@@ -1,0 +1,65 @@
+[
+    {
+        "id":"1",
+        "name":"Dashboard",
+        "route":"",
+        "icon":"subway:menu"
+    },
+    {
+        "id":"1",
+        "name":"Product",
+        "route":"product",
+        "icon":"fluent-mdl2:product-variant"
+    },
+    {
+        "id":"3",
+        "name":"Create",
+        "route":"create",
+        "icon":"uil:create-dashboard"
+
+    },
+    {
+        "id":"3",
+        "name":"State",
+        "route":"state",
+        "icon":"uil:create-dashboard"
+
+    },
+    {
+        "id":"3",
+        "name":"New Order/Invoice",
+        "route":"sell",
+        "icon":"uil:create-dashboard"
+
+    },
+    {
+        "id":"1",
+        "name":"Single Order",
+        "route":"user/order",
+        "icon":"bxs:category-alt"
+    },
+    {
+        "id":"1",
+        "name":"Category",
+        "route":"category",
+        "icon":"bxs:category-alt"
+    },
+    {
+        "id":"1",
+        "name":"Order",
+        "route":"order",
+        "icon":"material-symbols:order-approve"
+    },
+    {
+        "id":"1",
+        "name":"Notification",
+        "route":"notification",
+        "icon":"tdesign:notification"
+    },
+    {
+        "id":"1",
+        "name":"Conpany Info",
+        "route":"company/info",
+        "icon":"fluent-mdl2:product-variant"
+    }
+]
