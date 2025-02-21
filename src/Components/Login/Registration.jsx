@@ -3,22 +3,19 @@ import { useEffect, useState } from 'react';
 import InputComponent from '../Input/InputComponent';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
+import RoleSelector from './RoleSelector';
 
 
 const Registration = () => {
   const [values, setValues] = useState({
-    "rules": [
-      "admin"
-    ]
+    "rules": []
   });
   const [state, setState] = useState([])
   const goToHome = useNavigate();
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(values)
-
+    e.preventDefault()
     const response = await fetch(`${BaseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: {
@@ -52,6 +49,7 @@ const Registration = () => {
           <InputComponent onChange={(value) => { setValues({ ...values, username: value }) }} label={"Mobile"} type={"number"} placeholder={"Enter your mobile"} />
           <InputComponent onChange={(value) => { setValues({ ...values, email: value }) }} label={"Email"} type={"email"} placeholder={"Enter your email"} />
           <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
+          <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} />
           <InputComponent onChange={(value) => { setValues({ ...values, password: value }) }} label={"Password"} type={"password"} placeholder={"Enter your password"} />
           <button onClick={handleSubmit}
             className="text-white bg-blue-700 my-2 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

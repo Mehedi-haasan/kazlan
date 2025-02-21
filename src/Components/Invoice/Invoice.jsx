@@ -12,7 +12,7 @@ import BaseUrl from '../../Constant';
 import { useToImage } from '@hcorta/react-to-image'
 
 
-const Invoice = ({ isOrder = true }) => {
+const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -98,6 +98,8 @@ const Invoice = ({ isOrder = true }) => {
                 "date": date,
             })
         ))
+
+        console.log(orderData)
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -158,12 +160,13 @@ const Invoice = ({ isOrder = true }) => {
             const data = await response.json();
             if (data && data?.items?.length > 0) {
                 setUser(data?.items || []);
+                setUserId(data?.items[0]?.id)
             }
         }
         fetchUser()
     }, [stateId])
-
-
+    console.log(searchData)
+    console.log(data)
     return (
         <div className="bg-white">
 
@@ -220,16 +223,19 @@ const Invoice = ({ isOrder = true }) => {
                             </div>
                         </div>
 
-                        <div className='flex justify-between'>
-                            <div className='flex justify-start gap-3 items-center'>
-                                <h1 className='font-semibold w-[90px]'>অনুসন্ধান</h1>
-                                <h1 className='font-semibold'>:</h1>
-                                <div className='relative border rounded border-black text-black'>
-                                    <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none' />
-                                    <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
+                        {
+                            isSingleOrder ? <div className='flex justify-between mt-1'>
+                                <div className='flex justify-start gap-3 items-center'>
+                                    <h1 className='font-semibold w-[90px]'>অনুসন্ধান</h1>
+                                    <h1 className='font-semibold'>:</h1>
+                                    <div className='relative border rounded border-black text-black'>
+                                        <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none' />
+                                        <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> : <></>
+                        }
+
 
 
 
@@ -289,7 +295,7 @@ const Invoice = ({ isOrder = true }) => {
                                 }
 
                                 {allData?.map((item) => {
-                                    return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} price={item?.price} />
+                                    return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} cost={item?.cost} price={item?.price} />
                                 })}
                                 <PaymentTotal
                                     data={allData}

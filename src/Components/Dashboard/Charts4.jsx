@@ -23,13 +23,13 @@ const Charts4 = () => {
       toolTipContent: "<b>{name}</b>: ${y} (#percent%)",
       indexLabel: "{name} - #percent%",
       dataPoints: [
-        { y: 450, name: "Rent" },
-        { y: 120, name: "Insurance" },
-        { y: 300, name: "Travelling" },
+        { y: 12000, name: "Rent" },
+        { y: 2000, name: "Insurance" },
+        { y: 3000, name: "Travelling" },
         { y: 800, name: "Staf Cost" },
-        { y: 150, name: "Electricity bill" },
-        { y: 150, name: "Shopping" },
-        { y: 250, name: "Others" }
+        { y: 1500, name: "Electricity bill" },
+        { y: 3000, name: "Breakfast" },
+        { y: 30000, name: "Staff Bill" }
       ]
     }]
   };

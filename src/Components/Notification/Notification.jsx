@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import NotificationCard from './NotificationCard';
 import BaseUrl from '../../Constant';
-import ImageGenarate from '../Image/ImageGenarate'
 
 const Notification = () => {
-    const [data, setData] = useState([
-        {
-            id:1,
-            name:"Mehedi Hasan",
-            product_name:"Book"
-        }
-    ]);
+    const [data, setData] = useState([]);
+
     const getOrder = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order`, {
+        const response = await fetch(`${BaseUrl}/api/get/notification`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -22,9 +16,10 @@ const Notification = () => {
         });
         const data = await response.json()
         setData(data.items)
+        console.log(data?.items)
     }
     useEffect(() => {
-        // getOrder()
+        getOrder()
     }, [])
 
     return (
@@ -36,7 +31,6 @@ const Notification = () => {
                 return <NotificationCard key={item?.id} item={item} />
             })}
 
-            <ImageGenarate/>
         </div>
     );
 };

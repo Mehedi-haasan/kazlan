@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InvoiceCard = ({ id, name, qty, price }) => {
+const InvoiceCard = ({ id, name, qty, cost, price }) => {
     function convertToBengaliNumber(num) {
         const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
@@ -17,10 +17,10 @@ const InvoiceCard = ({ id, name, qty, price }) => {
                 {"Islamia Library"}
             </td>
             <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(price)}
+                {convertToBengaliNumber(parseInt(cost))}
             </td>
             <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(price * qty)}
+                {convertToBengaliNumber(price)}
             </td>
             <td className="pl-6 py-3 text-right">
                 {convertToBengaliNumber(price * qty)}

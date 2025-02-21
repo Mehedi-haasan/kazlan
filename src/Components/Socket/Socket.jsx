@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
-const socket = io("http://localhost:8050");
+import BaseUrl from "../../Constant";
+const socket = io(`${BaseUrl}`);
 export default socket;
 

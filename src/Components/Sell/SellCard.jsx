@@ -19,10 +19,10 @@ const SellCard = ({ product, onClick }) => {
                 {"Islamia Library"}
             </td>
             <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(product?.price)}
+                {convertToBengaliNumber(product?.cost)}
             </td>
             <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(product?.price * product.qty)}
+                {convertToBengaliNumber(product?.price )}
             </td>
             <td className="pl-6 py-3 text-right">
                 {convertToBengaliNumber(product?.price * product.qty)}

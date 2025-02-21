@@ -27,7 +27,7 @@
     },
     {
         "id":"3",
-        "name":"New Order/Invoice",
+        "name":"New Order",
         "route":"sell",
         "icon":"uil:create-dashboard"
 
@@ -54,6 +54,12 @@
         "id":"1",
         "name":"Notification",
         "route":"notification",
+        "icon":"tdesign:notification"
+    },
+    {
+        "id":"1",
+        "name":"Registration",
+        "route":"registration",
         "icon":"tdesign:notification"
     },
     {

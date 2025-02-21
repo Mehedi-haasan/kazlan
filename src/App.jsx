@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './Components/Share/Header.jsx'
-import Dashboard from "./Components/Dashboard/DashboardGraph.jsx";
+import Dashboard from "./Components/Dashboard/Dashboard.jsx";
 import CreactProduct from "./Components/ProductCreate/CreactProduct.jsx";
 import Product from './Components/Products/Products.jsx';
 import Container from "./Container.jsx";
@@ -16,14 +16,15 @@ import Notification from "./Components/Notification/Notification.jsx";
 import Company from "./Components/Company/Company.jsx";
 import Category from "./Components/Category/Category.jsx";
 import State from "./Components/State/State.jsx";
+import NotFound from "./Components/NotFound/NotFound.jsx";
 
 
 
-const DashboardContainer = ({ isLoggedOut }) => {
+const DashboardContainer = ({ isLoggedOut, auth }) => {
   return (
     <Container isLoggedOut={isLoggedOut}>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={auth ? <Dashboard /> : <Login auth={auth} />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/success" element={<Success />} />
         <Route path="/create" element={<CreactProduct />} />
@@ -36,7 +37,7 @@ const DashboardContainer = ({ isLoggedOut }) => {
         <Route path="/company/info" element={<Company />} />
         <Route path="/category" element={<Category />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/registration" element={<Registration />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Container>
   )
@@ -68,7 +69,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header auth={auth} />
-      {auth ? <DashboardContainer isLoggedOut={() => { setAuth(false) }} /> : <AuthContainer auth={() => setAuth(true)} />}
+      {auth ? <DashboardContainer isLoggedOut={() => { setAuth(false) }} auth={auth} /> : <AuthContainer auth={() => setAuth(true)} />}
     </BrowserRouter>
   );
 }

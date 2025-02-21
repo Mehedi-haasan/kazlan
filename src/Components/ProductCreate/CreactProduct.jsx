@@ -95,10 +95,14 @@ const CreactProduct = () => {
 
                 <div className='max-w-[600px] mx-auto border border-[#c71f66] rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
-                        <div className='mt-5 grid col-span-2'>
+                        <div className='mt-3'>
                             <h1 className='font-semibold py-1'>Select your Product Picture</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
+                        <div>
+                            <InputComponent onChange={(e) => setValues({ ...values, qty: e })} label={"Quantity"} placeholder={"Quantity"} type={"number"} isRequered={""} />
+                        </div>
+
                         <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Product Name"} placeholder={"Product Name"} type={""} isRequered={""} />
                         <SelectionComponent options={type} onSelect={(e) => setValues({ ...values, product_type: e?.name })} label={"Product Type"} />
                         <InputComponent onChange={(e) => setValues({ ...values, cost: e })} label={"Cost Price"} placeholder={"Cost Price"} type={"number"} isRequered={""} />
