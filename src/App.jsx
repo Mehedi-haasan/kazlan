@@ -17,6 +17,7 @@ import Company from "./Components/Company/Company.jsx";
 import Category from "./Components/Category/Category.jsx";
 import State from "./Components/State/State.jsx";
 import NotFound from "./Components/NotFound/NotFound.jsx";
+import UpdateProduct from "./Components/UpdateProduct/UpdateProduct.jsx";
 
 
 
@@ -37,6 +38,7 @@ const DashboardContainer = ({ isLoggedOut, auth }) => {
         <Route path="/company/info" element={<Company />} />
         <Route path="/category" element={<Category />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/update/product" element={<UpdateProduct />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Container>

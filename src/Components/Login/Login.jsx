@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputComponent from '../Input/InputComponent';
 import BaseUrl from '../../Constant';
 
-const Login = ({auth}) => {
+const Login = ({ auth }) => {
 
   const [values, setValues] = useState({
     username: "",
@@ -18,9 +18,12 @@ const Login = ({auth}) => {
       body: JSON.stringify(values),
     });
     const data = await response.json();
-    alert(data.message)
-    localStorage.setItem('token', data.accessToken);
-    auth(true)
+    if (data && data.accessToken && data.suceess) {
+      alert(data.message)
+      localStorage.setItem('token', data.accessToken);
+      auth(true)
+    }
+
 
   }
 

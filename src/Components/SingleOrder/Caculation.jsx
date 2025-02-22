@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
-const Caculation = ({ data, flatDiscount, percentageDiscount, discountType, due, pay, changePay }) => {
+const Caculation = ({ data, discount, discountType, due, pay }) => {
     const [total, setTotal] = useState(0);
     const [actualPrice, setActualPrice] = useState(0);
+    const [discountAmount, setDiscountAmount] = useState(0);
 
     useEffect(() => {
         let amount = data.reduce((acc, d) => acc + (parseInt(d?.price) * parseInt(d?.qty) || 0), 0);
         setActualPrice(amount)
         if (discountType === "Percentage") {
-            let discountAmount = (parseInt(percentageDiscount) * parseInt(amount)) / 100;
-            setTotal(amount - discountAmount);
+            setDiscountAmount(discount);
         } else {
-            let discountParcent = flatDiscount * 100 / amount;
-            console.log(parseInt(discountParcent));
-            setTotal(amount - flatDiscount);
+            setDiscountAmount(actualPrice * discount / 100);
         }
 
-    }, [data, flatDiscount, percentageDiscount, discountType]);
+    }, [data, discountType]);
 
 
     function convertToBengaliNumber(num) {
@@ -106,7 +104,7 @@ const Caculation = ({ data, flatDiscount, percentageDiscount, discountType, due,
                     ডিসকাউন্ট
                 </td>
                 <td className="pl-6 py-3 text-right text-black">
-                    {convertToBengaliNumber(parseInt(due))}.০
+                    {convertToBengaliNumber(parseInt(discountAmount))}.০
                 </td>
 
             </tr>
@@ -187,7 +185,7 @@ const Caculation = ({ data, flatDiscount, percentageDiscount, discountType, due,
                     মোট বাকি
                 </td>
                 <td className="pl-6 py-3 text-right">
-                    {convertToBengaliNumber(total + due - pay)}.০
+                    {convertToBengaliNumber(actualPrice + due - pay)}.০
                 </td>
             </tr>
         </>

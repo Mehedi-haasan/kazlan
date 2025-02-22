@@ -10,13 +10,20 @@ const SingleOrder = () => {
     const [invoice_id, setInvoiceId] = useState('')
 
     const SingleOrder = async () => {
-        const response = await fetch(`${BaseUrl}/api/get/order/${invoice_id}`);
-        const data = await response.json();
-        setData(data?.items);
-        setUse(data?.user)
-    }
+        try {
+            const response = await fetch(`${BaseUrl}/api/get/order/${invoice_id}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            setData(data?.items || []);
+            setUse(data?.user || null);
+        } catch (error) {
+            console.error("Error fetching order:", error);
+        }
+    };
 
-    console.log(data)
+
     return (
         <div className='relative'>
             <div className='flex justify-between items-center py-3'>
@@ -24,7 +31,7 @@ const SingleOrder = () => {
                     <h1 className='font-semibold'>Sell Product</h1>
                 </div>
                 <div className='relative border rounded'>
-                    <input type='text' placeholder='Enter invoice number' onChange={(e) => { setInvoiceId(e.target.value) }} className='px-2 py-1 rounded focus:outline-none' />
+                    <input type='text' placeholder='Enter invoice number' onKeyDown={(e) => { if (e.key === "Enter") { SingleOrder() } }} onChange={(e) => { setInvoiceId(e.target.value) }} className='px-2 py-1 rounded focus:outline-none' />
                     <Search className='absolute right-1 top-1.5' onClick={SingleOrder} />
                 </div>
             </div>
@@ -34,7 +41,7 @@ const SingleOrder = () => {
                     <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.contact} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.state} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
                 <div className='flex justify-start gap-3 items-center'>
@@ -74,7 +81,7 @@ const SingleOrder = () => {
                     <h1 className='font-semibold'>ডিসকাউন্ট</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.discount} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.discountType} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
             </div>
@@ -97,9 +104,8 @@ const SingleOrder = () => {
                         })}
                         <Caculation
                             data={data}
-                            flatDiscount={0}
-                            percentageDiscount={0}
-                            discountType={"flat"}
+                            discount={user?.discount}
+                            discountType={user?.discount_type}
                             due={10}
                             pay={1000}
                         />
