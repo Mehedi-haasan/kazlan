@@ -6,6 +6,7 @@ import BaseUrl from '../../Constant'
 const Company = () => {
 
     const [values, setValues] = useState({})
+    const [companyInfo, setCompanyInfo] = useState({})
 
     const PostInfo = async () => {
         const token = localStorage.getItem('token')
@@ -45,6 +46,7 @@ const Company = () => {
             }
         });
         const data = await response.json();
+        setCompanyInfo(data?.items)
         setValues(data?.items)
     }
 
@@ -66,7 +68,7 @@ const Company = () => {
             <InputComponent onChange={(e) => { setValues({ ...values, wh_url: e }) }} label={'Whatsapp Url'} placeholder={values?.wh_url || 'N/A'} />
             <InputComponent onChange={(e) => { setValues({ ...values, tw_url: e }) }} label={'Tweitter Url'} placeholder={values?.tw_url || 'N/A'} />
             <InputComponent onChange={(e) => { setValues({ ...values, description: e }) }} label={'Description'} placeholder={values?.description || 'N/A'} />
-            {values ? <Button onClick={UpdateInfo} name={'Update'} /> : <Button onClick={PostInfo} name={'Create'} />}
+            {companyInfo ? <Button onClick={UpdateInfo} name={'Update'} /> : <Button onClick={PostInfo} name={'Create'} />}
         </div>
     );
 };

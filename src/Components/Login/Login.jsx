@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
 import InputComponent from '../Input/InputComponent';
 import BaseUrl from '../../Constant';
+import Hide from '../Input/Hide';
+import Show from '../Input/Show';
+import Logo from '../Logo/logu (2).png'
+
 
 const Login = ({ auth }) => {
 
   const [values, setValues] = useState({
     username: "",
     password: "",
-  })
+  });
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e) => {
     const response = await fetch(`${BaseUrl}/api/auth/signin`, {
@@ -18,7 +23,7 @@ const Login = ({ auth }) => {
       body: JSON.stringify(values),
     });
     const data = await response.json();
-    if (data && data.accessToken && data.suceess) {
+    if (data && data.accessToken && data.success) {
       alert(data.message)
       localStorage.setItem('token', data.accessToken);
       auth(true)
@@ -31,10 +36,17 @@ const Login = ({ auth }) => {
 
   return (
     <div className='flex justify-center items-center bg-white'>
-      <div className='w-full md:w-[420px] py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl rounded-2xl border p-5'>
+      <div className='w-full md:w-[420px] pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl rounded-2xl border p-5'>
+        <img src={Logo} alt="logo" className="w-[160px] h-[80px] mx-auto pb-2" />
         <div className="">
           <InputComponent onChange={(value) => { setValues({ ...values, username: value }) }} label={"Your email or phone number"} type={"text"} placeholder={"Enter your email or phone number"} />
-          <InputComponent onChange={(value) => { setValues({ ...values, password: value }) }} label={"Your password"} type={"password"} placeholder={"Password"} />
+          <div className='py-1 relative'>
+            {
+              showPassword ? <Show className='absolute right-2 top-[38px] cursor-pointer' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[38px] cursor-pointer' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+            }
+            <h1 for={"Password"} className={`mb-2 text-start text-sm font-semibold text-gray-900 dark:text-white`}>{"Password"}</h1>
+            <input type={showPassword ? "text" : "password"} value={values?.password} required={true} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:outline-none focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} placeholder={"Enter your password"} />
+          </div>
 
 
           <div className="flex items-start mb-5 mt-1">

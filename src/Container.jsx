@@ -30,7 +30,7 @@ const Container = ({ children, isLoggedOut }) => {
         <div className='flex bg-gray-100 h-screen overflow-hidden sticky top-12'>
             <div className='bg-white border-r-[1px] w-[400px] sticky top-14 shadow-lg'>
                 <div className='p-5 h-screen overflow-y-auto w-[400px] fixed top-14'>
-                    <div className='flex justify-start gap-3 items-center pb-5 border-b-2 w-[300px]'>
+                    <div className='flex justify-start gap-3 items-center pb-5 border-b-2 w-[300px] pt-3'>
                         <div>
                             <img src={Logo} className='h-[75px] w-[75px] rounded-full justify-start' alt='Profile' />
                         </div>

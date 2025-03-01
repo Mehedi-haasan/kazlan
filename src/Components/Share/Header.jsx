@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Notification from "../../icons/Notification";
 import MessageBar from "./MessageBar";
-import logo from '../Logo/logu.PNG'
+import logo from '../Logo/logu (2).png'
 
 
 const Header = ({ auth }) => {
@@ -15,8 +15,8 @@ const Header = ({ auth }) => {
       <div className="flex justify-between items-center sticky top-0 z-50 w-[100%] px-2 mx-auto bg-white py-1">
 
         <div className="">
-          <NavLink className={`font-bold text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-[#FB923C] py-1`} to="/">
-            <img src={logo} alt="dhyfg" className="w-[100px] h-[70px]" />
+          <NavLink className={`py-1`} to="/">
+            <img src={logo} alt="dhyfg" className="w-[110px] h-[50px]" />
           </NavLink>
         </div>
 

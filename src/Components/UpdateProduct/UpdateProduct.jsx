@@ -13,6 +13,7 @@ const UpdateProduct = () => {
     const [allData, setAllData] = useState([]);
     const [show, setShow] = useState(false);
     const [searchData, setSearchData] = useState([]);
+    const [isLoad, setIsLoad] = useState(false);
 
 
     const SearchProduct = async (e) => {
@@ -35,15 +36,19 @@ const UpdateProduct = () => {
 
 
     const UpdateProductQty = async () => {
+        setIsLoad(true)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/update/product`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': token,
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(allData)
         });
+        const data = await response.json();
+        setIsLoad(true)
+        alert(data?.message)
     }
 
 
@@ -112,7 +117,7 @@ const UpdateProduct = () => {
                 </div>
             </Modal>
 
-            <Button isDisable={false} name={'Update'} onClick={UpdateProductQty} className='' />
+            <Button isDisable={isLoad} name={'Update'} onClick={UpdateProductQty} className='' />
         </div>
 
     );

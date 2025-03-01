@@ -3,6 +3,7 @@ import Search from '../../icons/Search';
 import BaseUrl from '../../Constant';
 import InvoiceCard from '../Invoice/InvoiceCard';
 import Caculation from './Caculation';
+import Tabeheader from '../Invoice/Tableheader';
 
 const SingleOrder = () => {
     const [data, setData] = useState([]);
@@ -23,9 +24,9 @@ const SingleOrder = () => {
         }
     };
 
-
+    console.log(user)
     return (
-        <div className='relative'>
+        <div className='relative pr-2'>
             <div className='flex justify-between items-center py-3'>
                 <div>
                     <h1 className='font-semibold'>Sell Product</h1>
@@ -41,14 +42,14 @@ const SingleOrder = () => {
                     <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.state} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.state} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
                 <div className='flex justify-start gap-3 items-center'>
                     <h1 className='font-semibold'>তারিখ</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.date} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.date} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
             </div>
@@ -57,14 +58,14 @@ const SingleOrder = () => {
                     <h1 className='font-semibold w-[90px]'>নাম</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.name} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.name} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
                 <div className='flex justify-start gap-3 items-center'>
                     <h1 className='font-semibold'>মেমো নং</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.invoice_id} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.invoice_id} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
             </div>
@@ -74,30 +75,21 @@ const SingleOrder = () => {
                     <h1 className='font-semibold w-[90px]'>মোবাইল</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.contact} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.contact} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
                 <div className='flex justify-end gap-3 items-center'>
                     <h1 className='font-semibold'>ডিসকাউন্ট</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.discountType} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.discountType} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
             </div>
 
             <div className='relative overflow-x-auto my-5'>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                        <tr className='border-b-2 border-black text-lg'>
-                            <th scope="col" className="pr-6 py-2 ">পরিমাণ</th>
-                            <th scope="col" className="px-4 py-2 text-center">বইয়ের নাম এবং শ্রেণী</th>
-                            <th scope="col" className="px-4 py-2 text-center">প্রকাশক</th>
-                            <th scope="col" className="pl-4 py-2 text-right">মূল্য</th>
-                            <th scope="col" className="pl-4 py-2 text-right">বিক্রয় মূল্য</th>
-                            <th scope="col" className="pl-4 py-2 text-right">মোট মূল্য</th>
-                        </tr>
-                    </thead>
+                    <Tabeheader />
                     <tbody>
                         {data?.map((item) => {
                             return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} cost={item?.cost} price={item?.price} />
@@ -106,8 +98,8 @@ const SingleOrder = () => {
                             data={data}
                             discount={user?.discount}
                             discountType={user?.discount_type}
-                            due={10}
-                            pay={1000}
+                            due={user?.due}
+                            pay={500}
                         />
 
                     </tbody>

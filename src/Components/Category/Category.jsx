@@ -56,9 +56,7 @@ const Category = () => {
             console.error("Image file is missing in the payload");
             return;
         }
-
         const token = localStorage.getItem('token');
-
         try {
             const response = await fetch(`${BaseUrl}/api/upload/image`, {
                 method: 'POST',

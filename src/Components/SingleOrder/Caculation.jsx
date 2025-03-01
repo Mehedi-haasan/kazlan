@@ -9,12 +9,12 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
         let amount = data.reduce((acc, d) => acc + (parseInt(d?.price) * parseInt(d?.qty) || 0), 0);
         setActualPrice(amount)
         if (discountType === "Percentage") {
-            setDiscountAmount(discount);
+            setDiscountAmount(parseInt(discount));
         } else {
-            setDiscountAmount(actualPrice * discount / 100);
+            setDiscountAmount(parseInt(actualPrice * discount / 100));
         }
 
-    }, [data, discountType]);
+    }, [data, discountType, discountAmount]);
 
 
     function convertToBengaliNumber(num) {
@@ -22,7 +22,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
     }
 
-
+    console.log(discountAmount);
 
     return (
         <>
@@ -145,7 +145,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     অবশিষ্ট
                 </td>
                 <td className="pl-6 py-3 text-right">
-                    {convertToBengaliNumber(total + due)}.০
+                    {convertToBengaliNumber(actualPrice + due - discountAmount)}.০
                 </td>
             </tr>
             <tr className="bg-white">
@@ -165,7 +165,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     জমা
                 </td>
                 <td className="pl-6 py-3 text-right border-b-2 border-black text-black">
-                    {convertToBengaliNumber(parseInt(due))}.০
+                    {convertToBengaliNumber(parseInt(pay))}.০
                 </td>
             </tr>
             <tr className="bg-white">
@@ -185,7 +185,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     মোট বাকি
                 </td>
                 <td className="pl-6 py-3 text-right">
-                    {convertToBengaliNumber(actualPrice + due - pay)}.০
+                    {convertToBengaliNumber((actualPrice + due) - (discountAmount + pay))}.০
                 </td>
             </tr>
         </>

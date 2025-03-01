@@ -27,7 +27,6 @@ const CreactProduct = () => {
         values.image_url = image_url;
         values.description = value;
         const token = localStorage.getItem('token');
-        console.log(values, "values");
         try {
             const response = await fetch(`${BaseUrl}/api/create/product`, {
                 method: 'POST',

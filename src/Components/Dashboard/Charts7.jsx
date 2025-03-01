@@ -4,7 +4,6 @@ import CanvasJSReact from '@canvasjs/react-charts';
 const { CanvasJSChart } = CanvasJSReact;
 
 const Charts7 = ({ month }) => {
-  console.log(month)
   const options = {
     animationEnabled: true,
     theme: "light2",

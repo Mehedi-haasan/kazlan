@@ -10,6 +10,7 @@ import SellCard from '../Sell/SellCard';
 import SelectionComponent from '../Input/SelectionComponent';
 import BaseUrl from '../../Constant';
 import { useToImage } from '@hcorta/react-to-image'
+import Tabeheader from './Tableheader';
 
 
 const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
@@ -99,7 +100,6 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
             })
         ))
 
-        console.log(orderData)
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -165,8 +165,7 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
         }
         fetchUser()
     }, [stateId])
-    console.log(searchData)
-    console.log(data)
+
     return (
         <div className="bg-white">
 
@@ -374,16 +373,7 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
 
                         <div className='relative overflow-x-auto py-5'>
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                                    <tr className='border-b-2 border-black text-lg'>
-                                        <th scope="col" className="pr-6 py-2 ">পরিমাণ</th>
-                                        <th scope="col" className="px-4 py-2 text-center">বইয়ের নাম এবং শ্রেণী</th>
-                                        <th scope="col" className="px-4 py-2 text-center">প্রকাশক</th>
-                                        <th scope="col" className="pl-4 py-2 text-right">মূল্য</th>
-                                        <th scope="col" className="pl-4 py-2 text-right">বিক্রয় মূল্য</th>
-                                        <th scope="col" className="pl-4 py-2 text-right">মোট মূল্য</th>
-                                    </tr>
-                                </thead>
+                                <Tabeheader />
                                 <tbody>
                                     {allData?.map((item) => {
                                         return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} price={item?.price} />
@@ -470,17 +460,8 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
                             </div>
 
                             <div className='relative overflow-x-auto py-5'>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                                        <tr className='border-b-2 border-black text-lg'>
-                                            <th scope="col" className="pr-6 py-2 ">পরিমাণ</th>
-                                            <th scope="col" className="px-4 py-2 text-center">বইয়ের নাম এবং শ্রেণী</th>
-                                            <th scope="col" className="px-4 py-2 text-center">প্রকাশক</th>
-                                            <th scope="col" className="pl-4 py-2 text-right">মূল্য</th>
-                                            <th scope="col" className="pl-4 py-2 text-right">বিক্রয় মূল্য</th>
-                                            <th scope="col" className="pl-4 py-2 text-right">মোট মূল্য</th>
-                                        </tr>
-                                    </thead>
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <Tabeheader />
                                     <tbody>
                                         {allData?.map((item) => {
                                             return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} price={item?.price} />
