@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-// import Menu from '../../icons/Edit';
-// import Charts from './Charts';
-// import Charts2 from './Charts2'
 import Charts3 from './Charts3';
 import Charts4 from './Charts4';
-// import Charts5 from './Chart5';
 import Charts6 from './Charts6';
 import Charts7 from './Charts7';
 import BaseUrl from '../../Constant';
@@ -56,10 +52,10 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div className=''>
+        <div className='bg-[#F7F7FF]'>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  gap-5'>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px]'>
+            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-blue-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -68,7 +64,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Total Sale</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px]'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -77,7 +73,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Customer Request</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px]'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-blue-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -86,7 +82,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Customer Complains</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px]'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -99,31 +95,58 @@ const Dashboard = () => {
 
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-2 mt-8 gap-5 lg:gap-7 pb-5'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5'>
                 <div className='rounded-lg'>
                     <Charts3 hourSales={hourSales} />
                 </div>
-                {/* <div className=''>
-                    <Charts2 />
-                </div> */}
                 <div>
                     <Charts7 month={month} />
                 </div>
-                <div>
-                    <Charts6 />
+                <div className='grid col-span-1 lg:col-span-2'>
+
+                    <div className='rounded-xl overflow-hidden bg-white p-4'>
+                        <div className='border-b border-black'>
+                            <h1 className='pb-2'>Recent Invoices</h1>
+                        </div>
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                                <tr className='border-b text-md'>
+                                    <th scope="col" className="pr-6 py-2 ">পরিমাণ</th>
+                                    <th scope="col" className="px-4 py-2 text-center">বইয়ের নাম এবং শ্রেণী</th>
+                                    <th scope="col" className="px-4 py-2 text-center">প্রকাশক</th>
+                                    <th scope="col" className="pl-4 py-2 text-right">মূল্য</th>
+                                    <th scope="col" className="pl-4 py-2 text-right">বিক্রয় মূল্য</th>
+                                    <th scope="col" className="pl-4 py-2 text-right">মোট মূল্য</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr key={89} className="bg-white dark:bg-gray-800 border-b">
+                                    <th scope="row" className="pr-6 pl-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {5}
+                                    </th>
+                                    <td className="px-6 py-2 text-center">
+                                        {"Mehedi"}
+                                    </td>
+                                    <td className="px-6 py-2 text-center">
+                                        {"Islamia Library"}
+                                    </td>
+                                    <td className="pl-6 py-2 text-right">
+                                        {8}
+                                    </td>
+                                    <td className="pl-6 py-2 text-right">
+                                        {3}
+                                    </td>
+                                    <td className="pl-6 py-2 text-right">
+                                        {7}
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                {/* <div>
-                    <Charts7 month={month} />
-                </div> */}
-                <div>
-                    <Charts4 />
-                </div>
-                {/* <div>
-                    <Charts5/>
-                </div> */}
-                {/* <div>
-                    <Charts text={"Basic Graph 2nd"} />
-                </div> */}
             </div>
 
         </div>

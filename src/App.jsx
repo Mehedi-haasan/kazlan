@@ -3,7 +3,6 @@ import Header from './Components/Share/Header.jsx'
 import Dashboard from "./Components/Dashboard/Dashboard.jsx";
 import CreactProduct from "./Components/ProductCreate/CreactProduct.jsx";
 import Product from './Components/Products/Products.jsx';
-import Container from "./Container.jsx";
 import SingleOrder from "./Components/SingleOrder/SingleOrder.jsx";
 import Order from "./Components/Order/Order.jsx";
 import Profile from "./Components/Profile/Profile.jsx";
@@ -21,38 +20,6 @@ import UpdateProduct from "./Components/UpdateProduct/UpdateProduct.jsx";
 
 
 
-const DashboardContainer = ({ isLoggedOut, auth }) => {
-  return (
-    <Container isLoggedOut={isLoggedOut}>
-      <Routes>
-        <Route path="/" element={auth ? <Dashboard /> : <Login auth={auth} />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/create" element={<CreactProduct />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/user/order" element={<SingleOrder />} />
-        <Route path="/sell" element={<Sell />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/order" element={<Order />} />
-        <Route path="/state" element={<State />} />
-        <Route path="/company/info" element={<Company />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/update/product" element={<UpdateProduct />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Container>
-  )
-}
-
-
-const AuthContainer = ({ auth }) => {
-  return (
-    <Routes>
-      <Route path="/" element={<Login auth={auth} />} />
-    </Routes>
-  )
-}
 
 
 function App() {
@@ -71,10 +38,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header auth={auth} isOpen={(v) => { setopen(v) }} />
-      <div className={`${open ? 'pl-[130px]' : 'pl-0'}`}>
+      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} />
+      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-14 ease-in duration-500 py-3 pr-3 space-x-2 space-y-2 ${open ? "pl-[238px]" : "pl-[75px]"}`}>
         <Routes>
-          <Route path="/" element={auth ? <Dashboard /> : <Login auth={auth} />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/success" element={<Success />} />
           <Route path="/create" element={<CreactProduct />} />

@@ -2,7 +2,7 @@
     {
         "id": "1",
         "name": "Dashboard",
-        "route": "",
+        "route": "dashboard",
         "icon": "subway:menu"
     },
     {

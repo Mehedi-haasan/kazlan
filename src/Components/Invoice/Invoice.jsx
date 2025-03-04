@@ -11,6 +11,8 @@ import SelectionComponent from '../Input/SelectionComponent';
 import BaseUrl from '../../Constant';
 import { useToImage } from '@hcorta/react-to-image'
 import Tabeheader from './Tableheader';
+import BarCode from '../../icons/BarCode';
+import Add from '../../icons/Add';
 
 
 const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
@@ -170,8 +172,21 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
         <div className="bg-white">
 
             <div className='w-full mx-auto border min-h-[90vh] rounded'>
-                <div className="mt-4 px-10">
+                <div className="mt-4 px-5">
+
                     <div>
+                        <div className='flex justify-center w-full pb-1.5'>
+                            <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF]'>
+                                <BarCode />
+                            </div>
+                            <div className='relative border-y text-black w-full'>
+                                <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none w-full' />
+                                <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
+                            </div>
+                            <div className='border rounded-r py-1 px-3 cursor-pointer text-[#008CFF] border-[#008CFF]'>
+                                <Add />
+                            </div>
+                        </div>
                         <div className='flex justify-between'>
                             <div className='flex justify-start gap-3 items-center'>
                                 <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>

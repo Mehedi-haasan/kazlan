@@ -69,7 +69,7 @@ const Charts7 = ({ month }) => {
   }
 
   return (
-    <div>
+    <div className='border rounded-xl overflow-hidden'>
       <CanvasJSChart options={options} />
     </div>
   );
