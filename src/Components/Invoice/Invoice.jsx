@@ -13,6 +13,7 @@ import { useToImage } from '@hcorta/react-to-image'
 import Tabeheader from './Tableheader';
 import BarCode from '../../icons/BarCode';
 import Add from '../../icons/Add';
+import CreactProduct from '../ProductCreate/CreactProduct';
 
 
 const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
@@ -38,6 +39,7 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
     const [percentageDiscount, setPercentageDiscount] = useState(0);
     const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
+    const [isCreate, setIsCreate] = useState(false)
 
     const options = {
         width: 1000,
@@ -77,7 +79,7 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
     }
 
     const PrintfPdf = () => {
-
+        window.print()
     }
 
     const Order = async () => {
@@ -172,18 +174,18 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
         <div className="bg-white">
 
             <div className='w-full mx-auto border min-h-[90vh] rounded'>
-                <div className="mt-4 px-5">
+                <div className="mt-4 px-3 pt-1">
 
                     <div>
                         <div className='flex justify-center w-full pb-1.5'>
-                            <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF]'>
+                            <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
                                 <BarCode />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none w-full' />
-                                <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
+                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
+                                <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                             </div>
-                            <div className='border rounded-r py-1 px-3 cursor-pointer text-[#008CFF] border-[#008CFF]'>
+                            <div onClick={() => { setIsCreate(true) }} className='border rounded-r py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
                                 <Add />
                             </div>
                         </div>
@@ -236,24 +238,11 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
                                 </div>
                             </div>
                         </div>
-
-                        {
-                            isSingleOrder ? <div className='flex justify-between mt-1'>
-                                <div className='flex justify-start gap-3 items-center'>
-                                    <h1 className='font-semibold w-[90px]'>অনুসন্ধান</h1>
-                                    <h1 className='font-semibold'>:</h1>
-                                    <div className='relative border rounded border-black text-black'>
-                                        <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none' />
-                                        <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
-                                    </div>
-                                </div>
-                            </div> : <></>
-                        }
-
-
-
-
                     </div>
+
+                    <Modal show={isCreate} handleClose={() => { setIsCreate(false) }} className={`w-[800px]`}>
+                        <CreactProduct />
+                    </Modal>
 
                     <Modal show={show} handleClose={() => { setShow(false) }} className={`w-[500px]`}>
                         <div className='flex justify-between items-center py-1'>

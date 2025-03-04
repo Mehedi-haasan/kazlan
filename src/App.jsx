@@ -39,9 +39,9 @@ function App() {
   return (
     <BrowserRouter>
       <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} />
-      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-14 ease-in duration-500 py-3 pr-3 space-x-2 space-y-2 ${open ? "pl-[238px]" : "pl-[75px]"}`}>
+      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"}`}>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/success" element={<Success />} />

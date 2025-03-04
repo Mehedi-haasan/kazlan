@@ -63,7 +63,7 @@ const Practice = () => {
             </div>
 
             <div className='w-full overflow-x-auto'>
-                <table className="min-w-[1550px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <table className="min-w-[1690px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr className='shadow'>
                             <th scope="col" className="pl-4">

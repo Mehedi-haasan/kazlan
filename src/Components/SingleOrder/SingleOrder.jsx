@@ -26,8 +26,8 @@ const SingleOrder = () => {
 
     console.log(user)
     return (
-        <div className='relative pr-2'>
-            <div className='flex justify-between items-center py-3'>
+        <div className='relative px-4 pt-5'>
+            {/* <div className='flex justify-between items-center py-3'>
                 <div>
                     <h1 className='font-semibold'>Sell Product</h1>
                 </div>
@@ -35,7 +35,7 @@ const SingleOrder = () => {
                     <input type='text' placeholder='Enter invoice number' onKeyDown={(e) => { if (e.key === "Enter") { SingleOrder() } }} onChange={(e) => { setInvoiceId(e.target.value) }} className='px-2 py-1 rounded focus:outline-none' />
                     <Search className='absolute right-1 top-1.5' onClick={SingleOrder} />
                 </div>
-            </div>
+            </div> */}
 
             <div className='flex justify-between pb-1'>
                 <div className='flex justify-start gap-3 items-center'>
@@ -65,7 +65,7 @@ const SingleOrder = () => {
                     <h1 className='font-semibold'>মেমো নং</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-semibold'>:</h1>
-                        <input placeholder={user?.invoice_id} readOnly={true} className='border focus:outline-none rounded p-1 border-black text-black' />
+                        <input placeholder={user?.invoice_id} onKeyDown={(e) => { if (e.key === "Enter") { SingleOrder() } }} onChange={(e) => { setInvoiceId(e.target.value) }} className='border focus:outline-none rounded p-1 border-black text-black' />
                     </div>
                 </div>
             </div>

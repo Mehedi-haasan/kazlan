@@ -52,7 +52,7 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div className='bg-[#F7F7FF]'>
+        <div className='bg-[#F7F7FF] pt-5 px-2 min-h-screen'>
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
                 <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-blue-500'>
