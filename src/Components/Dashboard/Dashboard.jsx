@@ -55,7 +55,7 @@ const Dashboard = () => {
         <div className='bg-[#F7F7FF] pt-5 px-2 min-h-screen'>
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-blue-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-blue-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -64,7 +64,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Total Sale</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -73,7 +73,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Customer Request</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-blue-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-blue-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -82,7 +82,7 @@ const Dashboard = () => {
                         <p className='font-semibold'>Customer Complains</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-8 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>

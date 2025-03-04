@@ -3,8 +3,8 @@ import Button from "../Input/Button"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant'
-import Edit from "../../icons/Edit";
-import Remove from "../../icons/Remove";
+import Add from "../../icons/Add";
+import StateCard from "./StateCard";
 
 const State = () => {
 
@@ -51,10 +51,10 @@ const State = () => {
 
 
     return (
-        <div>
-            <div className="flex justify-between items-center">
+        <div className="pt-5 px-2">
+            <div className="flex justify-between items-center border-b border-red-500 pb-2">
                 <h1 className="text-lg font-semibold">State</h1>
-                <Button isDisable={false} name="Add State" onClick={() => { setShow(true) }} className="" />
+                <button onClick={() => { setShow(true) }} className="border rounded-lg px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add /> State</button>
             </div>
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
@@ -76,13 +76,13 @@ const State = () => {
                                     <label for="checkbox-all-search" className="sr-only">checkbox</label>
                                 </div>
                             </th>
-                            <th scope="col" className="pl-1 py-3 text-left">
+                            <th scope="col" className="pl-1 py-3 text-left font-semibold text-[16px] text-black">
                                 Id
                             </th>
-                            <th scope="col" className="pl-1 py-3 text-left">
+                            <th scope="col" className="pl-1 py-3 text-left font-semibold text-[16px] text-black">
                                 Category name
                             </th>
-                            <th scope="col" className="px-4 py-3 text-right pr-5">
+                            <th scope="col" className="px-4 py-3 text-right pr-5 font-semibold text-[16px] text-black">
                                 Action
                             </th>
                         </tr>
@@ -90,24 +90,7 @@ const State = () => {
                     <tbody>
                         {
                             state?.map((cate) => {
-                                return <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td className="w-4 p-4">
-                                        <div className="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                            <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {cate?.id}
-                                    </th>
-                                    <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {cate?.name}
-                                    </th>
-                                    <td className="pl-4 py-4 pr-5 flex justify-end gap-2 items-center">
-                                        <Edit size='25px' />
-                                        <Remove size='25px' />
-                                    </td>
-                                </tr>
+                                return <StateCard cate={cate} />
                             })
                         }
                     </tbody>

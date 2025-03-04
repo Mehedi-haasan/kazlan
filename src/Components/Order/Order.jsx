@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Remove from '../../icons/Remove';
-import Edit from '../../icons/Edit';
+import BarCode from '../../icons/BarCode';
 import OrderCard from './OrderCard';
 import Search from '../../icons/Search';
 import BaseUrl from '../../Constant';
@@ -46,16 +45,14 @@ const Order = () => {
     }
 
     return (
-        <div className='bg-white relative'>
-            <div className='flex justify-between items-center py-3 px-4'>
-                <div>
-                    <h1 className='font-semibold'>Todays Order</h1>
+        <div className='bg-white relative pt-5 px-2'>
+            <div className='flex justify-center w-full pb-1.5'>
+                <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
+                    <BarCode />
                 </div>
-                <div className='flex justify-start items-center gap-3'>
-                    <input type='text' placeholder='Enter your order id' onChange={SearchProduct} className='px-2 py-1 rounded focus:outline-none border' />
-                    <button onClick={SearchProduct} className='border rounded px-4 py-[5px]'>
-                        <Search />
-                    </button>
+                <div className='relative border-y border-r rounded-r text-black w-full'>
+                    <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
+                    <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                 </div>
             </div>
 
@@ -103,8 +100,8 @@ const Order = () => {
                     </thead>
                     <tbody>
                         {
-                            data?.map(({ id, name,price, qty, contact, product}) => {
-                                return <OrderCard key={id} id={id} name={name} price={price} contact={contact} qty={qty} product={product}/>
+                            data?.map(({ id, name, price, qty, contact, product }) => {
+                                return <OrderCard key={id} id={id} name={name} price={price} contact={contact} qty={qty} product={product} />
                             })
                         }
                     </tbody>

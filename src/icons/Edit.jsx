@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Edit = ({ size = '20px', color = 'currentColor'}) => {
+const Edit = ({ size = '20px', color = 'currentColor',onClick}) => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg"
+        <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg"
             className='hover:text-red-300 cursor-pointer'
             width="20px" height="20px"
             viewBox="0 0 24 24">

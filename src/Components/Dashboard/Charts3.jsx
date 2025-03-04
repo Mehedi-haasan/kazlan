@@ -36,7 +36,7 @@ const Charts3 = ({ hourSales }) => {
 
 
   return (
-    <div className='border rounded-xl overflow-hidden'>
+    <div className='border rounded-xl overflow-hidden border-l-4 border-b-4 border-blue-500'>
       <CanvasJSChart options={options} />
     </div>
   );

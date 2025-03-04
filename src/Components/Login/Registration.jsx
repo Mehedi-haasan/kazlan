@@ -47,31 +47,31 @@ const Registration = () => {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
+      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[500px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
         <form className="space-y-4">
           <div>
             <label className="block text-white text-sm font-semibold mb-1">First Name</label>
-            <input type="email" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <input type="text" onChange={(e) => { setValues({ ...values, first_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Last Name</label>
-            <input type="email" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <input type="text" onChange={(e) => { setValues({ ...values, last_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Mobile</label>
-            <input type="email" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <input type="number" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Email</label>
-            <input type="email" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">State</label>
-            <input type="email" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <input type="text" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
-          {/* <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
-          <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} /> */}
+          <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
+          <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} />
           <div className='relative'>
             <label className="block text-white text-sm font-semibold mb-1">Password</label>
             {

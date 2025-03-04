@@ -18,7 +18,7 @@ const PracticeCard = ({ product }) => {
         {product?.name}
       </th>
       <td className="px-4 py-4">
-        {product?.category}
+        {product?.category}Category
       </td>
       <td className="px-4 py-4">
         {product?.price}

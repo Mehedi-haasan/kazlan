@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Remove = ({ size = '20px', color = 'currentColor' }) => {
+const Remove = ({ size = '20px', color = 'currentColor', onClick }) => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg"
+        <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg"
             className='hover:text-red-300 cursor-pointer'
             width="16px" height="16px" viewBox="0 0 16 16">
             <path fill="currentColor" fillRule="evenodd"

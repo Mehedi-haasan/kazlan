@@ -23,7 +23,7 @@ const Notification = () => {
     }, [])
 
     return (
-        <div>
+        <div className='pt-5 px-2 min-h-screen'>
             <h1 className='text-center font-semibold pb-1'>Notification</h1>
             <hr className='py-1'/>
 

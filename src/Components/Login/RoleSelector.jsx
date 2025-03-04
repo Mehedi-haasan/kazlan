@@ -19,14 +19,14 @@ const RoleSelector = ({ rules = [], onChange }) => {
   const roles = ["admin", "superadmin", "moderator"];
 
   return (
-    <div className="max-w-sm mx-auto">
-      <h2 className="font-semibold text-black my-1">Select Roles for User</h2>
+    <div className="">
+      <h2 className="block text-white text-sm font-semibold mb-1">Select Roles for User</h2>
 
       <div className="flex justify-between gap-2">
         {roles.map((role) => (
-          <label key={role} className={`flex items-center p-1 rounded-lg cursor-pointer transition ${selectedRoles.includes(role) ? "bg-blue-100" : "bg-gray-100"}`}>
+          <label key={role} className={`flex items-center p-1 rounded-lg cursor-pointer transition ${selectedRoles.includes(role) ? "text-white" : "text-white"}`}>
             <input type="checkbox" value={role} checked={selectedRoles.includes(role)} onChange={() => handleCheckboxChange(role)} className="hidden" />
-            <div className={`w-5 h-5 border-2 rounded-md flex items-center justify-center mr-3 ${selectedRoles.includes(role) ? "border-blue-600 bg-blue-600" : "border-gray-500"}`}>
+            <div className={`w-5 h-5 border-2 rounded-md flex items-center justify-center text-white mr-2 ${selectedRoles.includes(role) ? "border-blue-600 bg-blue-600" : "border-gray-500"}`}>
               {selectedRoles.includes(role) && (
                 <svg
                   className="w-3 h-3 text-white"
@@ -41,7 +41,7 @@ const RoleSelector = ({ rules = [], onChange }) => {
                 </svg>
               )}
             </div>
-            <span className="text-gray-800 capitalize">{role}</span>
+            <span className="text-white capitalize">{role}</span>
           </label>
         ))}
       </div>

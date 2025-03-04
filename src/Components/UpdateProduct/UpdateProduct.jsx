@@ -6,6 +6,7 @@ import BaseUrl from '../../Constant';
 import InvoiceCard from '../Invoice/InvoiceCard';
 import Search from '../../icons/Search';
 import Button from '../Input/Button';
+import BarCode from '../../icons/BarCode';
 
 
 const UpdateProduct = () => {
@@ -54,8 +55,8 @@ const UpdateProduct = () => {
 
 
     return (
-        <div>
-            <div className='flex justify-between mt-1'>
+        <div className='px-2 pt-5 min-h-screen'>
+            {/* <div className='flex justify-between mt-1'>
                 <div className='flex justify-start gap-3 items-center'>
                     <h1 className='font-semibold w-[90px]'>অনুসন্ধান</h1>
                     <h1 className='font-semibold'>:</h1>
@@ -63,6 +64,15 @@ const UpdateProduct = () => {
                         <input type='text' placeholder='পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 rounded focus:outline-none' />
                         <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 p-[2px] rounded-full' />
                     </div>
+                </div>
+            </div> */}
+            <div className='flex justify-center w-full pb-1.5'>
+                <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
+                    <BarCode />
+                </div>
+                <div className='relative border-y border-r rounded-r text-black w-full'>
+                    <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
+                    <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                 </div>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -117,7 +127,9 @@ const UpdateProduct = () => {
                 </div>
             </Modal>
 
-            <Button isDisable={isLoad} name={'Update'} onClick={UpdateProductQty} className='' />
+            <div className='flex justify-end'>
+                <Button isDisable={isLoad} name={'Update'} onClick={UpdateProductQty} className='' />
+            </div>
         </div>
 
     );

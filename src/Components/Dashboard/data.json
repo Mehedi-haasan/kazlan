@@ -13,12 +13,6 @@
     },
     {
         "id": "3",
-        "name": "Create",
-        "route": "create",
-        "icon": "uil:create-dashboard"
-    },
-    {
-        "id": "3",
         "name": "State",
         "route": "state",
         "icon": "uil:create-dashboard"
@@ -63,12 +57,6 @@
         "id": "1",
         "name": "Registration",
         "route": "registration",
-        "icon": "tdesign:notification"
-    },
-    {
-        "id": "1",
-        "name": "Conpany Info",
-        "route": "company/info",
-        "icon": "fluent-mdl2:product-variant"
+        "icon": "material-symbols:app-registration-rounded"
     }
 ]
