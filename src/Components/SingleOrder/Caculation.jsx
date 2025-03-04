@@ -26,7 +26,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
 
     return (
         <>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3 ">
 
                 </th>
@@ -46,7 +46,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     {convertToBengaliNumber(actualPrice)}.০
                 </td>
             </tr>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-2">
 
                 </th>
@@ -66,7 +66,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     ০০.০
                 </td>
             </tr>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3 text-black">
                     সর্বমোট
                 </th>
@@ -87,7 +87,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                 </td>
             </tr>
 
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3">
 
                 </th>
@@ -108,7 +108,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                 </td>
 
             </tr>
-            <tr className="bg-white ">
+            <tr className=" ">
                 <th scope="row" className="pr-6 py-3">
 
                 </th>
@@ -128,7 +128,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     {convertToBengaliNumber(parseInt(due))}.০
                 </td>
             </tr>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3">
 
                 </th>
@@ -148,7 +148,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     {convertToBengaliNumber(actualPrice + due - discountAmount)}.০
                 </td>
             </tr>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3">
 
                 </th>
@@ -168,7 +168,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     {convertToBengaliNumber(parseInt(pay))}.০
                 </td>
             </tr>
-            <tr className="bg-white">
+            <tr className="">
                 <th scope="row" className="pr-6 py-3">
                     <h1 className='font-semibold text-lg text-black'>বিতরনকারী</h1>
                 </th>

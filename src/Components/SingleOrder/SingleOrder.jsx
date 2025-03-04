@@ -24,9 +24,9 @@ const SingleOrder = () => {
         }
     };
 
-    console.log(user)
+
     return (
-        <div className='relative px-4 pt-5'>
+        <div className='relative px-4 pt-5 min-h-screen'>
             {/* <div className='flex justify-between items-center py-3'>
                 <div>
                     <h1 className='font-semibold'>Sell Product</h1>
@@ -87,7 +87,7 @@ const SingleOrder = () => {
                 </div>
             </div>
 
-            <div className='relative overflow-x-auto my-5'>
+            <div className='relative overflow-x-auto my-5 min-h-screen'>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <Tabeheader />
                     <tbody>

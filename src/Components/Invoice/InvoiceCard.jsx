@@ -6,7 +6,7 @@ const InvoiceCard = ({ id, name, qty, cost, price }) => {
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
     }
     return (
-        <tr key={id} className="bg-white dark:bg-gray-800 border-b">
+        <tr key={id} className="dark:bg-gray-800 border-b">
             <th scope="row" className="pr-6 pl-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {convertToBengaliNumber(qty)}
             </th>

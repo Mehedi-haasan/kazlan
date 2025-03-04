@@ -1,12 +1,10 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import InputComponent from '../Input/InputComponent';
 import BaseUrl from '../../Constant';
-import SelectionComponent from '../Input/SelectionComponent';
+import SelectionComponent from '../Input/SelectComp';
 import RoleSelector from './RoleSelector';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
-import Logo from '../Logo/logu (2).png'
 
 
 const Registration = () => {
@@ -27,8 +25,12 @@ const Registration = () => {
       },
       body: JSON.stringify(values)
     });
-    const result = await response.json();
-    alert(result.message)
+    const data = await response.json();
+    if (data && data.accessToken && data.success) {
+      alert(data.message)
+      goToHome('/')
+    }
+
   }
 
 
@@ -49,7 +51,7 @@ const Registration = () => {
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[500px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
-        <form className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label className="block text-white text-sm font-semibold mb-1">First Name</label>
             <input type="text" onChange={(e) => { setValues({ ...values, first_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
@@ -79,10 +81,10 @@ const Registration = () => {
             }
             <input type={showPassword ? "text" : "password"} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
           </div>
-          <button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
+          <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
             Sign Up
           </button>
-        </form>
+        </div>
         <p className="text-center text-sm text-gray-300 mt-4">
           Have an account? <a href="/" className="text-blue-400 hover:underline">Sign In</a>
         </p>

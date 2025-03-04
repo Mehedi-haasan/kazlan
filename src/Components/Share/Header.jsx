@@ -8,7 +8,7 @@ import Add from "../../icons/Add";
 import RightArrow from "../../icons/RightArrow";
 
 
-const Header = ({ auth, open, isOpen }) => {
+const Header = ({ auth, open, isOpen,notification }) => {
     function generateRandomNumber() {
         return Math.floor(Math.random() * 20) + 1;
     }
@@ -34,7 +34,7 @@ const Header = ({ auth, open, isOpen }) => {
                     </NavLink> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
                     <NavLink to='/notification' className="relative hover:bg-slate-200 p-2 rounded-full">
                         <Notification />
-                        <h1 className="text-red-600 absolute top-0 right-[2px] font-semibold text-sm">{generateRandomNumber()}</h1>
+                        <h1 className="text-red-600 absolute top-0 right-[2px] font-semibold text-sm">{notification?.length > 0 ? notification?.length : null}</h1>
                     </NavLink>
                 </div>
             </div>

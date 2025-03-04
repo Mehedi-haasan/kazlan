@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import InvoiceCard from './InvoiceCard';
@@ -16,7 +16,7 @@ import Add from '../../icons/Add';
 import CreactProduct from '../ProductCreate/CreactProduct';
 
 
-const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
+const Invoice = ({ isOrder = true, }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -45,7 +45,7 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
         width: 1000,
         backgroundColor: '#ffffff' // Set background color to white
     };
-    const { ref, isLoading, getSvg, getPng } = useToImage(options)
+    const { ref, getPng } = useToImage(options)
 
     const SearchProduct = async (e) => {
         e.preventDefault();
@@ -171,9 +171,9 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
     }, [stateId])
 
     return (
-        <div className="bg-white">
+        <div className="min-h-screen">
 
-            <div className='w-full mx-auto border min-h-[90vh] rounded'>
+            <div className='w-full mx-auto border min-h-screen rounded'>
                 <div className="mt-4 px-3 pt-1">
 
                     <div>
@@ -185,7 +185,9 @@ const Invoice = ({ isOrder = true, isSingleOrder = true }) => {
                                 <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                             </div>
-                            <div onClick={() => { setIsCreate(true) }} className='border rounded-r py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
+                            <div
+                                // onClick={() => { setIsCreate(true) }}
+                                className='border rounded-r py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
                                 <Add />
                             </div>
                         </div>

@@ -17,6 +17,7 @@ import Category from "./Components/Category/Category.jsx";
 import State from "./Components/State/State.jsx";
 import NotFound from "./Components/NotFound/NotFound.jsx";
 import UpdateProduct from "./Components/UpdateProduct/UpdateProduct.jsx";
+import BaseUrl from "./Constant.js";
 
 
 
@@ -35,10 +36,29 @@ function App() {
     }
   }, [])
 
+  const [data, setData] = useState([]);
+
+  const getNotification = async () => {
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${BaseUrl}/api/get/notification`, {
+          method: 'GET',
+          headers: {
+              "authorization": token,
+              'Content-type': 'application/json; charset=UTF-8',
+          },
+      });
+      const data = await response.json()
+      setData(data.items)
+  }
+  useEffect(() => {
+    getNotification()
+  }, [])
+
+
 
   return (
     <BrowserRouter>
-      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} />
+      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data}/>
       <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"}`}>
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
@@ -49,7 +69,7 @@ function App() {
           <Route path="/product" element={<Product />} />
           <Route path="/user/order" element={<SingleOrder />} />
           <Route path="/sell" element={<Sell />} />
-          <Route path="/notification" element={<Notification />} />
+          <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/order" element={<Order />} />
           <Route path="/state" element={<State />} />
           <Route path="/company/info" element={<Company />} />
