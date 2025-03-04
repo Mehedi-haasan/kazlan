@@ -57,6 +57,7 @@ const AuthContainer = ({ auth }) => {
 
 function App() {
   const [auth, setAuth] = useState(false)
+  const [open, setopen] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -70,8 +71,26 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header auth={auth} />
-      {auth ? <DashboardContainer isLoggedOut={() => { setAuth(false) }} auth={auth} /> : <AuthContainer auth={() => setAuth(true)} />}
+      <Header auth={auth} isOpen={(v) => { setopen(v) }} />
+      <div className={`${open ? 'pl-[130px]' : 'pl-0'}`}>
+        <Routes>
+          <Route path="/" element={auth ? <Dashboard /> : <Login auth={auth} />} />
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/create" element={<CreactProduct />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/user/order" element={<SingleOrder />} />
+          <Route path="/sell" element={<Sell />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/state" element={<State />} />
+          <Route path="/company/info" element={<Company />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/update/product" element={<UpdateProduct />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
