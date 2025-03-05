@@ -101,6 +101,8 @@ const Invoice = ({ isOrder = true, }) => {
                 "qty": v?.qty,
                 "contact": mobile,
                 "date": date,
+                "previousdue": due,
+                "payamount": pay
             })
         ))
 
@@ -112,7 +114,13 @@ const Invoice = ({ isOrder = true, }) => {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
+                    shop: "shop",
                     userId: userId,
+                    invoice_id: invoice_id,
+                    date: date,
+                    total: total,
+                    previousdue: due,
+                    paidamount: pay,
                     amount: total - pay,
                     orders: orderData
                 }),

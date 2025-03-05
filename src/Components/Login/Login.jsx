@@ -3,6 +3,7 @@ import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 import { useNavigate } from 'react-router-dom';
+import Confirm from '../Confirm/Confirm';
 
 
 const Login = ({ auth }) => {
@@ -23,7 +24,6 @@ const Login = ({ auth }) => {
     });
     const data = await response.json();
     if (data && data.accessToken && data.success) {
-      alert(data.message)
       localStorage.setItem('token', data.accessToken);
       auth(true)
       goto('/dashboard')
@@ -31,7 +31,6 @@ const Login = ({ auth }) => {
 
 
   }
-
 
 
   return (
