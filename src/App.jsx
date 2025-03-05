@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './Components/Share/Header.jsx'
 import Dashboard from "./Components/Dashboard/Dashboard.jsx";
@@ -7,9 +8,7 @@ import SingleOrder from "./Components/SingleOrder/SingleOrder.jsx";
 import Order from "./Components/Order/Order.jsx";
 import Profile from "./Components/Profile/Profile.jsx";
 import Login from "./Components/Login/Login.jsx";
-import { useState, useEffect } from "react";
 import Registration from "./Components/Login/Registration.jsx";
-import Sell from "./Components/Sell/Sell.jsx";
 import Success from "./Components/Socket/Success.jsx";
 import Notification from "./Components/Notification/Notification.jsx";
 import Company from "./Components/Company/Company.jsx";
@@ -18,6 +17,7 @@ import State from "./Components/State/State.jsx";
 import NotFound from "./Components/NotFound/NotFound.jsx";
 import UpdateProduct from "./Components/UpdateProduct/UpdateProduct.jsx";
 import BaseUrl from "./Constant.js";
+import Invoice from "./Components/Invoice/Invoice.jsx";
 
 
 
@@ -62,13 +62,13 @@ function App() {
       <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"}`}>
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard data={data} />} />
           <Route path="/registration" element={<Registration />} />
           <Route path="/success" element={<Success />} />
           <Route path="/create" element={<CreactProduct />} />
           <Route path="/product" element={<Product />} />
           <Route path="/user/order" element={<SingleOrder />} />
-          <Route path="/sell" element={<Sell />} />
+          <Route path="/sell" element={<Invoice />} />
           <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/order" element={<Order />} />
           <Route path="/state" element={<State />} />

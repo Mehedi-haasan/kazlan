@@ -6,7 +6,7 @@ import Modal from '../Input/Modal';
 import MiniButton from '../Input/MiniButton';
 import PaymentTotal from './PaymentTotal';
 import Search from '../../icons/Search';
-import SellCard from '../Sell/SellCard';
+import SellCard from './SellCard';
 import SelectionComponent from '../Input/SelectionComponent';
 import BaseUrl from '../../Constant';
 import { useToImage } from '@hcorta/react-to-image'
@@ -182,7 +182,7 @@ const Invoice = ({ isOrder = true, }) => {
                                 <BarCode />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
+                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none h-full w-full' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                             </div>
                             <div
@@ -193,7 +193,7 @@ const Invoice = ({ isOrder = true, }) => {
                         </div>
                         <div className='flex justify-between'>
                             <div className='flex justify-start gap-3 items-center'>
-                                <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>
+                                <h1 className='font-semibold w-[80px]'>ঠিকানা</h1>
                                 <div className='flex justify-start items-center gap-3'>
                                     <h1 className='font-semibold'>:</h1>
                                     <SelectionComponent options={state} onSelect={(value) => { setStateName(value?.name); setStateId(value?.id) }} label={''} />
@@ -209,7 +209,7 @@ const Invoice = ({ isOrder = true, }) => {
                         </div>
                         <div className='flex justify-between pb-1'>
                             <div className='flex justify-start gap-3 items-center'>
-                                <h1 className='font-semibold w-[90px]'>নাম</h1>
+                                <h1 className='font-semibold w-[80px]'>নাম</h1>
                                 <div className='flex justify-start items-center gap-3'>
                                     <h1 className='font-semibold'>:</h1>
                                     <SelectionComponent options={user} onSelect={(v) => { setName(v?.name); setUserId(v?.id); setDue(0) }} label={''} />
@@ -226,7 +226,7 @@ const Invoice = ({ isOrder = true, }) => {
 
                         <div className='flex justify-between'>
                             <div className='flex justify-start gap-3 items-center py-1'>
-                                <h1 className='font-semibold w-[90px]'>মোবাইল</h1>
+                                <h1 className='font-semibold w-[80px]'>মোবাইল</h1>
                                 <div className='flex justify-start items-center gap-3'>
                                     <h1 className='font-semibold'>:</h1>
                                     <input placeholder='মোবাইল নম্বর' onChange={(e) => { setMobile(e.target.value) }} className='border focus:outline-none rounded p-1 border-black text-black' />
@@ -257,8 +257,8 @@ const Invoice = ({ isOrder = true, }) => {
                         </div>
                         <div className='flex justify-between items-center py-1'>
                             <h1>Qty</h1>
-                            <input
-                                className="text-right focus:outline-none w-12"
+                            <input type='number'
+                                className="text-right focus:outline-none w-16 border rounded"
                                 onChange={(e) => setData({ ...data, qty: e.target.value })}
                                 // value={qty}
                                 onKeyDown={(e) => {
@@ -272,7 +272,24 @@ const Invoice = ({ isOrder = true, }) => {
                                 placeholder={""}
                             />
                         </div>
-                        <div className='flex justify-end items-center py-1'>
+                        <div className='flex justify-between items-center py-1'>
+                            <h1>Comn</h1>
+                            <input type='number'
+                                className="text-right focus:outline-none w-16 border rounded"
+                                onChange={(e) => setData({ ...data, qty: e.target.value })}
+                                // value={qty}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        setAllData([...allData, data]);
+                                        setData([]);
+                                        setShow(false);
+                                        // setQty(0)
+                                    }
+                                }}
+                                placeholder={""}
+                            />
+                        </div>
+                        <div className='flex justify-end items-center pt-1'>
                             <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); }} />
                         </div>
                     </Modal>

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Charts3 from './Charts3';
-import Charts4 from './Charts4';
-import Charts6 from './Charts6';
-import Charts7 from './Charts7';
+import MonthlySale from './MonthlySale';
 import BaseUrl from '../../Constant';
+import DailySalse from './DailySalse';
 
 
 
-const Dashboard = () => {
+const Dashboard = ({ data }) => {
 
     const [hourSales, setHourSales] = useState([]);
     const [month, setMonthly] = useState([]);
@@ -87,7 +85,7 @@ const Dashboard = () => {
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
                     <div className='flex justify-start items-end gap-1'>
-                        <h1 className='font-bold text-5xl'>12</h1>
+                        <h1 className='font-bold text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
                         <p className='font-semibold'>Notifications</p>
                     </div>
                 </div>
@@ -97,10 +95,10 @@ const Dashboard = () => {
 
             <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5'>
                 <div className='rounded-lg'>
-                    <Charts3 hourSales={hourSales} />
+                    <DailySalse hourSales={hourSales} />
                 </div>
                 <div>
-                    <Charts7 month={month} />
+                    <MonthlySale month={month} />
                 </div>
                 <div className='grid col-span-1 lg:col-span-2'>
 
@@ -111,16 +109,15 @@ const Dashboard = () => {
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                                 <tr className='border-b text-md'>
-                                    <th scope="col" className="pr-6 py-2 ">পরিমাণ</th>
-                                    <th scope="col" className="px-4 py-2 text-center">বইয়ের নাম এবং শ্রেণী</th>
-                                    <th scope="col" className="px-4 py-2 text-center">প্রকাশক</th>
-                                    <th scope="col" className="pl-4 py-2 text-right">মূল্য</th>
-                                    <th scope="col" className="pl-4 py-2 text-right">বিক্রয় মূল্য</th>
+                                    <th scope="col" className="pr-6 py-2 ">তারিখ</th>
+                                    <th scope="col" className="px-4 py-2 text-center">গ্রাহকের নাম</th>
+                                    <th scope="col" className="px-4 py-2 text-center">অর্ডার আইডি</th>
+                                    <th scope="col" className="pl-4 py-2 text-center">অর্থপ্রদানের অবস্থা</th>
+                                    <th scope="col" className="pl-4 py-2 text-center">বিক্রয় মূল্য</th>
                                     <th scope="col" className="pl-4 py-2 text-right">মোট মূল্য</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr key={89} className="bg-white dark:bg-gray-800 border-b">
                                     <th scope="row" className="pr-6 pl-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {5}
@@ -131,10 +128,10 @@ const Dashboard = () => {
                                     <td className="px-6 py-2 text-center">
                                         {"Islamia Library"}
                                     </td>
-                                    <td className="pl-6 py-2 text-right">
+                                    <td className="pl-6 py-2 text-center">
                                         {8}
                                     </td>
-                                    <td className="pl-6 py-2 text-right">
+                                    <td className="pl-6 py-2 text-center">
                                         {3}
                                     </td>
                                     <td className="pl-6 py-2 text-right">

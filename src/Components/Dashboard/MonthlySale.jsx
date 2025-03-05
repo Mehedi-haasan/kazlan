@@ -3,7 +3,7 @@ import CanvasJSReact from '@canvasjs/react-charts';
 
 const { CanvasJSChart } = CanvasJSReact;
 
-const Charts7 = ({ month }) => {
+const MonthlySale = ({ month }) => {
   const options = {
     animationEnabled: true,
     theme: "light2",
@@ -75,4 +75,4 @@ const Charts7 = ({ month }) => {
   );
 };
 
-export default Charts7;
+export default MonthlySale;

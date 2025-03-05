@@ -3,7 +3,7 @@ import CanvasJSReact from "@canvasjs/react-charts";
 
 const { CanvasJSChart } = CanvasJSReact;
 
-const Charts3 = ({ hourSales }) => {
+const DailySalse = ({ hourSales }) => {
 
   const options = {
     animationEnabled: true,
@@ -42,4 +42,4 @@ const Charts3 = ({ hourSales }) => {
   );
 };
 
-export default Charts3;
+export default DailySalse;
