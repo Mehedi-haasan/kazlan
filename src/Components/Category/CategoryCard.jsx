@@ -71,16 +71,16 @@ const CategoryCard = ({ cate }) => {
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </td>
-            <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" className="pl-1 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {cate?.id}
             </th>
-            <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" className="pl-1 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {cate?.name}
             </th>
-            <td className="px-4 py-4">
+            <td className="px-4 py-2">
                 <img src={cate?.image_url} alt="category" className="h-12 w-12 rounded" />
             </td>
-            <td className="pl-4 py-4 pr-5 flex justify-end gap-2 items-center">
+            <td className="pl-4 py-5 pr-5 flex justify-end gap-2 items-center">
                 <Edit size='25px' onClick={() => { setEdit(true) }} />
                 <Remove size='25px' onClick={() => { setShow(true) }} />
                 <Modal show={show} handleClose={() => { setShow(false) }} size="350px" className="">

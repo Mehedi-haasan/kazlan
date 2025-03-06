@@ -20,9 +20,8 @@ const Profile = () => {
         GetUser()
     }, [])
 
-    console.log(user);
     return (
-        <div>
+        <div className='min-h-screen'>
             <h1 className='font-semibold text-center py-5 text-xl '>My Profile</h1>
             <div className='border-t-[1px] p-6'>
                 <img src={user?.image_url ? user?.image_url : `https://cdn-icons-png.flaticon.com/128/149/149071.png`} alt='fjgkfd' className='h-[120px] w-[120px] mx-auto rounded-s-none' />

@@ -3,60 +3,94 @@
         "id": "1",
         "name": "Dashboard",
         "route": "dashboard",
-        "icon": "subway:menu"
+        "icon": "material-symbols:home-outline",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "2",
         "name": "Product",
         "route": "product",
-        "icon": "fluent-mdl2:product-variant"
+        "icon": "fluent-mdl2:product-variant",
+        "option": true,
+        "items": [
+            {
+                "id": 11,
+                "name": "List",
+                "route": "product"
+            },
+            {
+                "id": 12,
+                "name": "Create",
+                "route": "create"
+            }
+        ]
     },
     {
         "id": "3",
         "name": "State",
         "route": "state",
-        "icon": "uil:create-dashboard"
+        "icon": "mdi:location",
+        "option": false
     },
     {
-        "id": "3",
+        "id": "4",
         "name": "New Order",
         "route": "sell",
-        "icon": "uil:create-dashboard"
+        "icon": "mdi:cart-outline",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "5",
         "name": "Single Order",
         "route": "user/order",
-        "icon": "bxs:category-alt"
+        "icon": "bxs:category-alt",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "6",
         "name": "Category",
         "route": "category",
-        "icon": "bxs:category-alt"
+        "icon": "bxs:category-alt",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "7",
         "name": "Update",
         "route": "update/product",
-        "icon": "bxs:category-alt"
+        "icon": "dashicons:update",
+        "option": true,
+        "items": [
+            {
+                "id": 11,
+                "name": "List",
+                "route": "product"
+            },
+            {
+                "id": 12,
+                "name": "Create",
+                "route": "create"
+            }
+        ]
     },
     {
-        "id": "1",
+        "id": "8",
         "name": "Order",
         "route": "order",
-        "icon": "material-symbols:order-approve"
+        "icon": "material-symbols:order-approve",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "9",
         "name": "Notification",
         "route": "notification",
-        "icon": "tdesign:notification"
+        "icon": "tdesign:notification",
+        "option": false
     },
     {
-        "id": "1",
+        "id": "10",
         "name": "Registration",
         "route": "registration",
-        "icon": "material-symbols:app-registration-rounded"
+        "icon": "material-symbols:app-registration-rounded",
+        "option": false
     }
 ]

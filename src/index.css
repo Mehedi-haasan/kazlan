@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body {
-  font-family: 'Poppins', sans-serif;
-}
-
 a.canvasjs-chart-credit {
   display: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
 }

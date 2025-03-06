@@ -57,7 +57,7 @@ const Practice = () => {
                     <h1 className='font-semibold'>Item List</h1>
                 </div>
                 <div className='relative border rounded text-black'>
-                    <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none ' />
+                    <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-[230px]' />
                     <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                 </div>
                 <div className='flex justify-start items-center gap-3' onClick={() => { setIsCreate(true) }}>
@@ -66,7 +66,7 @@ const Practice = () => {
             </div>
 
             <div className='w-full overflow-x-auto'>
-                <table className="min-w-[1840px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <table className="min-w-[1640px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr className='shadow font-semibold'>
                             <th scope="col" className="pl-4">
@@ -103,7 +103,7 @@ const Practice = () => {
                     </thead>
                     <tbody>
                         {
-                            data.map((product) => {
+                            data?.map((product) => {
                                 return <ProductCard key={product?.id} product={product} />
                             })
                         }

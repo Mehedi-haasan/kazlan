@@ -3,7 +3,6 @@ import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 import { useNavigate } from 'react-router-dom';
-import Confirm from '../Confirm/Confirm';
 
 
 const Login = ({ auth }) => {

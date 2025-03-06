@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import MonthlySale from './MonthlySale';
 import BaseUrl from '../../Constant';
 import DailySalse from './DailySalse';
+import Cart from '../../icons/Cart';
+import Notification from '../../icons/Notification';
 
 
 
@@ -50,20 +52,20 @@ const Dashboard = ({ data }) => {
     }, [])
 
     return (
-        <div className='bg-[#F7F7FF] pt-5 px-2 min-h-screen relative'>
+        <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen relative'>
 
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-blue-500'>
-                    <div className='p-5 border rounded-full bg-[#FFF2E8]'>
-                        <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
+                    <div className='p-5 border rounded-full bg-blue-500'>
+                        <Cart className="text-[#FFFFFF]"/>
                     </div>
                     <div className='flex justify-start items-end gap-1'>
                         <h1 className='font-bold text-5xl'>{total}.00</h1>
                         <p className='font-semibold'>Total Sale</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -72,7 +74,7 @@ const Dashboard = ({ data }) => {
                         <p className='font-semibold'>Customer Request</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-blue-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
                     </div>
@@ -81,9 +83,9 @@ const Dashboard = ({ data }) => {
                         <p className='font-semibold'>Customer Complains</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border-l-4 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
-                        <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-12 w-12 ' alt='image' />
+                        <Notification height="35px" width="35px"/>
                     </div>
                     <div className='flex justify-start items-end gap-1'>
                         <h1 className='font-bold text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>

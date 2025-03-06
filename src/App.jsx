@@ -25,7 +25,7 @@ import Invoice from "./Components/Invoice/Invoice.jsx";
 
 function App() {
   const [auth, setAuth] = useState(false)
-  const [open, setopen] = useState(false)
+  const [open, setopen] = useState(true)
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -39,16 +39,16 @@ function App() {
   const [data, setData] = useState([]);
 
   const getNotification = async () => {
-      const token = localStorage.getItem('token')
-      const response = await fetch(`${BaseUrl}/api/get/notification`, {
-          method: 'GET',
-          headers: {
-              "authorization": token,
-              'Content-type': 'application/json; charset=UTF-8',
-          },
-      });
-      const data = await response.json()
-      setData(data.items)
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/notification`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setData(data.items)
   }
   useEffect(() => {
     getNotification()
@@ -58,8 +58,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data}/>
-      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"}`}>
+      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data} />
+      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard data={data} />} />
