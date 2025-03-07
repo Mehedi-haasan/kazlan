@@ -8,7 +8,7 @@ import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import SellCard from './SellCard';
+import PurchaseProductCard from './PurchaseProductCard';
 import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const Sell = () => {
+const PurchaseProduct = () => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -302,7 +302,7 @@ const Sell = () => {
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <SellCard item={item} />
+                                return <PurchaseProductCard item={item} />
                             })}
                         </tbody>
                     </table>
@@ -382,4 +382,4 @@ const Sell = () => {
     );
 }
 
-export default Sell;
+export default PurchaseProduct;

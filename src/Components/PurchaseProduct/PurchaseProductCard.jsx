@@ -1,7 +1,7 @@
 import React from 'react';
 import Remove from '../../icons/Remove';
 
-const SellCard = ({ item, onClick }) => {
+const PurchaseProductCard = ({ item, onClick }) => {
 
 
     return (
@@ -18,4 +18,4 @@ const SellCard = ({ item, onClick }) => {
     );
 };
 
-export default SellCard;
+export default PurchaseProductCard;

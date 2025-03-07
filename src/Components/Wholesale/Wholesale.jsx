@@ -8,7 +8,7 @@ import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import SellCard from './SellCard';
+import WholeSaleCard from './WholeSaleCard';
 import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const Sell = () => {
+const WholeSell = () => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -178,6 +178,7 @@ const Sell = () => {
         fetchUser()
     }, [stateId])
 
+
     let shop = [
         {
             id: 23,
@@ -214,11 +215,8 @@ const Sell = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <div className='w-full'>
-                            <h1>Customer</h1>
-                            <input placeholder={'Enter'} className='rounded-l border px-1 py-1.5 w-full' />
-                        </div>
-                        <div className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
+                        <SelectionComponent options={user} onSelect={() => { }} label={"Customer"} className='rounded-l' />
+                        <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
@@ -244,7 +242,7 @@ const Sell = () => {
                         <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
                     </div>
                     <div className='grid col-span-2'>
-                        <h1 className='pb-1'>Enter item name</h1>
+                        <h1 className='pb-1'>Enter Item Name</h1>
                         <div className='flex justify-center w-full'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
@@ -302,7 +300,7 @@ const Sell = () => {
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <SellCard item={item} />
+                                return <WholeSaleCard item={item} />
                             })}
                         </tbody>
                     </table>
@@ -382,4 +380,4 @@ const Sell = () => {
     );
 }
 
-export default Sell;
+export default WholeSell;
