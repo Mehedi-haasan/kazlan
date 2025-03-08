@@ -7,11 +7,11 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
 
     useEffect(() => {
         let amount = data.reduce((acc, d) => acc + (parseInt(d?.price) * parseInt(d?.qty) || 0), 0);
-        setActualPrice(amount)
+        // setActualPrice(amount)
         if (discountType === "Percentage") {
-            setDiscountAmount(parseInt(discount));
+            // setDiscountAmount(parseInt(discount));
         } else {
-            setDiscountAmount(parseInt(actualPrice * discount / 100));
+            // setDiscountAmount(parseInt(actualPrice * discount / 100));
         }
 
     }, [data, discountType, discountAmount]);
@@ -22,7 +22,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
     }
 
-    console.log(discountAmount);
+    console.log(data, discount, discountType, due, pay);
 
     return (
         <>
@@ -83,7 +83,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     সর্বমোট
                 </td>
                 <td className="pl-6 py-3 text-right">
-                    {convertToBengaliNumber(actualPrice * 1)}.০
+                    {convertToBengaliNumber(parseInt(actualPrice))}.০
                 </td>
             </tr>
 
@@ -145,7 +145,7 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
                     অবশিষ্ট
                 </td>
                 <td className="pl-6 py-3 text-right">
-                    {convertToBengaliNumber(actualPrice + due - discountAmount)}.০
+                    {convertToBengaliNumber(parseInt(actualPrice + due - discountAmount))}.০
                 </td>
             </tr>
             <tr className="">

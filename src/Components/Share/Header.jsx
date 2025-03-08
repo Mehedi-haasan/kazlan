@@ -27,9 +27,15 @@ const Header = ({ auth, open, isOpen, notification }) => {
                 <div className="flex justify-end items-center gap-3">
                     <button onClick={() => { isOpen(!open) }} className="border rounded-full px-2 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add /> Add Purchase</button>
                     <button className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add /> Add Sale</button>
-                    {auth ? <NavLink to='/profile' className='font-bold text-sm xl:text-md'>
-                        <img src={user} alt="sdgd" className="h-10 w-10 rounded-full" />
-                    </NavLink> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
+                    {auth ? <div className="flex justify-start items-start gap-2">
+                        <NavLink to='/profile' className='font-bold text-sm xl:text-md'>
+                            <img src={user} alt="sdgd" className="h-10 w-10 rounded-full" />
+                        </NavLink>
+                        <div>
+                            <h1 className="text-sm">Mahfuz</h1>
+                            <p className="text-xs">Admin</p>
+                        </div>
+                    </div> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
                     <NavLink to='/notification' className="relative hover:bg-slate-200 p-2 rounded-full">
                         <Notification />
                         <h1 className="text-red-600 absolute top-0 right-[2px] font-semibold text-sm">{notification?.length > 0 ? notification?.length : null}</h1>
@@ -41,16 +47,24 @@ const Header = ({ auth, open, isOpen, notification }) => {
                 <div className=''>
                     {data?.map((item, index) => (
                         <div className="">
-                            <NavLink onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} key={index} to={`/${item?.option ? 'dashboard' : `${item?.route}`}`} className={`flex ${selected?.id === item?.id ? 'bg-blue-50 text-blue-500' : ''} ${open ? 'justify-between ml-2' : 'justify-end mr-2'} text-[#5F5F5F] text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
-                                <div className="flex justify-start items-center gap-2">
-                                    <Icon icon={item.icon} width='20px' />
-                                    <h1 className={`${open ? '' : 'hidden'}`}>{item.name}</h1>
-                                </div>
-                                {item?.option && <RightArrow className={`${open ? '' : 'hidden'} transition-transform duration-300 ${selected?.id === item?.id ? 'rotate-90' : ''}`} />}
-                            </NavLink>
+                            {
+                                item?.option ? <div onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} key={index} className={`flex ${selected?.id === item?.id ? 'bg-blue-50 text-blue-500' : ''} ${open ? 'justify-between ml-2' : 'justify-end mr-2'} text-[#5F5F5F] cursor-pointer text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
+                                    <div className="flex justify-start items-center gap-2">
+                                        <Icon icon={item.icon} width='20px' />
+                                        <h1 className={`${open ? '' : 'hidden'}`}>{item.name}</h1>
+                                    </div>
+                                    {item?.option && <RightArrow className={`${open ? '' : 'hidden'} transition-transform duration-300 ${selected?.id === item?.id ? 'rotate-90' : ''}`} />}
+                                </div> : <NavLink onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} key={index} to={`/${item?.route}`} className={`flex ${selected?.id === item?.id ? 'bg-blue-50 text-blue-500' : ''} ${open ? 'justify-between ml-2' : 'justify-end mr-2'} text-[#5F5F5F] text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
+                                    <div className="flex justify-start items-center gap-2">
+                                        <Icon icon={item.icon} width='20px' />
+                                        <h1 className={`${open ? '' : 'hidden'}`}>{item.name}</h1>
+                                    </div>
+                                    {item?.option && <RightArrow className={`${open ? '' : 'hidden'} transition-transform duration-300 ${selected?.id === item?.id ? 'rotate-90' : ''}`} />}
+                                </NavLink>
+                            }
                             <div className={`pl-2 overflow-hidden transition-all duration-700 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
                                 {item?.items?.map((it) => (
-                                    <NavLink key={index} onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} to={`/${it?.route}`} className={`flex text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-4 py-1.5`}>
+                                    <NavLink key={index} to={`/${it?.route}`} className={`flex text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-4 py-1.5`}>
                                         <div className="flex justify-start items-center gap-2">
                                             <Circle />
                                             <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>

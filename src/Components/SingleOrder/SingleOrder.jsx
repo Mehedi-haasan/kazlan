@@ -95,10 +95,10 @@ const SingleOrder = () => {
                             return <InvoiceCard key={item?.id} id={item?.id} name={item?.name} qty={item?.qty} cost={item?.cost} price={item?.price} />
                         })}
                         <Caculation
-                            data={data}
-                            discount={user?.discount}
-                            discountType={user?.discount_type}
-                            due={user?.due}
+                            data={data || []}
+                            discount={user?.discount || 0}
+                            discountType={user?.discount_type || 0}
+                            due={user?.due || 0}
                             pay={500}
                         />
 

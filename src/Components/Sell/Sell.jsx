@@ -216,7 +216,7 @@ const Sell = () => {
                     <div className='flex justify-start items-end pb-1'>
                         <div className='w-full'>
                             <h1>Customer</h1>
-                            <input placeholder={'Enter'} className='rounded-l border px-1 py-1.5 w-full' />
+                            <input placeholder={'Enter'} className='rounded-l focus:outline-none border px-1 py-1.5 w-full' />
                         </div>
                         <div className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />

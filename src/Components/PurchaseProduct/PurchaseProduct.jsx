@@ -210,15 +210,12 @@ const PurchaseProduct = () => {
 
             <div className='bg-[#FFFFFF]'>
                 <div className='border-b p-4'>
-                    <h1>Sale Details</h1>
+                    <h1>Purchase Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <div className='w-full'>
-                            <h1>Customer</h1>
-                            <input placeholder={'Enter'} className='rounded-l border px-1 py-1.5 w-full' />
-                        </div>
-                        <div className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
+                        <SelectionComponent options={user} onSelect={() => { }} label={"Supplier"} className='rounded-l' />
+                        <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>

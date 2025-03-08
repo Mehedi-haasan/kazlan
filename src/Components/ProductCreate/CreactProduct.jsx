@@ -7,7 +7,7 @@ import SelectionComponent from '../Input/SelectionComponent'
 import BaseUrl from '../../Constant';
 
 
-const CreactProduct = () => {
+const CreactProduct = ({ handleClose }) => {
 
     const [image_url, setImage_Url] = useState();
     const [category, setCategory] = useState([])
@@ -38,6 +38,7 @@ const CreactProduct = () => {
             });
 
             const data = await response.json();
+            handleClose(false)
             alert(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);

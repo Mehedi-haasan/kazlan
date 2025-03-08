@@ -8,19 +8,24 @@
     },
     {
         "id": "2",
-        "name": "Product",
+        "name": "Items",
         "route": "product",
         "icon": "fluent-mdl2:product-variant",
         "option": true,
         "items": [
             {
                 "id": 11,
-                "name": "List",
+                "name": "Item List",
                 "route": "product"
             },
             {
+                "id": 11,
+                "name": "Category List",
+                "route": "category"
+            },
+            {
                 "id": 12,
-                "name": "Create",
+                "name": "Create item",
                 "route": "create"
             }
         ]
@@ -40,7 +45,7 @@
             {
                 "id": 12,
                 "name": "Suppliers",
-                "route": "create"
+                "route": "suppliers"
             }
         ]
     },

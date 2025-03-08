@@ -21,7 +21,7 @@ const SelectionComp = ({ options, onSelect, label }) => {
                 className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
             >
                 {options.map(({ id, name }) => (
-                    <option key={id} value={id}> {name}</option>
+                    <option key={id} value={id} className='text-black hover:text-white'> {name}</option>
                 ))}
             </select>
         </div>

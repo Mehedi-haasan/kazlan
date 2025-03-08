@@ -20,6 +20,8 @@ import BaseUrl from "./Constant.js";
 import Sell from "./Components/Sell/Sell.jsx";
 import WholeSell from "./Components/Wholesale/Wholesale.jsx";
 import Customers from "./Components/Customers/Customers.jsx";
+import Suppliers from "./Components/Supplier/Suppliers.jsx";
+import Return from "./Components/Return/Return.jsx";
 
 
 
@@ -39,6 +41,7 @@ function App() {
   }, [])
 
   const [data, setData] = useState([]);
+  const [category, setCategory] = useState([]);
 
   const getNotification = async () => {
     const token = localStorage.getItem('token')
@@ -52,8 +55,23 @@ function App() {
     const data = await response.json()
     setData(data.items)
   }
+
+
+  const getCategory = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/category`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setCategory(data.items)
+  }
   useEffect(() => {
     getNotification()
+    getCategory();
   }, [])
 
 
@@ -68,7 +86,7 @@ function App() {
           <Route path="/registration" element={<Registration />} />
           <Route path="/success" element={<Success />} />
           <Route path="/create" element={<CreactProduct />} />
-          <Route path="/product" element={<Product />} />
+          <Route path="/product" element={<Product category={category}/>} />
           <Route path="/user/order" element={<SingleOrder />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/wholesale" element={<WholeSell />} />
@@ -76,9 +94,11 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/state" element={<State />} />
           <Route path="/company/info" element={<Company />} />
-          <Route path="/category" element={<Category />} />
+          <Route path="/category" element={<Category category={category}/>} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/return" element={<Return />} />
           <Route path="/customers" element={<Customers />} />
+          <Route path="/suppliers" element={<Suppliers />} />
           <Route path="/update/product" element={<PurchaseProduct />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

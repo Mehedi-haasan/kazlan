@@ -8,7 +8,7 @@ import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import WholeSaleCard from './WholeSaleCard';
+import PurchaseProductCard from '../PurchaseProduct/PurchaseProductCard';
 import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const WholeSell = () => {
+const Return = () => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -178,7 +178,6 @@ const WholeSell = () => {
         fetchUser()
     }, [stateId])
 
-
     let shop = [
         {
             id: 23,
@@ -205,7 +204,7 @@ const WholeSell = () => {
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
             <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
+                <h1>Home</h1><RightArrow /><h1>Return</h1>
             </div>
 
 
@@ -214,12 +213,6 @@ const WholeSell = () => {
                     <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={() => { }} label={"State"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
-                            <Add />
-                        </div>
-                    </div>
                     <div className='flex justify-start items-end pb-1'>
                         <SelectionComponent options={user} onSelect={() => { }} label={"Customer"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
@@ -248,7 +241,7 @@ const WholeSell = () => {
                         <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
                     </div>
                     <div className='grid col-span-2'>
-                        <h1 className='pb-1'>Enter Item Name</h1>
+                        <h1 className='pb-1'>Enter item name</h1>
                         <div className='flex justify-center w-full'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
@@ -306,7 +299,7 @@ const WholeSell = () => {
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <WholeSaleCard item={item} />
+                                return <PurchaseProductCard item={item} />
                             })}
                         </tbody>
                     </table>
@@ -386,4 +379,4 @@ const WholeSell = () => {
     );
 }
 
-export default WholeSell;
+export default Return;

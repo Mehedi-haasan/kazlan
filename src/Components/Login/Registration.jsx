@@ -14,6 +14,7 @@ const Registration = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [state, setState] = useState([])
   const goToHome = useNavigate();
+  let user = [{ id: 1, name: "User" }, { id: 2, name: "Customer" }, { id: 3, name: "Supplier" }]
 
 
   const handleSubmit = async (e) => {
@@ -49,9 +50,9 @@ const Registration = () => {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[500px]">
+      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[800px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
-        <div className="space-y-4">
+        <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-white text-sm font-semibold mb-1">First Name</label>
             <input type="text" onChange={(e) => { setValues({ ...values, first_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
@@ -69,11 +70,11 @@ const Registration = () => {
             <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">State</label>
-            <input type="text" onChange={(value) => { setValues({ ...values, username: value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+            <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
           </div>
-          <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
-          <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} />
+          <div>
+            <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`User Type`} className='font-semibold' />
+          </div>
           <div className='relative'>
             <label className="block text-white text-sm font-semibold mb-1">Password</label>
             {
@@ -81,6 +82,11 @@ const Registration = () => {
             }
             <input type={showPassword ? "text" : "password"} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
           </div>
+          <div className=''>
+            <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} />
+          </div>
+        </div>
+        <div className='pt-5'>
           <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
             Sign Up
           </button>
