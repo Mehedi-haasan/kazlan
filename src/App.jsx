@@ -22,6 +22,11 @@ import WholeSell from "./Components/Wholesale/Wholesale.jsx";
 import Customers from "./Components/Customers/Customers.jsx";
 import Suppliers from "./Components/Supplier/Suppliers.jsx";
 import Return from "./Components/Return/Return.jsx";
+import ForgetPassword from "./Components/Login/ForgetPassword.jsx";
+import OtpVarification from "./Components/Login/OtpVarification.jsx";
+import RecentInvoice from "./Components/RecentInvoice/RecentInvoice.jsx";
+import Brand from "./Components/Brand/Brand.jsx";
+
 
 
 
@@ -29,19 +34,19 @@ import Return from "./Components/Return/Return.jsx";
 
 function App() {
   const [auth, setAuth] = useState(false)
-  const [open, setopen] = useState(true)
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token && token !== "null") {
-      setAuth(true)
-    } else {
-      setAuth(false)
-    }
-  }, [])
-
+  const [open, setopen] = useState(true);
+  const [info, setInfo] = useState({});
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
+
+  let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
+  let paytype = [{ id: 1, name: "Cash" }, { id: 2, name: "Due" }]
+  let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }, { id: 3, name: "30" }, { id: 4, name: "50" }]
+  let user = [{ id: 1, name: "Mehedi" }, { id: 2, name: "20" }]
+  let shop = [{ id: 23, name: "Main" }, { id: 24, name: "Shop 1" }]
+  let state = [{ id: 23, name: "Main" }, { id: 24, name: "Shop 1" }]
+
 
   const getNotification = async () => {
     const token = localStorage.getItem('token')
@@ -56,7 +61,6 @@ function App() {
     setData(data.items)
   }
 
-
   const getCategory = async () => {
     const token = localStorage.getItem('token')
     const response = await fetch(`${BaseUrl}/api/get/category`, {
@@ -69,37 +73,67 @@ function App() {
     const data = await response.json()
     setCategory(data.items)
   }
+
+  const getBrand = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/brand`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setBrand(data.items)
+  }
+
   useEffect(() => {
     getNotification()
     getCategory();
+    getBrand()
+
+
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('name');
+    const role = localStorage.getItem('role');
+    if (token && token !== "null") {
+      setAuth(true);
+      setInfo({ name: name, role: role })
+    } else {
+      setAuth(false)
+    }
   }, [])
 
 
 
   return (
     <BrowserRouter>
-      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data} />
+      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
       <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard data={data} />} />
           <Route path="/registration" element={<Registration />} />
+          <Route path="/forget/password" element={<ForgetPassword />} />
+          <Route path="/OTP/varification" element={<OtpVarification />} />
           <Route path="/success" element={<Success />} />
-          <Route path="/create" element={<CreactProduct />} />
-          <Route path="/product" element={<Product category={category}/>} />
+          <Route path="/create" element={<CreactProduct category={category} />} />
+          <Route path="/product" element={<Product category={category} type={type} brand={brand} entries={entries} shop={shop} />} />
           <Route path="/user/order" element={<SingleOrder />} />
-          <Route path="/sell" element={<Sell />} />
-          <Route path="/wholesale" element={<WholeSell />} />
+          <Route path="/sell" element={<Sell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} />} />
+          <Route path="/wholesale" element={<WholeSell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} />} />
           <Route path="/notification" element={<Notification data={data} />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/state" element={<State />} />
+          <Route path="/order" element={<Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} />} />
+          <Route path="/state" element={<State entries={entries} />} />
           <Route path="/company/info" element={<Company />} />
-          <Route path="/category" element={<Category category={category}/>} />
+          <Route path="/category" element={<Category category={category} entries={entries} />} />
+          <Route path="/brand" element={<Brand brands={brand} entries={entries} />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/recent/invoice" element={<RecentInvoice />} />
           <Route path="/return" element={<Return />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/suppliers" element={<Suppliers />} />
-          <Route path="/update/product" element={<PurchaseProduct />} />
+          <Route path="/customers" element={<Customers entries={entries} />} />
+          <Route path="/suppliers" element={<Suppliers entries={entries} />} />
+          <Route path="/update/product" element={<PurchaseProduct category={category} type={type} brand={brand} entries={entries} shop={shop} paytype={paytype} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

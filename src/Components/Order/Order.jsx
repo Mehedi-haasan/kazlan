@@ -10,7 +10,7 @@ import Updown from '../../icons/Updown';
 import Remove from '../../icons/Remove';
 import ShowEntries from '../Input/ShowEntries';
 
-const Order = () => {
+const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [], user = [] }) => {
     const [data, setData] = useState([]);
     const [searchData, setSearchData] = useState([])
 
@@ -52,7 +52,7 @@ const Order = () => {
 
     return (
         <div className='bg-white relative pt-5 px-2'>
-            <div className='flex justify-center w-full pb-1.5'>
+            {/* <div className='flex justify-center w-full pb-1.5'>
                 <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
                     <BarCode />
                 </div>
@@ -60,7 +60,7 @@ const Order = () => {
                     <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
                     <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                 </div>
-            </div>
+            </div> */}
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Order List</h1>
@@ -69,23 +69,23 @@ const Order = () => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <SelectionComponent options={[]} label={'Item Type'} />
+                        <SelectionComponent options={type} label={'Customer'} />
                     </div>
                     <div>
-                        <SelectionComponent options={[]} label={'Category'} />
+                        <SelectionComponent options={user} label={'User'} />
                     </div>
                     <div>
-                        <SelectionComponent options={[]} label={'User'} />
+                        <SelectionComponent options={user} label={'From Date'} />
                     </div>
                     <div>
-                        <SelectionComponent options={[]} label={'Warehouse Stock'} />
+                        <SelectionComponent options={shop} label={'To Date'} />
                     </div>
 
                 </div>
 
                 <div className='flex justify-between items-center my-3'>
                     <div>
-                        <ShowEntries options={[]}/>
+                        <ShowEntries options={entries} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -120,15 +120,15 @@ const Order = () => {
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Sale price
-                                        <Updown />
-                                    </div>
-                                </th>
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
                                         Purchase Price
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                    <div className="flex justify-between items-center">
+                                        Sale price
                                         <Updown />
                                     </div>
                                 </th>
@@ -152,25 +152,7 @@ const Order = () => {
 
                             {
                                 [1, 2, 3].map((item) => (
-                                    <tr className='border-b'>
-                                        <th className="w-4 py-2 px-4 border-x">
-                                            <div className="flex items-center">
-                                                <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                            </div>
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r">Samsung</th>
-                                        <th scope="col" className="px-2 py-2 border-r">0123456789</th>
-                                        <th scope="col" className="px-2 py-2 border-r">example@gmail.com</th>
-                                        <th scope="col" className="px-2 py-2 border-r">250</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Paid</th>
-                                        <th scope="col" className="px-2 py-2 border-r">250</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Paid</th>
-                                        <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
-                                            <Edit />
-                                            <Remove />
-                                        </th>
-                                    </tr>
+                                    <OrderCard item={item}/>
                                 ))
                             }
 
@@ -179,11 +161,11 @@ const Order = () => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1>Showing 1 to 3 of 3 entries</h1>
+                    <h1 className='font-normal'>Showing 1 to 3 of 3 entries</h1>
                     <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-2">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3">Next</button>
+                        <button className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
+                        <button className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
                     </div>
                 </div>
             </div>

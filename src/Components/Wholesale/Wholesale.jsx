@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const WholeSell = () => {
+const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [],paytype=[] }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -30,7 +30,6 @@ const WholeSell = () => {
     const [show, setShow] = useState(false);
     const [isPdf, setPdf] = useState(false);
     const [isImg, setImg] = useState(false);
-    const [state, setState] = useState([]);
     const [user, setUser] = useState([]);
     const [userId, setUserId] = useState(1);
     const [stateId, setStateId] = useState(1);
@@ -140,18 +139,7 @@ const WholeSell = () => {
     }
 
 
-    useEffect(() => {
-
-        const fetchState = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/state`);
-            const data = await response.json();
-            if (data && data?.items?.length > 0) {
-                setState(data?.items || []);
-            }
-        }
-        setDate(getFormattedDate())
-        fetchState()
-    }, [])
+    useEffect(() => { setDate(getFormattedDate()) }, [])
 
     useEffect(() => {
 
@@ -179,28 +167,6 @@ const WholeSell = () => {
     }, [stateId])
 
 
-    let shop = [
-        {
-            id: 23,
-            name: "Main"
-        },
-        {
-            id: 24,
-            name: "Shop 1"
-        }
-    ]
-
-    let paytype = [
-        {
-            id: 23,
-            name: "Cash"
-        },
-        {
-            id: 24,
-            name: "Due"
-        }
-    ]
-
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
@@ -215,7 +181,7 @@ const WholeSell = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={() => { }} label={"State"} className='rounded-l' />
+                        <SelectionComponent options={state} onSelect={() => { }} label={"State"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>

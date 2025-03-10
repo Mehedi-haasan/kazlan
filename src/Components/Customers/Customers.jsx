@@ -5,8 +5,8 @@ import ShowEntries from "../Input/ShowEntries";
 import { NavLink } from "react-router-dom";
 import Edit from "../../icons/Edit";
 
-const Customers = () => {
-    let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }]
+const Customers = ({ entries }) => {
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">

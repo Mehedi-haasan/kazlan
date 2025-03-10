@@ -1,86 +1,48 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import BaseUrl from '../../Constant';
+
+
 
 
 const ForgetPassword = () => {
-    const [login, setLogin]=useState(false);
-    const goToHome=useNavigate();
-    const [values, setValues]=useState({
-      email:"",
-})
-
-const [errorMessage, setErrorMessage]=useState("")
+  const goToHome = useNavigate();
+  const [email, setEmail] = useState("")
 
 
-    
 
-      const handleSubmit =(e)=>{
-        e.preventDefault();
-        // axios.post('http://localhost:5000/forgetPassword/',values)
-        // .then(res=> {
-        //   console.log(res.data)
-        //   if(res.data === "Success"){
-        //     alert("Login Successfull")
-        //   }else{
-        //     setErrorMessage(res.data);
-        //   }
-        // })
-        // .catch(err => setErrorMessage(err))
-        
-      }
+
+
+  const handleSubmit = async () => {
+    const response = await fetch(`${BaseUrl}/api/forget/password`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ email: email }),
+    })
+    const data = await response.json()
+    goToHome('/OTP/varification')
+  }
+
+
   return (
-    <div className='bg-white'>
-    <div className='bg-white'>
-      <h1 className='py-5'>{}</h1>
-     
+    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
+        <h2 className="text-2xl font-bold text-white text-center mb-6">Forget Password</h2>
 
-          <div className='grid col-span-12 md:col-span-6 rounded-xl pr-5'>
-          {
-              login ?  <div className='w-full md:w-[40%] mx-auto'>
-              <h1 className='text-center text-xl font-semibold py-6 '>Recover your password</h1>
-                  
-                <div className='mt-5 mx-auto w-[95%]'>
-                  <label className='text-xl font-semibold pt-4'>Enter your OTP</label>
-                  <input type='text' placeholder='Enter your OTP' className='border-b py-1 w-full focus:outline-none'/>
-                </div>
+        <div className='my-5'>
+          <label className="block text-white text-sm font-semibold mb-1">Email your email</label>
+          <input type="email" onChange={(e) => { setEmail(e.target.value) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+        </div>
+        <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
+          Submit
+        </button>
+      </div>
 
-                  <div className='mt-5 mx-auto w-[95%]'>
-                  <label className='mt-2 text-xl font-semibold pt-4'>New password</label>
-                  <input type='text' placeholder='Enter your new password' className='border-b py-1 w-full focus:outline-none'/>
-                  </div>
-
-                 <div className='mt-5 mx-auto w-[95%]'>
-                 <label className='text-xl font-semibold pt-4'>Confirm Password</label>
-                  <input type='text' placeholder='Enter your confirm password' className='border-b py-1 w-full focus:outline-none'/>
-                 </div>
-
-                   
-                  <div className='flex my-6 mx-auto w-[95%]'>
-                      <button onClick={()=>{goToHome("/")}} className='border block font-semibold bg-[#1B80E0] text-white mx-auto px-6 h-10 rounded-xl w-full'>Submit</button>
-                  </div>
-            </div>:<div className='w-full md:w-[40%] mx-auto'>
-              <h1 className='text-center text-xl font-semibold py-6 '>Forget Password</h1>
-                  
-                  
-                   <h1 className='text-center p-2'>Lost your password? Please enter your username or email address.<br/> You will receive a link to create a new password via email.</h1>
-                  <div className='mt-5 mx-auto w-[95%]'>
-                    <label className='mt-2 text-xl font-semibold pt-4'>E-mail Address</label>
-                    <input type='text' placeholder='Enter your email' onChange={(e)=>{setValues({...values, email:e.target.value})}} className='border-2 p-1 w-full rounded focus:outline-none'/>
-                  </div>
-
-
-                  <div className='flex my-6 mx-auto w-[95%]'>
-                      <button onClick={handleSubmit} className='border block font-semibold bg-[#1B80E0] w-full text-white mx-auto px-8 h-10 rounded-xl'>Send OTP</button>
-                  </div>
-                
-         </div>
-          }
-
-         </div>
-       </div>
-       <h1 className='py-5'>{}</h1>
-     </div>
-  
+    </div>
   )
 }
 

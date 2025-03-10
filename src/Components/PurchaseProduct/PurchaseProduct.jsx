@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const PurchaseProduct = () => {
+const PurchaseProduct = ({ shop = [], paytype = [] }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -39,11 +39,11 @@ const PurchaseProduct = () => {
     const [percentageDiscount, setPercentageDiscount] = useState(0);
     const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
-    const [isCreate, setIsCreate] = useState(false)
+
 
     const options = {
         width: 1000,
-        backgroundColor: '#ffffff' // Set background color to white
+        backgroundColor: '#ffffff'
     };
     const { ref, getPng } = useToImage(options)
 
@@ -141,16 +141,7 @@ const PurchaseProduct = () => {
 
 
     useEffect(() => {
-
-        const fetchState = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/state`);
-            const data = await response.json();
-            if (data && data?.items?.length > 0) {
-                setState(data?.items || []);
-            }
-        }
         setDate(getFormattedDate())
-        fetchState()
     }, [])
 
     useEffect(() => {
@@ -178,27 +169,6 @@ const PurchaseProduct = () => {
         fetchUser()
     }, [stateId])
 
-    let shop = [
-        {
-            id: 23,
-            name: "Main"
-        },
-        {
-            id: 24,
-            name: "Shop 1"
-        }
-    ]
-
-    let paytype = [
-        {
-            id: 23,
-            name: "Cash"
-        },
-        {
-            id: 24,
-            name: "Due"
-        }
-    ]
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">

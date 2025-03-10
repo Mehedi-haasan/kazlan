@@ -19,6 +19,11 @@
                 "route": "product"
             },
             {
+                "id": 121,
+                "name": "Brand List",
+                "route": "brand"
+            },
+            {
                 "id": 11,
                 "name": "Category List",
                 "route": "category"
@@ -76,13 +81,6 @@
         ]
     },
     {
-        "id": "5",
-        "name": "Single Order",
-        "route": "user/order",
-        "icon": "bxs:category-alt",
-        "option": false
-    },
-    {
         "id": "6",
         "name": "Category",
         "route": "category",
@@ -110,7 +108,7 @@
     },
     {
         "id": "8",
-        "name": "Order",
+        "name": "Sale Order",
         "route": "order",
         "icon": "material-symbols:order-approve",
         "option": false

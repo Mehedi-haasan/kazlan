@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectComp';
-import RoleSelector from './RoleSelector';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 
@@ -15,6 +14,7 @@ const Registration = () => {
   const [state, setState] = useState([])
   const goToHome = useNavigate();
   let user = [{ id: 1, name: "User" }, { id: 2, name: "Customer" }, { id: 3, name: "Supplier" }]
+  let Role = [{ id: 1, name: "User" }, { id: 2, name: "Admin" }, { id: 3, name: "moderator" }, { id: 4, name: "superadmin" }]
 
 
   const handleSubmit = async (e) => {
@@ -47,6 +47,7 @@ const Registration = () => {
     fetchState()
   }, [])
 
+
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
@@ -66,6 +67,14 @@ const Registration = () => {
             <input type="number" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
+            <label className="block text-white text-sm font-semibold mb-1">Whatsapp</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, whatsapp: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+          </div>
+          <div>
+            <label className="block text-white text-sm font-semibold mb-1">Address</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+          </div>
+          <div>
             <label className="block text-white text-sm font-semibold mb-1">Email</label>
             <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
@@ -73,18 +82,19 @@ const Registration = () => {
             <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
           </div>
           <div>
-            <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`User Type`} className='font-semibold' />
+            <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={`User Type`} className='font-semibold' />
+          </div>
+          <div>
+            <SelectionComponent options={Role} onSelect={(v) => { setValues({ ...values, rules: [v?.name] }) }} label={`User Role`} className='font-semibold' />
           </div>
           <div className='relative'>
             <label className="block text-white text-sm font-semibold mb-1">Password</label>
             {
               showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
             }
-            <input type={showPassword ? "text" : "password"} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+            <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
           </div>
-          <div className=''>
-            <RoleSelector rules={values.rules} onChange={(role) => setValues({ ...values, rules: role })} />
-          </div>
+
         </div>
         <div className='pt-5'>
           <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">

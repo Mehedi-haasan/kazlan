@@ -3,11 +3,11 @@ import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant';
 import Remove from "../../icons/Remove";
-import SelectionComponent from "../Input/SelectionComponent";
 import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
+import ShowEntries from "../Input/ShowEntries";
 
-const Category = ({ category }) => {
+const Category = ({ category, entries }) => {
 
     const [image_url, setImage_Url] = useState();
     const [values, setValues] = useState({ name: "", });
@@ -62,9 +62,9 @@ const Category = ({ category }) => {
             console.error('Error uploading image:', error);
         }
     }
-    
+
     return (
-        <div className="px-2 pt-5">
+        <div className="px-2 pt-5 min-h-screen">
 
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
@@ -80,13 +80,12 @@ const Category = ({ category }) => {
             </div>
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Category List</h1>
-                <Button name={'Create Category'} onClick={()=>setShow(true)}/>
+                <Button name={'Create Category'} onClick={() => setShow(true)} />
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
-                        <h1 className="mt-2">Entries </h1>
-                        <SelectionComponent options={[]} />
+                        <ShowEntries options={entries}/>
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>

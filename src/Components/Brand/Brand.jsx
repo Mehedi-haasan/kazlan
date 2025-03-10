@@ -1,34 +1,32 @@
-import { useState, useEffect } from "react"
-import Button from "../Input/Button"
+import { useState } from "react"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
-import BaseUrl from '../../Constant'
-import Add from "../../icons/Add";
-import StateCard from "./StateCard";
-import Updown from "../../icons/Updown";
-import SelectionComponent from "../Input/SelectionComponent";
+import BaseUrl from '../../Constant';
 import Remove from "../../icons/Remove";
-import Edit from "../../icons/Edit";
+import Button from "../Input/Button";
+import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
+import Edit from "../../icons/Edit";
+import BrandCard from "./BrandCard";
 
-const State = ({ entries = [] }) => {
+const Brand = ({ brands, entries }) => {
 
-    const [values, setValues] = useState("");
-    const [state, setState] = useState([])
+    const [image_url, setImage_Url] = useState();
+    const [values, setValues] = useState({ name: "", });
     const [show, setShow] = useState(false)
 
-    const handleCreate = async () => {
+    const handleCreate = async (image_url) => {
+
+        values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/create/state`, {
+            const response = await fetch(`${BaseUrl}/api/create/category`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify({
-                    name: values
-                }),
+                body: JSON.stringify(values),
             });
 
             const data = await response.json();
@@ -40,36 +38,51 @@ const State = ({ entries = [] }) => {
     }
 
 
-
-    useEffect(() => {
-
-        const fetchState = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/state`);
-            const data = await response.json();
-            if (data && data?.items?.length > 0) {
-                setState(data?.items || []);
-            }
+    const handleUpload = async () => {
+        const formData = new FormData();
+        if (image_url) {
+            formData.append('image_url', image_url);
+        } else {
+            console.error("Image file is missing in the payload");
+            return;
         }
-        fetchState()
-    }, [])
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BaseUrl}/api/upload/image`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                },
+                body: formData,
+            });
 
-
+            const data = await response.json();
+            if (data) {
+                handleCreate(data.image_url)
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    }
 
     return (
-        <div className="pt-5 px-2">
+        <div className="px-2 pt-5 min-h-screen">
+
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter State name`} label={`State name`} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
-
-                        <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3" />
+                        <InputComponent placeholder={`Enter Category name`} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <div className="pt-1">
+                            <h1 className="py-1 font-semibold">Select image</h1>
+                            <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
+                        </div>
+                        <Button isDisable={false} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </div>
-
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">State List</h1>
-                <Button name={'Create State'} />
+                <h1 className="font-semibold text-lg">Brand List</h1>
+                <Button name={'Create Brand'} onClick={() => setShow(true)} />
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
@@ -103,6 +116,12 @@ const State = ({ entries = [] }) => {
                                         <Updown />
                                     </div>
                                 </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Image
+                                        <Updown />
+                                    </div>
+                                </th>
                                 <th scope="col" className="px-2 py-2 text-right border-r">
                                     <div className="flex justify-between items-center">
                                         status
@@ -116,22 +135,8 @@ const State = ({ entries = [] }) => {
 
 
                             {
-                                [1, 2, 3].map((item) => (
-                                    <tr className='border-b'>
-                                        <th className="w-4 py-2 px-4 border-x">
-                                            <div className="flex items-center">
-                                                <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                            </div>
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r">Samsung</th>
-                                        <th scope="col" className="px-2 py-2 border-r">0123456789</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Paid</th>
-                                        <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
-                                            <Edit />
-                                            <Remove />
-                                        </th>
-                                    </tr>
+                                brands?.map((item) => (
+                                    <BrandCard item={item} />
                                 ))
                             }
 
@@ -152,4 +157,4 @@ const State = ({ entries = [] }) => {
     )
 }
 
-export default State
+export default Brand

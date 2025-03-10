@@ -22,8 +22,11 @@ const Login = ({ auth }) => {
       body: JSON.stringify(values),
     });
     const data = await response.json();
+    alert(data?.message)
     if (data && data.accessToken && data.success) {
       localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('name', data.name);
+      localStorage.setItem('role', data.role);
       auth(true)
       goto('/dashboard')
     }
@@ -48,15 +51,20 @@ const Login = ({ auth }) => {
           {
             showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
           }
-          <input type={showPassword ? "text" : "password"} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+          <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
         </div>
         <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
           Sign In
         </button>
 
-        <p className="text-center text-sm text-gray-300 mt-4">
-          Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
-        </p>
+        <div>
+          <p className="text-center text-sm text-gray-300 mt-4">
+            Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
+          </p>
+          <p className="text-center text-sm text-gray-300 mt-4">
+            <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
+          </p>
+        </div>
       </div>
     </div>
   )

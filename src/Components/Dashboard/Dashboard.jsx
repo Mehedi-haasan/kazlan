@@ -4,6 +4,7 @@ import BaseUrl from '../../Constant';
 import DailySalse from './DailySalse';
 import Cart from '../../icons/Cart';
 import Notification from '../../icons/Notification';
+import Invoice from '../RecentInvoice/Invoice';
 
 
 
@@ -58,7 +59,7 @@ const Dashboard = ({ data }) => {
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
                 <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
                     <div className='p-5 border rounded-full bg-blue-500'>
-                        <Cart className="text-[#FFFFFF]"/>
+                        <Cart className="text-[#FFFFFF]" />
                     </div>
                     <div className='flex justify-start items-end gap-1'>
                         <h1 className='font-bold text-5xl'>{total}.00</h1>
@@ -85,7 +86,7 @@ const Dashboard = ({ data }) => {
                 </div>
                 <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-5 border rounded-full bg-[#FFF2E8]'>
-                        <Notification height="35px" width="35px"/>
+                        <Notification height="35px" width="35px" />
                     </div>
                     <div className='flex justify-start items-end gap-1'>
                         <h1 className='font-bold text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
@@ -106,45 +107,10 @@ const Dashboard = ({ data }) => {
                 <div className='grid col-span-1 lg:col-span-2'>
 
                     <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-4 shadow-lg'>
-                        <div className='border-b border-black'>
+                        <div className=''>
                             <h1 className='pb-2'>Recent Invoices</h1>
                         </div>
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-900 uppercase dark:text-gray-400 bg-gray-50 rounded py-1">
-                                <tr className='border-b text-[16px] font-semibold text-black'>
-                                    <th scope="col" className="pr-6 py-3 pl-1">তারিখ</th>
-                                    <th scope="col" className="px-4 py-3 text-center">গ্রাহকের নাম</th>
-                                    <th scope="col" className="px-4 py-3 text-center">অর্ডার আইডি</th>
-                                    <th scope="col" className="pl-4 py-3 text-center">অর্থপ্রদানের অবস্থা</th>
-                                    <th scope="col" className="pl-4 py-3 text-center">বিক্রয় মূল্য</th>
-                                    <th scope="col" className="pl-4 pr-1 py-3 text-right">মোট মূল্য</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr key={89} className="bg-white dark:bg-gray-800 border-b">
-                                    <th scope="row" className="pr-6 pl-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {5}
-                                    </th>
-                                    <td className="px-6 py-1 text-center">
-                                        {"Mehedi"}
-                                    </td>
-                                    <td className="px-6 py-1 text-center">
-                                        {712}
-                                    </td>
-                                    <td className="pl-6 py-1 text-center">
-                                        {true ? <h1 className='text-green-500 bg-green-100 px-3 py-1 rounded-full w-16 mx-auto text-center'>{"PAID"}</h1> : <h1 className='text-red-500 bg-red-100 px-3 py-1 rounded-full w-20 mx-auto text-center'>{"UNPAID"}</h1>}
-                                    </td>
-                                    <td className="pl-6 py-1 text-center">
-                                        {1200}
-                                    </td>
-                                    <td className="pl-6 py-1 text-right">
-                                        {1200}
-                                    </td>
-                                </tr>
-
-
-                            </tbody>
-                        </table>
+                        <Invoice />
                     </div>
                 </div>
             </div>

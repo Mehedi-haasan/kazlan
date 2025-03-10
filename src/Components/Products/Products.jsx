@@ -10,24 +10,11 @@ import SelectionComponent from '../Input/SelectionComponent';
 import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 
-const Product = ({ category }) => {
+const Product = ({ category = [], type = [], brand = [], entries = [],shop=[] }) => {
 
     const [isCreate, setIsCreate] = useState(false)
     const [data, setData] = useState([]);
-    const [searchData, setSearchData] = useState([])
-    let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
-    let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }]
     let user = [{ id: 1, name: "Mehedi" }, { id: 2, name: "20" }]
-    let shop = [
-        {
-            id: 23,
-            name: "Main"
-        },
-        {
-            id: 24,
-            name: "Shop 1"
-        }
-    ]
 
     const getProduct = async () => {
         const token = localStorage.getItem('token')
@@ -60,8 +47,6 @@ const Product = ({ category }) => {
             });
             const data = await response.json();
             setData(data.items)
-        } else {
-            setData(searchData);
         }
     }
 
@@ -78,7 +63,7 @@ const Product = ({ category }) => {
                         <SelectionComponent options={type} label={'Item Type'} />
                     </div>
                     <div>
-                        <SelectionComponent options={[]} label={'Brand'} />
+                        <SelectionComponent options={brand} label={'Brand'} />
                     </div>
                     <div>
                         <SelectionComponent options={category ? category : []} label={'Category'} />
@@ -98,7 +83,14 @@ const Product = ({ category }) => {
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
-                        <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
+                        <input placeholder="Enter name"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    SearchProduct()
+                                }
+                            }}
+                            onChange={SearchProduct}
+                            className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
                 <div className="pt-3">

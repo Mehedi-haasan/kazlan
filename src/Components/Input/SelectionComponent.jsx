@@ -38,7 +38,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
       <select id={label} value={selectedId} onChange={handleSelect}
         className={`bg-gray-50 border w-full min-w-[205px] border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:outline-none focus:border-blue-500 block p-2 ${className} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
       >
-        {options.map(({ id, name }) => (
+        {options?.map(({ id, name }) => (
           <option key={id} value={id}> {name}</option>
         ))}
       </select>

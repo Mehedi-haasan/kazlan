@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import InputComponent from '../Input/InputComponent'
@@ -7,10 +7,9 @@ import SelectionComponent from '../Input/SelectionComponent'
 import BaseUrl from '../../Constant';
 
 
-const CreactProduct = ({ handleClose }) => {
+const CreactProduct = ({ handleClose, category }) => {
 
     const [image_url, setImage_Url] = useState();
-    const [category, setCategory] = useState([])
     let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
     const [value, setValue] = useState('')
     const [values, setValues] = useState({
@@ -18,7 +17,6 @@ const CreactProduct = ({ handleClose }) => {
         qty: 0,
         product_type: true,
     })
-
 
 
 
@@ -44,7 +42,6 @@ const CreactProduct = ({ handleClose }) => {
             console.error('Error updating variant:', error);
         }
     }
-
 
 
 
@@ -77,15 +74,6 @@ const CreactProduct = ({ handleClose }) => {
         }
     }
 
-    useEffect(() => {
-        const GetCategory = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/category`);
-            const data = await response.json();
-            setCategory(data?.items || [])
-        }
-
-        GetCategory()
-    }, [])
 
 
     return (

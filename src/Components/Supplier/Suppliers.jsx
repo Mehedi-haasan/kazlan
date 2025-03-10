@@ -1,11 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import SelectionComponent from '../Input/SelectionComponent'
 import Updown from '../../icons/Updown'
 import Remove from '../../icons/Remove'
 import Edit from "../../icons/Edit";
+import ShowEntries from "../Input/ShowEntries";
 
-const Suppliers = () => {
+const Suppliers = ({entries}) => {
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
@@ -15,7 +15,7 @@ const Suppliers = () => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
                     <div>
-                        <SelectionComponent options={[]} label={'Suppliers Type'} />
+                        <ShowEntries options={entries}/>
                     </div>
                     <div className="flex justify-end items-center gap-1.5">
                         <h1>Search : </h1>

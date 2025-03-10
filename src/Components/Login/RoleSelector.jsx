@@ -16,7 +16,7 @@ const RoleSelector = ({ rules = [], onChange }) => {
     onChange && onChange(updatedRoles); // Notify parent of change
   };
 
-  const roles = ["admin", "superadmin", "moderator"];
+  const roles = ["User", "admin", "moderator", "superadmin"];
 
   return (
     <div className="">
