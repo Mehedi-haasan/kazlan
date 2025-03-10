@@ -8,21 +8,26 @@ import Show from '../Input/Show';
 
 const Registration = () => {
   const [values, setValues] = useState({
-    "rules": []
+    "rules": [],
+    usertype: "user",
+    stateId: 1
   });
   const [showPassword, setShowPassword] = useState(false)
   const [state, setState] = useState([])
   const goToHome = useNavigate();
-  let user = [{ id: 1, name: "User" }, { id: 2, name: "Customer" }, { id: 3, name: "Supplier" }]
-  let Role = [{ id: 1, name: "User" }, { id: 2, name: "Admin" }, { id: 3, name: "moderator" }, { id: 4, name: "superadmin" }]
+  let user = [{ id: 1, name: "user" }, { id: 2, name: "customer" }, { id: 3, name: "supplier" }, { id: 4, name: "shop" }]
+  let Role = [{ id: 1, name: "user" }, { id: 2, name: "admin" }, { id: 3, name: "moderator" }, { id: 4, name: "superadmin" }]
 
 
   const handleSubmit = async (e) => {
+    console.log(values)
+    const token = localStorage.getItem('token')
     e.preventDefault()
     const response = await fetch(`${BaseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization': token,
       },
       body: JSON.stringify(values)
     });

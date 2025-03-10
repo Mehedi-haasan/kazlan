@@ -39,13 +39,13 @@ function App() {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
   const [brand, setBrand] = useState([]);
+  const [user, setUser] = useState([]);
+  const [state, setState] = useState([])
 
   let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
   let paytype = [{ id: 1, name: "Cash" }, { id: 2, name: "Due" }]
   let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }, { id: 3, name: "30" }, { id: 4, name: "50" }]
-  let user = [{ id: 1, name: "Mehedi" }, { id: 2, name: "20" }]
   let shop = [{ id: 23, name: "Main" }, { id: 24, name: "Shop 1" }]
-  let state = [{ id: 23, name: "Main" }, { id: 24, name: "Shop 1" }]
 
 
   const getNotification = async () => {
@@ -87,11 +87,38 @@ function App() {
     setBrand(data.items)
   }
 
+  const getUser = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/users`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setUser(data.items)
+  }
+
+  const getState = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/state`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setState(data.items)
+  }
+
   useEffect(() => {
     getNotification()
     getCategory();
     getBrand()
-
+    getUser()
+    getState()
 
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('name');
@@ -117,14 +144,14 @@ function App() {
           <Route path="/forget/password" element={<ForgetPassword />} />
           <Route path="/OTP/varification" element={<OtpVarification />} />
           <Route path="/success" element={<Success />} />
-          <Route path="/create" element={<CreactProduct category={category} />} />
-          <Route path="/product" element={<Product category={category} type={type} brand={brand} entries={entries} shop={shop} />} />
+          <Route path="/create" element={<CreactProduct category={category} brand={brand} />} />
+          <Route path="/product" element={<Product category={category} type={type} brand={brand} entries={entries} shop={shop} user={user} />} />
           <Route path="/user/order" element={<SingleOrder />} />
           <Route path="/sell" element={<Sell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} />} />
           <Route path="/wholesale" element={<WholeSell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} />} />
           <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/order" element={<Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} />} />
-          <Route path="/state" element={<State entries={entries} />} />
+          <Route path="/state" element={<State entries={entries} state={state}/>} />
           <Route path="/company/info" element={<Company />} />
           <Route path="/category" element={<Category category={category} entries={entries} />} />
           <Route path="/brand" element={<Brand brands={brand} entries={entries} />} />

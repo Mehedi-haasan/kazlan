@@ -6,6 +6,7 @@ import Remove from "../../icons/Remove";
 import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
+import CategoryCard from "./CategoryCard";
 
 const Category = ({ category, entries }) => {
 
@@ -85,7 +86,7 @@ const Category = ({ category, entries }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
-                        <ShowEntries options={entries}/>
+                        <ShowEntries options={entries} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -134,21 +135,7 @@ const Category = ({ category, entries }) => {
 
                             {
                                 category?.map((item) => (
-                                    <tr className='border-b'>
-                                        <th className="w-4 py-2 px-4 border-x">
-                                            <div className="flex items-center">
-                                                <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                            </div>
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">#{item?.id}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">
-                                            <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r">Active</th>
-                                        <th scope="col" className="px-2 py-2 flex justify-end items-center border-r"><Remove /></th>
-                                    </tr>
+                                    <CategoryCard item={item} />
                                 ))
                             }
 

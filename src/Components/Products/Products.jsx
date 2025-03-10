@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ProductCard from './ProductCard';
-import Search from '../../icons/Search';
 import BaseUrl from '../../Constant';
-import Add from '../../icons/Add';
 import Modal from '../Input/Modal';
 import CreactProduct from '../ProductCreate/CreactProduct';
 import Button from '../Input/Button';
@@ -10,11 +8,10 @@ import SelectionComponent from '../Input/SelectionComponent';
 import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 
-const Product = ({ category = [], type = [], brand = [], entries = [],shop=[] }) => {
+const Product = ({ category = [], type = [], brand = [], entries = [], shop = [], user = [] }) => {
 
     const [isCreate, setIsCreate] = useState(false)
     const [data, setData] = useState([]);
-    let user = [{ id: 1, name: "Mehedi" }, { id: 2, name: "20" }]
 
     const getProduct = async () => {
         const token = localStorage.getItem('token')

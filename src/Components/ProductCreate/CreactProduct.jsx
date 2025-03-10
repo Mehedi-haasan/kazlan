@@ -7,15 +7,16 @@ import SelectionComponent from '../Input/SelectionComponent'
 import BaseUrl from '../../Constant';
 
 
-const CreactProduct = ({ handleClose, category }) => {
+const CreactProduct = ({ handleClose, category ,brand}) => {
 
     const [image_url, setImage_Url] = useState();
     let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
     const [value, setValue] = useState('')
     const [values, setValues] = useState({
         categoryId: 1,
+        brandId:1,
         qty: 0,
-        product_type: true,
+        product_type: "Physical",
     })
 
 
@@ -95,8 +96,8 @@ const CreactProduct = ({ handleClose, category }) => {
                         <SelectionComponent options={type} onSelect={(e) => setValues({ ...values, product_type: e?.name })} label={"Product Type"} />
                         <InputComponent onChange={(e) => setValues({ ...values, cost: e })} label={"Cost Price"} placeholder={"Cost Price"} type={"number"} isRequered={""} />
                         <InputComponent onChange={(e) => setValues({ ...values, price: e })} label={"Sell Price"} placeholder={"Sell Price"} type={"number"} isRequered={""} />
-                        <InputComponent onChange={(e) => setValues({ ...values, standard_price: e })} label={"Standrard Price"} placeholder={"Standrard Price"} type={"number"} isRequered={""} />
-                        <SelectionComponent options={category} onSelect={(e) => setValues({ ...values, category: e?.id })} label={"Product Category"} />
+                        <SelectionComponent options={brand} onSelect={(e) => setValues({ ...values, brandId: e?.id })} label={"Product Brand"} />
+                        <SelectionComponent options={category} onSelect={(e) => setValues({ ...values, categoryId: e?.id })} label={"Product Category"} />
                         <div className='my-2 grid col-span-2'>
                             <h1 className='font-semibold py-1'>Description</h1>
                             <ReactQuill theme="snow" value={value} onChange={setValue} />

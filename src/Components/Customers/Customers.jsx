@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Updown from '../../icons/Updown'
 import Remove from '../../icons/Remove'
 import ShowEntries from "../Input/ShowEntries";
 import { NavLink } from "react-router-dom";
 import Edit from "../../icons/Edit";
+import BaseUrl from "../../Constant";
 
 const Customers = ({ entries }) => {
+
+    const [customer, setCustomer] = useState([])
+
+    const GetCustomer = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/customer`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setCustomer(data?.items)
+    }
+
+    useEffect(() => {
+        GetCustomer()
+    }, [])
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
@@ -82,7 +102,7 @@ const Customers = ({ entries }) => {
 
 
                             {
-                                [1, 2, 3].map((item) => (
+                                customer?.map((item) => (
                                     <tr className='border-b'>
                                         <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
@@ -90,13 +110,13 @@ const Customers = ({ entries }) => {
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">Samsung</th>
-                                        <th scope="col" className="px-2 py-2 border-r">0123456789</th>
-                                        <th scope="col" className="px-2 py-2 border-r">example@gmail.com</th>
-                                        <th scope="col" className="px-2 py-2 border-r">0123456789</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Dhaka Uttara</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.first_name} {item?.last_name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
                                         <th scope="col" className="px-2 py-2 border-r">250</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Paid</th>
+                                        <th scope="col" className="px-2 py-2 border-r">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                                             <Edit />
                                             <Remove />

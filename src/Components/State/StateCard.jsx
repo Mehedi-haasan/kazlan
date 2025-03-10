@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Button from "../Input/Button"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
@@ -6,7 +6,7 @@ import BaseUrl from '../../Constant'
 import Edit from "../../icons/Edit";
 import Remove from "../../icons/Remove";
 
-const StateCard = ({ cate }) => {
+const StateCard = ({ item }) => {
 
     const [values, setValues] = useState("");
     const [show, setShow] = useState(false);
@@ -38,28 +38,22 @@ const StateCard = ({ cate }) => {
 
 
     return (
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
+        <tr className='border-b'>
+            <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </td>
-            <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {cate?.id}
             </th>
-            <th scope="row" className="pl-1 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {cate?.name}
-            </th>
-            <td className="pl-4 py-4 pr-5 flex justify-end gap-2 items-center">
-
-                <Edit size='25px' onClick={() => { setEdit(true) }} />
-                <Remove size='25px' onClick={() => { setShow(true) }} />
-
-
+            <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-r">#{item?.id}</th>
+            <th scope="col" className="px-2 py-2 border-r">Active</th>
+            <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
+                <Edit />
+                <Remove />
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={cate?.name} label={`State name`} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
+                        <InputComponent placeholder={item?.name} label={`State name`} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
 
                         <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3" />
                     </div>
@@ -72,8 +66,7 @@ const StateCard = ({ cate }) => {
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
                     </div>
                 </Modal>
-
-            </td>
+            </th>
         </tr>
     )
 }
