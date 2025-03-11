@@ -2,11 +2,9 @@ import { useState } from "react"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant';
-import Remove from "../../icons/Remove";
 import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
-import Edit from "../../icons/Edit";
 import BrandCard from "./BrandCard";
 
 const Brand = ({ brands, entries }) => {
@@ -15,7 +13,7 @@ const Brand = ({ brands, entries }) => {
     const [values, setValues] = useState({ name: "", });
     const [show, setShow] = useState(false)
 
-    const handleCreate = async (image_url) => {
+    const handleUpdate = async (image_url) => {
 
         values.image_url = image_url;
         const token = localStorage.getItem('token');
@@ -58,7 +56,7 @@ const Brand = ({ brands, entries }) => {
 
             const data = await response.json();
             if (data) {
-                handleCreate(data.image_url)
+                handleUpdate(data.image_url)
             }
         } catch (error) {
             console.error('Error uploading image:', error);

@@ -39,7 +39,7 @@
         "id": "32",
         "name": "Contact",
         "route": "",
-        "icon": "fluent-mdl2:product-variant",
+        "icon": "fxemoji:contact2",
         "option": true,
         "items": [
             {

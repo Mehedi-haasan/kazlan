@@ -151,7 +151,7 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
 
 
                             {
-                                [1, 2, 3].map((item) => (
+                                data?.map((item) => (
                                     <OrderCard item={item}/>
                                 ))
                             }

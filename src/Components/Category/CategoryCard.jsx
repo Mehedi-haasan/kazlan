@@ -13,13 +13,13 @@ const CategoryCard = ({ item }) => {
     const [image_url, setImage_Url] = useState();
     const [values, setValues] = useState({ name: "", });
 
-    const handleCreate = async (image_url) => {
+    const handleUpdate = async (image_url) => {
 
         values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/create/category`, {
-                method: 'POST',
+            const response = await fetch(`${BaseUrl}/api/update/category`, {
+                method: 'PATCH',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
@@ -55,13 +55,26 @@ const CategoryCard = ({ item }) => {
 
             const data = await response.json();
             if (data) {
-                handleCreate(data.image_url)
+                handleUpdate(data.image_url)
             }
         } catch (error) {
             console.error('Error uploading image:', error);
         }
     }
 
+    const handleDelete = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/delete/category`, {
+            method: 'POST',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({ id: item?.id, url: item?.image_url }),
+        });
+        const data = await response.json();
+        alert(data?.message)
+    }
 
     return (
 
@@ -85,18 +98,18 @@ const CategoryCard = ({ item }) => {
                     <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
-                        <button className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
+                        <button onClick={handleDelete} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
                     </div>
                 </Modal>
 
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="450px" className="w-[450px]">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter Category name`} label={item?.name} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={item?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
-                        <Button isDisable={false} name="Create" onClick={handleUpload} className="mt-3" />
+                        <Button isDisable={false} name="Update" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </th>

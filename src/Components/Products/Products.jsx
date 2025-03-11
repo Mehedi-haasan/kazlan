@@ -57,19 +57,19 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                        <SelectionComponent options={type} label={'Item Type'} />
+                        <SelectionComponent options={type} onSelect={(v)=>{}} label={'Item Type'} />
                     </div>
                     <div>
-                        <SelectionComponent options={brand} label={'Brand'} />
+                        <SelectionComponent options={brand} onSelect={(v)=>{}} label={'Brand'} />
                     </div>
                     <div>
-                        <SelectionComponent options={category ? category : []} label={'Category'} />
+                        <SelectionComponent options={category ? category : []} onSelect={(v)=>{}} label={'Category'} />
                     </div>
                     <div>
-                        <SelectionComponent options={user} label={'User'} />
+                        <SelectionComponent options={user} onSelect={(v)=>{}} label={'User'} />
                     </div>
                     <div>
-                        <SelectionComponent options={shop} label={'Warehouse Stock'} />
+                        <SelectionComponent options={shop} onSelect={(v)=>{}} label={'Warehouse Stock'} />
                     </div>
 
                 </div>

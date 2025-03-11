@@ -34,7 +34,7 @@ import Brand from "./Components/Brand/Brand.jsx";
 
 function App() {
   const [auth, setAuth] = useState(false)
-  const [open, setopen] = useState(true);
+  const [open, setopen] = useState(false);
   const [info, setInfo] = useState({});
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
@@ -136,11 +136,11 @@ function App() {
   return (
     <BrowserRouter>
       <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
-      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
+      <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${!auth ? "pl-0" : open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard data={data} />} />
-          <Route path="/registration" element={<Registration state={state}/>} />
+          <Route path="/registration" element={<Registration state={state} />} />
           <Route path="/forget/password" element={<ForgetPassword />} />
           <Route path="/OTP/varification" element={<OtpVarification />} />
           <Route path="/success" element={<Success />} />
@@ -151,7 +151,7 @@ function App() {
           <Route path="/wholesale" element={<WholeSell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} />} />
           <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/order" element={<Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} />} />
-          <Route path="/state" element={<State entries={entries} state={state}/>} />
+          <Route path="/state" element={<State entries={entries} state={state} />} />
           <Route path="/company/info" element={<Company />} />
           <Route path="/category" element={<Category category={category} entries={entries} />} />
           <Route path="/brand" element={<Brand brands={brand} entries={entries} />} />

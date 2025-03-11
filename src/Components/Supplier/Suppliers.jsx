@@ -102,7 +102,7 @@ const Suppliers = ({ entries }) => {
 
 
                             {
-                                [1, 2, 3].map((item) => (
+                                supplier?.map((item) => (
                                     <tr className='border-b'>
                                         <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
