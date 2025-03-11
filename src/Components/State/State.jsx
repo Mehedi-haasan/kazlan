@@ -11,7 +11,7 @@ import Remove from "../../icons/Remove";
 import Edit from "../../icons/Edit";
 import ShowEntries from "../Input/ShowEntries";
 
-const State = ({ entries = [],state=[] }) => {
+const State = ({ entries = [], state = [] }) => {
 
     const [values, setValues] = useState("");
     const [show, setShow] = useState(false)
@@ -53,7 +53,7 @@ const State = ({ entries = [],state=[] }) => {
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">State List</h1>
-                <Button name={'Create State'} />
+                <Button onClick={() => { setShow(true) }} name={'Create State'} />
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
@@ -101,7 +101,7 @@ const State = ({ entries = [],state=[] }) => {
 
                             {
                                 state?.map((item) => (
-                                    <StateCard item={item}/>
+                                    <StateCard item={item} />
                                 ))
                             }
 

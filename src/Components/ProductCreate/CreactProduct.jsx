@@ -37,8 +37,8 @@ const CreactProduct = ({ handleClose, category ,brand}) => {
             });
 
             const data = await response.json();
-            handleClose(false)
             alert(data?.message)
+            handleClose(false)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -78,7 +78,7 @@ const CreactProduct = ({ handleClose, category ,brand}) => {
 
 
     return (
-        <div className=''>
+        <div className='min-h-screen'>
             <div className=''>
                 <h1 className='text-3xl font-semibold text-center py-5'>Product Create</h1>
 

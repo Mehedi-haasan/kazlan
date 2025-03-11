@@ -140,7 +140,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard data={data} />} />
-          <Route path="/registration" element={<Registration />} />
+          <Route path="/registration" element={<Registration state={state}/>} />
           <Route path="/forget/password" element={<ForgetPassword />} />
           <Route path="/OTP/varification" element={<OtpVarification />} />
           <Route path="/success" element={<Success />} />

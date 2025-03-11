@@ -18,7 +18,7 @@ const Header = ({ auth, open, isOpen, notification, info = {} }) => {
             <div className="flex justify-between items-center sticky top-0 z-50 w-[100%] px-2 mx-auto bg-[#FFFFFF] py-1">
 
                 <div className="">
-                    <NavLink className={`pt-1 pb-2`} onClick={() => { isOpen(!open) }} to="/dashboard">
+                    <NavLink className={`pt-1 pb-2`} to="/dashboard">
                         <img src={logo} alt="dhyfg" className="w-[110px] h-[50px]" />
                     </NavLink>
                 </div>

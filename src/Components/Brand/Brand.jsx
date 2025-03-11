@@ -20,7 +20,7 @@ const Brand = ({ brands, entries }) => {
         values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/create/category`, {
+            const response = await fetch(`${BaseUrl}/api/create/brand`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
@@ -71,7 +71,7 @@ const Brand = ({ brands, entries }) => {
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter Category name`} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={`Enter brand name`} label={`Brand name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />

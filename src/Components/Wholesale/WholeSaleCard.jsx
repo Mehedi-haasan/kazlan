@@ -11,7 +11,7 @@ const SellCard = ({ item, onClick }) => {
             <th scope="col" className="px-4 py-2 text-center">{item?.qty}</th>
             <th scope="col" className="pl-4 py-2 text-right">{item?.price}</th>
             <th scope="col" className="pl-4 py-2 text-right">{item?.price}</th>
-            <th scope="col" className="pl-4 py-2 text-right">{item?.Comn}</th>
+            <th scope="col" className="pl-4 py-2 text-right">{item?.comn}</th>
             <th scope="col" className="pl-4 py-2 text-right">{parseInt(item?.price) * parseInt(item?.qty)}</th>
             <th scope="col" className="pl-4 py-2 flex justify-end items-center"><Remove /></th>
         </tr>

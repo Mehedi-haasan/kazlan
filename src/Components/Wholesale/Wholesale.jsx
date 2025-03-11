@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [],paytype=[] }) => {
+const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [] }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -32,17 +32,13 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
     const [isImg, setImg] = useState(false);
     const [user, setUser] = useState([]);
     const [userId, setUserId] = useState(1);
-    const [stateId, setStateId] = useState(1);
-    const [mobile, setMobile] = useState('')
-    const [flatDiscount, setFlatDiscount] = useState(0);
-    const [percentageDiscount, setPercentageDiscount] = useState(0);
-    const [discountType, setDiscountType] = useState("Percentage");
+    const [stateId, setStateId] = useState(null);
+    const [mobile, setMobile] = useState('01750834062')
     const [date, setDate] = useState('');
-    const [isCreate, setIsCreate] = useState(false)
 
     const options = {
         width: 1000,
-        backgroundColor: '#ffffff' // Set background color to white
+        backgroundColor: '#ffffff'
     };
     const { ref, getPng } = useToImage(options)
 
@@ -83,27 +79,38 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
 
     const Order = async () => {
         const token = localStorage.getItem('token');
-        let dis = discountType === "Percentage" ? percentageDiscount : (parseInt(flatDiscount) * 100) / total;
         let orderData = [];
         allData?.map((v) => (
             orderData.push({
+                "active": true,
                 "invoice_id": invoice_id,
                 "product_id": v?.id,
                 "username": name,
                 "userId": userId,
                 "name": v?.name,
+                "shop": "main",
                 "price": v?.price,
-                "discount": parseInt(dis),
-                "discountType": discountType,
-                "discountamount": parseInt(v?.price * v?.qty * dis / 100),
-                "sellprice": (v?.price * v?.qty) - (v?.price * v?.qty * dis / 100),
+                "discount": v?.comn,
+                "sellprice": (v?.price * v?.qty),
                 "qty": v?.qty,
                 "contact": mobile,
-                "date": date,
-                "previousdue": due,
-                "payamount": pay
+                "date": date
             })
         ))
+
+        let finaldata = {
+            shop: "main",
+            userId: userId,
+            invoice_id: invoice_id,
+            date: date,
+            total: total,
+            previousdue: due,
+            paidamount: pay,
+            amount: total - pay,
+            orders: orderData
+        }
+
+        console.log(finaldata)
 
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
@@ -138,13 +145,31 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
         return date.toLocaleDateString('bn-BD', options);
     }
 
+    useEffect(() => {
+        let amount = allData?.reduce((acc, item) => {
+            return acc + (parseInt(item?.qty) * parseInt(item?.price));
+        }, 0);
 
-    useEffect(() => { setDate(getFormattedDate()) }, [])
+        setTotal(amount);
+    }, [allData]);
+
+
+    useEffect(() => {
+        setDate(getFormattedDate());
+        setStateId(state[0]?.id)
+    }, [state])
 
     useEffect(() => {
 
         const fetchUserDue = async () => {
-            const response = await fetch(`${BaseUrl}/api/users/due/${userId}`);
+            const token = localStorage.getItem(`token`);
+            const response = await fetch(`${BaseUrl}/api/users/due/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
             const data = await response.json();
             if (data && data?.items) {
                 setDue(data?.items?.amount || 0);
@@ -153,20 +178,31 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
         fetchUserDue()
     }, [userId])
 
+
     useEffect(() => {
 
         const fetchUser = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/users/${stateId}`);
+            const token = localStorage.getItem(`token`);
+            const response = await fetch(`${BaseUrl}/api/get/users/${stateId}`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
             const data = await response.json();
             if (data && data?.items?.length > 0) {
                 setUser(data?.items || []);
                 setUserId(data?.items[0]?.id)
             }
         }
-        fetchUser()
+        if (state?.length > 0) {
+            fetchUser()
+        }
+
     }, [stateId])
 
-
+    // console.log(total)
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
@@ -181,13 +217,13 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={state} onSelect={() => { }} label={"State"} className='rounded-l' />
+                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setStateName(v?.name) }} label={"State"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={() => { }} label={"Customer"} className='rounded-l' />
+                        <SelectionComponent options={user} onSelect={(v) => { setUserId(v.id); setName(v?.name) }} label={"Customer"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -196,7 +232,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                         <InputComponent placeholder={getFormattedDate()} label={'Date'} />
                     </div>
                     <div>
-                        <InputComponent placeholder={'Shop1/111'} label={'Sale Code'} />
+                        <InputComponent placeholder={`Shop1/${invoice_id}`} label={'Sale Code'} />
                     </div>
                     <div>
                         <InputComponent placeholder={'Optional'} label={'Reference No.'} />
@@ -280,10 +316,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
 
                 <div className='p-4'>
                     <h1 className='pb-2'>Payment</h1>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-                        <div>
-                            <InputComponent label={'Amount'} />
-                        </div>
+                    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5'>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
@@ -291,12 +324,21 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                             </div>
                         </div>
                         <div>
+                            <InputComponent placeholder={total} label={'Amount'} />
+                        </div>
+                        <div>
+                            <InputComponent placeholder={due} label={'Previous due'} />
+                        </div>
+                        <div>
+                            <InputComponent placeholder={due} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
+                        </div>
+                        <div>
                             <InputComponent label={'Payment Note'} />
                         </div>
                     </div>
                 </div>
                 <div className='p-4 border-t'>
-                    <Button name={'Submit'} />
+                    <Button onClick={Order} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
@@ -331,7 +373,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                     <h1>Comn</h1>
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, Comn: e.target.value })}
+                        onChange={(e) => setData({ ...data, comn: e.target.value })}
                         // value={qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {

@@ -16,33 +16,22 @@ import Button from '../Input/Button';
 
 
 
-const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype=[] }) => {
+const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [] }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
-    const [stateName, setStateName] = useState('Tangail')
-    const [name, setName] = useState('Mehedi hasan')
-    const [due, setDue] = useState(0);
+    const [name, setName] = useState('Random')
     const [pay, setPay] = useState(0)
-    const [invoice_id, setInvoiceId] = useState(712)
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
     const [show, setShow] = useState(false);
     const [isPdf, setPdf] = useState(false);
     const [isImg, setImg] = useState(false);
-    const [user, setUser] = useState([]);
-    const [userId, setUserId] = useState(1);
-    const [stateId, setStateId] = useState(1);
-    const [mobile, setMobile] = useState('')
-    const [flatDiscount, setFlatDiscount] = useState(0);
-    const [percentageDiscount, setPercentageDiscount] = useState(0);
-    const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
-    const [isCreate, setIsCreate] = useState(false)
 
     const options = {
         width: 1000,
-        backgroundColor: '#ffffff' // Set background color to white
+        backgroundColor: '#ffffff'
     };
     const { ref, getPng } = useToImage(options)
 
@@ -83,25 +72,22 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
 
     const Order = async () => {
         const token = localStorage.getItem('token');
-        let dis = discountType === "Percentage" ? percentageDiscount : (parseInt(flatDiscount) * 100) / total;
         let orderData = [];
         allData?.map((v) => (
             orderData.push({
-                "invoice_id": invoice_id,
+                "active": true,
+                "invoice_id": 2,
                 "product_id": v?.id,
                 "username": name,
-                "userId": userId,
+                "userId": 4,
                 "name": v?.name,
+                "shop": "main",
                 "price": v?.price,
-                "discount": parseInt(dis),
-                "discountType": discountType,
-                "discountamount": parseInt(v?.price * v?.qty * dis / 100),
-                "sellprice": (v?.price * v?.qty) - (v?.price * v?.qty * dis / 100),
+                "discount": v?.comn,
+                "sellprice": (v?.price * v?.qty),
                 "qty": v?.qty,
-                "contact": mobile,
-                "date": date,
-                "previousdue": due,
-                "payamount": pay
+                "contact": "123456789",
+                "date": date
             })
         ))
 
@@ -114,11 +100,10 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                 },
                 body: JSON.stringify({
                     shop: "shop",
-                    userId: userId,
-                    invoice_id: invoice_id,
+                    userId: 4,
                     date: date,
                     total: total,
-                    previousdue: due,
+                    previousdue: 0,
                     paidamount: pay,
                     amount: total - pay,
                     orders: orderData
@@ -138,21 +123,18 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
         return date.toLocaleDateString('bn-BD', options);
     }
 
+    useEffect(() => {
+        setDate(getFormattedDate())
+    }, [])
 
 
     useEffect(() => {
+        let amount = allData?.reduce((acc, item) => {
+            return acc + (parseInt(item?.qty) * parseInt(item?.price));
+        }, 0);
 
-        const fetchUser = async () => {
-            const response = await fetch(`${BaseUrl}/api/get/users/${stateId}`);
-            const data = await response.json();
-            if (data && data?.items?.length > 0) {
-                setUser(data?.items || []);
-                setUserId(data?.items[0]?.id)
-            }
-        }
-        fetchUser()
-        setDate(getFormattedDate())
-    }, [stateId])
+        setTotal(amount);
+    }, [allData]);
 
 
     return (
@@ -171,7 +153,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                     <div className='flex justify-start items-end pb-1'>
                         <div className='w-full'>
                             <h1>Customer</h1>
-                            <input placeholder={'Enter'} className='rounded-l focus:outline-none border px-1 py-1.5 w-full' />
+                            <input placeholder={'Enter'} onChange={(e) => { setName(e.target.value) }} className='rounded-l focus:outline-none border px-1 py-1.5 w-full' />
                         </div>
                         <div className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
@@ -265,10 +247,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
 
                 <div className='p-4'>
                     <h1 className='pb-2'>Payment</h1>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-                        <div>
-                            <InputComponent label={'Amount'} />
-                        </div>
+                    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5'>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
@@ -276,12 +255,21 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                             </div>
                         </div>
                         <div>
+                            <InputComponent placeholder={total} label={'Amount'} />
+                        </div>
+                        <div>
+                            <InputComponent placeholder={0} label={'Previous due'} />
+                        </div>
+                        <div>
+                            <InputComponent placeholder={0} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
+                        </div>
+                        <div>
                             <InputComponent label={'Payment Note'} />
                         </div>
                     </div>
                 </div>
                 <div className='p-4 border-t'>
-                    <Button name={'Submit'} />
+                    <Button name={'Submit'} onClick={Order} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
@@ -316,7 +304,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                     <h1>Comn</h1>
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, Comn: e.target.value })}
+                        onChange={(e) => setData({ ...data, comn: e.target.value })}
                         // value={qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {

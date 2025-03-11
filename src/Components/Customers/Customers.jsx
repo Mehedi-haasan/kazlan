@@ -27,6 +27,7 @@ const Customers = ({ entries }) => {
         GetCustomer()
     }, [])
 
+    console.log(customer)
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
