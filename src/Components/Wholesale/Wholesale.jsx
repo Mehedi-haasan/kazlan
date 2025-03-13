@@ -147,7 +147,8 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
 
     useEffect(() => {
         let amount = allData?.reduce((acc, item) => {
-            return acc + (parseInt(item?.qty) * parseInt(item?.price));
+            let discount = parseInt(item?.price * item?.comn / 100);
+            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
         }, 0);
 
         setTotal(amount);

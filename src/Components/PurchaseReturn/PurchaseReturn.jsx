@@ -8,7 +8,7 @@ import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import PurchaseProductCard from './PurchaseProductCard';
+import PurchaseProductCard from '../PurchaseProduct/PurchaseProductCard';
 import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
+const PruchaseReturn = () => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -31,6 +31,7 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     const [isPdf, setPdf] = useState(false);
     const [isImg, setImg] = useState(false);
     const [state, setState] = useState([]);
+    const [user, setUser] = useState([]);
     const [userId, setUserId] = useState(1);
     const [stateId, setStateId] = useState(1);
     const [mobile, setMobile] = useState('')
@@ -38,13 +39,13 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     const [percentageDiscount, setPercentageDiscount] = useState(0);
     const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
-
+    const [isCreate, setIsCreate] = useState(false)
 
     const options = {
         width: 1000,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff' // Set background color to white
     };
-    const { ref, getPng } = useToImage(options);
+    const { ref, getPng } = useToImage(options)
 
     const SearchProduct = async (e) => {
         e.preventDefault();
@@ -64,22 +65,6 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
         }
     }
 
-    const downloadPDF = () => {
-        const capture = document.querySelector('.actual-receipt');
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('img/png');
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const componentWidth = doc.internal.pageSize.getWidth();
-            const componentHeight = doc.internal.pageSize.getHeight();
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-            doc.save('receipt.pdf');
-        })
-        setPdf(false)
-    }
-
-    const PrintfPdf = () => {
-        window.print()
-    }
 
     const Order = async () => {
         const token = localStorage.getItem('token');
@@ -139,21 +124,30 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     }
 
 
-    useEffect(() => {
-        setDate(getFormattedDate())
-    }, [])
+    // useEffect(() => {
 
-    useEffect(() => {
+    //     const fetchState = async () => {
+    //         const response = await fetch(`${BaseUrl}/api/get/state`);
+    //         const data = await response.json();
+    //         if (data && data?.items?.length > 0) {
+    //             setState(data?.items || []);
+    //         }
+    //     }
+    //     setDate(getFormattedDate())
+    //     fetchState()
+    // }, [])
 
-        const fetchUserDue = async () => {
-            const response = await fetch(`${BaseUrl}/api/users/due/${userId}`);
-            const data = await response.json();
-            if (data && data?.items) {
-                setDue(data?.items?.amount || 0);
-            }
-        }
-        fetchUserDue()
-    }, [userId])
+    // useEffect(() => {
+
+    //     const fetchUserDue = async () => {
+    //         const response = await fetch(`${BaseUrl}/api/users/due/${userId}`);
+    //         const data = await response.json();
+    //         if (data && data?.items) {
+    //             setDue(data?.items?.amount || 0);
+    //         }
+    //     }
+    //     fetchUserDue()
+    // }, [userId])
 
     // useEffect(() => {
 
@@ -167,23 +161,44 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     //     }
     //     fetchUser()
     // }, [stateId])
-    console.log(user)
+
+    let shop = [
+        {
+            id: 23,
+            name: "Main"
+        },
+        {
+            id: 24,
+            name: "Shop 1"
+        }
+    ]
+
+    let paytype = [
+        {
+            id: 23,
+            name: "Cash"
+        },
+        {
+            id: 24,
+            name: "Due"
+        }
+    ]
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
             <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
+                <h1>Home</h1><RightArrow /><h1>Purchase Return</h1>
             </div>
 
 
             <div className='bg-[#FFFFFF]'>
                 <div className='border-b p-4'>
-                    <h1>Purchase Details</h1>
+                    <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={() => { }} label={"Supplier"} className='rounded-l' />
+                        <SelectionComponent options={user} onSelect={() => { }} label={"Supplair"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -345,4 +360,4 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     );
 }
 
-export default PurchaseProduct;
+export default PruchaseReturn;

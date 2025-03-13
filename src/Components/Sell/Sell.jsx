@@ -130,7 +130,8 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
 
     useEffect(() => {
         let amount = allData?.reduce((acc, item) => {
-            return acc + (parseInt(item?.qty) * parseInt(item?.price));
+            let discount = parseInt(item?.price * item?.comn / 100);
+            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
         }, 0);
 
         setTotal(amount);
@@ -257,9 +258,9 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                         <div>
                             <InputComponent placeholder={total} label={'Amount'} />
                         </div>
-                        <div>
+                        {/* <div>
                             <InputComponent placeholder={0} label={'Previous due'} />
-                        </div>
+                        </div> */}
                         <div>
                             <InputComponent placeholder={0} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
                         </div>

@@ -16,7 +16,7 @@ import Button from '../Input/Button';
 
 
 
-const Return = () => {
+const SaleReturn = () => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -204,7 +204,7 @@ const Return = () => {
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
             <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Return</h1>
+                <h1>Home</h1><RightArrow /><h1>Sale Return</h1>
             </div>
 
 
@@ -379,4 +379,4 @@ const Return = () => {
     );
 }
 
-export default Return;
+export default SaleReturn;

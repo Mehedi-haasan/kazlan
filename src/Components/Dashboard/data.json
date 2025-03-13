@@ -8,55 +8,77 @@
     },
     {
         "id": "2",
-        "name": "Items",
+        "name": "Inventory",
         "route": "product",
         "icon": "fluent-mdl2:product-variant",
         "option": true,
         "items": [
             {
                 "id": 21,
-                "parent":"2",
+                "parent": "2",
                 "name": "Item List",
                 "route": "product"
             },
             {
                 "id": 22,
-                "parent":"2",
+                "parent": "2",
                 "name": "Brand List",
                 "route": "brand"
             },
             {
                 "id": 23,
-                "parent":"2",
+                "parent": "2",
                 "name": "Category List",
                 "route": "category"
             },
             {
                 "id": 24,
-                "parent":"2",
+                "parent": "2",
                 "name": "Create item",
+                "route": "create"
+            },
+            {
+                "id": 25,
+                "parent": "2",
+                "name": "Inventory",
+                "route": "category"
+            },
+            {
+                "id": 26,
+                "parent": "2",
+                "name": "Adjustment",
                 "route": "create"
             }
         ]
     },
     {
         "id": "3",
-        "name": "Contact",
+        "name": "Sales",
         "route": "",
-        "icon": "clarity:users-solid",
+        "icon": "mdi:cart-outline",
         "option": true,
         "items": [
             {
                 "id": 31,
-                "parent":"32",
+                "parent": "32",
                 "name": "Customers",
                 "route": "customers"
             },
             {
                 "id": 32,
-                "parent":"32",
-                "name": "Suppliers",
-                "route": "suppliers"
+                "parent": "32",
+                "name": "Sale Order",
+                "route": "order"
+            },
+            {
+                "id": 33,
+                "name": "Invoice",
+                "route": "wholesale"
+            },
+            {
+                "id": 34,
+                "name": "Sale Return",
+                "route": "sale/return"
             }
         ]
     },
@@ -69,20 +91,25 @@
     },
     {
         "id": "5",
-        "name": "New Order",
+        "name": "Users",
         "route": "sell",
         "icon": "mdi:cart-outline",
         "option": true,
         "items": [
             {
                 "id": 51,
-                "name": "Wholesale",
-                "route": "wholesale"
+                "name": "Profile",
+                "route": "profile"
             },
             {
                 "id": 52,
-                "name": "Sell",
-                "route": "sell"
+                "name": "Users",
+                "route": "users"
+            },
+            {
+                "id": 52,
+                "name": "Roles",
+                "route": "roles"
             }
         ]
     },
@@ -95,13 +122,23 @@
         "items": [
             {
                 "id": 61,
-                "name": "Purchase",
-                "route": "update/product"
+                "name": "Supplier",
+                "route": "suppliers"
             },
             {
                 "id": 62,
-                "name": "Return",
-                "route": "return"
+                "name": "Prchase Order",
+                "route": "update/product"
+            },
+            {
+                "id": 63,
+                "name": "Vouchers",
+                "route": "update/product"
+            },
+            {
+                "id": 64,
+                "name": "Prrchase Return",
+                "route": "purchase/return"
             }
         ]
     },

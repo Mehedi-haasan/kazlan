@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import BarCode from '../../icons/BarCode';
 import OrderCard from './OrderCard';
-import Search from '../../icons/Search';
 import BaseUrl from '../../Constant';
-import Edit from '../../icons/Edit';
 import Button from '../Input/Button';
 import SelectionComponent from '../Input/SelectionComponent';
 import Updown from '../../icons/Updown';
-import Remove from '../../icons/Remove';
 import ShowEntries from '../Input/ShowEntries';
 import InputComponent from '../Input/InputComponent';
+import RecentInvoice from '../RecentInvoice/RecentInvoice';
+import Invoice from '../RecentInvoice/Invoice';
 
-const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [], user = [] }) => {
+const Order = ({ type = [], entries = [], user = [] }) => {
     const [data, setData] = useState([]);
     const [searchData, setSearchData] = useState([])
 
@@ -84,67 +82,8 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
                         <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
-                <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr className='border'>
-                                <th className="w-4 py-2 px-4 border-r">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Name
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Item Code
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Category
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Purchase Price
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Sale price
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Quantity
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        status
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="pl-4 pr-1 py-2 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data?.map((item) => (
-                                <OrderCard item={item} />
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="w-full overflow-hidden overflow-x-auto">
+                    <Invoice />
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1 className='font-normal'>Showing 1 to 3 of 3 entries</h1>

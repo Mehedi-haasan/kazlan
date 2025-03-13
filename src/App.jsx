@@ -21,11 +21,12 @@ import Sell from "./Components/Sell/Sell.jsx";
 import WholeSell from "./Components/Wholesale/Wholesale.jsx";
 import Customers from "./Components/Customers/Customers.jsx";
 import Suppliers from "./Components/Supplier/Suppliers.jsx";
-import Return from "./Components/Return/Return.jsx";
 import ForgetPassword from "./Components/Login/ForgetPassword.jsx";
 import OtpVarification from "./Components/Login/OtpVarification.jsx";
 import RecentInvoice from "./Components/RecentInvoice/RecentInvoice.jsx";
 import Brand from "./Components/Brand/Brand.jsx";
+import SaleReturn from "./Components/SaleReturn/SaleReturn.jsx";
+import PruchaseReturn from "./Components/PurchaseReturn/PurchaseReturn.jsx";
 
 
 
@@ -152,7 +153,7 @@ function App() {
         name: name
       }])
     }
-  }, [])
+  }, [auth])
 
 
 
@@ -180,10 +181,11 @@ function App() {
           <Route path="/brand" element={<Brand brands={brand} entries={entries} />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/recent/invoice" element={<RecentInvoice />} />
-          <Route path="/return" element={<Return />} />
+          <Route path="/sale/return" element={<SaleReturn />} />
+          <Route path="/purchase/return" element={<PruchaseReturn />} />
           <Route path="/customers" element={<Customers entries={entries} />} />
           <Route path="/suppliers" element={<Suppliers entries={entries} />} />
-          <Route path="/update/product" element={<PurchaseProduct category={category} type={type} brand={brand} entries={entries} shop={shop} paytype={paytype} />} />
+          <Route path="/update/product" element={<PurchaseProduct user={user} category={category} type={type} brand={brand} entries={entries} shop={shop} paytype={paytype} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
