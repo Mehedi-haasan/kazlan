@@ -87,7 +87,7 @@ const SingleOrder = () => {
                 </div>
             </div>
 
-            <div className='relative overflow-x-auto my-5 min-h-screen'>
+            <div className='relative w-full overflow-hidden overflow-x-auto my-5 min-h-screen'>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <Tabeheader />
                     <tbody>

@@ -11,11 +11,13 @@ const CategoryCard = ({ item }) => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [image_url, setImage_Url] = useState();
-    const [values, setValues] = useState({ name: "", });
+    const [values, setValues] = useState({ name: item?.name, });
 
-    const handleUpdate = async (image_url) => {
+    const handleUpdate = async (image_url, url, id) => {
 
         values.image_url = image_url;
+        values.url = url;
+        values.id = id;
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/update/category`, {
@@ -55,7 +57,7 @@ const CategoryCard = ({ item }) => {
 
             const data = await response.json();
             if (data) {
-                handleUpdate(data.image_url)
+                handleUpdate(data.image_url, item?.image_url, item?.id)
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -104,12 +106,12 @@ const CategoryCard = ({ item }) => {
 
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="450px" className="w-[450px]">
                     <div className="pt-1">
-                        <InputComponent placeholder={item?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={values?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
-                        <Button isDisable={false} name="Update" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        <Button isDisable={false} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item?.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </th>

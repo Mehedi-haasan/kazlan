@@ -72,7 +72,7 @@ const ProductCard = ({ item }) => {
 
   const handleDelete = async () => {
     const token = localStorage.getItem('token')
-    const response = await fetch(`${BaseUrl}/api/delete/category`, {
+    const response = await fetch(`${BaseUrl}/api/delete/product`, {
       method: 'POST',
       headers: {
         'authorization': token,

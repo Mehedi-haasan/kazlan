@@ -33,10 +33,10 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
 
     const SearchProduct = async (e) => {
         e.preventDefault();
-        const id = e.target.value
+        const name = e.target.value
         const token = localStorage.getItem('token')
-        if (id) {
-            const response = await fetch(`${BaseUrl}/api/product/single/order/${id}`, {
+        if (name) {
+            const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -57,19 +57,19 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                        <SelectionComponent options={type} onSelect={(v)=>{}} label={'Item Type'} />
+                        <SelectionComponent options={type} onSelect={(v) => { }} label={'Item Type'} />
                     </div>
                     <div>
-                        <SelectionComponent options={brand} onSelect={(v)=>{}} label={'Brand'} />
+                        <SelectionComponent options={brand} onSelect={(v) => { }} label={'Brand'} />
                     </div>
                     <div>
-                        <SelectionComponent options={category ? category : []} onSelect={(v)=>{}} label={'Category'} />
+                        <SelectionComponent options={category ? category : []} onSelect={(v) => { }} label={'Category'} />
                     </div>
                     <div>
-                        <SelectionComponent options={user} onSelect={(v)=>{}} label={'User'} />
+                        <SelectionComponent options={user} onSelect={(v) => { }} label={'User'} />
                     </div>
                     <div>
-                        <SelectionComponent options={shop} onSelect={(v)=>{}} label={'Warehouse Stock'} />
+                        <SelectionComponent options={shop} onSelect={(v) => { }} label={'Warehouse Stock'} />
                     </div>
 
                 </div>
@@ -90,7 +90,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                             className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
-                <div className="pt-3">
+                <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>

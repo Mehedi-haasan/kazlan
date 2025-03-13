@@ -43,7 +43,7 @@ const Suppliers = ({ entries }) => {
                         <input placeholder="Enter name" className="focus:outline-none border rounded p-1" />
                     </div>
                 </div>
-                <div className="pt-3">
+                <div className="pt-3  w-full overflow-hidden overflow-x-auto">
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>

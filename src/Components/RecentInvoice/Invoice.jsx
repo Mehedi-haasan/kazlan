@@ -73,6 +73,12 @@ const Invoice = ({ items }) => {
                         </th>
                         <th scope="col" className="px-3 py-3 text-center border-r">
                             <div className="flex justify-between items-center">
+                                Created by
+                                <Updown />
+                            </div>
+                        </th>
+                        <th scope="col" className="px-3 py-3 text-center border-r">
+                            <div className="flex justify-between items-center">
                                 Status
                                 <Updown />
                             </div>
@@ -109,6 +115,7 @@ const Invoice = ({ items }) => {
                                 <th scope="col" className="px-3 py-3 border-r">{item?.total}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.due}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{"Admin"}</th>
                                 <th scope="col" className="px-3 py-3 border-r">Paid</th>
                                 <th scope="col" className="px-3 py-3 border-r">{'argent'}</th>
                                 <th scope="col" className="px-3 py-3 border-r">250</th>

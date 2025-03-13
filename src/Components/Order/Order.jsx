@@ -9,6 +9,7 @@ import SelectionComponent from '../Input/SelectionComponent';
 import Updown from '../../icons/Updown';
 import Remove from '../../icons/Remove';
 import ShowEntries from '../Input/ShowEntries';
+import InputComponent from '../Input/InputComponent';
 
 const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [], user = [] }) => {
     const [data, setData] = useState([]);
@@ -52,15 +53,6 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
 
     return (
         <div className='bg-white relative pt-5 px-2'>
-            {/* <div className='flex justify-center w-full pb-1.5'>
-                <div className='border rounded-l py-1 px-3 cursor-pointer text-[#008CFF] flex justify-center items-center'>
-                    <BarCode />
-                </div>
-                <div className='relative border-y border-r rounded-r text-black w-full'>
-                    <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1 my-auto rounded focus:outline-none w-full' />
-                    <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
-                </div>
-            </div> */}
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Order List</h1>
@@ -75,10 +67,10 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
                         <SelectionComponent options={user} label={'User'} />
                     </div>
                     <div>
-                        <SelectionComponent options={user} label={'From Date'} />
+                        <InputComponent placeholder={"From Date"} label={"From Date"} />
                     </div>
                     <div>
-                        <SelectionComponent options={shop} label={'To Date'} />
+                        <InputComponent placeholder={"To Date"} label={"To Date"} />
                     </div>
 
                 </div>
@@ -92,7 +84,7 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
                         <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
-                <div className="pt-3">
+                <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>
@@ -148,15 +140,9 @@ const Order = ({ category = [], type = [], brand = [], entries = [], shop = [], 
                             </tr>
                         </thead>
                         <tbody>
-
-
-                            {
-                                data?.map((item) => (
-                                    <OrderCard item={item}/>
-                                ))
-                            }
-
-
+                            {data?.map((item) => (
+                                <OrderCard item={item} />
+                            ))}
                         </tbody>
                     </table>
                 </div>

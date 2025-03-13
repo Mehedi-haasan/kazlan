@@ -3,12 +3,8 @@ import Button from "../Input/Button"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant'
-import Add from "../../icons/Add";
 import StateCard from "./StateCard";
 import Updown from "../../icons/Updown";
-import SelectionComponent from "../Input/SelectionComponent";
-import Remove from "../../icons/Remove";
-import Edit from "../../icons/Edit";
 import ShowEntries from "../Input/ShowEntries";
 
 const State = ({ entries = [], state = [] }) => {
@@ -65,7 +61,7 @@ const State = ({ entries = [], state = [] }) => {
                         <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
-                <div className="pt-3">
+                <div className="pt-3  w-full overflow-hidden overflow-x-auto">
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>

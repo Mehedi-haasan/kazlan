@@ -149,7 +149,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                 <div className='border-b p-4'>
                     <h1>Sale Details</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
                         <div className='w-full'>
                             <h1>Customer</h1>
@@ -176,7 +176,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                 <div className='border-b p-4'>
                     <h1>Items</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3 p-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
                         <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
                     </div>
@@ -223,7 +223,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
 
 
 
-                <div className='p-4'>
+                <div className='p-4 w-full overflow-hidden overflow-x-auto'>
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border-b border-black text-[16px]'>
@@ -247,7 +247,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
 
                 <div className='p-4'>
                     <h1 className='pb-2'>Payment</h1>
-                    <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>

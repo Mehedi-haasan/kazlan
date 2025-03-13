@@ -40,12 +40,13 @@ function App() {
   const [category, setCategory] = useState([]);
   const [brand, setBrand] = useState([]);
   const [user, setUser] = useState([]);
-  const [state, setState] = useState([])
+  const [state, setState] = useState([]);
+  const [shop, setShop] = useState([])
 
   let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
   let paytype = [{ id: 1, name: "Cash" }, { id: 2, name: "Due" }]
   let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }, { id: 3, name: "30" }, { id: 4, name: "50" }]
-  let shop = [{ id: 23, name: "Main" }, { id: 24, name: "Shop 1" }]
+
 
 
   const getNotification = async () => {
@@ -113,6 +114,19 @@ function App() {
     setState(data.items)
   }
 
+  const getShop = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/shop`, {
+      method: 'GET',
+      headers: {
+        "authorization": token,
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json()
+    setShop(data.items)
+  }
+
   useEffect(() => {
     getNotification()
     getCategory();
@@ -123,11 +137,20 @@ function App() {
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('name');
     const role = localStorage.getItem('role');
+    const id = localStorage.getItem('id');
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ name: name, role: role })
+      setInfo({ id: id, name: name, role: role })
     } else {
       setAuth(false)
+    }
+    if (role === "superadmin" || role === "modarator") {
+      getShop()
+    } else {
+      setShop([{
+        id: id,
+        name: name
+      }])
     }
   }, [])
 
@@ -135,10 +158,10 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header auth={auth} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
+      <Header auth={auth} isLoggedOut={(v) => setAuth(v)} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
       <div className={`absolute bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-500 ${!auth ? "pl-0" : open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
-          <Route path="/" element={<Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/" element={auth ? <Dashboard data={data} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/dashboard" element={<Dashboard data={data} />} />
           <Route path="/registration" element={<Registration state={state} />} />
           <Route path="/forget/password" element={<ForgetPassword />} />

@@ -27,6 +27,7 @@ const Login = ({ auth }) => {
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('name', data.name);
       localStorage.setItem('role', data.role);
+      localStorage.setItem('id', data.id);
       auth(true)
       goto('/dashboard')
     }

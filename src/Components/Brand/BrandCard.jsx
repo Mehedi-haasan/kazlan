@@ -11,15 +11,17 @@ const BrandCard = ({ item }) => {
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
     const [image_url, setImage_Url] = useState();
-    const [values, setValues] = useState({ name: "", });
+    const [values, setValues] = useState({ name: item?.name, });
 
 
-    const handleUpdate = async (image_url) => {
+    const handleUpdate = async (image_url, url, id) => {
         values.image_url = image_url;
+        values.url = url;
+        values.id = id;
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/update/brand`, {
-                method: 'POST',
+                method: 'PATCH',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
@@ -28,7 +30,7 @@ const BrandCard = ({ item }) => {
             });
 
             const data = await response.json();
-            setShow(false)
+            setEdit(false)
             alert(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -56,7 +58,7 @@ const BrandCard = ({ item }) => {
 
             const data = await response.json();
             if (data) {
-                handleUpdate(data.image_url)
+                handleUpdate(data.image_url, item?.image_url, item?.id)
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -75,6 +77,7 @@ const BrandCard = ({ item }) => {
             body: JSON.stringify({ id: item?.id, url: item?.image_url }),
         });
         const data = await response.json();
+        setShow(false)
         alert(data?.message)
     }
 
@@ -100,7 +103,7 @@ const BrandCard = ({ item }) => {
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
-                        <Button isDisable={false} name="Update" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        <Button isDisable={false} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item?.image_url, '', item?.id) }} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
                 <Edit onClick={() => { setEdit(true) }} />
