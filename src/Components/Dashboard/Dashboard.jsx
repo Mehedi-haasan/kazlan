@@ -15,12 +15,18 @@ const Dashboard = ({ data }) => {
     const [total, setTotal] = useState(0)
 
     const HourlySalesData = async () => {
-        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse`);
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse`, {
+            method: "GET",
+            headers: {
+                'authorization': token
+            }
+        });
         const data = await response.json();
 
         if (data?.items) {
             const salesData = data.items.map((sa, i) => (
-                { x: new Date(2024, 0, 1, sa?.h), y: sa?.sales || 0 }
+                { x: new Date(2025, 0, 1, sa?.h), y: sa?.sales || 0 }
             ));
             let total = 0
             const totalSale = data.items.map((sa, i) => (
@@ -32,7 +38,13 @@ const Dashboard = ({ data }) => {
     };
 
     const MonthlySalesData = async () => {
-        const response = await fetch(`${BaseUrl}/api/get/user/order/monthly`);
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/user/order/monthly`, {
+            method: "GET",
+            headers: {
+                'authorization': token
+            }
+        });
         const data = await response.json();
 
         if (data?.items) {

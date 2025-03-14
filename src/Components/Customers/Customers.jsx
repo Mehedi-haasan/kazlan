@@ -111,7 +111,7 @@ const Customers = ({ entries }) => {
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.first_name} {item?.last_name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>

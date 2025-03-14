@@ -45,8 +45,8 @@ function App() {
   const [shop, setShop] = useState([])
 
   let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
-  let paytype = [{ id: 1, name: "Cash" }, { id: 2, name: "Due" }]
-  let entries = [{ id: 1, name: "10" }, { id: 2, name: "20" }, { id: 3, name: "30" }, { id: 4, name: "50" }]
+  let paytype = [{ id: 201, name: "Cash" }, { id: 202, name: "Due" }]
+  let entries = [{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]
 
 
 
@@ -182,7 +182,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/recent/invoice" element={<RecentInvoice />} />
           <Route path="/sale/return" element={<SaleReturn />} />
-          <Route path="/purchase/return" element={<PruchaseReturn />} />
+          <Route path="/purchase/return" element={<PruchaseReturn shop={shop} paytype={paytype} />} />
           <Route path="/customers" element={<Customers entries={entries} />} />
           <Route path="/suppliers" element={<Suppliers entries={entries} />} />
           <Route path="/update/product" element={<PurchaseProduct user={user} category={category} type={type} brand={brand} entries={entries} shop={shop} paytype={paytype} />} />
