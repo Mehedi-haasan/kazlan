@@ -34,20 +34,20 @@
             {
                 "id": 24,
                 "parent": "2",
-                "name": "Create item",
-                "route": "create"
+                "name": "Warehouse List",
+                "route": "warehouse"
             },
             {
                 "id": 25,
                 "parent": "2",
-                "name": "Inventory",
-                "route": "category"
+                "name": "Create item",
+                "route": "create"
             },
             {
                 "id": 26,
                 "parent": "2",
-                "name": "Adjustment",
-                "route": "create"
+                "name": "Inventory Adjustment",
+                "route": "category"
             }
         ]
     },
