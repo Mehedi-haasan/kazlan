@@ -56,7 +56,7 @@ const Company = () => {
 
 
     return (
-        <div>
+        <div className='px-3 py-5'>
             <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Company Name'} placeholder={values?.name || 'N/A'} />
             <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} placeholder={values?.email || 'N/A'} />
             <InputComponent onChange={(e) => { setValues({ ...values, email2: e }) }} label={'2nd Email'} placeholder={values?.email2 || 'N/A'} />

@@ -62,7 +62,7 @@ const State = ({ entries = [], state = [] }) => {
                     </div>
                 </div>
                 <div className="pt-3  w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">

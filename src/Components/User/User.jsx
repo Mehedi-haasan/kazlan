@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import Updown from '../../icons/Updown'
 import Remove from '../../icons/Remove'
-import ShowEntries from "../Input/ShowEntries";
-import { NavLink } from "react-router-dom";
 import Edit from "../../icons/Edit";
+import ShowEntries from "../Input/ShowEntries";
 import BaseUrl from "../../Constant";
 
-const Customers = ({ entries }) => {
+const User = ({ entries }) => {
 
-    const [customer, setCustomer] = useState([])
+    const [supplier, setSupplier] = useState([])
 
-    const GetCustomer = async () => {
+    const GetSupplier = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customer`, {
+        const response = await fetch(`${BaseUrl}/api/get/users/with/role`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -20,18 +20,18 @@ const Customers = ({ entries }) => {
             },
         })
         const data = await response.json();
-        setCustomer(data?.items)
+        setSupplier(data?.items)
     }
 
     useEffect(() => {
-        GetCustomer()
+        GetSupplier()
     }, [])
-
+    console.log(supplier)
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">Customer List</h1>
-                <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Customer</NavLink>
+                <h1 className="font-semibold text-lg">User List</h1>
+                <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create user</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
@@ -44,7 +44,7 @@ const Customers = ({ entries }) => {
                     </div>
                 </div>
                 <div className="pt-3  w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
@@ -85,7 +85,7 @@ const Customers = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-right border-r">
                                     <div className="flex justify-between items-center">
-                                        Balence
+                                        Role
                                         <Updown />
                                     </div>
                                 </th>
@@ -102,7 +102,7 @@ const Customers = ({ entries }) => {
 
 
                             {
-                                customer?.map((item) => (
+                                supplier?.map((item) => (
                                     <tr className='border-b'>
                                         <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
@@ -110,12 +110,12 @@ const Customers = ({ entries }) => {
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.first_name} {item?.last_name}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">250</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.role?.length > 0 ? item?.role[0]?.name : 'User'}</th>
                                         <th scope="col" className="px-2 py-2 border-r">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                                             <Edit />
@@ -133,7 +133,7 @@ const Customers = ({ entries }) => {
                     <h1>Showing 1 to 3 of 3 entries</h1>
                     <div>
                         <button className="border-y border-l rounded-l py-1.5 px-3">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-2">1</button>
                         <button className="border-y border-r rounded-r py-1.5 px-3">Next</button>
                     </div>
                 </div>
@@ -142,4 +142,4 @@ const Customers = ({ entries }) => {
     )
 }
 
-export default Customers
+export default User

@@ -8,7 +8,7 @@
     },
     {
         "id": "2",
-        "name": "Inventory",
+        "name": "Items",
         "route": "product",
         "icon": "fluent-mdl2:product-variant",
         "option": true,
@@ -36,18 +36,6 @@
                 "parent": "2",
                 "name": "Warehouse List",
                 "route": "warehouse"
-            },
-            {
-                "id": 25,
-                "parent": "2",
-                "name": "Create item",
-                "route": "create"
-            },
-            {
-                "id": 26,
-                "parent": "2",
-                "name": "Inventory Adjustment",
-                "route": "category"
             }
         ]
     },
@@ -90,30 +78,6 @@
         "option": false
     },
     {
-        "id": "5",
-        "name": "Users",
-        "route": "sell",
-        "icon": "mdi:cart-outline",
-        "option": true,
-        "items": [
-            {
-                "id": 51,
-                "name": "Profile",
-                "route": "profile"
-            },
-            {
-                "id": 52,
-                "name": "Users",
-                "route": "users"
-            },
-            {
-                "id": 52,
-                "name": "Roles",
-                "route": "roles"
-            }
-        ]
-    },
-    {
         "id": "6",
         "name": "Purchase",
         "route": "update/product",
@@ -137,7 +101,7 @@
             },
             {
                 "id": 64,
-                "name": "Prrchase Return",
+                "name": "Parchase Return",
                 "route": "purchase/return"
             }
         ]
@@ -151,10 +115,37 @@
     },
     {
         "id": "8",
-        "name": "Notification",
-        "route": "notification",
-        "icon": "tdesign:notification",
-        "option": false
+        "name": "Setting",
+        "route": "setting",
+        "icon": "uil:setting",
+        "option": true,
+        "items": [
+            {
+                "id": 81,
+                "name": "Profile",
+                "route": "profile"
+            },
+            {
+                "id": 82,
+                "name": "Users and roles",
+                "route": "users"
+            },
+            {
+                "id": 83,
+                "name": "App Setting",
+                "route": "app/setting"
+            },
+            {
+                "id": 84,
+                "name": "Company",
+                "route": "company"
+            },
+            {
+                "id": 85,
+                "name": "Bank Account",
+                "route": ""
+            }
+        ]
     },
     {
         "id": "9",

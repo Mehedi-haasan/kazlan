@@ -26,6 +26,7 @@ const Login = ({ auth }) => {
     if (data && data.accessToken && data.success) {
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('name', data.name);
+      localStorage.setItem('image', data.image);
       localStorage.setItem('role', data.role);
       localStorage.setItem('id', data.id);
       auth(true)

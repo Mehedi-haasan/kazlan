@@ -26,6 +26,9 @@ import Brand from "./Components/Brand/Brand.jsx";
 import SaleReturn from "./Components/SaleReturn/SaleReturn.jsx";
 import PruchaseReturn from "./Components/PurchaseReturn/PurchaseReturn.jsx";
 import Warehouse from "./Components/Warehouse/Warehouse.jsx";
+import User from "./Components/User/User.jsx";
+import Company from "./Components/Company/Company.jsx";
+import Setting from "./Components/Setting/Setting.jsx";
 
 
 
@@ -34,7 +37,7 @@ import Warehouse from "./Components/Warehouse/Warehouse.jsx";
 
 function App() {
   const [auth, setAuth] = useState(false)
-  const [open, setopen] = useState(false);
+  const [open, setopen] = useState(true);
   const [info, setInfo] = useState({});
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
@@ -100,9 +103,9 @@ function App() {
     const data = await response.json();
     if (data?.message === "Invalid token") {
       setAuth(false);
-      alert("Your Login seassion expired. Please login again")
+      alert("Your Login seassion expired. Please login again");
+      localStorage.setItem('token', '')
     }
-    console.log(data, "data")
     setUser(data.items)
   }
 
@@ -144,11 +147,12 @@ function App() {
 
     const token = localStorage.getItem('token');
     const name = localStorage.getItem('name');
+    const image = localStorage.getItem('image');
     const role = localStorage.getItem('role');
     const id = localStorage.getItem('id');
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ id: id, name: name, role: role })
+      setInfo({ id: id, name: name, image: image, role: role })
     } else {
       setAuth(false)
     }
@@ -180,12 +184,15 @@ function App() {
           <Route path="/sell" element={auth ? <Sell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/wholesale" element={auth ? <WholeSell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/notification" element={<Notification data={data} />} />
+          <Route path="/company" element={<Company />} />
+          <Route path="/app/setting" element={<Setting />} />
           <Route path="/order" element={auth ? <Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/state" element={auth ? <State entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/warehouse" element={auth ? <Warehouse entries={entries} shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/category" element={auth ? <Category category={category} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/brand" element={auth ? <Brand brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/profile" element={auth ? <Profile /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/users" element={auth ? <User entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/sale/return" element={auth ? <SaleReturn /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/purchase/return" element={auth ? <PruchaseReturn shop={shop} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
