@@ -42,6 +42,10 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
         }
     }
 
+    useEffect(() => {
+        document.title = `Return - Kazaland Brothers`;
+    }, []);
+
 
     const PurchaseReturn = async () => {
         const token = localStorage.getItem('token');

@@ -26,6 +26,11 @@ const Warehouse = ({ entries }) => {
         FetchShop()
     }, [])
 
+    useEffect(() => {
+        document.title = "Warehouses - Kazaland Brothers";
+    }, []);
+
+
     return (
         <div className="px-2 pt-5 min-h-screen">
 

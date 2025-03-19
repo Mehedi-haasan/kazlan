@@ -71,7 +71,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
             {
                 auth && <div className={`absolute bg-[#FFFFFF] transition-all ease-in duration-500 top-[59px] z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh] py-3 pr-3  ${open ? "left-[0px]" : "left-[-170px]"}`}>
-                    <div className='max-h-[500px] overflow-y-auto'>
+                    <div className='h-full overflow-y-auto'>
                         {data?.map((item, index) => (
                             <div className="">
                                 {

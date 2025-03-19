@@ -27,16 +27,6 @@ const SingleOrder = () => {
 
     return (
         <div className='relative px-4 pt-5 min-h-screen'>
-            {/* <div className='flex justify-between items-center py-3'>
-                <div>
-                    <h1 className='font-semibold'>Sell Product</h1>
-                </div>
-                <div className='relative border rounded'>
-                    <input type='text' placeholder='Enter invoice number' onKeyDown={(e) => { if (e.key === "Enter") { SingleOrder() } }} onChange={(e) => { setInvoiceId(e.target.value) }} className='px-2 py-1 rounded focus:outline-none' />
-                    <Search className='absolute right-1 top-1.5' onClick={SingleOrder} />
-                </div>
-            </div> */}
-
             <div className='flex justify-between pb-1'>
                 <div className='flex justify-start gap-3 items-center'>
                     <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>

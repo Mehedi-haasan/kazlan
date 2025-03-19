@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant';
@@ -62,6 +62,10 @@ const Brand = ({ brands, entries }) => {
             console.error('Error uploading image:', error);
         }
     }
+
+    useEffect(() => {
+        document.title = `Brands - Kazaland Brothers`;
+    }, []);
 
     return (
         <div className="px-2 pt-5 min-h-screen">

@@ -8,6 +8,11 @@ const Company = () => {
     const [values, setValues] = useState({})
     const [companyInfo, setCompanyInfo] = useState({})
 
+
+        useEffect(() => {
+            document.title = `Company info - Kazaland Brothers`;
+        }, []);
+
     const PostInfo = async () => {
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/create/company/info`, {

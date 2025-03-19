@@ -17,7 +17,7 @@
                 "id": 21,
                 "parent": "2",
                 "name": "Item List",
-                "route": "product"
+                "route": "items"
             },
             {
                 "id": 22,
@@ -35,7 +35,7 @@
                 "id": 24,
                 "parent": "2",
                 "name": "Warehouse List",
-                "route": "warehouse"
+                "route": "warehouses"
             }
         ]
     },
@@ -76,6 +76,25 @@
         "route": "state",
         "icon": "mdi:location",
         "option": false
+    },
+    {
+        "id": "5",
+        "name": "Server",
+        "route": "server",
+        "icon": "mdi:location",
+        "option": true,
+        "items": [
+            {
+                "id": 51,
+                "name": "NAS Server",
+                "route": "nas"
+            },
+            {
+                "id": 52,
+                "name": "Google Drive",
+                "route": "google/drive"
+            }
+        ]
     },
     {
         "id": "6",
@@ -127,7 +146,7 @@
             },
             {
                 "id": 82,
-                "name": "Users and roles",
+                "name": "Users info",
                 "route": "users"
             },
             {
@@ -139,11 +158,6 @@
                 "id": 84,
                 "name": "Company",
                 "route": "company"
-            },
-            {
-                "id": 85,
-                "name": "Bank Account",
-                "route": ""
             }
         ]
     },

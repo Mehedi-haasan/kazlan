@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
@@ -35,6 +35,10 @@ const Login = ({ auth }) => {
 
 
   }
+
+  useEffect(() => {
+    document.title = "Login - KazalandBrothers";
+  }, []);
 
 
   return (

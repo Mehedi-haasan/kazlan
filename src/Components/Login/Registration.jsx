@@ -40,6 +40,9 @@ const Registration = ({ state }) => {
   }
 
 
+  useEffect(() => {
+    document.title = "Registration - KazalandBrothers";
+  }, []);
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>

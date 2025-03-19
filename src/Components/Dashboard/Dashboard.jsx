@@ -64,6 +64,10 @@ const Dashboard = ({ data }) => {
         }
     }, [])
 
+        useEffect(() => {
+            document.title = "Dashboard - KazalandBrothers";
+        }, []);
+
     return (
         <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen relative'>
 

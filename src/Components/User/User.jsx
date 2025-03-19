@@ -26,7 +26,11 @@ const User = ({ entries }) => {
     useEffect(() => {
         GetSupplier()
     }, [])
-    console.log(supplier)
+
+    useEffect(() => {
+        document.title = "User info - KazalandBrothers";
+    }, []);
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
@@ -79,6 +83,12 @@ const User = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
+                                        Bank Account
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
                                         Address
                                         <Updown />
                                     </div>
@@ -114,6 +124,7 @@ const User = ({ entries }) => {
                                         <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankaccount}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.role?.length > 0 ? item?.role[0]?.name : 'User'}</th>
                                         <th scope="col" className="px-2 py-2 border-r">Active</th>

@@ -39,6 +39,9 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
 
+    useEffect(() => {
+        document.title = `Purchase - Kazaland Brothers`;
+    }, []);
 
     const options = {
         width: 1000,
