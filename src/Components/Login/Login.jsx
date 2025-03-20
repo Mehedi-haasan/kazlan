@@ -29,6 +29,7 @@ const Login = ({ auth }) => {
       localStorage.setItem('image', data.image);
       localStorage.setItem('role', data.role);
       localStorage.setItem('id', data.id);
+      localStorage.setItem('usertype', data.usertype);
       auth(true)
       goto('/dashboard')
     }
@@ -43,7 +44,7 @@ const Login = ({ auth }) => {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
+      style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Login</h2>

@@ -77,7 +77,13 @@ const User = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
-                                        Whatsapp
+                                        Bank Name
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Account Name
                                         <Updown />
                                     </div>
                                 </th>
@@ -90,6 +96,12 @@ const User = ({ entries }) => {
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
                                         Address
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Type
                                         <Updown />
                                     </div>
                                 </th>
@@ -120,12 +132,14 @@ const User = ({ entries }) => {
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.first_name} {item?.last_name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankaccount}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountnumber}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.usertype}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.role?.length > 0 ? item?.role[0]?.name : 'User'}</th>
                                         <th scope="col" className="px-2 py-2 border-r">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">

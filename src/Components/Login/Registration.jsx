@@ -8,16 +8,14 @@ import Show from '../Input/Show';
 
 const Registration = ({ state }) => {
   const [values, setValues] = useState({
-    "rules": [],
-    usertype: "user",
+    "rules": ["admin"],
+    usertype: "Wholesaler",
     stateId: 2
   });
   const [showPassword, setShowPassword] = useState(false)
 
   const goToHome = useNavigate();
-  let user = [{ id: 1, name: "user" }, { id: 2, name: "customer" }, { id: 3, name: "supplier" }, { id: 4, name: "shop" }]
-  let Role = [{ id: 1, name: "user" }, { id: 2, name: "admin" }, { id: 3, name: "moderator" }, { id: 4, name: "superadmin" }]
-
+  let user = [{ id: 1, name: "Wholesaler" }, { id: 2, name: "Retailer" }]
 
   const handleSubmit = async (e) => {
     console.log(values)
@@ -33,9 +31,7 @@ const Registration = ({ state }) => {
     });
     const data = await response.json();
     alert(data.message)
-    if (data && data.accessToken && data.success) {
-      goToHome('/')
-    }
+    goToHome('/')
 
   }
 
@@ -45,30 +41,34 @@ const Registration = ({ state }) => {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('https://img.freepik.com/premium-vector/library-illustration-book-shelves-with-interior-wooden-furniture-education-knowledge_2175-18763.jpg?w=996')" }}>
+    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('url('${BaseUrl}/uploads/bg.png')` }}>
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[800px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
         <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">First Name</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, first_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your first name" />
+            <label className="block text-white text-sm font-semibold mb-1">Full Name</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your first name" />
           </div>
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Last Name</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, last_name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your last name" />
+            <label className="block text-white text-sm font-semibold mb-1">Phone</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your last name" />
           </div>
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Mobile</label>
-            <input type="number" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your mobile number" />
+            <label className="block text-white text-sm font-semibold mb-1">Bank Name</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, bankname: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your mobile number" />
           </div>
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Whatsapp</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, whatsapp: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your whatsapp number" />
+            <label className="block text-white text-sm font-semibold mb-1">Account Name</label>
+            <input type="text" onChange={(e) => { setValues({ ...values, accountname: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your whatsapp number" />
+          </div>
+          <div>
+            <label className="block text-white text-sm font-semibold mb-1">Account Number</label>
+            <input type="number" onChange={(e) => { setValues({ ...values, accountnumber: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your address" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Address</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your address" />
+            <input type="email" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
           </div>
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Email</label>
@@ -79,9 +79,6 @@ const Registration = ({ state }) => {
           </div>
           <div>
             <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={`User Type`} className='font-semibold' />
-          </div>
-          <div>
-            <SelectionComponent options={Role} onSelect={(v) => { setValues({ ...values, rules: [v?.name] }) }} label={`User Role`} className='font-semibold' />
           </div>
           <div className='relative'>
             <label className="block text-white text-sm font-semibold mb-1">Password</label>

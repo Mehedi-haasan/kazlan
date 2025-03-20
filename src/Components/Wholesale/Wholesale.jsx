@@ -16,11 +16,12 @@ import Button from '../Input/Button';
 
 
 
-const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [] }) => {
+const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
     const [stateName, setStateName] = useState('Tangail')
+    const [customer, setCustomer] = useState([])
     const [name, setName] = useState('Mehedi hasan')
     const [due, setDue] = useState(0);
     const [pay, setPay] = useState(0)
@@ -29,10 +30,8 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
     const [searchData, setSearchData] = useState([]);
     const [show, setShow] = useState(false);
     const [isPdf, setPdf] = useState(false);
-    const [isImg, setImg] = useState(false);
-    const [user, setUser] = useState([]);
     const [userId, setUserId] = useState(1);
-    const [stateId, setStateId] = useState(null);
+    const [stateId, setStateId] = useState(1);
     const [mobile, setMobile] = useState('01750834062')
     const [date, setDate] = useState('');
 
@@ -88,7 +87,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                 "username": name,
                 "userId": userId,
                 "name": v?.name,
-                "shop": "main",
+                "shop": info?.name,
                 "price": v?.price,
                 "discount": v?.comn,
                 "sellprice": (v?.price * v?.qty),
@@ -98,20 +97,6 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
             })
         ))
 
-        let finaldata = {
-            shop: "main",
-            userId: userId,
-            invoice_id: invoice_id,
-            date: date,
-            total: total,
-            previousdue: due,
-            paidamount: pay,
-            amount: total - pay,
-            orders: orderData
-        }
-
-        console.log(finaldata)
-
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -120,7 +105,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    shop: "shop",
+                    shop: info?.name,
                     userId: userId,
                     invoice_id: invoice_id,
                     date: date,
@@ -146,6 +131,10 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
     }
 
     useEffect(() => {
+        setDate(getFormattedDate())
+    }, [])
+
+    useEffect(() => {
         let amount = allData?.reduce((acc, item) => {
             let discount = parseInt(item?.price * item?.comn / 100);
             return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
@@ -155,16 +144,15 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
     }, [allData]);
 
 
-    useEffect(() => {
-        setDate(getFormattedDate());
-        setStateId(state[0]?.id)
-    }, [state])
 
+
+
+    // Fetch Customer due
     useEffect(() => {
 
         const fetchUserDue = async () => {
             const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/users/due/${userId}`, {
+            const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -173,18 +161,20 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
             });
             const data = await response.json();
             if (data && data?.items) {
-                setDue(data?.items?.amount || 0);
+                setDue(data?.balance || 0);
             }
         }
         fetchUserDue()
     }, [userId])
 
 
-    useEffect(() => {
 
-        const fetchUser = async () => {
+
+    // Customer Fetch
+    useEffect(() => {
+        const GetCustomer = async () => {
             const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/get/users/${stateId}`, {
+            const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/${stateId}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -193,15 +183,16 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
             });
             const data = await response.json();
             if (data && data?.items?.length > 0) {
-                setUser(data?.items || []);
-                setUserId(data?.items[0]?.id)
+                setCustomer(data?.items || []);
+                setUserId(data?.items[0]?.id);
+                setName(data?.items[0]?.name);
             }
         }
-        if (state?.length > 0) {
-            fetchUser()
-        }
+
+        GetCustomer()
 
     }, [stateId])
+
 
 
     return (
@@ -224,7 +215,7 @@ const WholeSell = ({ category = [], type = [], brand = [], entries = [], shop = 
                         </div>
                     </div>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={(v) => { setUserId(v.id); setName(v?.name) }} label={"Customer"} className='rounded-l' />
+                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name) }} label={"Customer"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>

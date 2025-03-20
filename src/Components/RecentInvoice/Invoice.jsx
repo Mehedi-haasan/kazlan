@@ -23,6 +23,13 @@ const Invoice = ({ items }) => {
         RecentInvoice(invoices)
     }, [])
 
+
+    function getFormattedDate() {
+        const date = new Date();
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return date.toLocaleDateString('bn-BD', options);
+    }
+
     console.log()
     return (
         <div className="pt-3">
@@ -115,10 +122,10 @@ const Invoice = ({ items }) => {
                                 <th scope="col" className="px-3 py-3 border-r">{item?.total}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.due}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{"Admin"}</th>
-                                <th scope="col" className="px-3 py-3 border-r">Paid</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.shop}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.status}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{'argent'}</th>
-                                <th scope="col" className="px-3 py-3 border-r">250</th>
+                                <th scope="col" className="px-3 py-3 border-r">{getFormattedDate()}</th>
                             </tr>
                         ))
                     }

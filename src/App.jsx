@@ -29,8 +29,10 @@ import Warehouse from "./Components/Warehouse/Warehouse.jsx";
 import User from "./Components/User/User.jsx";
 import Company from "./Components/Company/Company.jsx";
 import Setting from "./Components/Setting/Setting.jsx";
-import Nas from "./Components/Nas/Nas.jsx";
-import GoogleDrive from "./Components/GoogleDrive/GoogleDrive.jsx";
+import CreateCustomer from "./Components/Customers/CreateCustomer.jsx";
+import CreateSupplier from "./Components/Supplier/CreateSupplier.jsx";
+import Sale from "./Components/Sale/Sale.jsx";
+
 
 
 
@@ -144,12 +146,15 @@ function App() {
     const image = localStorage.getItem('image');
     const role = localStorage.getItem('role');
     const id = localStorage.getItem('id');
+    const usertype = localStorage.getItem('usertype');
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ id: id, name: name, image: image, role: role })
+      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype })
     } else {
       setAuth(false)
     }
+
+    
     if (role === "superadmin" || role === "modarator") {
       getShop()
     } else {
@@ -160,7 +165,7 @@ function App() {
     }
 
     if (auth) {
-      getNotification()
+      // getNotification()
       getCategory();
       getBrand()
       getUser()
@@ -184,13 +189,12 @@ function App() {
           <Route path="/create" element={auth ? <CreactProduct category={category} brand={brand} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/items" element={auth ? <Product category={category} type={type} brand={brand} entries={entries} shop={shop} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/user/order" element={auth ? <SingleOrder /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/sell" element={auth ? <Sell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/wholesale" element={auth ? <WholeSell category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/sale/order" element={auth ? <Sale category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/company" element={<Company />} />
-          <Route path="/nas" element={<Nas />} />
-          <Route path="/google/drive" element={<GoogleDrive />} />
           <Route path="/app/setting" element={<Setting />} />
+          <Route path="/create/customer" element={<CreateCustomer state={state} />} />
+          <Route path="/create/supplier" element={<CreateSupplier state={state} />} />
           <Route path="/order" element={auth ? <Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/state" element={auth ? <State entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/warehouses" element={auth ? <Warehouse entries={entries} shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />

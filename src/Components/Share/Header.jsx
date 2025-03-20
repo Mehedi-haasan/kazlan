@@ -22,7 +22,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
                 <div className="">
                     <NavLink className={`pt-1 pb-2`}
-                     onClick={() => { isOpen(!open); setSelected({}) }}
+                        onClick={() => { isOpen(!open); setSelected({}) }}
                     >
                         <img src={logo} alt="dhyfg" className="w-[110px] h-[50px]" />
                     </NavLink>
@@ -102,17 +102,28 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
                                 {/* Child Route */}
                                 <div className={`pl-2 overflow-hidden transition-all duration-700 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
-                                    {item?.items?.map((it) => (
-                                        <NavLink key={index} to={`/${it?.route}`}
-                                            onClick={() => { child?.id === it?.id ? setChaild({}) : setChaild(it) }}
-                                            className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''}
-                                           text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-4 py-1.5`}>
-                                            <div className="flex justify-start items-center gap-2">
-                                                <Circle />
-                                                <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>
-                                            </div>
-                                        </NavLink>
-                                    ))}
+                                    {item?.items?.map((it) => {
+                                        return <div>
+                                            {
+                                                it?.isLink ? <a key={index} href={`${it?.route}`} target="_blank" rel="noopener noreferrer"
+                                                    onClick={() => { child?.id === it?.id ? setChaild({}) : setChaild(it) }}
+                                                    className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''} text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-4 py-1.5`}>
+                                                    <div className="flex justify-start items-center gap-2">
+                                                        <Circle />
+                                                        <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>
+                                                    </div>
+                                                </a> : <NavLink key={index} to={`/${it?.route}`}
+                                                    onClick={() => { child?.id === it?.id ? setChaild({}) : setChaild(it) }}
+                                                    className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''}
+                                               text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-4 py-1.5`}>
+                                                    <div className="flex justify-start items-center gap-2">
+                                                        <Circle />
+                                                        <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>
+                                                    </div>
+                                                </NavLink>
+                                            }
+                                        </div>
+                                    })}
 
                                 </div>
 

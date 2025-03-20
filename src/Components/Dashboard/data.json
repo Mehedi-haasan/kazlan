@@ -55,13 +55,13 @@
             {
                 "id": 32,
                 "parent": "32",
-                "name": "Sale Order",
+                "name": "Invoice",
                 "route": "order"
             },
             {
                 "id": 33,
-                "name": "Invoice",
-                "route": "wholesale"
+                "name": "Sale Order",
+                "route": "sale/order"
             },
             {
                 "id": 34,
@@ -86,13 +86,36 @@
         "items": [
             {
                 "id": 51,
+                "isLink":true,
                 "name": "NAS Server",
                 "route": "nas"
             },
             {
                 "id": 52,
+                "isLink":true,
                 "name": "Google Drive",
-                "route": "google/drive"
+                "route": "https://cloud.mahfuz.workers.dev/"
+            }
+        ]
+    },
+    {
+        "id": "9",
+        "name": "Software",
+        "route": "server",
+        "icon": "mdi:location",
+        "option": true,
+        "items": [
+            {
+                "id": 51,
+                "isLink":true,
+                "name": "Karanpc",
+                "route": "https://karanpc.com/posts/"
+            },
+            {
+                "id": 52,
+                "isLink":true,
+                "name": "Getintopc",
+                "route": "https://getintopc.com/"
             }
         ]
     },

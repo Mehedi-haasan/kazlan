@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import BaseUrl from '../../Constant';
-import { useToImage } from '@hcorta/react-to-image'
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
@@ -16,7 +13,7 @@ import Button from '../Input/Button';
 
 
 
-const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], state = [], paytype = [] }) => {
+const Sell = ({ shop = [], paytype = [], info = {} }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
@@ -25,15 +22,8 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
     const [show, setShow] = useState(false);
-    const [isPdf, setPdf] = useState(false);
-    const [isImg, setImg] = useState(false);
     const [date, setDate] = useState('');
 
-    const options = {
-        width: 1000,
-        backgroundColor: '#ffffff'
-    };
-    const { ref, getPng } = useToImage(options)
 
     const SearchProduct = async (e) => {
         e.preventDefault();
@@ -53,22 +43,7 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
         }
     }
 
-    const downloadPDF = () => {
-        const capture = document.querySelector('.actual-receipt');
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('img/png');
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const componentWidth = doc.internal.pageSize.getWidth();
-            const componentHeight = doc.internal.pageSize.getHeight();
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-            doc.save('receipt.pdf');
-        })
-        setPdf(false)
-    }
 
-    const PrintfPdf = () => {
-        window.print()
-    }
 
     const Order = async () => {
         const token = localStorage.getItem('token');
@@ -79,9 +54,9 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                 "invoice_id": 2,
                 "product_id": v?.id,
                 "username": name,
-                "userId": 4,
+                "userId": 1,
                 "name": v?.name,
-                "shop": "main",
+                "shop": info?.name,
                 "price": v?.price,
                 "discount": v?.comn,
                 "sellprice": (v?.price * v?.qty),
@@ -99,8 +74,8 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    shop: "shop",
-                    userId: 4,
+                    shop: info?.name,
+                    userId: 1,
                     date: date,
                     total: total,
                     previousdue: 0,
@@ -258,9 +233,6 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                         <div>
                             <InputComponent placeholder={total} label={'Amount'} />
                         </div>
-                        {/* <div>
-                            <InputComponent placeholder={0} label={'Previous due'} />
-                        </div> */}
                         <div>
                             <InputComponent placeholder={0} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
                         </div>
@@ -289,13 +261,11 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
                         onChange={(e) => setData({ ...data, qty: e.target.value })}
-                        // value={qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 setAllData([...allData, data]);
                                 setData([]);
                                 setShow(false);
-                                // setQty(0)
                             }
                         }}
                         placeholder={""}
@@ -306,13 +276,11 @@ const Sell = ({ category = [], type = [], brand = [], entries = [], shop = [], s
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
                         onChange={(e) => setData({ ...data, comn: e.target.value })}
-                        // value={qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 setAllData([...allData, data]);
                                 setData([]);
                                 setShow(false);
-                                // setQty(0)
                             }
                         }}
                         placeholder={""}

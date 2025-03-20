@@ -12,7 +12,7 @@ const Customers = ({ entries }) => {
 
     const GetCustomer = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customer`, {
+        const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -31,7 +31,7 @@ const Customers = ({ entries }) => {
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Customer List</h1>
-                <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Customer</NavLink>
+                <NavLink to={`/create/customer`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Customer</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
@@ -73,7 +73,19 @@ const Customers = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
-                                        Whatsapp
+                                        Bank Name
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Account Name
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Account Number
                                         <Updown />
                                     </div>
                                 </th>
@@ -111,11 +123,13 @@ const Customers = ({ entries }) => {
                                             </div>
                                         </th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.phone}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountnumber}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">250</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.balance}</th>
                                         <th scope="col" className="px-2 py-2 border-r">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                                             <Edit />

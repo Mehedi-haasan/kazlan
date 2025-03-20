@@ -12,7 +12,7 @@ const Suppliers = ({ entries }) => {
 
     const GetSupplier = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/supplier`, {
+        const response = await fetch(`${BaseUrl}/api/get/suppliers`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -27,15 +27,15 @@ const Suppliers = ({ entries }) => {
         GetSupplier()
     }, [])
 
-        useEffect(() => {
-            document.title = `Suppliers - Kazaland Brothers`;
-        }, []);
+    useEffect(() => {
+        document.title = `Suppliers - Kazaland Brothers`;
+    }, []);
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Suppliers List</h1>
-                <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Supplier</NavLink>
+                <NavLink to={`/create/supplier`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Supplier</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
@@ -77,7 +77,19 @@ const Suppliers = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-center border-r">
                                     <div className="flex justify-between items-center">
-                                        Whatsapp
+                                        Bank Name
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Account Name
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                    <div className="flex justify-between items-center">
+                                        Account Number
                                         <Updown />
                                     </div>
                                 </th>
@@ -114,12 +126,14 @@ const Suppliers = ({ entries }) => {
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.first_name} {item?.last_name}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.phone}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.whatsapp}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountnumber}</th>
                                         <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">250</th>
+                                        <th scope="col" className="px-2 py-2 border-r">{item?.balance}</th>
                                         <th scope="col" className="px-2 py-2 border-r">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                                             <Edit />

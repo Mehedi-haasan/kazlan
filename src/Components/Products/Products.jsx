@@ -91,7 +91,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
@@ -164,8 +164,8 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
 
 
 
-            <Modal show={isCreate} handleClose={() => { setIsCreate(false) }} className='w-[1000px]' >
-                <CreactProduct handleClose={() => { setIsCreate(false) }} />
+            <Modal show={isCreate} handleClose={() => { setIsCreate(false) }} className='' >
+                <CreactProduct handleClose={() => { setIsCreate(false) }} brand={brand} category={category}/>
             </Modal>
         </div>
     )

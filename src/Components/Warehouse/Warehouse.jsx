@@ -36,7 +36,7 @@ const Warehouse = ({ entries }) => {
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Waregouse List</h1>
-                <NavLink>Create </NavLink>
+                <NavLink to='/' className={`border px-4 py-1 rounded bg-blue-500 text-white`}>Create </NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
@@ -106,8 +106,8 @@ const Warehouse = ({ entries }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {shop?.map((item,i) => (
-                                <WarehouseCard item={item} i={i}/>
+                            {shop?.map((item, i) => (
+                                <WarehouseCard item={item} i={i} />
                             ))}
                         </tbody>
                     </table>
