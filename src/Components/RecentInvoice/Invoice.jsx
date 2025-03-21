@@ -5,11 +5,12 @@ import BaseUrl from "../../Constant";
 
 const Invoice = ({ items }) => {
 
-    const [invoices, setInvoices] = useState([])
+    const [invoices, setInvoices] = useState([]);
+    const [page, setPage]=useState(1)
 
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${page}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -30,7 +31,6 @@ const Invoice = ({ items }) => {
         return date.toLocaleDateString('bn-BD', options);
     }
 
-    console.log()
     return (
         <div className="pt-3">
             <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

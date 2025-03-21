@@ -12,10 +12,12 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
 
     const [isCreate, setIsCreate] = useState(false)
     const [data, setData] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10)
 
     const getProduct = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/product/templete`, {
+        const response = await fetch(`${BaseUrl}/api/get/product/templete/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -23,12 +25,12 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
             },
         });
         const data = await response.json()
-        setData(data.items)
+        setData(data?.items)
     }
 
     useEffect(() => {
         getProduct()
-    }, [])
+    }, [page, pageSize])
 
 
     const SearchProduct = async (e) => {
@@ -76,7 +78,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
 
                 <div className='flex justify-between items-center my-3'>
                     <div>
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -155,9 +157,9 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
                     <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-2">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3">Next</button>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
                     </div>
                 </div>
             </div>
@@ -165,7 +167,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
 
 
             <Modal show={isCreate} handleClose={() => { setIsCreate(false) }} className='' >
-                <CreactProduct handleClose={() => { setIsCreate(false) }} brand={brand} category={category}/>
+                <CreactProduct handleClose={() => { setIsCreate(false) }} brand={brand} category={category} />
             </Modal>
         </div>
     )

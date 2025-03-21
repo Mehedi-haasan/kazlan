@@ -84,7 +84,7 @@ function App() {
 
   const getBrand = async () => {
     const token = localStorage.getItem('token')
-    const response = await fetch(`${BaseUrl}/api/get/brand`, {
+    const response = await fetch(`${BaseUrl}/api/get/brand/${1}/${1}`, {
       method: 'GET',
       headers: {
         "authorization": token,
