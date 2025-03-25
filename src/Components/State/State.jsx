@@ -7,10 +7,32 @@ import StateCard from "./StateCard";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 
-const State = ({ entries = [], state = [] }) => {
+const State = ({ entries = [] }) => {
 
     const [values, setValues] = useState("");
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+    const [state, setState] = useState([])
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10)
+
+    const getState = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/state/${page}/${pageSize}`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setState(data.items)
+    }
+
+
+    useEffect(() => {
+        document.title = `States - Kazaland Brothers`;
+        getState()
+    }, [page, pageSize]);
 
     const handleCreate = async () => {
         const token = localStorage.getItem('token');
@@ -54,7 +76,7 @@ const State = ({ entries = [], state = [] }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -108,9 +130,9 @@ const State = ({ entries = [], state = [] }) => {
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
                     <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
                     </div>
                 </div>
             </div>

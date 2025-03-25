@@ -5,14 +5,20 @@ import ShowEntries from "../Input/ShowEntries";
 import { NavLink } from "react-router-dom";
 import Edit from "../../icons/Edit";
 import BaseUrl from "../../Constant";
+import Loading from "../../icons/Loading";
+import CustomerCard from "./CustomerCard";
 
-const Customers = ({ entries }) => {
+const Customers = ({ entries, state = [] }) => {
 
     const [customer, setCustomer] = useState([])
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [isLoading, setIsLoading] = useState(false)
 
     const GetCustomer = async () => {
+        setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/`, {
+        const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -21,11 +27,14 @@ const Customers = ({ entries }) => {
         })
         const data = await response.json();
         setCustomer(data?.items)
+        setIsLoading(false)
     }
 
     useEffect(() => {
+        document.title = "Customers - KazalandBrothers";
         GetCustomer()
     }, [])
+
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
@@ -36,7 +45,7 @@ const Customers = ({ entries }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
                     <div>
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-1.5">
                         <h1>Search : </h1>
@@ -114,29 +123,9 @@ const Customers = ({ entries }) => {
 
 
                             {
-                                customer?.map((item) => (
-                                    <tr className='border-b'>
-                                        <th className="w-4 py-2 px-4 border-x">
-                                            <div className="flex items-center">
-                                                <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                            </div>
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.phone}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankname}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountname}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountnumber}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.balance}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Active</th>
-                                        <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
-                                            <Edit />
-                                            <Remove />
-                                        </th>
-                                    </tr>
-                                ))
+                                customer?.map((item) => {
+                                    return <CustomerCard item={item} state={state} />
+                                })
                             }
 
 
@@ -145,10 +134,14 @@ const Customers = ({ entries }) => {
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
-                    <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3">Next</button>
+                    <div className='flex justify-start'>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}
+                        </button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Next"}
+                        </button>
                     </div>
                 </div>
             </div>

@@ -86,53 +86,17 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
 
     const Order = async () => {
         const token = localStorage.getItem('token');
-        let dis = discountType === "Percentage" ? percentageDiscount : (parseInt(flatDiscount) * 100) / total;
-        let orderData = [];
-        allData?.map((v) => (
-            orderData.push({
-                "invoice_id": invoice_id,
-                "product_id": v?.id,
-                "username": name,
-                "userId": userId,
-                "name": v?.name,
-                "price": v?.price,
-                "discount": parseInt(dis),
-                "discountType": discountType,
-                "discountamount": parseInt(v?.price * v?.qty * dis / 100),
-                "sellprice": (v?.price * v?.qty) - (v?.price * v?.qty * dis / 100),
-                "qty": v?.qty,
-                "contact": mobile,
-                "date": date,
-                "previousdue": due,
-                "payamount": pay
-            })
-        ))
+        const respons = await fetch(`${BaseUrl}/api/update/product`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                "authorization": token
 
-        try {
-            const response = await fetch(`${BaseUrl}/api/post/order`, {
-                method: 'POST',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-                body: JSON.stringify({
-                    shop: "shop",
-                    userId: userId,
-                    invoice_id: invoice_id,
-                    date: date,
-                    total: total,
-                    previousdue: due,
-                    paidamount: pay,
-                    amount: total - pay,
-                    orders: orderData
-                }),
-            });
-
-            const data = await response.json();
-            alert(data?.message)
-        } catch (error) {
-            console.error('Error updating variant:', error);
-        }
+            },
+            body: JSON.stringify(allData)
+        });
+        const data = await respons.json();
+        alert(data?.message)
     }
 
     function getFormattedDate() {
@@ -149,7 +113,13 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     useEffect(() => {
 
         const fetchUserDue = async () => {
-            const response = await fetch(`${BaseUrl}/api/users/due/${userId}`);
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
+                method: "GET",
+                headers: {
+                    "authorization": token
+                }
+            });
             const data = await response.json();
             if (data && data?.items) {
                 setDue(data?.items?.amount || 0);
@@ -158,25 +128,12 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
         fetchUserDue()
     }, [userId])
 
-    // useEffect(() => {
-
-    //     const fetchUser = async () => {
-    //         const response = await fetch(`${BaseUrl}/api/get/users/${stateId}`);
-    //         const data = await response.json();
-    //         if (data && data?.items?.length > 0) {
-    //             setUser(data?.items || []);
-    //             setUserId(data?.items[0]?.id)
-    //         }
-    //     }
-    //     fetchUser()
-    // }, [stateId])
-    console.log(user)
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
 
             <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
+                <h1>Home</h1><RightArrow /><h1>Add Items</h1>
             </div>
 
 
@@ -292,7 +249,7 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                     </div>
                 </div>
                 <div className='p-4 border-t'>
-                    <Button name={'Submit'} />
+                    <Button name={'Submit'} onClick={Order} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
@@ -311,30 +268,11 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
                         onChange={(e) => setData({ ...data, qty: e.target.value })}
-                        // value={qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 setAllData([...allData, data]);
                                 setData([]);
                                 setShow(false);
-                                // setQty(0)
-                            }
-                        }}
-                        placeholder={""}
-                    />
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Comn</h1>
-                    <input type='number'
-                        className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, Comn: e.target.value })}
-                        // value={qty}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                setAllData([...allData, data]);
-                                setData([]);
-                                setShow(false);
-                                // setQty(0)
                             }
                         }}
                         placeholder={""}

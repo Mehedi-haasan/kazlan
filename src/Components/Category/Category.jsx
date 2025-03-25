@@ -1,21 +1,46 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant';
-import Remove from "../../icons/Remove";
 import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 import CategoryCard from "./CategoryCard";
+import Loading from "../../icons/Loading";
 
-const Category = ({ category, entries }) => {
+const Category = ({ entries }) => {
 
     const [image_url, setImage_Url] = useState();
     const [values, setValues] = useState({ name: "", });
-    const [show, setShow] = useState(false)
+    const [category, setCategory] = useState([])
+    const [show, setShow] = useState(false);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [isLoading, setIsLoading] = useState(false)
+
+    const getCategory = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/category/${page}/${pageSize}`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setCategory(data.items)
+        setIsLoading(false)
+    }
+
+
+    useEffect(() => {
+        document.title = `Categorys - Kazaland Brothers`;
+        getCategory()
+    }, [page, pageSize]);
 
     const handleCreate = async (image_url) => {
-
+        setIsLoading(true)
         values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
@@ -32,17 +57,21 @@ const Category = ({ category, entries }) => {
             setShow(false)
             alert(data?.message)
         } catch (error) {
-            console.error('Error updating variant:', error);
+            setIsLoading(false)
+            alert('Error updating variant:', error);
         }
+        setIsLoading(false)
     }
 
 
     const handleUpload = async () => {
+        setIsLoading(true)
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            console.error("Image file is missing in the payload");
+            alert("Image file is missing in the payload");
+            setIsLoading(false)
             return;
         }
         const token = localStorage.getItem('token');
@@ -60,8 +89,10 @@ const Category = ({ category, entries }) => {
                 handleCreate(data.image_url)
             }
         } catch (error) {
-            console.error('Error uploading image:', error);
+            setIsLoading(false)
+            alert('Error uploading image:', error);
         }
+        setIsLoading(false)
     }
 
     return (
@@ -75,7 +106,7 @@ const Category = ({ category, entries }) => {
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
-                        <Button isDisable={false} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </div>
@@ -86,7 +117,7 @@ const Category = ({ category, entries }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -145,10 +176,14 @@ const Category = ({ category, entries }) => {
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
-                    <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
+                    <div className='flex justify-start'>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}
+                        </button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Next"}
+                        </button>
                     </div>
                 </div>
             </div>

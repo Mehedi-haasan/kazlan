@@ -6,11 +6,12 @@ import BaseUrl from "../../Constant";
 const Invoice = ({ items }) => {
 
     const [invoices, setInvoices] = useState([]);
-    const [page, setPage]=useState(1)
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(15)
 
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${page}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 'authorization': token,

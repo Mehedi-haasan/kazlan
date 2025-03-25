@@ -6,6 +6,7 @@ import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 import BrandCard from "./BrandCard";
+import Loading from "../../icons/Loading";
 
 const Brand = ({ brands, entries }) => {
 
@@ -14,10 +15,11 @@ const Brand = ({ brands, entries }) => {
     const [values, setValues] = useState({ name: "", });
     const [show, setShow] = useState(false);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10)
+    const [pageSize, setPageSize] = useState(10);
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleUpdate = async (image_url) => {
-
+        setIsLoading(true)
         values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
@@ -36,15 +38,18 @@ const Brand = ({ brands, entries }) => {
         } catch (error) {
             console.error('Error updating variant:', error);
         }
+        setIsLoading(false)
     }
 
 
     const handleUpload = async () => {
+        setIsLoading(true)
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            console.error("Image file is missing in the payload");
+            alert("Image file is missing in the payload");
+            setIsLoading(false)
             return;
         }
         const token = localStorage.getItem('token');
@@ -64,6 +69,7 @@ const Brand = ({ brands, entries }) => {
         } catch (error) {
             console.error('Error uploading image:', error);
         }
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -74,6 +80,7 @@ const Brand = ({ brands, entries }) => {
 
 
     const getBrand = async () => {
+        setIsLoading(true)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/brand/${page}/${pageSize}`, {
             method: 'GET',
@@ -84,6 +91,24 @@ const Brand = ({ brands, entries }) => {
         });
         const data = await response.json()
         setBran(data.items)
+        setIsLoading(false)
+    }
+
+
+    const SearchBrand = async (e) => {
+        e.preventDefault();
+        const name = e.target.value
+        const token = localStorage.getItem('token')
+        if (name) {
+            const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                },
+            });
+            const data = await response.json();
+            // setData(data.items)
+        }
     }
 
     return (
@@ -97,7 +122,7 @@ const Brand = ({ brands, entries }) => {
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
-                        <Button isDisable={false} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </div>
@@ -112,7 +137,7 @@ const Brand = ({ brands, entries }) => {
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
-                        <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
+                        <input placeholder="Enter name" onChange={SearchBrand} className="focus:outline-none border rounded p-1.5 " />
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
@@ -167,10 +192,14 @@ const Brand = ({ brands, entries }) => {
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
-                    <div>
-                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                    <div className='flex justify-start'>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}
+                        </button>
                         <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
-                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">
+                            {isLoading ? <Loading className='h-6 w-7' /> : "Next"}
+                        </button>
                     </div>
                 </div>
             </div>

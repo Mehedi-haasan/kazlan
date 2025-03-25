@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Loading = () => {
+const Loading = ({ className = '' }) => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg"
+        <svg className={className} xmlns="http://www.w3.org/2000/svg"
             width="1em" height="1em" viewBox="0 0 24 24">
             <circle cx="12" cy="3" r="0" fill="currentColor">
                 <animate id="svgSpinners6DotsScale0" fill="freeze" attributeName="r" begin="0;svgSpinners6DotsScale2.end-0.5s" calcMode="spline" dur="0.6s" keySplines="0,1,0,1;.53,0,.61,.73" keyTimes="0;.2;1" values="0;2;0" />

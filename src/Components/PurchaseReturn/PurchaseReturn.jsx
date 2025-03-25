@@ -19,6 +19,7 @@ import Button from '../Input/Button';
 const PruchaseReturn = ({ shop = [], paytype = [] }) => {
 
     const [data, setData] = useState({});
+    const [total, setTotal] = useState(0)
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
     const [show, setShow] = useState(false);
@@ -59,7 +60,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    data:orderData
+                    data: orderData
                 }),
             });
 
@@ -73,7 +74,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
     const GetSupplier = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/get/supplier`, {
+            const response = await fetch(`${BaseUrl}/api/get/suppliers/${1}/${20}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -90,6 +91,21 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
     useEffect(() => {
         GetSupplier()
     }, [])
+
+
+    useEffect(() => {
+        let amount = allData?.reduce((acc, item) => {
+            return acc + (parseInt(item?.qty) * parseInt(item?.price))
+        }, 0);
+
+        setTotal(parseInt(amount));
+    }, [allData]);
+
+    function getFormattedDate() {
+        const date = new Date();
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return date.toLocaleDateString('bn-BD', options);
+    }
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
@@ -111,7 +127,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                         </div>
                     </div>
                     <div>
-                        <InputComponent placeholder={``} label={'Date'} />
+                        <InputComponent placeholder={getFormattedDate()} label={'Date'} />
                     </div>
                     <div>
                         <InputComponent placeholder={'Shop1/111'} label={'Sale Code'} />
@@ -200,7 +216,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                     <h1 className='pb-2'>Payment</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                         <div>
-                            <InputComponent label={'Amount'} />
+                            <InputComponent label={'Amount'} placeholder={total} />
                         </div>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />

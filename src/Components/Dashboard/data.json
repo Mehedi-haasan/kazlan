@@ -4,6 +4,7 @@
         "name": "Dashboard",
         "route": "dashboard",
         "icon": "material-symbols:home-outline",
+        "class": "",
         "option": false
     },
     {
@@ -11,6 +12,7 @@
         "name": "Items",
         "route": "product",
         "icon": "fluent-mdl2:product-variant",
+        "class": "mt-3",
         "option": true,
         "items": [
             {
@@ -44,6 +46,7 @@
         "name": "Sales",
         "route": "",
         "icon": "mdi:cart-outline",
+        "class": "",
         "option": true,
         "items": [
             {
@@ -75,24 +78,26 @@
         "name": "State",
         "route": "state",
         "icon": "mdi:location",
+        "class": "py-3",
         "option": false
     },
     {
         "id": "5",
         "name": "Server",
         "route": "server",
-        "icon": "mdi:location",
+        "icon": "solar:server-minimalistic-bold",
+        "class": "",
         "option": true,
         "items": [
             {
                 "id": 51,
-                "isLink":true,
+                "isLink": true,
                 "name": "NAS Server",
                 "route": "nas"
             },
             {
                 "id": 52,
-                "isLink":true,
+                "isLink": true,
                 "name": "Google Drive",
                 "route": "https://cloud.mahfuz.workers.dev/"
             }
@@ -102,18 +107,19 @@
         "id": "9",
         "name": "Software",
         "route": "server",
-        "icon": "mdi:location",
+        "icon": "eos-icons:software-outlined",
+        "class": "mb-3",
         "option": true,
         "items": [
             {
                 "id": 51,
-                "isLink":true,
+                "isLink": true,
                 "name": "Karanpc",
                 "route": "https://karanpc.com/posts/"
             },
             {
                 "id": 52,
-                "isLink":true,
+                "isLink": true,
                 "name": "Getintopc",
                 "route": "https://getintopc.com/"
             }
@@ -124,6 +130,7 @@
         "name": "Purchase",
         "route": "update/product",
         "icon": "dashicons:update",
+        "class": "pt-3",
         "option": true,
         "items": [
             {
@@ -133,7 +140,7 @@
             },
             {
                 "id": 62,
-                "name": "Prchase Order",
+                "name": "Prchase Items",
                 "route": "update/product"
             },
             {
@@ -153,6 +160,7 @@
         "name": "Sale Order",
         "route": "order",
         "icon": "material-symbols:order-approve",
+        "class": "",
         "option": false
     },
     {
@@ -160,6 +168,7 @@
         "name": "Setting",
         "route": "setting",
         "icon": "uil:setting",
+        "class": "my-3",
         "option": true,
         "items": [
             {
@@ -168,27 +177,10 @@
                 "route": "profile"
             },
             {
-                "id": 82,
-                "name": "Users info",
-                "route": "users"
-            },
-            {
                 "id": 83,
                 "name": "App Setting",
                 "route": "app/setting"
-            },
-            {
-                "id": 84,
-                "name": "Company",
-                "route": "company"
             }
         ]
-    },
-    {
-        "id": "9",
-        "name": "Registration",
-        "route": "registration",
-        "icon": "material-symbols:app-registration-rounded",
-        "option": false
     }
 ]

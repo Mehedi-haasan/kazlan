@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import InputComponent from '../Input/InputComponent'
@@ -7,19 +7,52 @@ import SelectionComponent from '../Input/SelectionComponent'
 import BaseUrl from '../../Constant';
 
 
-const CreactProduct = ({ handleClose, category ,brand}) => {
+const CreactProduct = ({ handleClose }) => {
 
     const [image_url, setImage_Url] = useState();
+    const [category, setCategory] = useState([]);
+    const [brand, setBrand] = useState([])
     let type = [{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]
     const [value, setValue] = useState('')
     const [values, setValues] = useState({
         categoryId: 1,
-        brandId:1,
+        brandId: 1,
         qty: 0,
         product_type: "Physical",
     })
 
+
+    const getCategory = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/category`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setCategory(data.items)
+    }
+
+
+    const getBrand = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/brand`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setBrand(data.items)
+    }
+
+
     useEffect(() => {
+        getCategory()
+        getBrand()
         document.title = "Items - KazalandBrothers";
     }, []);
 

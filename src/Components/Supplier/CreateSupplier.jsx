@@ -7,13 +7,14 @@ import Add from "../../icons/Add";
 
 const CreateSupplier = ({ state }) => {
 
-    const [active, setActive] = useState("Address")
+    const [active, setActive] = useState("Address");
+    const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Supplier"
     })
     const handleSubmit = async (e) => {
-        console.log(values)
+        setIsLoading(true)
         const token = localStorage.getItem('token')
         e.preventDefault()
         const response = await fetch(`${BaseUrl}/api/create/customers`, {
@@ -25,6 +26,7 @@ const CreateSupplier = ({ state }) => {
             body: JSON.stringify(values)
         });
         const data = await response.json();
+        setIsLoading(false);
         alert(data.message)
     }
 

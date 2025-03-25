@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import OrderCard from './OrderCard';
 import BaseUrl from '../../Constant';
 import Button from '../Input/Button';
 import SelectionComponent from '../Input/SelectionComponent';
-import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 import InputComponent from '../Input/InputComponent';
-import RecentInvoice from '../RecentInvoice/RecentInvoice';
 import Invoice from '../RecentInvoice/Invoice';
 
 const Order = ({ type = [], entries = [], user = [] }) => {
     const [data, setData] = useState([]);
     const [searchData, setSearchData] = useState([])
-
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10)
 
     const getOrder = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -27,8 +25,11 @@ const Order = ({ type = [], entries = [], user = [] }) => {
         setData(data.items)
     }
     useEffect(() => {
-        getOrder()
+        document.title = "Orders - KazalandBrothers";
+        // getOrder()
     }, [])
+
+   
 
 
     const SearchProduct = async (e) => {
@@ -75,7 +76,7 @@ const Order = ({ type = [], entries = [], user = [] }) => {
 
                 <div className='flex justify-between items-center my-3'>
                     <div>
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-start items-center gap-1.5 mt-5">
                         <h1>Search : </h1>
@@ -88,9 +89,9 @@ const Order = ({ type = [], entries = [], user = [] }) => {
                 <div className="flex justify-between items-center pt-3">
                     <h1 className='font-normal'>Showing 1 to 3 of 3 entries</h1>
                     <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
                     </div>
                 </div>
             </div>

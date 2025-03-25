@@ -11,9 +11,11 @@ import Search from '../../icons/Search';
 
 
 
-const SaleReturn = () => {
+
+const SaleReturn = ({shop=[]}) => {
 
     const [user, setUser] = useState({});
+    const [total, setTotal] = useState(0);
     const [allData, setAllData] = useState([])
     const [invoice, setInvoice] = useState(0)
 
@@ -36,10 +38,6 @@ const SaleReturn = () => {
 
     const ReturnSaleProduct = async (e) => {
         const token = localStorage.getItem('token')
-        console.log("Invoice ID:", invoice);
-        console.log("All Data:", allData);
-
-
         const response = await fetch(`${BaseUrl}/api/return/sale`, {
             method: 'POST',
             headers: {
@@ -56,6 +54,9 @@ const SaleReturn = () => {
 
     }
 
+    useEffect(() => {
+        document.title = "Sale Return - KazalandBrothers";
+    }, [])
 
     let paytype = [
         {
@@ -67,6 +68,14 @@ const SaleReturn = () => {
             name: "Due"
         }
     ]
+
+    useEffect(() => {
+        let amount = allData?.reduce((acc, item) => {
+            return acc + (parseInt(item?.sellprice))
+        }, 0);
+
+        setTotal(parseInt(amount));
+    }, [allData]);
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
@@ -82,10 +91,10 @@ const SaleReturn = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
-                        <InputComponent placeholder={user?.state} label={'State'} />
+                        <InputComponent placeholder={user?.stateId} label={'State'} readOnly={true} />
                     </div>
                     <div>
-                        <InputComponent placeholder={user?.name} label={'Customer'} />
+                        <InputComponent placeholder={user?.name} label={'Customer'} readOnly={true} />
                     </div>
                     <div className=''>
                         <h1 className='pb-[7px]'>Invoice number</h1>
@@ -103,13 +112,13 @@ const SaleReturn = () => {
                         </div>
                     </div>
                     <div>
-                        <InputComponent placeholder={user?.date} label={'Date'} />
+                        <InputComponent placeholder={allData[0]?.date} label={'Date'} readOnly={true} />
                     </div>
                     <div>
-                        <InputComponent placeholder={user?.contact} label={'Mobile'} />
+                        <InputComponent placeholder={user?.phone} label={'Mobile'} readOnly={true} />
                     </div>
                     <div>
-                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} />
+                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} onChange={(v)=>{}}/>
                     </div>
                 </div>
 
@@ -118,7 +127,7 @@ const SaleReturn = () => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
-                        <InputComponent placeholder={'BDT'} label={'Warehouse'} />
+                        <SelectionComponent options={shop} onChange={(v)=>{}} label={"Warehouse"}/>
                     </div>
 
                 </div>
@@ -149,9 +158,15 @@ const SaleReturn = () => {
 
                 <div className='p-4'>
                     <h1 className='pb-2'>Payment</h1>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
                         <div>
-                            <InputComponent label={'Amount'} />
+                            <InputComponent label={'Amount'} placeholder={total} />
+                        </div>
+                        <div>
+                            <InputComponent label={'Due'} placeholder={user?.balance} />
+                        </div>
+                        <div>
+                            <InputComponent label={'Return Amount'} placeholder={total - user?.balance} />
                         </div>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />

@@ -8,11 +8,13 @@ import BaseUrl from "../../Constant";
 
 const User = ({ entries }) => {
 
-    const [supplier, setSupplier] = useState([])
+    const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(1)
 
-    const GetSupplier = async () => {
+    const GetUsers = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/users/with/role`, {
+        const response = await fetch(`${BaseUrl}/api/get/users/with/role/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -20,16 +22,15 @@ const User = ({ entries }) => {
             },
         })
         const data = await response.json();
-        setSupplier(data?.items)
+        setUsers(data?.items)
     }
 
     useEffect(() => {
-        GetSupplier()
+        document.title = "User info - KazalandBrothers";
+        GetUsers()
     }, [])
 
-    useEffect(() => {
-        document.title = "User info - KazalandBrothers";
-    }, []);
+
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen">
@@ -40,7 +41,7 @@ const User = ({ entries }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
                     <div>
-                        <ShowEntries options={entries} />
+                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-1.5">
                         <h1>Search : </h1>
@@ -124,7 +125,7 @@ const User = ({ entries }) => {
 
 
                             {
-                                supplier?.map((item) => (
+                                users?.map((item) => (
                                     <tr className='border-b'>
                                         <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
@@ -157,9 +158,9 @@ const User = ({ entries }) => {
                 <div className="flex justify-between items-center pt-3">
                     <h1>Showing 1 to 3 of 3 entries</h1>
                     <div>
-                        <button className="border-y border-l rounded-l py-1.5 px-3">Prev</button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-2">1</button>
-                        <button className="border-y border-r rounded-r py-1.5 px-3">Next</button>
+                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
+                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">Next</button>
                     </div>
                 </div>
             </div>

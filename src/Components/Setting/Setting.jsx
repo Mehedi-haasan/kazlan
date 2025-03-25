@@ -1,15 +1,64 @@
 import React, { useState, useEffect } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
+import BaseUrl from "../../Constant";
 
 const Setting = () => {
     const [user, setUser] = useState({});
-    const [select, setSelect] = useState('General')
+    const [select, setSelect] = useState('General');
+    const [image_url, setImage_Url] = useState();
 
     useEffect(() => {
         document.title = `${select} Setting - Kazaland Brothers`;
     }, [select]);
-    
+
+
+    const GenarelSetting = async (image_url) => {
+        user.image_url = image_url;
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/create/company/info`, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'authorization': token,
+            },
+            body: JSON.stringify(user),
+        });
+        const data = await response.json();
+        alert(data?.message)
+    }
+
+
+    const handleUpload = async () => {
+        const formData = new FormData();
+        if (image_url) {
+            formData.append('image_url', image_url);
+        } else {
+            console.error("Image file is missing in the payload");
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch(`${BaseUrl}/api/upload/image`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                },
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data) {
+                GenarelSetting(data.image_url)
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    }
+
+
     return (
         <div className='min-h-screen'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
@@ -17,7 +66,7 @@ const Setting = () => {
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
                         <h1 className='py-2 text-lg'>Setting</h1>
                         <button onClick={() => setSelect('General')} className="flex justify-start items-center gap-2 p-2 hover:bg-blue-500 hover:text-white rounded w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
                             <h1>General</h1>
                         </button>
                         <button onClick={() => setSelect('App')} className="flex justify-start items-center gap-2 p-2 hover:bg-blue-500 hover:text-white rounded w-full">
@@ -40,20 +89,27 @@ const Setting = () => {
                         <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow'>
                             <h1 className='pt-1 pb-3'>Genarel</h1>
                         </div>
-                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] rounded-b shadow'>
-                            <InputComponent label={'Application Name'} placeholder={user?.first_name} />
-                            <InputComponent label={'Footer text'} placeholder={user?.last_name} />
-                            <InputComponent label={'Email'} placeholder={user?.email} />
-                            <InputComponent label={'Mobile'} placeholder={user?.username} />
-                            <InputComponent label={'Address'} placeholder={user?.address} />
-                            <InputComponent label={'State'} placeholder={user?.stateId} />
+                        <div className='px-3 md:px-4 lg:px-5 py-3 md:py-4 lg:py-5 bg-[#FFFFFF] rounded-b shadow'>
+                            <InputComponent label={'Application Name'} placeholder={user?.name} onChange={(v) => { setUser({ ...user, name: v }) }} />
+                            <InputComponent label={'Footer text'} placeholder={user?.footertext} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
+                            <InputComponent label={'Email'} placeholder={user?.email} onChange={(v) => { setUser({ ...user, email: v }) }} />
+                            <InputComponent label={'Mobile'} placeholder={user?.phone} onChange={(v) => { setUser({ ...user, phone: v }) }} />
+                            <InputComponent label={'Address'} placeholder={user?.address} onChange={(v) => { setUser({ ...user, address: v }) }} />
+                            <InputComponent label={'State'} placeholder={user?.description} onChange={(v) => { setUser({ ...user, description: v }) }} />
+                            <div className='mt-3'>
+                                <h1 className='font-semibold py-1'>Select your Logo</h1>
+                                <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
+                            </div>
                             <div className='py-3'>
-                                <Button onClick={() => { }} name={'Submit'} />
+                                <Button onClick={handleUpload} name={'Submit'} />
                                 <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "App" ? '' : 'hidden'}`}>
                     <div >
 
