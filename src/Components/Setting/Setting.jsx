@@ -8,7 +8,21 @@ const Setting = () => {
     const [select, setSelect] = useState('General');
     const [image_url, setImage_Url] = useState();
 
+    const AppInfo = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/company/info`, {
+            method: "GET",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'authorization': token,
+            }
+        });
+        const data = await response.json();
+        setUser(data?.items)
+    }
+
     useEffect(() => {
+        AppInfo()
         document.title = `${select} Setting - Kazaland Brothers`;
     }, [select]);
 
@@ -25,6 +39,7 @@ const Setting = () => {
             body: JSON.stringify(user),
         });
         const data = await response.json();
+        AppInfo()
         alert(data?.message)
     }
 
@@ -95,7 +110,7 @@ const Setting = () => {
                             <InputComponent label={'Email'} placeholder={user?.email} onChange={(v) => { setUser({ ...user, email: v }) }} />
                             <InputComponent label={'Mobile'} placeholder={user?.phone} onChange={(v) => { setUser({ ...user, phone: v }) }} />
                             <InputComponent label={'Address'} placeholder={user?.address} onChange={(v) => { setUser({ ...user, address: v }) }} />
-                            <InputComponent label={'State'} placeholder={user?.description} onChange={(v) => { setUser({ ...user, description: v }) }} />
+                            <InputComponent label={'Description'} placeholder={user?.description} onChange={(v) => { setUser({ ...user, description: v }) }} />
                             <div className='mt-3'>
                                 <h1 className='font-semibold py-1'>Select your Logo</h1>
                                 <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />

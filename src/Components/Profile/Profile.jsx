@@ -20,13 +20,10 @@ const Profile = () => {
             const data = await response.json()
             setUser(data?.items || {})
         }
-
+        document.title = `Profile - Kazaland Brothers`;
         GetUser()
     }, [])
 
-    useEffect(() => {
-        document.title = `Profile - Kazaland Brothers`;
-    }, []);
 
     const UpdateUser = async () => {
         const token = localStorage.getItem('token');
@@ -86,7 +83,7 @@ const Profile = () => {
                         <InputComponent label={'Account Name'} onChange={(v) => { setUser({ ...user, accountname: v }) }} placeholder={user?.accountname} />
                         <InputComponent label={'Account Name'} onChange={(v) => { setUser({ ...user, accountnumber: v }) }} placeholder={user?.accountnumber} />
                         <InputComponent label={'Address'} onChange={(v) => { setUser({ ...user, address: v }) }} placeholder={user?.address} />
-                        <InputComponent label={'State'} onChange={(v) => { setUser({ ...user, stateId: v }) }} placeholder={user?.stateId} />
+                        <InputComponent label={'State'} onChange={(v) => { setUser({ ...user, stateId: v }) }} placeholder={user?.state?.name} readOnly={true} />
                         <div className='py-3'>
                             <Button onClick={UpdateUser} name={'Submit'} />
                             <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
@@ -102,7 +99,7 @@ const Profile = () => {
                         <InputComponent label={'Confirm Password'} onChange={(v) => { setUser({ ...user, password: v }) }} placeholder={"Enter Confirm password"} />
 
                         <div className='py-3'>
-                            <Button onClick={() => { }} name={'Submit'} />
+                            <Button onClick={ChangePassword} name={'Change Password'} />
                             <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                         </div>
                     </div>

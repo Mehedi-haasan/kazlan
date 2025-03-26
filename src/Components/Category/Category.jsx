@@ -7,6 +7,9 @@ import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 import CategoryCard from "./CategoryCard";
 import Loading from "../../icons/Loading";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Category = ({ entries }) => {
 
@@ -55,10 +58,12 @@ const Category = ({ entries }) => {
 
             const data = await response.json();
             setShow(false)
-            alert(data?.message)
+            getCategory();
+            setValues({ ...values, name: '' })
+            toast(data?.message)
         } catch (error) {
             setIsLoading(false)
-            alert('Error updating variant:', error);
+            toast('Error updating variant:', error);
         }
         setIsLoading(false)
     }
@@ -70,7 +75,7 @@ const Category = ({ entries }) => {
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            alert("Image file is missing in the payload");
+            toast("Image file is missing in the payload");
             setIsLoading(false)
             return;
         }
@@ -90,18 +95,18 @@ const Category = ({ entries }) => {
             }
         } catch (error) {
             setIsLoading(false)
-            alert('Error uploading image:', error);
+            toast('Error uploading image:', error);
         }
         setIsLoading(false)
     }
 
     return (
         <div className="px-2 pt-5 min-h-screen">
-
+            <ToastContainer />
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter Category name`} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />

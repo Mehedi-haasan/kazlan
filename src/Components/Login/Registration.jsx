@@ -7,9 +7,12 @@ import Show from '../Input/Show';
 
 
 const Registration = ({ state }) => {
+
+  const [warehouses, setWarehouses] = useState([])
   const [values, setValues] = useState({
     "rules": ["admin"],
     usertype: "Wholesaler",
+    compId: 1,
     stateId: 1
   });
   const [showPassword, setShowPassword] = useState(false)
@@ -34,9 +37,23 @@ const Registration = ({ state }) => {
 
   }
 
+  const GetWarehouse = async () => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`${BaseUrl}/api/get/all/company`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': token,
+      }
+    });
+    const data = await response.json();
+    setWarehouses(data?.items)
+  }
+
 
   useEffect(() => {
     document.title = "Registration - KazalandBrothers";
+    GetWarehouse()
   }, []);
 
   return (
@@ -46,7 +63,7 @@ const Registration = ({ state }) => {
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[800px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
         <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          <div className='grid col-span-2'>
             <label className="block text-white text-sm font-semibold mb-1">Full Name</label>
             <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your first name" />
           </div>
@@ -73,6 +90,9 @@ const Registration = ({ state }) => {
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Email</label>
             <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+          </div>
+          <div>
+            <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='font-semibold' />
           </div>
           <div>
             <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />

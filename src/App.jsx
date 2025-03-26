@@ -148,9 +148,11 @@ function App() {
     const role = localStorage.getItem('role');
     const id = localStorage.getItem('id');
     const usertype = localStorage.getItem('usertype');
+    const logo = localStorage.getItem('logo');
+    const shopname = localStorage.getItem('shopname');
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype })
+      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype, logo: logo, shopname: shopname })
     } else {
       setAuth(false)
     }
@@ -166,7 +168,7 @@ function App() {
     }
 
     if (auth) {
-      // getNotification()
+      getNotification()
       getCategory();
       getBrand()
       getUser()
@@ -204,7 +206,7 @@ function App() {
           <Route path="/profile" element={auth ? <Profile /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/users" element={auth ? <User entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/sale/return" element={auth ? <SaleReturn shop={shop}/> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/sale/return" element={auth ? <SaleReturn shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/purchase/return" element={auth ? <PruchaseReturn shop={shop} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/customers" element={auth ? <Customers entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/suppliers" element={auth ? <Suppliers entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
@@ -212,7 +214,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <Footer/>
+      <Footer />
     </BrowserRouter>
   );
 }

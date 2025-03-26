@@ -10,6 +10,8 @@ import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
 import Button from '../Input/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -56,7 +58,7 @@ const Sell = ({ shop = [], paytype = [], info = {} }) => {
                 "username": name,
                 "userId": 1,
                 "name": v?.name,
-                "shop": info?.name,
+                "shop": info?.shopname,
                 "price": v?.price,
                 "discount": v?.comn,
                 "sellprice": (v?.price * v?.qty),
@@ -74,7 +76,8 @@ const Sell = ({ shop = [], paytype = [], info = {} }) => {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    shop: info?.name,
+                    shop: info?.shopname,
+                    customername: name,
                     userId: 1,
                     date: date,
                     total: total,
@@ -86,7 +89,7 @@ const Sell = ({ shop = [], paytype = [], info = {} }) => {
             });
 
             const data = await response.json();
-            alert(data?.message)
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -115,7 +118,7 @@ const Sell = ({ shop = [], paytype = [], info = {} }) => {
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
-
+            <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
             </div>

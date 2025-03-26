@@ -4,6 +4,8 @@ import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateCustomer = () => {
     const [selectedOption, setSelectedOption] = useState("Wholesaler");
@@ -26,7 +28,7 @@ const CreateCustomer = () => {
             body: JSON.stringify(values)
         });
         const data = await response.json();
-        alert(data.message)
+        toast(data.message)
     }
 
     function getFormattedDate() {
@@ -56,6 +58,7 @@ const CreateCustomer = () => {
 
     return (
         <div className="px-3 py-5 min-h-screen">
+            <ToastContainer />
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen">
                 <h1 className="py-2 px-3">Customer Details</h1>
                 <div className="border-t p-3 flex justify-start items-center gap-3">

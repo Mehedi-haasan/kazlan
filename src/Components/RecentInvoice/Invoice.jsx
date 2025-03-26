@@ -6,12 +6,9 @@ import BaseUrl from "../../Constant";
 const Invoice = ({ items }) => {
 
     const [invoices, setInvoices] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(15)
-
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${15}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -118,14 +115,14 @@ const Invoice = ({ items }) => {
                                     </div>
                                 </th>
                                 <th scope="col" className="px-3 py-3 border-r">#{item?.id}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{item?.shop}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{item?.createdby}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.shopname}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.total}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.due}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{item?.shop}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.status}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{'argent'}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{'Argent'}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{getFormattedDate()}</th>
                             </tr>
                         ))

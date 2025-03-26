@@ -23,7 +23,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     <NavLink className={`pt-1 pb-2`}
                         onClick={() => { isOpen(!open); setSelected({}) }}
                     >
-                        <img src={logo} alt="dhyfg" className="w-[110px] h-[50px]" />
+                        <img src={info?.logo ? info?.logo : logo} alt="dhyfg" className="w-[110px] h-[50px]" />
                     </NavLink>
                 </div>
 

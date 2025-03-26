@@ -6,6 +6,8 @@ import BaseUrl from '../../Constant'
 import StateCard from "./StateCard";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const State = ({ entries = [] }) => {
 
@@ -50,7 +52,9 @@ const State = ({ entries = [] }) => {
 
             const data = await response.json();
             setShow(false)
-            alert(data?.message)
+            getState()
+            setValues('')
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -58,11 +62,12 @@ const State = ({ entries = [] }) => {
 
 
     return (
-        <div className="pt-5 px-2">
+        <div className="pt-5 px-2 min-h-screen">
+            <ToastContainer/>
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter State name`} label={`State name`} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
+                        <InputComponent placeholder={`Enter State name`} label={`State name`} value={values} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
 
                         <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3" />
                     </div>

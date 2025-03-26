@@ -7,13 +7,16 @@ const Company = () => {
 
     const [values, setValues] = useState({})
     const [companyInfo, setCompanyInfo] = useState({})
+    const [image_url, setImage_Url] = useState();
+    const [imageFile, setImageFile] = useState(null);
 
 
-        useEffect(() => {
-            document.title = `Company info - Kazaland Brothers`;
-        }, []);
+    useEffect(() => {
+        document.title = `Company info - Kazaland Brothers`;
+    }, []);
 
-    const PostInfo = async () => {
+    const PostInfo = async (image_url) => {
+        values.image_url = image_url;
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/create/company/info`, {
             method: 'POST',
@@ -26,54 +29,79 @@ const Company = () => {
         const data = await response.json();
     }
 
-    const UpdateInfo = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/update/company/info`, {
-            method: 'POST',
-            headers: {
-                'authorization': token,
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify(values),
-        });
-        const data = await response.json();
-    }
 
 
+    const handleUpload = async () => {
+        const formData = new FormData();
+        if (image_url) {
+            formData.append('image_url', image_url);
+        } else {
+            console.error("Image file is missing in the payload");
+            return;
+        }
 
-    const GetCompanyInfo = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/company/info`, {
-            method: 'GET',
-            headers: {
-                'authorization': token,
-                'Content-type': 'application/json; charset=UTF-8',
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch(`${BaseUrl}/api/upload/image`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                },
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data) {
+                PostInfo(data.image_url)
             }
-        });
-        const data = await response.json();
-        setCompanyInfo(data?.items)
-        setValues(data?.items)
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
     }
 
-    useEffect(() => {
-        GetCompanyInfo()
-    }, [])
 
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage_Url(file);
+            setImageFile(URL.createObjectURL(file));
+        }
+    };
 
     return (
-        <div className='px-3 py-5'>
-            <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Company Name'} placeholder={values?.name || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} placeholder={values?.email || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, email2: e }) }} label={'2nd Email'} placeholder={values?.email2 || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone'} placeholder={values?.phone || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, phone2: e }) }} label={'2nd Phone'} placeholder={values?.phone2 || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, address: e }) }} label={'Address'} placeholder={values?.address || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, fb_url: e }) }} label={'Facebook Url'} placeholder={values?.fb_url || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, yu_url: e }) }} label={'Youtube Url'} placeholder={values?.yu_url || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, wh_url: e }) }} label={'Whatsapp Url'} placeholder={values?.wh_url || 'N/A'} />
-            <InputComponent onChange={(e) => { setValues({ ...values, tw_url: e }) }} label={'Tweitter Url'} placeholder={values?.tw_url || 'N/A'} />
+        <div className='px-3 py-5 min-h-screen'>
+            <div className="pb-2">
+                {imageFile ? (
+                    <label className="cursor-pointer">
+                        <h1 className="font-semibold pt-1 pb-2">Selected Picture</h1>
+                        <img src={imageFile} alt="Preview" className="w-full h-24 object-cover rounded-lg border border-red-500 p-1" />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="hidden"
+                        />
+                    </label>
+                ) : (
+                    <div>
+                        <h1 className="font-semibold py-1">Select your item Picture</h1>
+                        <input
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            type="file"
+                        />
+                    </div>
+                )}
+            </div>
+            <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Warehouse Name'} placeholder={values?.name || 'N/A'} />
             <InputComponent onChange={(e) => { setValues({ ...values, description: e }) }} label={'Description'} placeholder={values?.description || 'N/A'} />
-            {companyInfo ? <Button onClick={UpdateInfo} name={'Update'} /> : <Button onClick={PostInfo} name={'Create'} />}
+            <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} placeholder={values?.email || 'N/A'} />
+            <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone'} placeholder={values?.phone || 'N/A'} />
+            <InputComponent onChange={(e) => { setValues({ ...values, address: e }) }} label={'Address'} placeholder={values?.address || 'N/A'} />
+            <InputComponent onChange={(e) => { setValues({ ...values, footertext: e }) }} label={'Footer Text'} placeholder={values?.footertext || 'N/A'} />
+            <Button onClick={handleUpload} name={'Create'} />
         </div>
     );
 };

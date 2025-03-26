@@ -3,6 +3,8 @@ import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = ({ auth }) => {
@@ -22,7 +24,7 @@ const Login = ({ auth }) => {
       body: JSON.stringify(values),
     });
     const data = await response.json();
-    alert(data?.message)
+    toast(data?.message)
     if (data && data.accessToken && data.success) {
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('name', data.name);
@@ -30,6 +32,8 @@ const Login = ({ auth }) => {
       localStorage.setItem('role', data.role);
       localStorage.setItem('id', data.id);
       localStorage.setItem('usertype', data.usertype);
+      localStorage.setItem('logo', data.logo);
+      localStorage.setItem('shopname', data.shopname);
       auth(true)
       goto('/dashboard')
     }
@@ -44,7 +48,9 @@ const Login = ({ auth }) => {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
+
       style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
+      <ToastContainer />
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Login</h2>

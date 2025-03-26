@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import ProductCard from './ProductCard';
 import BaseUrl from '../../Constant';
-import Modal from '../Input/Modal';
-import CreactProduct from '../ProductCreate/CreactProduct';
-import Button from '../Input/Button';
 import SelectionComponent from '../Input/SelectionComponent';
 import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 import Loading from '../../icons/Loading';
+import { NavLink } from 'react-router-dom';
 
 const Product = ({ category = [], type = [], brand = [], entries = [], shop = [], user = [], info = {} }) => {
 
-    const [isCreate, setIsCreate] = useState(false)
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -58,7 +55,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
         <div className="pl-4 pt-5 pr-2 min-h-screen">
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Item List</h1>
-                <Button name={'Create item'} onClick={() => { setIsCreate(true) }} />
+                    <NavLink to='/create' className={`border text-white rounded-lg shadow py-2 px-5 bg-blue-600`}>Create item</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -173,12 +170,6 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                     </div>
                 </div>
             </div>
-
-
-
-            <Modal show={isCreate} handleClose={() => { setIsCreate(false) }} className='' >
-                <CreactProduct handleClose={() => { setIsCreate(false) }} brand={brand} category={category} />
-            </Modal>
         </div>
     )
 }

@@ -7,6 +7,8 @@ import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 import BrandCard from "./BrandCard";
 import Loading from "../../icons/Loading";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Brand = ({ brands, entries }) => {
 
@@ -33,8 +35,10 @@ const Brand = ({ brands, entries }) => {
             });
 
             const data = await response.json();
-            setShow(false)
-            alert(data?.message)
+            setShow(false);
+            getBrand();
+            setValues({ ...values, name: '' })
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -48,7 +52,7 @@ const Brand = ({ brands, entries }) => {
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            alert("Image file is missing in the payload");
+            toast("Image file is missing in the payload");
             setIsLoading(false)
             return;
         }
@@ -113,11 +117,11 @@ const Brand = ({ brands, entries }) => {
 
     return (
         <div className="px-2 pt-5 min-h-screen">
-
+            <ToastContainer />
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter brand name`} label={`Brand name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={`Enter brand name`} label={`Brand name`} value={values?.name} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />

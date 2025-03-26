@@ -4,6 +4,8 @@ import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateSupplier = ({ state }) => {
 
@@ -27,7 +29,7 @@ const CreateSupplier = ({ state }) => {
         });
         const data = await response.json();
         setIsLoading(false);
-        alert(data.message)
+        toast(data.message)
     }
 
     function getFormattedDate() {
@@ -39,6 +41,7 @@ const CreateSupplier = ({ state }) => {
 
     return (
         <div className="px-3 py-5 min-h-screen">
+            <ToastContainer />
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen">
                 <h1 className="py-2 px-3">Supplier Details</h1>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
