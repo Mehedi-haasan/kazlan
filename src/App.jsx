@@ -16,8 +16,6 @@ import State from "./Components/State/State.jsx";
 import NotFound from "./Components/NotFound/NotFound.jsx";
 import PurchaseProduct from "./Components/PurchaseProduct/PurchaseProduct.jsx";
 import BaseUrl from "./Constant.js";
-import Sell from "./Components/Sell/Sell.jsx";
-import WholeSell from "./Components/Wholesale/Wholesale.jsx";
 import Customers from "./Components/Customers/Customers.jsx";
 import Suppliers from "./Components/Supplier/Suppliers.jsx";
 import ForgetPassword from "./Components/Login/ForgetPassword.jsx";
@@ -33,6 +31,7 @@ import CreateCustomer from "./Components/Customers/CreateCustomer.jsx";
 import CreateSupplier from "./Components/Supplier/CreateSupplier.jsx";
 import Sale from "./Components/Sale/Sale.jsx";
 import House from "./Components/Warehouse/House.jsx";
+import AppSetting from "./Components/Setting/AppSetting.jsx";
 
 
 
@@ -150,9 +149,10 @@ function App() {
     const usertype = localStorage.getItem('usertype');
     const logo = localStorage.getItem('logo');
     const shopname = localStorage.getItem('shopname');
+    const compId = localStorage.getItem('compId');
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype, logo: logo, shopname: shopname })
+      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype, logo: logo, shopname: shopname, compId: compId })
     } else {
       setAuth(false)
     }
@@ -195,7 +195,7 @@ function App() {
           <Route path="/sale/order" element={auth ? <Sale category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/notification" element={<Notification data={data} />} />
           <Route path="/company" element={<Company />} />
-          <Route path="/app/setting" element={<Setting />} />
+          <Route path="/app/setting" element={<Setting userinfo={info} />} />
           <Route path="/create/customer" element={<CreateCustomer state={state} />} />
           <Route path="/create/supplier" element={<CreateSupplier state={state} />} />
           <Route path="/order" element={auth ? <Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />

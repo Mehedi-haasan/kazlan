@@ -8,11 +8,13 @@ import RightArrow from '../../icons/RightArrow';
 import Button from '../Input/Button';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 
-const SaleReturn = ({shop=[]}) => {
+const SaleReturn = ({ shop = [] }) => {
 
     const [user, setUser] = useState({});
     const [total, setTotal] = useState(0);
@@ -50,7 +52,7 @@ const SaleReturn = ({shop=[]}) => {
             }),
         });
         const data = await response.json();
-        console.log(data)
+        toast(data?.message)
 
     }
 
@@ -77,9 +79,12 @@ const SaleReturn = ({shop=[]}) => {
         setTotal(parseInt(amount));
     }, [allData]);
 
+
+
+    console.log(allData)
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
-
+            <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Sale Return</h1>
             </div>
@@ -118,7 +123,7 @@ const SaleReturn = ({shop=[]}) => {
                         <InputComponent placeholder={user?.phone} label={'Mobile'} readOnly={true} />
                     </div>
                     <div>
-                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} onChange={(v)=>{}}/>
+                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} onChange={(v) => { }} />
                     </div>
                 </div>
 
@@ -127,7 +132,7 @@ const SaleReturn = ({shop=[]}) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
-                        <SelectionComponent options={shop} onChange={(v)=>{}} label={"Warehouse"}/>
+                        <SelectionComponent options={shop} onChange={(v) => { }} label={"Warehouse"} />
                     </div>
 
                 </div>

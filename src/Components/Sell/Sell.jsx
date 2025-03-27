@@ -28,7 +28,6 @@ const Sell = ({ shop = [], paytype = [], info = {} }) => {
 
 
     const SearchProduct = async (e) => {
-        e.preventDefault();
         const name = e.target.value
         const token = localStorage.getItem('token')
         if (name) {

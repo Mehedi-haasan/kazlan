@@ -3,7 +3,7 @@ import Updown from "../../icons/Updown";
 import BaseUrl from "../../Constant";
 
 
-const Invoice = ({ items }) => {
+const Invoice = () => {
 
     const [invoices, setInvoices] = useState([]);
     const RecentInvoice = async () => {
@@ -22,6 +22,8 @@ const Invoice = ({ items }) => {
         RecentInvoice(invoices)
     }, [])
 
+
+    console.log(invoices)
 
     function getFormattedDate() {
         const date = new Date();
@@ -48,7 +50,7 @@ const Invoice = ({ items }) => {
                         </th>
                         <th scope="col" className="px-3 py-3 text-center border-r">
                             <div className="flex justify-between items-center">
-                                Task
+                                Customer
                                 <Updown />
                             </div>
                         </th>
@@ -115,8 +117,8 @@ const Invoice = ({ items }) => {
                                     </div>
                                 </th>
                                 <th scope="col" className="px-3 py-3 border-r">#{item?.id}</th>
+                                <th scope="col" className="px-3 py-3 border-r">{item?.customername}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.shopname}</th>
-                                <th scope="col" className="px-3 py-3 border-r">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.total}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r">{item?.due}</th>

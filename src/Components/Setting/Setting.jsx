@@ -2,15 +2,21 @@ import React, { useState, useEffect } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
+import SelectionComponent from "../Input/SelectionComponent";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Setting = () => {
+const Setting = ({ userinfo = {} }) => {
     const [user, setUser] = useState({});
+    const [allComp, setAllComp] = useState([])
+    const [compId, setCompId] = useState(1)
+    const [info, setInfo] = useState({});
     const [select, setSelect] = useState('General');
-    const [image_url, setImage_Url] = useState();
+    const [image_url, setImage_Url] = useState(null);
 
     const AppInfo = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/company/info`, {
+        const response = await fetch(`${BaseUrl}/api/get/company/info/${compId}`, {
             method: "GET",
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
@@ -18,19 +24,44 @@ const Setting = () => {
             }
         });
         const data = await response.json();
-        setUser(data?.items)
+        setUser(data?.items);
+        setInfo(data?.items)
     }
+
+    const AppInfoAll = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/company`, {
+            method: "GET",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                'authorization': token,
+            }
+        });
+        const data = await response.json();
+        setAllComp(data?.items);
+    }
+
 
     useEffect(() => {
         AppInfo()
         document.title = `${select} Setting - Kazaland Brothers`;
-    }, [select]);
 
 
-    const GenarelSetting = async (image_url) => {
+    }, [select, compId]);
+
+    useEffect(() => {
+        setCompId(userinfo?.compId);
+
+        if (userinfo?.role === "superadmin") {
+            AppInfoAll()
+        }
+    }, [userinfo]);
+
+    const UpdateSetting = async (image_url, update_url) => {
         user.image_url = image_url;
+        user.update_url = update_url;
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/create/company/info`, {
+        const response = await fetch(`${BaseUrl}/api/update/company/info`, {
             method: "POST",
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
@@ -40,11 +71,12 @@ const Setting = () => {
         });
         const data = await response.json();
         AppInfo()
-        alert(data?.message)
+        toast(data?.message)
     }
 
 
-    const handleUpload = async () => {
+
+    const handleUploadUpdate = async () => {
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
@@ -66,7 +98,7 @@ const Setting = () => {
 
             const data = await response.json();
             if (data) {
-                GenarelSetting(data.image_url)
+                UpdateSetting(data.image_url, info?.image_url)
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -74,8 +106,10 @@ const Setting = () => {
     }
 
 
+
     return (
         <div className='min-h-screen'>
+            <ToastContainer/>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
@@ -101,22 +135,29 @@ const Setting = () => {
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "General" ? '' : 'hidden'}`}>
                     <div >
 
-                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow'>
-                            <h1 className='pt-1 pb-3'>Genarel</h1>
+                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow flex justify-between items-center pb-3'>
+                            <div>
+                                <h1 className='pt-1 pb-3'>Genarel</h1>
+                            </div>
+                            {userinfo?.role === "superadmin" && <div className="w-[200px]">
+                                <SelectionComponent options={allComp} onSelect={(v) => { setCompId(v?.id) }} />
+                            </div>}
                         </div>
                         <div className='px-3 md:px-4 lg:px-5 py-3 md:py-4 lg:py-5 bg-[#FFFFFF] rounded-b shadow'>
-                            <InputComponent label={'Application Name'} placeholder={user?.name} onChange={(v) => { setUser({ ...user, name: v }) }} />
-                            <InputComponent label={'Footer text'} placeholder={user?.footertext} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
-                            <InputComponent label={'Email'} placeholder={user?.email} onChange={(v) => { setUser({ ...user, email: v }) }} />
-                            <InputComponent label={'Mobile'} placeholder={user?.phone} onChange={(v) => { setUser({ ...user, phone: v }) }} />
-                            <InputComponent label={'Address'} placeholder={user?.address} onChange={(v) => { setUser({ ...user, address: v }) }} />
-                            <InputComponent label={'Description'} placeholder={user?.description} onChange={(v) => { setUser({ ...user, description: v }) }} />
-                            <div className='mt-3'>
-                                <h1 className='font-semibold py-1'>Select your Logo</h1>
-                                <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
-                            </div>
+                            <InputComponent label={'Application Name'} placeholder={user?.name} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, name: v }) }} />
+                            <InputComponent label={'Footer text'} placeholder={user?.footertext} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
+                            <InputComponent label={'Email'} placeholder={user?.email} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, email: v }) }} />
+                            <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
+                            <InputComponent label={'Address'} placeholder={user?.address} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, address: v }) }} />
+                            <InputComponent label={'Description'} placeholder={user?.description} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
+                            {
+                                userinfo?.role === "superadmin" && <div className='mt-3'>
+                                    <h1 className='font-semibold py-1'>Select your Logo</h1>
+                                    <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
+                                </div>
+                            }
                             <div className='py-3'>
-                                <Button onClick={handleUpload} name={'Submit'} />
+                                <Button onClick={() => { image_url !== null ? handleUploadUpdate() : UpdateSetting(user?.image_url, "") }} isDisable={userinfo?.role === "superadmin" ? false : true} name={'Update'} />
                                 <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                             </div>
                         </div>

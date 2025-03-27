@@ -13,6 +13,8 @@ import RightArrow from '../../icons/RightArrow';
 import MiniButton from '../Input/MiniButton';
 import Modal from '../Input/Modal';
 import Button from '../Input/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -65,7 +67,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
             });
 
             const data = await response.json();
-            alert(data?.message)
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -109,7 +111,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
-
+            <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Purchase Return</h1>
             </div>

@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectComp';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Registration = ({ state }) => {
@@ -17,12 +18,10 @@ const Registration = ({ state }) => {
   });
   const [showPassword, setShowPassword] = useState(false)
 
-  const goToHome = useNavigate();
   let user = [{ id: 1, name: "Wholesaler" }, { id: 2, name: "Retailer" }]
 
   const handleSubmit = async (e) => {
     const token = localStorage.getItem('token')
-    e.preventDefault()
     const response = await fetch(`${BaseUrl}/api/auth/signup`, {
       method: 'POST',
       headers: {
@@ -32,9 +31,7 @@ const Registration = ({ state }) => {
       body: JSON.stringify(values)
     });
     const data = await response.json();
-    alert(data.message)
-    goToHome('/')
-
+    toast(data.message)
   }
 
   const GetWarehouse = async () => {
@@ -59,6 +56,7 @@ const Registration = ({ state }) => {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
+      <ToastContainer />
       <div className="absolute inset-0 bg-black bg-opacity-40"></div>
       <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[800px]">
         <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>

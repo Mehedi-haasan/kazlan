@@ -20,7 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState({ qty: 0, comn: 0 });
     const [total, setTotal] = useState(0);
     const [stateName, setStateName] = useState('Tangail')
     const [customer, setCustomer] = useState([])
@@ -44,7 +44,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     const { ref, getPng } = useToImage(options)
 
     const SearchProduct = async (e) => {
-        e.preventDefault();
         const name = e.target.value
         const token = localStorage.getItem('token')
         if (name) {
@@ -107,7 +106,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    shop: info?.name,
+                    shop: info?.shopname,
                     customername: name,
                     userId: userId,
                     invoice_id: invoice_id,
@@ -148,7 +147,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
 
 
-
+    console.log(data)
 
     // Fetch Customer due
     useEffect(() => {
@@ -352,11 +351,11 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
                         onChange={(e) => setData({ ...data, qty: e.target.value })}
-                        // value={qty}
+                        value={data?.qty}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 setAllData([...allData, data]);
-                                setData([]);
+                                setData({});
                                 setShow(false);
                                 // setQty(0)
                             }
@@ -369,11 +368,11 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <input type='number'
                         className="text-right focus:outline-none w-16 border rounded"
                         onChange={(e) => setData({ ...data, comn: e.target.value })}
-                        // value={qty}
+                        value={data?.comn}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 setAllData([...allData, data]);
-                                setData([]);
+                                setData({});
                                 setShow(false);
                                 // setQty(0)
                             }
@@ -382,7 +381,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     />
                 </div>
                 <div className='flex justify-end items-center pt-1'>
-                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); }} />
+                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData({}); setShow(false); }} />
                 </div>
             </Modal>
         </div>
