@@ -12,7 +12,7 @@
         "name": "Items",
         "route": "product",
         "icon": "fluent-mdl2:product-variant",
-        "class": "mt-3",
+        "class": "mt-2",
         "option": true,
         "items": [
             {
@@ -78,7 +78,7 @@
         "name": "State",
         "route": "state",
         "icon": "mdi:location",
-        "class": "py-3",
+        "class": "mt-1 mb-2",
         "option": false
     },
     {

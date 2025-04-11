@@ -98,7 +98,6 @@ const ProductCard = ({ item }) => {
       <th scope="col" className="px-2 py-2 border-r">{item?.cost}</th>
       <th scope="col" className="px-2 py-2 border-r">{item?.price}</th>
       <th scope="col" className="px-2 py-2 border-r">{item?.qty}</th>
-      <th scope="col" className="px-2 py-2 border-r">{item?.active || 'N/A'}</th>
       <th scope="col" className="px-2 py-2 flex justify-end items-center border-r">
         <Modal show={edit} handleClose={() => { setEdit(false) }} size={``} className=''>
           <div className='max-w-[600px] p-5'>

@@ -5,6 +5,10 @@ import Show from '../Input/Show';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from '../Logo/logo_delta.png'
+import login_logo from '../Logo/login-cover.svg'
+import us from '../Logo/united.png'
+import bn from '../Logo/bangladesh.png'
 
 
 const Login = ({ auth }) => {
@@ -48,36 +52,65 @@ const Login = ({ auth }) => {
 
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-
-      style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
+    <div>
       <ToastContainer />
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">Login</h2>
+      <div className='grid grid-cols-1 lg:grid-cols-3 min-h-[95vh] h-full bg-white'>
 
-        <div className='mb-2'>
-          <label className="block text-white text-sm font-semibold mb-1">Email</label>
-          <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+        <div className='grid lg:col-span-2 lg:bg-[#F7F7FF]'>
+          <div className='hidden lg:block'>
+            <div className='flex justify-center items-center h-full min-h-[95vh]'>
+              <img src={login_logo} alt='login_logu' className='w-[550px] h-[550px]' />
+            </div>
+          </div>
         </div>
-        <div className='relative mb-5'>
-          <label className="block text-white text-sm font-semibold mb-1">Password</label>
-          {
-            showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
-          }
-          <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
-        </div>
-        <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
-          Sign In
-        </button>
 
-        <div>
-          <p className="text-center text-sm text-gray-300 mt-4">
-            Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
-          </p>
-          <p className="text-center text-sm text-gray-300 mt-4">
-            <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
-          </p>
+        <div className='grid col-span-1 border-l'>
+          <div className=' flex justify-center items-center '>
+            <div className="z-10 p-8 rounded-2xl w-full">
+              <img src={logo} alt='image' className='h-12 w-12 rounded mx-auto' />
+              <h2 className="text-xl font-semibold text-center mt-2">KazalandBrothers</h2>
+              <p className="text-center mt-2 font-normal">Please Login to your account</p>
+
+              <div className='mb-2'>
+                <label className="block text-white text-sm font-semibold mb-1">Email</label>
+                <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300" placeholder="Enter your email" />
+              </div>
+              <div className='relative mb-5'>
+                <label className="block text-white text-sm font-semibold mb-1">Password</label>
+                {
+                  showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+                }
+                <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 text-white rounded-lg focus:outline-none border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+              </div>
+              <div className='flex justify-between items-center mb-3'>
+                <p className="text-center text-sm text-gray-300 flex justify-start items-center gap-1">
+                  Remenber me<input type='checkbox' />
+                </p>
+                <p className="text-center text-sm text-gray-300 ">
+                  <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
+                </p>
+              </div>
+              <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
+                Sign In
+              </button>
+
+              <div>
+                <p className="text-center text-sm text-gray-300 mt-4">
+                  Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
+                </p>
+              </div>
+              <div className='flex justify-center items-center gap-3 mt-3 font-normal text-sm'>
+                <div className='flex justify-start items-center ga-2'>
+                  <img src={us} alt='flag' className='h-3.5 w-3.5' />
+                  <h1>English</h1>
+                </div>
+                <div className='flex justify-start items-center ga-2'>
+                  <img src={bn} alt='flag' className='h-4 w-4' />
+                  <h1>Bangla</h1>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,29 +121,40 @@ export default Login
 
 
 
-// <div className='flex justify-center items-center bg-white'>
-//   <div className='w-full md:w-[420px] pb-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl rounded-2xl border p-5'>
-//     <img src={Logo} alt="logo" className="w-[160px] h-[80px] mx-auto pb-2" />
-//     <div className="">
-//       <InputComponent onChange={(value) => { setValues({ ...values, username: value }) }} label={"Your email or phone number"} type={"text"} placeholder={"Enter your email or phone number"} />
-//       <div className='py-1 relative'>
-//         {
-//           showPassword ? <Show className='absolute right-2 top-[38px] cursor-pointer' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[38px] cursor-pointer' onClick={() => { setShowPassword(true); console.log("Hide") }} />
-//         }
-//         <h1 for={"Password"} className={`mb-2 text-start text-sm font-semibold text-gray-900 dark:text-white`}>{"Password"}</h1>
-//         <input type={showPassword ? "text" : "password"} value={values?.password} required={true} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:outline-none focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} placeholder={"Enter your password"} />
-//       </div>
+{/* <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
 
 
-//       <div className="flex items-start mb-5 mt-1">
-//         <div className="flex items-center h-5">
-//           <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
-//         </div>
-//         <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-//       </div>
+  <div>
+    <ToastContainer />
+    <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
+      <h2 className="text-2xl font-bold text-white text-center mb-6">Login</h2>
+
+      <div className='mb-2'>
+        <label className="block text-white text-sm font-semibold mb-1">Email</label>
+        <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
+      </div>
+      <div className='relative mb-5'>
+        <label className="block text-white text-sm font-semibold mb-1">Password</label>
+        {
+          showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+        }
+        <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+      </div>
+      <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
+        Sign In
+      </button>
+
+      <div>
+        <p className="text-center text-sm text-gray-300 mt-4">
+          Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
+        </p>
+        <p className="text-center text-sm text-gray-300 mt-4">
+          <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
+        </p>
+      </div>
+    </div>
+  </div>
 
 
-//       <button onClick={handleSubmit} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-//     </div>
-//   </div>
-// </div>
+</div> */}

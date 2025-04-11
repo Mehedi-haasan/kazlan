@@ -7,7 +7,7 @@ import BaseUrl from "../../Constant";
 import Button from "../Input/Button";
 
 
-const BrandCard = ({ item }) => {
+const BrandCard = ({ item,i }) => {
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
     const [image_url, setImage_Url] = useState();
@@ -82,20 +82,20 @@ const BrandCard = ({ item }) => {
     }
 
     return (
-        <tr className='border-b'>
-            <th className="w-4 py-2 px-4 border-x">
+        <tr className={`${i%2==0 ? " " :"bg-gray-100"} border-b`}>
+            <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r">#{item?.id}</th>
-            <th scope="col" className="px-2 py-2 border-r">
+            <th scope="col" className="px-2 py-1.5 border-r">{item?.name}</th>
+            <th scope="col" className="px-2 py-1.5 border-r">#{item?.id}</th>
+            <th scope="col" className="px-2 py-1.5 border-r">
                 <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
             </th>
-            <th scope="col" className="px-2 py-2 border-r">Active</th>
-            <th scope="col" className="px-2 py-2 flex justify-end items-center border-r">
+            <th scope="col" className="px-2 py-1.5 border-r">Active</th>
+            <th scope="col" className="px-2 py-1.5 flex justify-end items-center border-r">
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size={``} className=''>
                     <div className="pt-1">
                         <InputComponent placeholder={item?.name} label={`Brand name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />

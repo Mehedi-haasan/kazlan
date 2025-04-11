@@ -16,7 +16,7 @@ const ShowEntries = ({ options, onSelect, className = 'rounded' }) => {
     <div className='w-full flex justify-start items-center gap-1.5'>
       <h1 className="mb-2 text-start text-sm text-gray-900 dark:text-white pt-2">Show :</h1>
       <select id={11111} value={selectedId} onChange={handleSelect}
-        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:outline-none focus:border-blue-500 block py-1 px-3 ${className} dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+        className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:outline-none focus:border-blue-500 block py-1 px-3 ${className}`}
       >
         {options?.map(({ id, name }) => (
           <option key={id} value={id}> {name}</option>

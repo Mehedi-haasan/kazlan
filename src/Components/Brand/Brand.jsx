@@ -139,15 +139,22 @@ const Brand = ({ brands, entries }) => {
                     <div className="flex justify-start items-center gap-1.5">
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
-                    <div className="flex justify-start items-center gap-1.5 mt-5">
-                        <h1>Search : </h1>
-                        <input placeholder="Enter name" onChange={SearchBrand} className="focus:outline-none border rounded p-1.5 " />
+                    <div className="flex justify-end items-center gap-5">
+                        <div>
+                            <button className="border-y border-l rounded rounded-l px-3 py-1.5">Excel</button>
+                            <button className="border px-3 py-1.5">CSV</button>
+                            <button className="border-y border-r rounded rounded-r px-3 py-1.5">PDF</button>
+                        </div>
+                        <div className="flex justify-start items-center gap-1.5">
+                            <h1>Search : </h1>
+                            <input placeholder="Enter name" onChange={SearchBrand} className="focus:outline-none border rounded p-1.5 " />
+                        </div>
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                     <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr className='border'>
+                            <tr className='border text-black font-bold'>
                                 <th className="w-4 py-2 px-4 border-r">
                                     <div className="flex items-center">
                                         <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
@@ -155,7 +162,7 @@ const Brand = ({ brands, entries }) => {
                                     </div>
                                 </th>
                                 <th scope="col" className="px-2 py-2 border-r ">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center font-bold text-md">
                                         Name
                                         <Updown />
                                     </div>
@@ -185,8 +192,8 @@ const Brand = ({ brands, entries }) => {
 
 
                             {
-                                bran?.map((item) => (
-                                    <BrandCard item={item} />
+                                bran?.map((item, i) => (
+                                    <BrandCard item={item} i={i} />
                                 ))
                             }
 

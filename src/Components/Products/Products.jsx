@@ -141,12 +141,6 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        status
-                                        <Updown />
-                                    </div>
-                                </th>
                                 <th scope="col" className="pl-4 pr-1 py-2 text-right">Action</th>
                             </tr>
                         </thead>
