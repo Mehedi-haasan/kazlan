@@ -195,6 +195,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     }, [stateId])
 
+    let nameee = "Scan/Type product name";
 
 
     return (
@@ -228,12 +229,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <div>
                         <InputComponent placeholder={`Shop1/${invoice_id}`} label={'Sale Code'} />
                     </div>
-                    <div>
-                        <InputComponent placeholder={'Optional'} label={'Reference No.'} />
-                    </div>
-                    <div>
-                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} />
-                    </div>
+
                 </div>
 
                 <div className='border-b p-4'>
@@ -250,7 +246,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
+                                <input type='text' placeholder={nameee} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
 
                                 {
@@ -288,15 +284,15 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                        <thead class="text-xs text-gray-900 dark:text-gray-400">
                             <tr className='border-b border-black text-[16px]'>
                                 <th scope="col" className="pr-6 py-2 ">Serial</th>
                                 <th scope="col" className="px-4 py-2 text-center">Item</th>
                                 <th scope="col" className="px-4 py-2 text-center">Qty</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Unit</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Price/unit</th>
+                                <th scope="col" className="pl-4 py-2 text-right">M.R.P</th>
                                 <th scope="col" className="pl-4 py-2 text-right">Discount</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Total</th>
+                                <th scope="col" className="pl-4 py-2 text-right">Sale Price</th>
+                                <th scope="col" className="pl-4 py-2 text-right">Total price</th>
                                 <th scope="col" className="pl-4 py-2 text-right">Action</th>
                             </tr>
                         </thead>

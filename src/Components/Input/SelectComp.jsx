@@ -16,12 +16,12 @@ const SelectionComp = ({ options, onSelect, label }) => {
 
     return (
         <div className='py-1 w-full'>
-            <label htmlFor={label} className="block text-white text-sm font-semibold mb-1"> {label} </label>
+            <label htmlFor={label} className="block text-sm font-thin mb-1"> {label} </label>
             <select id={label} value={selectedId} onChange={handleSelect}
-                className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300"
+                className="w-full p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300 border font-thin"
             >
                 {options.map(({ id, name }) => (
-                    <option key={id} value={id} className='text-black hover:text-white'> {name}</option>
+                    <option key={id} value={id} className='text-black hover:text-white font-thin'> {name}</option>
                 ))}
             </select>
         </div>

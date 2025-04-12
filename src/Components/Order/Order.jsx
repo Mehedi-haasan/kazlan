@@ -51,7 +51,7 @@ const Order = ({ type = [], entries = [], user = [] }) => {
     }
 
     return (
-        <div className='bg-white relative pt-5 px-2'>
+        <div className='bg-white relative pt-5 px-2 min-h-screen'>
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Order List</h1>

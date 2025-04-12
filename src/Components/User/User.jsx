@@ -125,24 +125,24 @@ const User = ({ entries }) => {
 
 
                             {
-                                users?.map((item) => (
-                                    <tr className='border-b'>
+                                users?.map((item, i) => (
+                                    <tr className={`border-b font-thin ${i % 2 == 0 ? 'bg-gray-100' : ''}`}>
                                         <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
                                                 <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.username}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.email}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.bankname}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountname}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.accountnumber}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.address}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.usertype}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">{item?.role?.length > 0 ? item?.role[0]?.name : 'User'}</th>
-                                        <th scope="col" className="px-2 py-2 border-r">Active</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.name}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.username}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.email}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.bankname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.accountname}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.accountnumber}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.address}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.usertype}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">{item?.role?.length > 0 ? item?.role[0]?.name : 'User'}</th>
+                                        <th scope="col" className="px-2 py-2 border-r font-thin">Active</th>
                                         <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                                             <Edit />
                                             <Remove />
@@ -156,7 +156,7 @@ const User = ({ entries }) => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1>Showing 1 to 3 of 3 entries</h1>
+                    <h1 className="font-thin">Showing 1 to 3 of 3 entries</h1>
                     <div>
                         <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">Prev</button>
                         <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>

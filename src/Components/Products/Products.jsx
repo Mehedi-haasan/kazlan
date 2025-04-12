@@ -60,7 +60,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                        <SelectionComponent options={type} onSelect={(v) => { }} label={'Item Type'} />
+                        <SelectionComponent options={type} onSelect={(v) => { }} label={'Item Type'} className='font-thin'/>
                     </div>
                     <div>
                         <SelectionComponent options={brand} onSelect={(v) => { }} label={'Brand'} />
@@ -96,7 +96,7 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
@@ -146,13 +146,13 @@ const Product = ({ category = [], type = [], brand = [], entries = [], shop = []
                         </thead>
                         <tbody>
                             {data?.map((item, i) => (
-                                <ProductCard key={i} item={item} />
+                                <ProductCard key={i} item={item} i={i}/>
                             ))}
                         </tbody>
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1>Showing 1 to 3 of 3 entries</h1>
+                    <h1 className='font-thin'>Showing 1 to 3 of 3 entries</h1>
                     <div className='flex justify-start'>
                         <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
                             {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}

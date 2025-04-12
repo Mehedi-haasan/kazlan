@@ -40,8 +40,8 @@ const Warehouse = ({ entries }) => {
         <div className="px-2 pt-5 min-h-screen">
 
             <div className="flex justify-between items-center px-4 py-1.5 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">Waregouse List</h1>
-                <NavLink to='/company' className={`border px-4 py-1 rounded bg-blue-500 text-white`}>Create </NavLink>
+                <h1 className="font-semibold text-lg">Warehouse List</h1>
+                <NavLink to='/company' className={`border px-4 py-1 rounded bg-blue-500 text-white`}>Create Warehouse</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>

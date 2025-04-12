@@ -72,15 +72,15 @@ const Login = ({ auth }) => {
               <p className="text-center mt-2 font-normal">Please Login to your account</p>
 
               <div className='mb-2'>
-                <label className="block text-white text-sm font-semibold mb-1">Email</label>
-                <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300" placeholder="Enter your email" />
+                <label className="block  text-sm font-semibold mb-1">Email</label>
+                <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300" placeholder="Enter your email" />
               </div>
               <div className='relative mb-5'>
-                <label className="block text-white text-sm font-semibold mb-1">Password</label>
+                <label className="block text-sm font-semibold mb-1">Password</label>
                 {
-                  showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+                  showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer' onClick={() => { setShowPassword(true); console.log("Hide") }} />
                 }
-                <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 text-white rounded-lg focus:outline-none border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+                <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
               </div>
               <div className='flex justify-between items-center mb-3'>
                 <p className="text-center text-sm text-gray-300 flex justify-start items-center gap-1">
@@ -91,7 +91,7 @@ const Login = ({ auth }) => {
                 </p>
               </div>
               <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
-                Sign In
+                Log In
               </button>
 
               <div>
@@ -100,12 +100,12 @@ const Login = ({ auth }) => {
                 </p>
               </div>
               <div className='flex justify-center items-center gap-3 mt-3 font-normal text-sm'>
-                <div className='flex justify-start items-center ga-2'>
-                  <img src={us} alt='flag' className='h-3.5 w-3.5' />
+                <div className='flex justify-start items-center gap-1'>
+                  <img src={us} alt='flag' className='h-4 w-4' />
                   <h1>English</h1>
                 </div>
-                <div className='flex justify-start items-center ga-2'>
-                  <img src={bn} alt='flag' className='h-4 w-4' />
+                <div className='flex justify-start items-center gap-1'>
+                  <img src={bn} alt='flag' className='h-5 w-5' />
                   <h1>Bangla</h1>
                 </div>
               </div>

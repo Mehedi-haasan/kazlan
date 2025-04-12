@@ -3,12 +3,15 @@ import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectComp';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
+import logo from '../Logo/userProfile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const Registration = ({ state }) => {
 
+  const [image_url, setImage_Url] = useState();
+  const [imageFile, setImageFile] = useState(null);
   const [warehouses, setWarehouses] = useState([])
   const [values, setValues] = useState({
     "rules": ["admin"],
@@ -18,7 +21,7 @@ const Registration = ({ state }) => {
   });
   const [showPassword, setShowPassword] = useState(false)
 
-  let user = [{ id: 1, name: "Wholesaler" }, { id: 2, name: "Retailer" }]
+  let user = [{ id: 1, name: "admin" }, { id: 2, name: "superadmin" }]
 
   const handleSubmit = async (e) => {
     const token = localStorage.getItem('token')
@@ -53,69 +56,103 @@ const Registration = ({ state }) => {
     GetWarehouse()
   }, []);
 
-  return (
-    <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
-      <ToastContainer />
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-      <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-[800px]">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">Registration</h2>
-        <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className='grid col-span-2'>
-            <label className="block text-white text-sm font-semibold mb-1">Full Name</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your first name" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Phone</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your last name" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Bank Name</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, bankname: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your mobile number" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Account Name</label>
-            <input type="text" onChange={(e) => { setValues({ ...values, accountname: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your whatsapp number" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Account Number</label>
-            <input type="number" onChange={(e) => { setValues({ ...values, accountnumber: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your address" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Address</label>
-            <input type="email" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
-          </div>
-          <div>
-            <label className="block text-white text-sm font-semibold mb-1">Email</label>
-            <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
-          </div>
-          <div>
-            <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='font-semibold' />
-          </div>
-          <div>
-            <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={`Select State`} className='font-semibold' />
-          </div>
-          <div>
-            <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={`User Type`} className='font-semibold' />
-          </div>
-          <div className='relative'>
-            <label className="block text-white text-sm font-semibold mb-1">Password</label>
-            {
-              showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
-            }
-            <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
-          </div>
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage_Url(file);
+      setImageFile(URL.createObjectURL(file));
+    }
+  };
 
+  return (
+    <div className="min-h-screen p-5">
+      <ToastContainer />
+      <div className='bg-[#FFFFFF] rounded-xl shadow-lg m-8'>
+        <div className='border-b'>
+          <h1 className='py-4 pl-8'>User Details</h1>
         </div>
-        <div className='pt-5'>
-          <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
-            Sign Up
-          </button>
+        <div className="z-10 p-8 w-full">
+          <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="flex justify-start items-center gap-5">
+              <div>
+                <p className='pb-2 font-thin'>User Picture</p>
+                <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
+              </div>
+              <div>
+                <div className='flex justify-start items-center gap-2 pt-10'>
+                  <div className='border rounded-lg px-4 py-1'>
+                    <label>
+                      <h1 className="font-semibold pt-1 pb-2">Browse</h1>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div className='border rounded-lg px-4 py-1.5'>
+                    <h1 className="font-semibold py-1">Reset</h1>
+                  </div>
+
+                </div>
+                <p className='font-thin py-1 text-sm'>Allowed JPG, GIF or PNG. Max size of 1MB</p>
+              </div>
+            </div>
+            <div className=''>
+              <label className="block  text-sm  mb-1 font-thin">Full Name</label>
+              <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your first name" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Phone</label>
+              <input type="text" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your last name" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Bank Name</label>
+              <input type="text" onChange={(e) => { setValues({ ...values, bankname: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your mobile number" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Account Name</label>
+              <input type="text" onChange={(e) => { setValues({ ...values, accountname: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your whatsapp number" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Account Number</label>
+              <input type="number" onChange={(e) => { setValues({ ...values, accountnumber: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your address" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Address</label>
+              <input type="email" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
+            </div>
+            <div>
+              <label className="block  text-sm  mb-1 font-thin">Email</label>
+              <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
+            </div>
+            <div>
+              <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='' />
+            </div>
+            <div>
+              <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, rules: v?.name }) }} label={`User Role`} className='' />
+            </div>
+            <div className='relative'>
+              <label className="block  text-sm  mb-1 font-thin">Password</label>
+              {
+                showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+              }
+              <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your password" />
+            </div>
+
+          </div>
+          <div className='pt-5'>
+            <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600  text-white py-3 rounded-lg transition-all">
+              Sign Up
+            </button>
+          </div>
+          <p className="text-center text-sm text-gray-300 mt-4">
+            Have an account? <a href="/" className="text-blue-400 hover:underline">Sign In</a>
+          </p>
         </div>
-        <p className="text-center text-sm text-gray-300 mt-4">
-          Have an account? <a href="/" className="text-blue-400 hover:underline">Sign In</a>
-        </p>
       </div>
+
     </div>
 
   )

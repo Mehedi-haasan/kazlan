@@ -74,14 +74,6 @@
         ]
     },
     {
-        "id": "4",
-        "name": "State",
-        "route": "state",
-        "icon": "mdi:location",
-        "class": "mt-1 mb-2",
-        "option": false
-    },
-    {
         "id": "5",
         "name": "Server",
         "route": "server",
@@ -140,7 +132,7 @@
             },
             {
                 "id": 62,
-                "name": "Prchase Items",
+                "name": "Purchase  Items",
                 "route": "update/product"
             },
             {
@@ -150,14 +142,14 @@
             },
             {
                 "id": 64,
-                "name": "Parchase Return",
+                "name": "Purchase  Return",
                 "route": "purchase/return"
             }
         ]
     },
     {
         "id": "7",
-        "name": "Sale Order",
+        "name": "Sale History",
         "route": "order",
         "icon": "material-symbols:order-approve",
         "class": "",
@@ -180,6 +172,21 @@
                 "id": 83,
                 "name": "App Setting",
                 "route": "app/setting"
+            }
+        ]
+    },
+    {
+        "id": "9",
+        "name": "Users",
+        "route": "setting",
+        "icon": "uil:setting",
+        "class": "my-3",
+        "option": true,
+        "items": [
+            {
+                "id": 81,
+                "name": "Users and Roles",
+                "route": "users"
             }
         ]
     }

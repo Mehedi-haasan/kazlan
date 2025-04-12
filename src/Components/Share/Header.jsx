@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import Add from "../../icons/Add";
 import RightArrow from "../../icons/RightArrow";
 import Circle from '../../icons/Circle';
-import flag from '../Logo/united-states.png'
+import flag from '../Logo/united.png'
 
 
 const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) => {
@@ -22,11 +22,12 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                 <div className="flex justify-end items-center gap-3">
                     {
                         auth && <div className="hidden md:block">
-                            <NavLink to={`/update/product`} className="border rounded-full px-2 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add /> Add Purchase</NavLink>
+                            <NavLink to={`/update/product`} className="border rounded-full px-2 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add />Purchase</NavLink>
                         </div>
                     }
 
-                    {auth && <NavLink to={`/sale/order`} className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add /> Add Sale</NavLink>}
+                    {auth && <NavLink to={`/sale/order`} className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add />Sale</NavLink>}
+                    {auth && <NavLink to={`/sale/order`} className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add />POS</NavLink>}
                     <img src={flag} alt="flag" className="h-10 w-10 p-1 cursor-pointer" />
                     {auth ? <div className="flex justify-start items-start gap-2 cursor-pointer relative">
                         <button className='font-bold text-sm xl:text-md cursor-pointer' onClick={() => setIsShowProfile(!isShowProfile)}>
@@ -61,7 +62,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
             {
                 auth && <div onMouseEnter={()=>isOpen(true)} 
-                 className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-1000 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
+                 className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
                     <div className={`flex items-center border-b py-2 ${open ? 'justify-between ml-3' : 'justify-end mr-2.5'}`} >
                         <div className="">
                             <NavLink className={`pb-1`} onClick={() => { isOpen(!open); setSelected({}) }}>
@@ -104,7 +105,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
                                 {/* Child Route */}
-                                <div className={`pl-2 overflow-hidden transition-all duration-1000 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
+                                <div className={`pl-2 overflow-hidden transition-all duration-200 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
                                     {item?.items?.map((it) => {
                                         return <div>
                                             {
@@ -133,16 +134,6 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                             </div>
                         ))}
 
-                        {
-                            info?.role === "superadmin" && <div className="">
-                                <NavLink to={`/registration`} className={`flex  group ${open ? `'justify-between ml-2 hover:bg-blue-50'` : 'justify-end'} text-[#5F5F5F] text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
-                                    <div className={`flex justify-start items-center gap-2 ${open ? '' : 'bg-blue-50 p-1.5 rounded'}`}>
-                                        <Icon icon={"material-symbols:app-registration-outline"} width='18px' className="group-hover:text-blue-500" />
-                                        <h1 className={`${open ? '' : 'hidden'} font-roboto group-hover:text-blue-500 font-normal text-[17px]`}>Registration</h1>
-                                    </div>
-                                </NavLink>
-                            </div>
-                        }
 
                         <NavLink to={`/`} onClick={() => { localStorage.setItem('token', ''); isLoggedOut(false); }} className={`flex  group ${open ? 'justify-between ml-2 hover:bg-blue-50' : 'justify-end'} text-[#5F5F5F] text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
                             <div className={`flex justify-start items-center gap-2 ${open ? '' : 'hover:bg-blue-50 p-1.5 rounded'}`}>

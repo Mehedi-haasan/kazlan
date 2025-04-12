@@ -14,9 +14,9 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
 
   return (
     <div className='w-full'>
-      <h1 className="mb-2 text-start text-sm font-semibold text-black"> {label} </h1>
+      <h1 className="mb-2 text-start text-sm font-thin text-black"> {label} </h1>
       <select id={label} value={selectedId} onChange={handleSelect}
-        className={`bg-gray-50 border text-black w-full min-w-[205px] border-gray-300 text-sm focus:ring-blue-500 focus:outline-none focus:border-blue-500 block p-2 ${className} `}
+        className={`bg-gray-50 border text-black w-full min-w-[205px] border-gray-300 text-sm focus:ring-blue-500 focus:outline-none font-thin focus:border-blue-500 block p-2 ${className} `}
       >
         {options?.map(({ id, name }) => (
           <option key={id} value={id} className='text-black'> {name}</option>
