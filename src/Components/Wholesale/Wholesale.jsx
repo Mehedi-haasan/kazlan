@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     const [data, setData] = useState({ qty: 0, comn: 0 });
+    const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
     const [stateName, setStateName] = useState('Tangail')
     const [customer, setCustomer] = useState([])
@@ -45,6 +46,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     const SearchProduct = async (e) => {
         const name = e.target.value
+        setSearchItem(name)
         const token = localStorage.getItem('token')
         if (name) {
             const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
@@ -146,33 +148,31 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     }, [allData]);
 
 
-
-    console.log(data)
-
     // Fetch Customer due
-    useEffect(() => {
-
-        const fetchUserDue = async () => {
-            const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
-                method: 'GET',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            });
-            const data = await response.json();
-            if (data && data?.items) {
-                setDue(data?.balance || 0);
-            }
+    const fetchUserDue = async () => {
+        const token = localStorage.getItem(`token`);
+        const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json();
+        if (data && data?.balance) {
+            setDue(data?.balance);
         }
+    }
+
+
+    useEffect(() => {
         fetchUserDue()
     }, [userId])
 
 
 
 
-    // Customer Fetch
+    // Customer Fetch state wise
     useEffect(() => {
         const GetCustomer = async () => {
             const token = localStorage.getItem(`token`);
@@ -185,8 +185,9 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
             });
             const data = await response.json();
             if (data && data?.items?.length > 0) {
-                setCustomer(data?.items || []);
+                setCustomer(data?.items);
                 setUserId(data?.items[0]?.id);
+                fetchUserDue()
                 setName(data?.items[0]?.name);
             }
         }
@@ -195,8 +196,9 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     }, [stateId])
 
-    let nameee = "Scan/Type product name";
 
+
+    let nameee = "Scan/Type product name";
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2 w-full">
@@ -212,7 +214,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setStateName(v?.name) }} label={"State"} className='rounded-l' />
+                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setStateName(v?.name); setCustomer([]) }} label={"State"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -246,7 +248,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={nameee} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
+                                <input type='text' placeholder={nameee} value={searchItem} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
 
                                 {
@@ -314,13 +316,13 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                             </div>
                         </div>
                         <div>
-                            <InputComponent placeholder={total} label={'Amount'} />
+                            <InputComponent placeholder={total} label={'Amount'} readOnly={true} />
                         </div>
                         <div>
-                            <InputComponent placeholder={due} label={'Previous due'} />
+                            <InputComponent placeholder={due} label={'Previous due'} readOnly={true} />
                         </div>
                         <div>
-                            <InputComponent placeholder={due} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
+                            <InputComponent placeholder={"Enter amount"} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
                         </div>
                         <div>
                             <InputComponent label={'Payment Note'} />
@@ -353,6 +355,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 setAllData([...allData, data]);
                                 setData({});
                                 setShow(false);
+                                setSearchItem('')
                                 // setQty(0)
                             }
                         }}
@@ -370,6 +373,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 setAllData([...allData, data]);
                                 setData({});
                                 setShow(false);
+                                setSearchItem('')
                                 // setQty(0)
                             }
                         }}
@@ -377,7 +381,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     />
                 </div>
                 <div className='flex justify-end items-center pt-1'>
-                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData({}); setShow(false); }} />
+                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData({}); setShow(false); setSearchItem('') }} />
                 </div>
             </Modal>
         </div>

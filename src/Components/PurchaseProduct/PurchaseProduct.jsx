@@ -22,24 +22,16 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
 
     const [data, setData] = useState({});
     const [total, setTotal] = useState(0);
-    const [stateName, setStateName] = useState('Tangail')
-    const [name, setName] = useState('Mehedi hasan')
-    const [due, setDue] = useState(0);
     const [pay, setPay] = useState(0)
-    const [invoice_id, setInvoiceId] = useState(712)
+    const [due, setDue] = useState(0);
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
     const [show, setShow] = useState(false);
     const [isPdf, setPdf] = useState(false);
-    const [isImg, setImg] = useState(false);
-    const [state, setState] = useState([]);
     const [userId, setUserId] = useState(1);
-    const [stateId, setStateId] = useState(1);
-    const [mobile, setMobile] = useState('')
-    const [flatDiscount, setFlatDiscount] = useState(0);
-    const [percentageDiscount, setPercentageDiscount] = useState(0);
-    const [discountType, setDiscountType] = useState("Percentage");
     const [date, setDate] = useState('');
+    const [supplier, setSupplier] = useState([]);
+    const [searchItem, setSearchitem] = useState('')
 
     useEffect(() => {
         document.title = `Purchase - Kazaland Brothers`;
@@ -69,6 +61,14 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
         }
     }
 
+    useEffect(() => {
+        let amount = allData?.reduce((acc, item) => {
+            return acc + (parseInt(item?.qty) * parseInt(item?.price))
+        }, 0);
+
+        setTotal(amount);
+    }, [allData]);
+
     const downloadPDF = () => {
         const capture = document.querySelector('.actual-receipt');
         html2canvas(capture).then((canvas) => {
@@ -95,7 +95,7 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                 "authorization": token
 
             },
-            body: JSON.stringify(allData)
+            body: JSON.stringify({ allData: allData, balance: total - pay, userId: userId })
         });
         const data = await respons.json();
         toast(data?.message)
@@ -112,24 +112,50 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
         setDate(getFormattedDate())
     }, [])
 
-    useEffect(() => {
 
-        const fetchUserDue = async () => {
-            const token = localStorage.getItem('token')
-            const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
-                method: "GET",
-                headers: {
-                    "authorization": token
-                }
-            });
-            const data = await response.json();
-            if (data && data?.items) {
-                setDue(data?.items?.amount || 0);
+    const fetchUserDue = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
+            method: "GET",
+            headers: {
+                "authorization": token
             }
+        });
+        const data = await response.json();
+        if (data && data?.balance) {
+            setDue(data?.balance || 0);
         }
+    }
+
+
+
+
+    useEffect(() => {
         fetchUserDue()
     }, [userId])
 
+    const GetSupplier = async () => {
+        const token = localStorage.getItem(`token`);
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/1/100`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json();
+        if (data && data?.items?.length > 0) {
+            setSupplier(data?.items);
+            setUserId(data?.items[0]?.id)
+        }
+    }
+
+    useEffect(() => {
+        GetSupplier()
+
+    }, [])
+
+    console.log(total)
 
     return (
         <div className="min-h-screen pl-4 pt-5 pr-2">
@@ -145,13 +171,13 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={user} onSelect={() => { }} label={"Supplier"} className='rounded-l' />
+                        <SelectionComponent options={supplier} onSelect={(v) => { setUserId(v?.id); setDue(0) }} label={"Supplier"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
                     <div>
-                        <InputComponent placeholder={getFormattedDate()} label={'Date'} />
+                        <InputComponent placeholder={date} label={'Date'} />
                     </div>
                     <div>
                         <InputComponent placeholder={'Shop1/111'} label={'Sale Code'} />
@@ -178,7 +204,7 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
+                                <input type='text' placeholder='স্ক্যান / পণ্যের নাম লিখুন' value={searchItem} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
 
                                 {
@@ -238,15 +264,18 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
 
                 <div className='p-4'>
                     <h1 className='pb-2'>Payment</h1>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-                        <div>
-                            <InputComponent label={'Amount'} />
-                        </div>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>
+                        </div>
+                        <div>
+                            <InputComponent label={'Previous Due'} placeholder={due} readOnly={true} />
+                        </div>
+                        <div>
+                            <InputComponent label={'Amount'} placeholder={parseInt(total) + due} onChange={(v) => { setPay(v) }} />
                         </div>
                     </div>
                 </div>
@@ -275,13 +304,14 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
                                 setAllData([...allData, data]);
                                 setData([]);
                                 setShow(false);
+                                setSearchitem('')
                             }
                         }}
                         placeholder={""}
                     />
                 </div>
                 <div className='flex justify-end items-center pt-1'>
-                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); }} />
+                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); setSearchitem('') }} />
                 </div>
             </Modal>
         </div>
