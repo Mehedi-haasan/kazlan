@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import InputComponent from '../Input/InputComponent';
 import Button from '../Input/Button';
 import BaseUrl from '../../Constant'
+import logo from '../Logo/userProfile.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Company = () => {
 
     const [values, setValues] = useState({})
     const [companyInfo, setCompanyInfo] = useState({})
+    const [isLoading, setIsLoading] = useState(false)
     const [image_url, setImage_Url] = useState();
     const [imageFile, setImageFile] = useState(null);
 
@@ -16,6 +20,7 @@ const Company = () => {
     }, []);
 
     const PostInfo = async (image_url) => {
+        setIsLoading(true)
         values.image_url = image_url;
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/create/company/info`, {
@@ -27,6 +32,8 @@ const Company = () => {
             body: JSON.stringify(values),
         });
         const data = await response.json();
+        toast(data?.message)
+        setIsLoading(false)
     }
 
     const GetCompInfo = async (compId) => {
@@ -51,6 +58,7 @@ const Company = () => {
 
 
     const handleUpload = async () => {
+        setIsLoading(true)
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
@@ -71,10 +79,12 @@ const Company = () => {
             });
 
             const data = await response.json();
+            setIsLoading(false)
             if (data) {
                 PostInfo(data.image_url)
             }
         } catch (error) {
+            setIsLoading(false)
             console.error('Error uploading image:', error);
         }
     }
@@ -90,33 +100,38 @@ const Company = () => {
     };
 
     return (
-        <div className='px-3 py-5 min-h-screen text-[#32393f]'>
+        <div className='px-3 py-5 min-h-screen pb-12 text-[#32393f]'>
+            <ToastContainer />
             <div className='bg-[#FFFFFF] rounded shadow w-[50%]'>
                 <div className='border-b px-5'>
                     <h1 className='py-3 text-2xl text-[#32393f]'>Warehouse Details</h1>
                 </div>
-                <div className="pb-2 px-5 pt-2">
-                    {imageFile ? (
-                        <label className="cursor-pointer">
-                            <h1 className="font-thin pt-1 pb-2">Selected Picture</h1>
-                            <img src={imageFile} alt="Preview" className="w-full h-24 object-cover rounded-lg border border-red-500 p-1" />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                className="hidden font-thin"
-                            />
-                        </label>
-                    ) : (
-                        <div>
-                            <h1 className="py-1 font-thin">Select your Warehouse logo</h1>
-                            <input className='font-thin'
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                type="file"
-                            />
+
+                <div className="flex justify-start items-center gap-5 pb-2 px-5 pt-2">
+                    <div>
+                        <p className='pb-2 font-thin'>Shop Logo</p>
+                        <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
+                    </div>
+                    <div>
+                        <div className='flex justify-start items-center gap-2 pt-10'>
+                            <div className='border rounded-lg px-4 py-1'>
+                                <label>
+                                    <h1 className="font-semibold pt-1 pb-2">Browse</h1>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                            </div>
+                            <div className='border rounded-lg px-4 py-1.5'>
+                                <h1 className="font-semibold py-1">Reset</h1>
+                            </div>
+
                         </div>
-                    )}
+                        <p className='font-thin py-1 text-sm'>Allowed JPG, GIF or PNG. Max size of 1MB</p>
+                    </div>
                 </div>
                 <div className='px-5'>
                     <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Warehouse Name'} placeholder={values?.name || 'N/A'} className={`text-[#32393f] font-thin`} />

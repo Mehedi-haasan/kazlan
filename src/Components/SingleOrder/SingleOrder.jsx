@@ -26,7 +26,7 @@ const SingleOrder = () => {
 
 
     return (
-        <div className='relative px-4 pt-5 min-h-screen'>
+        <div className='relative px-4 pt-5 min-h-screen pb-12'>
             <div className='flex justify-between pb-1'>
                 <div className='flex justify-start gap-3 items-center'>
                     <h1 className='font-semibold w-[90px]'>ঠিকানা</h1>
@@ -77,7 +77,7 @@ const SingleOrder = () => {
                 </div>
             </div>
 
-            <div className='relative w-full overflow-hidden overflow-x-auto my-5 min-h-screen'>
+            <div className='relative w-full overflow-hidden overflow-x-auto my-5 min-h-screen pb-12'>
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <Tabeheader />
                     <tbody>

@@ -1,134 +1,90 @@
 import React, { useState, useEffect } from 'react'
 import ProductCard from './ProductCard';
 import BaseUrl from '../../Constant';
-import SelectionComponent from '../Input/SelectionComponent';
-import Selection from '../Input/Selection';
 import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 import Loading from '../../icons/Loading';
-import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { useToImage } from '@hcorta/react-to-image'
+import logo from '../Logo/userProfile.png'
+import ProTranCard from './ProTranCard';
 
 
-const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
+const ProTransaction = ({ entries = [] }) => {
 
+    const params = useParams()
     const [data, setData] = useState([]);
+    const [values, setValues] = useState({})
     const [page, setPage] = useState(1);
     const [totalItem, setTotalItem] = useState(0)
     const [pageSize, setPageSize] = useState(20);
-    const [catId, setCatId] = useState(null);
-    const [brandId, setBrandId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [comId, setComId] = useState(null);
     const [isChecked, setIsChecked] = useState(false)
-    let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
-    const options = {
-        width: 1000,
+    const options = {   width: 1000,
         backgroundColor: '#ffffff'
     };
     const { ref, getPng } = useToImage(options)
-    const [isPdf, setPdf] = useState(false);
 
 
-    useEffect(() => {
-        if (info?.role === "superadmin") {
-            setComId(null)
-        } else {
-            setComId(info?.compId)
-        }
-    }, [info])
-
-    const getProduct = async () => {
-        setIsLoading(true)
+    const GetProduct = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/product/templete/${page}/${pageSize}/${brandId}/${catId}/${comId}`, {
+        const res = await fetch(`${BaseUrl}/api/get/single/product/tran/${params?.id}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
                 'Content-type': 'application/json; charset=UTF-8',
             },
         });
-        const data = await response.json()
-        setData(data?.items)
-        setTotalItem(data?.count)
-        setIsLoading(false)
+        const data = await res.json()
+        setData(data?.items);
+        setValues(data?.product);
+        console.log(data)
     }
 
     useEffect(() => {
-        getProduct()
-    }, [page, pageSize, brandId, catId, comId])
+        GetProduct()
+    }, [])
 
 
-    const SearchProduct = async (e) => {
-        const name = e
-        const token = localStorage.getItem('token')
-        if (name) {
-            const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
-                method: 'GET',
-                headers: {
-                    'authorization': token,
-                },
-            });
-            const data = await response.json();
-            setData(data.items)
-        }
-    }
-
-
-
-    const downloadPDF = () => {
-        const capture = document.querySelector('.actual-receipt');
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('img/png');
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const componentWidth = doc.internal.pageSize.getWidth();
-            const componentHeight = doc.internal.pageSize.getHeight();
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-            doc.save('receipt.pdf');
-        })
-        setPdf(false)
-    }
 
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
-            <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">Item List</h1>
-                <NavLink to='/create' className={`border text-white rounded-lg font-thin shadow py-2 px-5 bg-blue-600`}>Create Item</NavLink>
-            </div>
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div>
-                        <SelectionComponent options={brand} onSelect={(v) => { setBrandId(v?.id) }} label={'Brand / Publishers'} />
-                    </div>
-                    <div>
-                        <SelectionComponent options={category ? category : []} onSelect={(v) => { setCatId(v?.id) }} label={'Categories'} />
-                    </div>
-                    {
-                        info?.role === "superadmin" && <div>
-                            <Selection options={shop} onSelect={(v) => { setComId(v?.id) }} label={'Warehouse'} />
-                        </div>
-                    }
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-4 py-2 bg-[#FFFFFF] rounded shadow">
+                <div className='border-r p-3'>
+                    <img
+                        src={values?.image_url ? values?.image_url : logo}
+                        alt="image"
+                        className="h-full w-full object-cover"
+                    />
                 </div>
+                <div className='grid col-span-1 lg:col-span-2 p-3'>
+                    <div className='text-[#4C5258] font-thin text-sm'>
+                        <h1 className='text-xl py-3'>{values?.name}</h1>
+                        <h1 className='text-xs py-2 '>Stock Quantity {values?.qty}</h1>
+                        <h1 className='text-xs py-2'>Price <span className='text-2xl'>{values?.price}</span> / {values?.qty_type}</h1>
+                        <h1 className='text-sm'>Item Code - - - #{values?.id}</h1>
+                        <h1 className='py-2'>Category {values?.category?.name}</h1>
+                        <h1>Item Type {values?.category?.name}</h1>
+                    </div>
+                </div>
+            </div>
 
 
-
+            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center mb-3 mt-5'>
                     <div>
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel onClick={() => { downloadPDF() }} Jpg={getPng} />
-                        <Search SearchProduct={(e) => { SearchProduct(e) }} />
+                        <Excel onClick={() => { }} Jpg={getPng} />
+                        <Search SearchProduct={(e) => { }} />
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
-                    <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                         <thead class="text-md text-gray-900 ">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
@@ -140,24 +96,6 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                                 <th scope="col" className="px-2 py-2 border-r ">
                                     <div className="flex justify-between items-center">
                                         Item Name
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Brand
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Category
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Warehouse
                                         <Updown />
                                     </div>
                                 </th>
@@ -191,14 +129,11 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                                         <Updown />
                                     </div>
                                 </th>
-                                {
-                                    info?.role === "superadmin" && <th scope="col" className="pl-2 pr-1 py-2 text-center">Action</th>
-                                }
                             </tr>
                         </thead>
                         <tbody>
                             {data?.map((item, i) => (
-                                <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info}/>
+                                <ProTranCard key={i} item={item} i={i} isChecked={isChecked} />
                             ))}
                         </tbody>
                     </table>
@@ -220,6 +155,6 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     )
 }
 
-export default Product
+export default ProTransaction
 
 

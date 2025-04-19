@@ -69,7 +69,7 @@ const Dashboard = ({ data }) => {
         }, []);
 
     return (
-        <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen relative'>
+        <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen pb-12 relative'>
 
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>

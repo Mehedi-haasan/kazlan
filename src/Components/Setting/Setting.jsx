@@ -5,6 +5,7 @@ import BaseUrl from "../../Constant";
 import SelectionComponent from "../Input/SelectionComponent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from '../Logo/userProfile.png'
 
 const Setting = ({ userinfo = {} }) => {
     const [user, setUser] = useState({});
@@ -12,7 +13,8 @@ const Setting = ({ userinfo = {} }) => {
     const [compId, setCompId] = useState(1)
     const [info, setInfo] = useState({});
     const [select, setSelect] = useState('General');
-    const [image_url, setImage_Url] = useState(null);
+    const [image_url, setImage_Url] = useState();
+    const [imageFile, setImageFile] = useState(null);
 
     const AppInfo = async () => {
         const token = localStorage.getItem('token')
@@ -105,11 +107,18 @@ const Setting = ({ userinfo = {} }) => {
         }
     }
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage_Url(file);
+            setImageFile(URL.createObjectURL(file));
+        }
+    };
 
 
     return (
-        <div className='min-h-screen'>
-            <ToastContainer/>
+        <div className='min-h-screen pb-12'>
+            <ToastContainer />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
@@ -144,18 +153,41 @@ const Setting = ({ userinfo = {} }) => {
                             </div>}
                         </div>
                         <div className='px-3 md:px-4 lg:px-5 py-3 md:py-4 lg:py-5 bg-[#FFFFFF] rounded-b shadow'>
+                            {
+                                userinfo?.role === "superadmin" && <div className="flex justify-start items-center gap-5 pb-2 pt-2">
+                                    <div>
+                                        <p className='pb-2 font-semibold'>Shop Logo</p>
+                                        <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
+                                    </div>
+                                    <div>
+                                        <div className='flex justify-start items-center gap-2 pt-10'>
+                                            <div className='border rounded-lg px-4 py-1'>
+                                                <label>
+                                                    <h1 className="font-semibold pt-1 pb-2">Browse</h1>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={handleImageChange}
+                                                        className="hidden"
+                                                    />
+                                                </label>
+                                            </div>
+                                            <div className='border rounded-lg px-4 py-1.5'>
+                                                <h1 className="font-semibold py-1">Reset</h1>
+                                            </div>
+
+                                        </div>
+                                        <p className='font-thin py-1 text-sm'>Allowed JPG, GIF or PNG. Max size of 1MB</p>
+                                    </div>
+                                </div>
+                            }
                             <InputComponent label={'Application Name'} placeholder={user?.name} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, name: v }) }} />
                             <InputComponent label={'Footer text'} placeholder={user?.footertext} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
                             <InputComponent label={'Email'} placeholder={user?.email} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, email: v }) }} />
                             <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
                             <InputComponent label={'Address'} placeholder={user?.address} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, address: v }) }} />
                             <InputComponent label={'Description'} placeholder={user?.description} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
-                            {
-                                userinfo?.role === "superadmin" && <div className='mt-3'>
-                                    <h1 className='font-semibold py-1'>Select your Logo</h1>
-                                    <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
-                                </div>
-                            }
+
                             <div className='py-3'>
                                 <Button onClick={() => { image_url !== null ? handleUploadUpdate() : UpdateSetting(user?.image_url, "") }} isDisable={userinfo?.role === "superadmin" ? false : true} name={'Update'} />
                                 <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />

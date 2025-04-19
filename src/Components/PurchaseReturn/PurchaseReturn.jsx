@@ -106,11 +106,11 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
     function getFormattedDate() {
         const date = new Date();
         const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        return date.toLocaleDateString('bn-BD', options);
+        return date.toLocaleDateString('en-EN', options);
     }
 
     return (
-        <div className="min-h-screen pl-4 pt-5 pr-2">
+        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
             <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Purchase Return</h1>
@@ -193,9 +193,9 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr className='border-b border-black text-[16px]'>
+                    <table class="min-w-[800px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-sm text-gray-900  dark:text-gray-400">
+                            <tr className='border-b border-gray-400 text-[16px]'>
                                 <th scope="col" className="pr-6 py-2 ">Serial</th>
                                 <th scope="col" className="px-4 py-2 text-center">Item</th>
                                 <th scope="col" className="px-4 py-2 text-center">Qty</th>
@@ -215,7 +215,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                 </div>
 
                 <div className='p-4'>
-                    <h1 className='pb-2'>Payment</h1>
+                    {/* <h1 className='pb-2'>Payment</h1> */}
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
                         <div>
                             <InputComponent label={'Amount'} placeholder={total} />
@@ -228,7 +228,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                         </div>
                     </div>
                 </div>
-                <div className='p-4 border-t'>
+                <div className='p-4 '>
                     <Button name={'Submit'} onClick={PurchaseReturn} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>

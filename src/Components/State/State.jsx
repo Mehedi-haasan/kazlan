@@ -62,7 +62,7 @@ const State = ({ entries = [] }) => {
 
 
     return (
-        <div className="pt-5 px-2 min-h-screen">
+        <div className="pt-5 px-2 min-h-screen pb-12">
             <ToastContainer/>
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">

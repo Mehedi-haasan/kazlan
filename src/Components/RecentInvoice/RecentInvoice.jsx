@@ -9,7 +9,7 @@ import Invoice from "./Invoice";
 
 const RecentInvoice = ({ entries }) => {
     return (
-        <div className="pl-4 pt-5 pr-2 min-h-screen">
+        <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
             <div className="flex justify-between items-center px-4 py-3 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Customer List</h1>
                 <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4`}>Create Customer</NavLink>

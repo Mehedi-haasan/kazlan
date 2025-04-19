@@ -121,7 +121,7 @@ export default Login
 
 
 
-{/* <div className="relative flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
+{/* <div className="relative flex items-center justify-center min-h-screen pb-12 bg-cover bg-center" style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
 
 
   <div>

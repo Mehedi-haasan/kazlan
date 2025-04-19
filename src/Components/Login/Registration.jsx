@@ -65,7 +65,7 @@ const Registration = ({ state }) => {
   };
 
   return (
-    <div className="min-h-screen p-5">
+    <div className="min-h-screen pb-12 p-5">
       <ToastContainer />
       <div className='bg-[#FFFFFF] rounded-xl shadow-lg m-8'>
         <div className='border-b'>

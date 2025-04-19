@@ -3,8 +3,8 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className='bg-[#FFFFFF] border-t shadow h-10 flex justify-center items-center '>
-          <h1>Copyright© Kazlandbrothers</h1>
+    <div className='bg-[#FFFFFF] border-t shadow h-10 flex justify-center items-center fixed bottom-0 left-0 right-0'>
+          <h1>Copyright© KazalandBrothers - 2025 (v1)</h1>
     </div>
   )
 }

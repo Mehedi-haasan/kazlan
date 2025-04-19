@@ -159,6 +159,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
             },
         });
         const data = await response.json();
+        setDue(data?.balance);
         if (data && data?.balance) {
             setDue(data?.balance);
         }
@@ -201,7 +202,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     let nameee = "Scan/Type product name";
 
     return (
-        <div className="min-h-screen pl-4 pt-5 pr-2 w-full">
+        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2 w-full">
             <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
@@ -242,13 +243,13 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                         <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
                     </div>
                     <div className='grid col-span-2'>
-                        <h1 className='pb-1'>Enter Item Name</h1>
+                        <h1 className='pb-1 font-thin'>Enter Item Name</h1>
                         <div className='flex justify-center w-full'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={nameee} value={searchItem} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full' />
+                                <input type='text' placeholder={nameee} value={searchItem} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full font-thin' />
                                 <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
 
                                 {
@@ -288,14 +289,14 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 dark:text-gray-400">
                             <tr className='border-b border-black text-[16px]'>
-                                <th scope="col" className="pr-6 py-2 ">Serial</th>
-                                <th scope="col" className="px-4 py-2 text-center">Item</th>
-                                <th scope="col" className="px-4 py-2 text-center">Qty</th>
-                                <th scope="col" className="pl-4 py-2 text-right">M.R.P</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Discount</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Sale Price</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Total price</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Action</th>
+                                <th scope="col" className="pr-6 py-2 font-thin">Serial</th>
+                                <th scope="col" className="px-4 py-2 text-center font-thin">Item name</th>
+                                <th scope="col" className="px-4 py-2 text-center font-thin">Qty</th>
+                                <th scope="col" className="pl-4 py-2 text-right font-thin">M.R.P</th>
+                                <th scope="col" className="pl-4 py-2 text-right font-thin ">Discount</th>
+                                <th scope="col" className="pl-4 py-2 text-right font-thin">Sale Price</th>
+                                <th scope="col" className="pl-4 py-2 text-right font-thin">Total price</th>
+                                <th scope="col" className="pl-4 py-2 text-right font-thin">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -307,7 +308,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
 
                 <div className='p-4'>
-                    <h1 className='pb-2'>Payment</h1>
+                    <h1 className='pb-2 font-thin'>Payment</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
@@ -316,16 +317,16 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                             </div>
                         </div>
                         <div>
-                            <InputComponent placeholder={total} label={'Amount'} readOnly={true} />
+                            <InputComponent placeholder={total} label={'Amount'} readOnly={true} className={`font-thin`} />
                         </div>
                         <div>
-                            <InputComponent placeholder={due} label={'Previous due'} readOnly={true} />
+                            <InputComponent placeholder={due} label={'Previous due'} readOnly={true} className={`font-thin`} />
                         </div>
                         <div>
-                            <InputComponent placeholder={"Enter amount"} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} />
+                            <InputComponent placeholder={"Enter amount"} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} className={`font-thin`} />
                         </div>
                         <div>
-                            <InputComponent label={'Payment Note'} />
+                            <InputComponent label={'Payment Note'} placeholder={`Enter note`} onChange={(v) => { }} className={`font-thin`} />
                         </div>
                     </div>
                 </div>

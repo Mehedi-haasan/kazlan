@@ -13,7 +13,8 @@ import flag from '../Logo/united.png'
 const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) => {
     const [selected, setSelected] = useState({});
     const [child, setChaild] = useState({});
-    const [isShowProfile, setIsShowProfile] = useState(false)
+    const [isShowProfile, setIsShowProfile] = useState(false);
+    const [lan, setLan] = useState(false)
     return (
         <div className="w-full top-0 z-40 shadow fixed">
 
@@ -22,13 +23,29 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                 <div className="flex justify-end items-center gap-3">
                     {
                         auth && <div className="hidden md:block">
-                            <NavLink to={`/update/product`} className="border rounded-full px-2 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add />Purchase</NavLink>
+                            <NavLink to={`/update/product`} className="border font-thin rounded-full px-2 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add />Purchase</NavLink>
                         </div>
                     }
 
-                    {auth && <NavLink to={`/sale/order`} className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add />Sale</NavLink>}
-                    {auth && <NavLink to={`/sale/order`} className="border rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add />POS</NavLink>}
-                    <img src={flag} alt="flag" className="h-10 w-10 p-1 cursor-pointer" />
+                    {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-2 py-1 border-red-500 flex float-start text-md items-center gap-1 text-red-500"><Add />Sale</NavLink>}
+                    {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>}
+                    <div className="flex justify-start items-start gap-2 cursor-pointer relative">
+                        <div className={`absolute ${lan ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-8 rounded-lg`}>
+                            <div className="">
+                                <button onClick={() => { setLan(!lan) }} className="flex justify-start items-center gap-1 border-b p-2">
+                                    <img src={flag} alt="flag" className="h-7 w-7 p-1 cursor-pointer" />
+                                    <h1>Bangla</h1>
+                                </button>
+                                <button onClick={() => { setLan(!lan) }} className="flex justify-start items-center gap-1 ml-1 p-2">
+                                    <img src={flag} alt="flag" className="h-7 w-7 p-1 cursor-pointer" />
+                                    <h1> English</h1>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <img src={flag} alt="flag" onClick={() => { setLan(!lan) }} className="h-10 w-10 p-1 cursor-pointer" />
                     {auth ? <div className="flex justify-start items-start gap-2 cursor-pointer relative">
                         <button className='font-bold text-sm xl:text-md cursor-pointer' onClick={() => setIsShowProfile(!isShowProfile)}>
                             <img src={info?.image} alt="profile" className="h-10 w-10 rounded-full cursor-pointer" />
@@ -61,8 +78,8 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
             </div>
 
             {
-                auth && <div onMouseEnter={()=>isOpen(true)} 
-                 className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
+                auth && <div onMouseEnter={() => isOpen(true)}
+                    className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
                     <div className={`flex items-center border-b py-2 ${open ? 'justify-between ml-3' : 'justify-end mr-2.5'}`} >
                         <div className="">
                             <NavLink className={`pb-1`} onClick={() => { isOpen(!open); setSelected({}) }}>
@@ -75,11 +92,11 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     </div>
 
 
-                    <div className='max-h-[400px] overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 '>
+                    <div className='max-h-[500px] overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 '>
                         {data?.map((item, index) => (
                             <div className="">
                                 {
-                                    item?.option ? <div onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} key={index} className={`flex  p-1 rounded ${open ? `${selected?.id === item?.id ? 'bg-blue-50' : ''} justify-between ml-2 hover:bg-blue-50` : 'justify-end'} text-[#5F5F5F] cursor-pointer text-md  group hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
+                                    item?.option ? <div onClick={() => { selected?.id === item?.id ? setSelected({}) : setSelected(item) }} key={index} className={`flex  p-1 rounded ${open ? `${selected?.id === item?.id ? 'bg-blue-50 text-blue-500' : ''} justify-between ml-2 hover:bg-blue-50` : 'justify-end'} text-[#5F5F5F] cursor-pointer text-md  group hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
                                         <div className={`flex justify-start items-center gap-2 ${open ? '' : `${selected?.id === item?.id ? 'bg-blue-50 py-1.5 px-2 rounded' : ''} py-1.5 px-2 rounded`}`}>
                                             <Icon icon={item.icon} width='24px' className="group-hover:text-blue-500 h-[20px] w-[20px]" />
                                             <h1 className={`${open ? '' : 'hidden'}`}>{item.name}</h1>
@@ -146,7 +163,8 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     </div>
                 </div>
             }
-        </div >
+
+        </div>
     )
 };
 

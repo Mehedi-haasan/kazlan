@@ -5,6 +5,8 @@ import ShowEntries from "../Input/ShowEntries";
 import WarehouseCard from "./WarehouseCard";
 import { NavLink } from "react-router-dom";
 import Loading from "../../icons/Loading";
+import Excel from "../Input/Excel";
+import Search from "../Input/Search";
 
 const Warehouse = ({ entries }) => {
 
@@ -12,6 +14,7 @@ const Warehouse = ({ entries }) => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10)
     const [isLoading, setIsLoading] = useState(false);
+    const [totalItem, setTotalItem] = useState(0)
 
 
     const FetchShop = async () => {
@@ -37,25 +40,25 @@ const Warehouse = ({ entries }) => {
 
 
     return (
-        <div className="px-2 pt-5 min-h-screen">
+        <div className="px-2 pt-5 min-h-screen pb-12">
 
-            <div className="flex justify-between items-center px-4 py-1.5 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Warehouse List</h1>
-                <NavLink to='/company' className={`border px-4 py-1 rounded bg-blue-500 text-white`}>Create Warehouse</NavLink>
+                <NavLink to='/company' className={`border px-4 py-1.5 rounded-md bg-blue-500 text-white font-thin`}>Create Warehouse</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
-                    <div className="flex justify-start items-center gap-1.5 mt-5">
-                        <h1>Search : </h1>
-                        <input placeholder="Enter name" onChange={() => { }} className="focus:outline-none border rounded p-1.5 " />
+                    <div className="flex justify-end items-center gap-8">
+                        <Excel />
+                        <Search SearchProduct={() => { }} />
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                    <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-sm text-gray-900">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
                                     <div className="flex items-center">
@@ -101,11 +104,17 @@ const Warehouse = ({ entries }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-right border-r">
                                     <div className="flex justify-between items-center">
+                                        Number of Employee
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                    <div className="flex justify-between items-center">
                                         Created by
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="pl-4 pr-2 py-2 text-right">
+                                <th scope="col" className="pl-4 pr-2 py-2 text-center">
                                     Action
                                 </th>
                             </tr>
@@ -118,14 +127,14 @@ const Warehouse = ({ entries }) => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1>Showing 1 to 3 of 3 entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + shop?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
-                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
-                            {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}
+                        <button disabled={page === 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
+                            {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}
                         </button>
-                        <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
-                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">
-                            {isLoading ? <Loading className='h-6 w-7' /> : "Next"}
+                        <button className="border-y bg-blue-500 text-white py-[7px] px-3 font-thin">{page}</button>
+                        <button disabled={totalItem === (pageSize * (page - 1) + shop?.length) ? true : false} onClick={() => { setPage(page + 1) }} className={`border-y border-r rounded-r py-1.5 px-3 bg-blue-50 ${totalItem === (pageSize * (page - 1) + shop?.length) ? 'text-gray-400' : 'text-blue-500'} text-sm`}>
+                            {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Next</p>}
                         </button>
                     </div>
                 </div>

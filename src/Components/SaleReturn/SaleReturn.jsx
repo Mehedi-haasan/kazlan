@@ -83,7 +83,7 @@ const SaleReturn = ({ shop = [] }) => {
 
     console.log(allData)
     return (
-        <div className="min-h-screen pl-4 pt-5 pr-2">
+        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
             <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Sale Return</h1>
@@ -108,7 +108,7 @@ const SaleReturn = ({ shop = [] }) => {
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' onKeyDown={(e) => { if (e.key === "Enter") { GetReturnProduct() } }} placeholder='Enter invoice number' onChange={(e) => { setInvoice(e.target.value) }} className='p-1.5 rounded focus:outline-none w-full bg-gray-50' />
+                                <input type='text' onKeyDown={(e) => { if (e.key === "Enter") { GetReturnProduct() } }} placeholder='Enter invoice number' onChange={(e) => { setInvoice(e.target.value) }} className='p-1.5 rounded focus:outline-none w-full font-thin' />
                                 <Search onClick={GetReturnProduct} className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
                             </div>
                             <div className='border px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
@@ -127,22 +127,22 @@ const SaleReturn = ({ shop = [] }) => {
                     </div>
                 </div>
 
-                <div className='border-b p-4'>
+                {/* <div className='border-b p-4'>
                     <h1>Items</h1>
-                </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
+                </div> */}
+                {/* <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
                         <SelectionComponent options={shop} onChange={(v) => { }} label={"Warehouse"} />
                     </div>
 
-                </div>
+                </div> */}
 
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr className='border-b border-black text-[16px]'>
+                    <table class="min-w-[800px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-sm text-gray-900 dark:text-gray-400">
+                            <tr className='border-b border-gray-400 text-[16px]'>
                                 <th scope="col" className="pr-6 py-2 ">Serial</th>
                                 <th scope="col" className="px-4 py-2 text-center">Item</th>
                                 <th scope="col" className="px-4 py-2 text-center">Qty</th>
@@ -168,10 +168,10 @@ const SaleReturn = ({ shop = [] }) => {
                             <InputComponent label={'Amount'} placeholder={total} />
                         </div>
                         <div>
-                            <InputComponent label={'Due'} placeholder={user?.balance} />
+                            <InputComponent label={'Due'} placeholder={parseInt(user?.balance || 0)} />
                         </div>
                         <div>
-                            <InputComponent label={'Return Amount'} placeholder={total - user?.balance} />
+                            <InputComponent label={'Return Amount'} placeholder={total - parseInt(user?.balance || 0)} />
                         </div>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />

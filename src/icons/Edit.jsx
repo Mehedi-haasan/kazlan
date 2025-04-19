@@ -3,7 +3,7 @@ import React from 'react';
 const Edit = ({ size = '20px', color = 'currentColor',onClick}) => {
     return (
         <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg"
-            className='hover:text-red-300 cursor-pointer'
+            className='hover:text-red-300 cursor-pointer text-[#212529]'
             width="20px" height="20px"
             viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">

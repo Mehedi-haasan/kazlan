@@ -179,9 +179,9 @@ const Invoice = ({ isOrder = true, }) => {
     }, [stateId])
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen pb-12">
 
-            <div className='w-full mx-auto border min-h-screen rounded'>
+            <div className='w-full mx-auto border min-h-screen pb-12 rounded'>
                 <div className="mt-4 px-3 pt-1">
 
                     <div>

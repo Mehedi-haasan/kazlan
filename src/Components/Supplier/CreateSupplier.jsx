@@ -6,6 +6,7 @@ import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Selection from "../Input/Selection";
 
 const CreateSupplier = ({ state }) => {
 
@@ -39,12 +40,33 @@ const CreateSupplier = ({ state }) => {
     }
 
 
+    let qt = [{
+        id: 1,
+        name: "To Pay"
+    },
+    {
+        id: 2,
+        name: "To Receive"
+    }]
+
+    let cus = [{
+        id: 1,
+        name: "Wholesaler"
+    },
+    {
+        id: 2,
+        name: "Retailer"
+    }]
+
     return (
-        <div className="px-3 py-5 min-h-screen">
+        <div className="px-3 py-5 min-h-screen pb-12">
             <ToastContainer />
-            <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen">
+            <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
                 <h1 className="py-2 px-3">Supplier Details</h1>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="pt-2">
+                        <Selection options={cus} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={'Customer Type*'} />
+                    </div>
                     <InputComponent label={"Full Name"} placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Email"} placeholder={'Enter full email'} onChange={(v) => { setValues({ ...values, email: v }) }} />
                     <InputComponent label={"Phone"} placeholder={'Enter full phone'} onChange={(v) => { setValues({ ...values, phone: v }) }} />
@@ -72,8 +94,21 @@ const CreateSupplier = ({ state }) => {
                 }
                 {
                     active === "Balence" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <InputComponent label={"Opening Balance"} placeholder={'Enter opening balance'} onChange={(v) => { setValues({ ...values, balance: v }) }} />
-                        <InputComponent label={"Date"} placeholder={getFormattedDate()} />
+                        <div>
+                            <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
+                            <div className='flex justify-start items-end pb-1'>
+                                <input type='number' onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                                <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
+                                    className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
+                                >
+                                    {qt.map(({ id, name }) => (
+
+                                        <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                    ))}
+                                </select>
+
+                            </div>
+                        </div>
                     </div>
                 }
 

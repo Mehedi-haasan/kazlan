@@ -32,12 +32,6 @@
                 "parent": "2",
                 "name": "Category List",
                 "route": "category"
-            },
-            {
-                "id": 24,
-                "parent": "2",
-                "name": "Warehouse List",
-                "route": "warehouses"
             }
         ]
     },
@@ -70,6 +64,36 @@
                 "id": 34,
                 "name": "Sale Return",
                 "route": "sale/return"
+            }
+        ]
+    },
+    {
+        "id": "6",
+        "name": "Purchase",
+        "route": "update/product",
+        "icon": "dashicons:update",
+        "class": "pt-3",
+        "option": true,
+        "items": [
+            {
+                "id": 61,
+                "name": "Supplier",
+                "route": "suppliers"
+            },
+            {
+                "id": 62,
+                "name": "Purchase  Items",
+                "route": "update/product"
+            },
+            {
+                "id": 63,
+                "name": "Vouchers",
+                "route": "update/product"
+            },
+            {
+                "id": 64,
+                "name": "Purchase  Return",
+                "route": "purchase/return"
             }
         ]
     },
@@ -118,42 +142,33 @@
         ]
     },
     {
-        "id": "6",
-        "name": "Purchase",
-        "route": "update/product",
-        "icon": "dashicons:update",
-        "class": "pt-3",
-        "option": true,
-        "items": [
-            {
-                "id": 61,
-                "name": "Supplier",
-                "route": "suppliers"
-            },
-            {
-                "id": 62,
-                "name": "Purchase  Items",
-                "route": "update/product"
-            },
-            {
-                "id": 63,
-                "name": "Vouchers",
-                "route": "update/product"
-            },
-            {
-                "id": 64,
-                "name": "Purchase  Return",
-                "route": "purchase/return"
-            }
-        ]
-    },
-    {
         "id": "7",
         "name": "Sale History",
         "route": "order",
         "icon": "material-symbols:order-approve",
         "class": "",
         "option": false
+    },
+    {
+        "id": "6",
+        "name": "Warehouse",
+        "route": "update/product",
+        "icon": "dashicons:update",
+        "class": "pt-3",
+        "option": true,
+        "items": [
+            {
+                "id": 24,
+                "parent": "2",
+                "name": "Warehouses",
+                "route": "warehouses"
+            },
+            {
+                "id": 62,
+                "name": "Stock Transfer",
+                "route": "update/product"
+            }
+        ]
     },
     {
         "id": "8",

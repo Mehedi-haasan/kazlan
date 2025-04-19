@@ -9,17 +9,25 @@ import CategoryCard from "./CategoryCard";
 import Loading from "../../icons/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NavLink } from "react-router-dom";
+import logo from '../Logo/userProfile.png'
+import Excel from "../Input/Excel";
+import Search from "../Input/Search";
+import ImageSelect from "../Input/ImageSelect";
 
 
-const Category = ({ entries }) => {
+const Category = ({ entries, info = {} }) => {
 
     const [image_url, setImage_Url] = useState();
+    const [imageFile, setImageFile] = useState(null);
     const [values, setValues] = useState({ name: "", });
-    const [category, setCategory] = useState([])
     const [show, setShow] = useState(false);
+    const [category, setCategory] = useState([])
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
+    const [totalItem, setTotalItem] = useState(0)
+    const [isChecked, setIsChecked] = useState(false)
 
     const getCategory = async () => {
         setIsLoading(true)
@@ -33,6 +41,7 @@ const Category = ({ entries }) => {
         });
         const data = await response.json()
         setCategory(data.items)
+        setTotalItem(data?.count)
         setIsLoading(false)
     }
 
@@ -41,6 +50,7 @@ const Category = ({ entries }) => {
         document.title = `Categorys - Kazaland Brothers`;
         getCategory()
     }, [page, pageSize]);
+
 
     const handleCreate = async (image_url) => {
         setIsLoading(true)
@@ -57,8 +67,6 @@ const Category = ({ entries }) => {
             });
 
             const data = await response.json();
-            setShow(false)
-            getCategory();
             setValues({ ...values, name: '' })
             toast(data?.message)
         } catch (error) {
@@ -67,7 +75,6 @@ const Category = ({ entries }) => {
         }
         setIsLoading(false)
     }
-
 
     const handleUpload = async () => {
         setIsLoading(true)
@@ -100,78 +107,99 @@ const Category = ({ entries }) => {
         setIsLoading(false)
     }
 
+    const SearchCategory = () => { }
+
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage_Url(file);
+            setImageFile(URL.createObjectURL(file));
+        }
+    };
+
+
     return (
-        <div className="px-2 pt-5 min-h-screen">
+        <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <ToastContainer />
+            <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
+                <h1 className="font-semibold text-lg">Category List</h1>
+                <button onClick={() => { setShow(true) }} className={`bg-blue-500 rounded px-4 py-1.5 text-white font-thin`}>Create Category</button>
+            </div>
+
             <div>
-                <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
-                    <div className="pt-1">
-                        <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
-                        <div className="pt-1">
-                            <h1 className="py-1 font-semibold">Select image</h1>
-                            <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
+                <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
+                    <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
+                        <div className="border-b">
+                            <h1 className="pl-5 text-xl py-2">Category Details</h1>
                         </div>
-                        <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        <div className="pt-5">
+                            <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                        </div>
+                        <div className="px-6 py-4">
+                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                        </div>
                     </div>
                 </Modal>
             </div>
-            <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">Category List</h1>
-                <Button name={'Create Category'} onClick={() => setShow(true)} />
-            </div>
+
+
+
+
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
-                    <div className="flex justify-start items-center gap-1.5 mt-5">
-                        <h1>Search : </h1>
-                        <input placeholder="Enter name" className="focus:outline-none border rounded p-1.5 " />
+                    <div className="flex justify-end items-center gap-8">
+                        <Excel />
+                        <Search SearchProduct={() => { }} />
                     </div>
                 </div>
-                <div className="pt-3  w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                <div className="pt-3 w-full overflow-hidden overflow-x-auto">
+                    <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                        <thead class="text-xs text-gray-900 ">
                             <tr className='border'>
                                 <th className="w-4 py-2 px-4 border-r">
                                     <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                        <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
                                 </th>
                                 <th scope="col" className="px-2 py-2 border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Name
+                                    <div className="flex justify-between items-center text-[16px]">
+                                        Category
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
+                                <th scope="col" className="px-2 py-2 text-center border-r text-[16px]">
                                     <div className="flex justify-between items-center">
-                                        Item Code
+                                        Picture
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Image
+                                <th scope="col" className="px-2 py-2 text-center border-r ">
+                                    <div className="flex justify-between items-center text-[16px]">
+                                        Created by
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                <th scope="col" className="px-2 py-2 text-right border-r text-[16px]">
                                     <div className="flex justify-between items-center">
-                                        status
+                                        Created at
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="pl-4 pr-1 py-2 text-right">Action</th>
+                                {info?.role === "superadmin" && <th scope="col" className=" py-2 text-center text-[16px]">Action</th>}
                             </tr>
                         </thead>
                         <tbody>
 
 
                             {
-                                category?.map((item) => (
-                                    <CategoryCard item={item} />
+                                category?.map((item, i) => (
+                                    <CategoryCard item={item} i={i} isChecked={isChecked} info={info} />
                                 ))
                             }
 
@@ -180,14 +208,14 @@ const Category = ({ entries }) => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1>Showing 1 to 3 of 3 entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + category?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
-                        <button onClick={() => { page > 0 ? setPage(page - 1) : setPage(1) }} className="border-y border-l rounded-l py-1.5 px-3 bg-blue-50">
-                            {isLoading ? <Loading className='h-6 w-7' /> : "Prev"}
+                        <button disabled={page == 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
+                            {isLoading ? <Loading className='h-6 w-7' /> : <p className="font-thin">Prev</p>}
                         </button>
                         <button className="border-y bg-blue-500 text-white py-[7px] px-3">{page}</button>
-                        <button onClick={() => { setPage(page + 1) }} className="border-y border-r rounded-r py-1.5 px-3 bg-blue-50">
-                            {isLoading ? <Loading className='h-6 w-7' /> : "Next"}
+                        <button disabled={totalItem === (pageSize * (page - 1) + category?.length) ? true : false} onClick={() => { setPage(page + 1) }} className={`border-y border-r rounded-r py-1.5 px-3 bg-blue-50 ${totalItem === (pageSize * (page - 1) + category?.length) ? 'text-gray-400' : 'text-blue-500'} text-sm`}>
+                            {isLoading ? <Loading className='h-6 w-7' /> : <p className="font-thin">Next</p>}
                         </button>
                     </div>
                 </div>

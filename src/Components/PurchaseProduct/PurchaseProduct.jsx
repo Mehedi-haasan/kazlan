@@ -158,7 +158,7 @@ const PurchaseProduct = ({ user = [], shop = [], paytype = [] }) => {
     console.log(total)
 
     return (
-        <div className="min-h-screen pl-4 pt-5 pr-2">
+        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
             <ToastContainer />
             <div className='flex justify-start items-center gap-2 p-3'>
                 <h1>Home</h1><RightArrow /><h1>Add Items</h1>

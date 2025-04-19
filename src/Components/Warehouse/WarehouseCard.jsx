@@ -5,6 +5,8 @@ import { useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const WarehouseCard = ({ item, i }) => {
@@ -66,35 +68,36 @@ const WarehouseCard = ({ item, i }) => {
 
     const handleDelete = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/delete/category`, {
-            method: 'POST',
+        const response = await fetch(`${BaseUrl}/api/delete/company/${item?.id}`, {
+            method: 'DELETE',
             headers: {
                 'authorization': token,
                 'Content-type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify({ id: item?.id, url: item?.image_url }),
+            }
         });
         const data = await response.json();
-        alert(data?.message)
+        toast(data?.message)
     }
 
     return (
 
-        <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-100':''}`}>
+        <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-100' : ''}`}>
             <th className="w-4 py-2 px-4 border-x">
+            <ToastContainer />
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r">{item?.count}</th>
-            <th scope="col" className="px-2 py-2 border-r"> {item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r">{item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r"> {item?.TotalWorth}</th>
-            <th scope="col" className="px-2 py-2 border-r"> {item?.TotalWorth - item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r">Admin</th>
-            <th scope="col" className="px-2 py-2 flex justify-end items-center border-r">
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.count}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalCost}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.TotalCost}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth - item?.TotalCost}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {2}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">Admin</th>
+            <th scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2">
                 <Edit size='25px' onClick={() => { setEdit(true) }} />
                 <Remove size='25px' onClick={() => { setShow(true) }} />
                 <Modal show={show} handleClose={() => { setShow(false) }} size="350px" className="">
