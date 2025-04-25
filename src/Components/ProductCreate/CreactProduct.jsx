@@ -12,6 +12,9 @@ import Add from '../../icons/Add';
 import Selection from '../Input/Selection';
 import logo from '../Logo/userProfile.png'
 import ImageSelect from '../Input/ImageSelect'
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
+import Modal from '../Input/Modal';
 
 const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
@@ -24,13 +27,15 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const [brand, setBrand] = useState([])
     const [value, setValue] = useState('')
     const [active, setActive] = useState("Pricing")
-    const [selectedId, setSelectedId] = useState(1)
+    const [showlotti, setLottiShow] = useState(false)
     const [values, setValues] = useState({
         categoryId: 1,
         compId: 1,
         brandId: 1,
         image_url: "",
         qty: 0,
+        qty_type:'none',
+        discount:0,
         discount_type: "Percentage",
         product_type: "Physical",
     })
@@ -100,34 +105,44 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         GetSupplier()
     }, []);
 
+    const anotherFunction = () => {
+        setIsLoading(false)
+        setLottiShow(true)
+    }
 
 
-    const handleCreate = async () => {
+    const handleCreate = async (image_url) => {
         values.description = value;
-        console.log(values)
-        // const token = localStorage.getItem('token');
-        // try {
-        //     const response = await fetch(`${BaseUrl}/api/create/product`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'authorization': token,
-        //             'Content-type': 'application/json; charset=UTF-8',
-        //         },
-        //         body: JSON.stringify(values),
-        //     });
+        values.image_url = image_url;
+        setIsLoading(true)
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BaseUrl}/api/create/product`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
 
-        //     const data = await response.json();
-        //     toast(data?.message)
-        //     handleClose(false);
-        //     callAgain()
-        //     goto('/items')
-        // } catch (error) {
-        //     console.error('Error updating variant:', error);
-        // }
+            const data = await response.json();
+            toast(data?.message)
+            anotherFunction();
+            handleClose(false);
+            callAgain()
+            goto('/items')
+        } catch (error) {
+            console.error('Error updating variant:', error);
+        }
     }
 
     const handleUpload = async () => {
-        setIsLoading(true)
+      
+        if (!values?.name || !values?.supplier || !values?.cost || !values?.price || !values?.qty) {
+            toast("Required field is missing");
+            return;
+        }
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
@@ -136,6 +151,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             setIsLoading(false)
             return;
         }
+        setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/upload/image`, {
@@ -164,8 +180,6 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             setImageFile(URL.createObjectURL(file));
         }
     };
-
-    const handleSelect = () => { }
 
     let dis = [{
         id: 1,
@@ -197,6 +211,18 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         name: "Bottol"
     }]
 
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 200,
+            height: 200,
+        },
+    };
+
+    const { View } = useLottie(options);
+
+
     return (
         <div className='min-h-screen pb-12 p-6'>
             <ToastContainer />
@@ -204,20 +230,22 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                 <div className='border-b px-5'>
                     <h1 className='text-2xl font-semibold  py-5'>Item Details</h1>
                 </div>
-
+                <Modal show={showlotti} handleClose={() => { setLottiShow(false); goto('/items'); }} size={`250px`}>
+                    <>{View}</>
+                </Modal>
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
                         <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Item Name*"} isRequered={true} placeholder={"Enter Item Name"} type={""} className={``} />
 
-                        <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={brand}  onSelect={(v)=>{}} label={"Brand / Publishers*"} className='rounded-l' />
+                        <div className='flex justify-start items-end pb-1 z-40'>
+                            <SelectionComponent options={brand} onSelect={(v) => { setValues({ ...values, brandId: v?.id }) }} label={"Brand / Publishers*"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
 
-                        <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={category} onSelect={(v)=>{}} label={"Category*"} className='rounded-l' />
+                        <div className='flex justify-start items-end pb-1 '>
+                            <SelectionComponent options={category} onSelect={(v) => { setValues({ ...values, categoryId: v?.id }) }} label={"Category*"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
@@ -225,7 +253,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
 
                         <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={supplier}  onSelect={(v)=>{}} label={"Supplier*"} className='rounded-l' />
+                            <SelectionComponent options={supplier} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Supplier*"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
@@ -248,12 +276,12 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                             <div>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                        <InputComponent label={"M.R.P*"} placeholder={'Enter M.R.P'} type={'number'} isRequered={true} onChange={(v) => { setValues({ ...values, cost: v }) }} />
-                                        <InputComponent label={"Sale Price*"} placeholder={'Enter sell price'} type={'number'} isRequered={true} onChange={(v) => { setValues({ ...values, price: v }) }} />
+                                        <InputComponent label={"M.R.P*"} placeholder={'Enter M.R.P'} type={'number'} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v }) }} />
+                                        <InputComponent label={"Sale Price*"} placeholder={'Enter sell price'} type={'number'} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v }) }} />
                                         <div>
                                             <p className='pb-2 pt-1 font-semibold text-sm'>Discount on Sale</p>
                                             <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' onChange={(e) => { setValues({ ...values, dis_amount: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%]' />
+                                                <input type='number' value={values?.discount} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%]' />
                                                 <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, discount_type: v.target.value }) }}
                                                     className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
@@ -277,13 +305,13 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                         <div>
                                             <p className='pb-2 font-semibold text-sm'>Quantity</p>
                                             <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' placeholder='' className='border-y border-l focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
-                                                <select id={selectedId} value={selectedId} onChange={handleSelect}
+                                                <input type='number' placeholder='' value={values?.qty} onChange={(e) => { setValues({ ...values, qty: e.target.value }) }} className='border-y border-l focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
+                                                <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
                                                     className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
                                                     {qt.map(({ id, name }) => (
 
-                                                        <option key={id} value={id} className='text-[#6B7280]'> {name}</option>
+                                                        <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                                     ))}
                                                 </select>
 
@@ -302,8 +330,8 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                         </div>
 
                     </div>
-                    <div className='flex justify-start items-center gap-4'>
-                        <Button onClick={handleCreate} isDisable={false} name={"Create"} />
+                    <div className='flex justify-start items-center gap-2'>
+                        <Button onClick={handleUpload} isDisable={isLoading} name={"Create"} />
                         <button className='bg-gray-100 rounded-md px-5 py-2 font-thin hover:bg-gray-300'>Close</button>
                     </div>
 

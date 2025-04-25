@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Notification from "../../icons/Notification";
 import data from '../Dashboard/data.json'
 import logo from '../Logo/logo_delta.png'
@@ -8,13 +8,34 @@ import Add from "../../icons/Add";
 import RightArrow from "../../icons/RightArrow";
 import Circle from '../../icons/Circle';
 import flag from '../Logo/united.png'
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "../../lotti/Animation - 1745262361506.json";
 
 
 const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) => {
     const [selected, setSelected] = useState({});
     const [child, setChaild] = useState({});
     const [isShowProfile, setIsShowProfile] = useState(false);
-    const [lan, setLan] = useState(false)
+    const [lan, setLan] = useState(false);
+    const [noti, setNoti] = useState([])
+
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 40,
+            height: 40,
+        },
+    };
+
+    const { View } = useLottie(options);
+
+    useEffect(() => {
+        setNoti(notification)
+    }, [notification, noti])
+
+
+
     return (
         <div className="w-full top-0 z-40 shadow fixed">
 
@@ -67,18 +88,23 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                             </div>
                         </div>
                     </div> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
-
-                    {
-                        auth && <NavLink to='/notification' className="relative hover:bg-slate-200 p-2 rounded-full">
+                    <NavLink to='/notification' className="relative hover:bg-slate-200 p-1 rounded-full">
+                        <div className={`w-8 h-6 ${noti?.length === 0 ? 'hidden' : ''}`}>
+                            {View}
+                        </div>
+                        <div className={`w-10 h-10 ${noti?.length === 0 ? '' : 'hidden'}`}>
                             <Notification />
-                            <h1 className="text-red-600 absolute top-0 right-[2px] font-semibold text-sm">{notification?.length > 0 ? notification?.length : null}</h1>
-                        </NavLink>
-                    }
+                        </div>
+
+                        <h1 className="text-red-600 absolute -top-1.5 right-[2px] font-semibold text-sm">{noti?.length > 0 ? noti?.length : null}</h1>
+                    </NavLink>
+
                 </div>
             </div>
 
             {
-                auth && <div onMouseEnter={() => isOpen(true)}
+                auth && <div
+                    // onMouseEnter={() => isOpen(true)}
                     className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
                     <div className={`flex items-center border-b py-2 ${open ? 'justify-between ml-3' : 'justify-end mr-2.5'}`} >
                         <div className="">
@@ -92,7 +118,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     </div>
 
 
-                    <div className='max-h-[500px] overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 '>
+                    <div className='max-h-[100vh] overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 pb-14'>
                         {data?.map((item, index) => (
                             <div className="">
                                 {
@@ -164,7 +190,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                 </div>
             }
 
-        </div>
+        </div >
     )
 };
 

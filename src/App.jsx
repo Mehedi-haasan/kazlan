@@ -154,15 +154,17 @@ function App() {
     const logo = localStorage.getItem('logo');
     const shopname = localStorage.getItem('shopname');
     const compId = localStorage.getItem('compId');
+    const shopcode = localStorage.getItem('shopcode');
+
     if (token && token !== "null") {
       setAuth(true);
-      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype, logo: logo, shopname: shopname, compId: compId })
+      setInfo({ id: id, name: name, image: image, role: role, usertype: usertype, logo: logo, shopname: shopname, compId: compId, shopcode: shopcode })
     } else {
       setAuth(false)
     }
 
 
-    if (role === "superadmin") {
+    if (auth && role === "superadmin") {
       getShop()
     } else {
       setShop([{
@@ -207,8 +209,8 @@ function App() {
           <Route path="/order" element={auth ? <Order category={category} type={type} brand={brand} entries={entries} shop={shop} state={state} paytype={paytype} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/state" element={auth ? <State entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/warehouses" element={auth ? <House entries={entries} shop={shop} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/category" element={auth ? <Category category={category} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/brand" element={auth ? <Brand brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/category" element={auth ? <Category category={category} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/brand" element={auth ? <Brand brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/create/category" element={auth ? <CreateCategory brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/create/brand" element={auth ? <CreateBrand brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/profile" element={auth ? <Profile /> : <Login auth={(v) => { setAuth(v) }} />} />
@@ -216,10 +218,10 @@ function App() {
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/sale/return" element={auth ? <SaleReturn shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/purchase/return" element={auth ? <PruchaseReturn shop={shop} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/customers" element={auth ? <Customers entries={entries} state={state} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/customers" element={auth ? <Customers entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/payment/history/:id" element={auth ? <PaymentHistory category={category} brand={brand} info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/suppliers" element={auth ? <Suppliers entries={entries} state={state} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/update/product" element={auth ? <PurchaseProduct user={user} category={category} type={type} brand={brand} entries={entries} shop={shop} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/suppliers" element={auth ? <Suppliers entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/update/product" element={auth ? <PurchaseProduct shop={shop} paytype={paytype} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

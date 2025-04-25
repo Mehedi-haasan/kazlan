@@ -10,46 +10,40 @@ import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
 import RightArrow from '../../icons/RightArrow';
-import MiniButton from '../Input/MiniButton';
-import Modal from '../Input/Modal';
 import Button from '../Input/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getFormattedDate } from '../Input/Time';
 
 
 
 const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
-    const [data, setData] = useState({ qty: 0, comn: 0 });
+
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
-    const [stateName, setStateName] = useState('Tangail')
     const [customer, setCustomer] = useState([])
     const [name, setName] = useState('Mehedi hasan')
     const [due, setDue] = useState(0);
-    const [pay, setPay] = useState(0)
-    const [invoice_id, setInvoiceId] = useState(712)
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
-    const [show, setShow] = useState(false);
-    const [isPdf, setPdf] = useState(false);
-    const [userId, setUserId] = useState(1);
+    const [userId, setUserId] = useState(null);
     const [stateId, setStateId] = useState(1);
-    const [mobile, setMobile] = useState('01750834062')
-    const [date, setDate] = useState('');
-
-    const options = {
-        width: 1000,
-        backgroundColor: '#ffffff'
-    };
+    const options = { width: 1000, backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(options)
+    const [values, setValues] = useState({})
+
+    useEffect(() => {
+        document.title = "Sale - KazalandBrothers";
+    }, []);
+
 
     const SearchProduct = async (e) => {
         const name = e.target.value
         setSearchItem(name)
         const token = localStorage.getItem('token')
         if (name) {
-            const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
+            const response = await fetch(`${BaseUrl}/api/get/product/search/with/${name}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -72,7 +66,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
             doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
             doc.save('receipt.pdf');
         })
-        setPdf(false)
     }
 
     const PrintfPdf = () => {
@@ -80,12 +73,15 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     }
 
     const Order = async () => {
+        if (!userId || !values?.pay || !values?.pay_type) {
+            toast("Customer Pay Amount and Pay Type are required");
+            return
+        }
         const token = localStorage.getItem('token');
         let orderData = [];
         allData?.map((v) => (
             orderData.push({
                 "active": true,
-                "invoice_id": invoice_id,
                 "product_id": v?.id,
                 "username": name,
                 "userId": userId,
@@ -95,11 +91,10 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 "discount": v?.comn,
                 "sellprice": (v?.price * v?.qty),
                 "qty": v?.qty,
-                "contact": mobile,
-                "date": date
+                "contact": values?.phone,
+                "date": getFormattedDate()
             })
         ))
-
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -111,12 +106,11 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     shop: info?.shopname,
                     customername: name,
                     userId: userId,
-                    invoice_id: invoice_id,
-                    date: date,
+                    date: getFormattedDate(),
                     total: total,
                     previousdue: due,
-                    paidamount: pay,
-                    amount: total - pay,
+                    paidamount: values?.pay,
+                    amount: total - values?.pay,
                     orders: orderData
                 }),
             });
@@ -128,30 +122,22 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         }
     }
 
-    function getFormattedDate() {
-        const date = new Date();
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        return date.toLocaleDateString('bn-BD', options);
+    const CalculateAmount = () => {
+        let amount = allData?.reduce((acc, item) => {
+            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+        }, 0);
+        setTotal(amount);
     }
 
     useEffect(() => {
-        setDate(getFormattedDate())
-    }, [])
-
-    useEffect(() => {
-        let amount = allData?.reduce((acc, item) => {
-            let discount = parseInt(item?.price * item?.comn / 100);
-            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
-        }, 0);
-
-        setTotal(amount);
+        CalculateAmount()
     }, [allData]);
 
 
-    // Fetch Customer due
-    const fetchUserDue = async () => {
+    const fetchUserDue = async (id) => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/customer/due/${userId}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customer/due/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -160,24 +146,16 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         });
         const data = await response.json();
         setDue(data?.balance);
-        if (data && data?.balance) {
-            setDue(data?.balance);
-        }
+        setValues({ ...values, phone: data?.phone })
     }
 
 
-    useEffect(() => {
-        fetchUserDue()
-    }, [userId])
 
 
-
-
-    // Customer Fetch state wise
     useEffect(() => {
         const GetCustomer = async () => {
             const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/${stateId}`, {
+            const response = await fetch(`${BaseUrl}/api/get/customers/${stateId}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -185,12 +163,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 },
             });
             const data = await response.json();
-            if (data && data?.items?.length > 0) {
-                setCustomer(data?.items);
-                setUserId(data?.items[0]?.id);
-                fetchUserDue()
-                setName(data?.items[0]?.name);
-            }
+            setCustomer(data?.items);
         }
 
         GetCustomer()
@@ -198,8 +171,27 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     }, [stateId])
 
 
+    const ChangeQty = (id, qty) => {
+        const updatedData = allData.map(item =>
+            item.id === id ? { ...item, qty } : item
+        );
+        setAllData(updatedData);
+    };
 
-    let nameee = "Scan/Type product name";
+    const ChangePrice = (id, price) => {
+        const updatedData = allData.map(item =>
+            item.id === id ? { ...item, price } : item
+        );
+        setAllData(updatedData);
+    };
+
+    const ChangeDiscount = (id, discount) => {
+        const updatedData = allData.map(item =>
+            item.id === id ? { ...item, discount } : item
+        );
+        setAllData(updatedData);
+    };
+
 
     return (
         <div className="min-h-screen pb-12 pl-4 pt-5 pr-2 w-full">
@@ -215,22 +207,22 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setStateName(v?.name); setCustomer([]) }} label={"State"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
+                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setCustomer([]) }} label={"Thana Name"} className='rounded-l' />
+                        <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name) }} label={"Customer"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
+                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
+                        <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
                     <div>
-                        <InputComponent placeholder={getFormattedDate()} label={'Date'} />
+                        <InputComponent placeholder={getFormattedDate()} label={'Date'} readOnly={true} />
                     </div>
                     <div>
-                        <InputComponent placeholder={`Shop1/${invoice_id}`} label={'Sale Code'} />
+                        <InputComponent placeholder={`${info?.shopcode}`} label={'Sale Code'} readOnly={true} />
                     </div>
 
                 </div>
@@ -238,45 +230,49 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 <div className='border-b p-4'>
                     <h1>Items</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4 '>
                     <div>
-                        <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
+                        {info?.role === "superadmin" ? <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} /> : <InputComponent placeholder={info?.shopname} label={'Warehouse'} readOnly={true} />}
                     </div>
-                    <div className='grid col-span-2'>
+                    <div className='grid col-span-2 pt-[2px]'>
                         <h1 className='pb-1 font-thin'>Enter Item Name</h1>
-                        <div className='flex justify-center w-full'>
+                        <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={nameee} value={searchItem} onChange={SearchProduct} className='p-1.5 rounded focus:outline-none w-full font-thin' />
-                                <Search className='absolute right-1 top-1.5 cursor-pointer hover:bg-slate-200 rounded-full' />
-
-                                {
-                                    searchData && searchData?.length > 0 && <div className='w-full absolute top-[37px] border bg-[#FFFFFF] shadow rounded-b'>
-                                        <div className='flex justify-between items-center py-1 px-1.5 bg-gray-100 text-sm'>
-                                            <h1>Name</h1>
-                                            <h1>Category</h1>
-                                            <h1>Purchase Price</h1>
-                                            <h1>Salse Price</h1>
-                                            <h1>Stock</h1>
-                                        </div>
-                                        {
-                                            searchData?.map((item) => {
-                                                return <div onClick={() => { setData(item); setSearchData([]); setShow(true) }} className='flex justify-between items-center py-1 px-1.5 text-sm border-t font-roboto cursor-pointer hover:bg-blue-100 hover:text-blue-500'>
-                                                    <h1>{item?.name}</h1>
-                                                    <h1>Category</h1>
-                                                    <h1>{item?.cost}</h1>
-                                                    <h1>{item?.price}</h1>
-                                                    <h1 className='pr-1'>{item?.qty}.00</h1>
-                                                </div>
-                                            })
-                                        }
-                                    </div>
+                                <input type='text' placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
+                                {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead class="text-xs text-gray-900">
+                                            <tr className='border-b border-black text-[16px]'>
+                                                <th scope="col" className="px-1 py-2 font-thin">Name</th>
+                                                <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
+                                                <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
+                                                <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
+                                                <th scope="col" className="pl-4 py-2 text-left font-thin ">Discount</th>
+                                                <th scope="col" className="pr-3 py-2 text-right font-thin">Stock</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {searchData?.map((item) => {
+                                                return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
+                                                    <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{"Cate"}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
+                                                    <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
+                                                    <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
+                                                    <th scope="col" className="pr-3 py-2 text-right font-thin">{item?.qty}</th>
+                                                </tr>
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 }
 
                             </div>
-                            <div className='border px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
+                            <div className='border px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>
                         </div>
@@ -288,45 +284,48 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
                     <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 dark:text-gray-400">
-                            <tr className='border-b border-black text-[16px]'>
-                                <th scope="col" className="pr-6 py-2 font-thin">Serial</th>
-                                <th scope="col" className="px-4 py-2 text-center font-thin">Item name</th>
-                                <th scope="col" className="px-4 py-2 text-center font-thin">Qty</th>
-                                <th scope="col" className="pl-4 py-2 text-right font-thin">M.R.P</th>
-                                <th scope="col" className="pl-4 py-2 text-right font-thin ">Discount</th>
-                                <th scope="col" className="pl-4 py-2 text-right font-thin">Sale Price</th>
-                                <th scope="col" className="pl-4 py-2 text-right font-thin">Total price</th>
-                                <th scope="col" className="pl-4 py-2 text-right font-thin">Action</th>
+                            <tr className='border-y text-[16px] py-1'>
+                                <th scope="col" className="pl-4 py-2.5 font-thin border-x">Serial</th>
+                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Item name</th>
+                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Qty</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">M.R.P</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Discount</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Sale Price</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin">Total price</th>
+                                <th scope="col" className="py-2.5 text-center font-thin border-x">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <WholeSaleCard item={item} />
+                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} changeprice={ChangePrice} onClick={() => { }} />
                             })}
                         </tbody>
                     </table>
                 </div>
 
                 <div className='p-4'>
-                    <h1 className='pb-2 font-thin'>Payment</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
-                        <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
-                            <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
-                                <Add />
+                        <div>
+                            <div className=''>
+                                <InputComponent placeholder={due} label={'Balance'} readOnly={true} className={`font-thin`} />
                             </div>
-                        </div>
-                        <div>
-                            <InputComponent placeholder={total} label={'Amount'} readOnly={true} className={`font-thin`} />
-                        </div>
-                        <div>
-                            <InputComponent placeholder={due} label={'Previous due'} readOnly={true} className={`font-thin`} />
-                        </div>
-                        <div>
-                            <InputComponent placeholder={"Enter amount"} onChange={(e) => { setPay(parseInt(e)) }} label={'Pay amount'} className={`font-thin`} />
-                        </div>
-                        <div>
-                            <InputComponent label={'Payment Note'} placeholder={`Enter note`} onChange={(v) => { }} className={`font-thin`} />
+
+                            <div>
+                                <InputComponent label={'Total Amount'} placeholder={total} onChange={(v) => { }} readOnly={true} className={`font-thin`} />
+                            </div>
+                            <div>
+                                <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
+                                <div className='flex justify-start items-end pb-1 pt-1'>
+                                    <input type='number' value={values?.pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                    <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
+                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {paytype.map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -336,55 +335,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
             </div>
 
-            <Modal show={show} handleClose={() => { setShow(false) }} className={`w-[500px]`}>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Name</h1>
-                    <h1>{data?.name}</h1>
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Price</h1>
-                    <h1>{data?.price}</h1>
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Qty</h1>
-                    <input type='number'
-                        className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, qty: e.target.value })}
-                        value={data?.qty}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                setAllData([...allData, data]);
-                                setData({});
-                                setShow(false);
-                                setSearchItem('')
-                                // setQty(0)
-                            }
-                        }}
-                        placeholder={""}
-                    />
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Comn</h1>
-                    <input type='number'
-                        className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, comn: e.target.value })}
-                        value={data?.comn}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                setAllData([...allData, data]);
-                                setData({});
-                                setShow(false);
-                                setSearchItem('')
-                                // setQty(0)
-                            }
-                        }}
-                        placeholder={""}
-                    />
-                </div>
-                <div className='flex justify-end items-center pt-1'>
-                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData({}); setShow(false); setSearchItem('') }} />
-                </div>
-            </Modal>
         </div>
     );
 }

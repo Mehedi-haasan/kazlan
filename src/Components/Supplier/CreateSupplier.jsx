@@ -6,7 +6,6 @@ import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Selection from "../Input/Selection";
 
 const CreateSupplier = ({ state }) => {
 
@@ -31,12 +30,6 @@ const CreateSupplier = ({ state }) => {
         const data = await response.json();
         setIsLoading(false);
         toast(data.message)
-    }
-
-    function getFormattedDate() {
-        const date = new Date();
-        const options = { day: 'numeric', month: 'long', year: 'numeric' };
-        return date.toLocaleDateString('bn-BD', options);
     }
 
 
@@ -64,9 +57,6 @@ const CreateSupplier = ({ state }) => {
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
                 <h1 className="py-2 px-3">Supplier Details</h1>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div className="pt-2">
-                        <Selection options={cus} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={'Customer Type*'} />
-                    </div>
                     <InputComponent label={"Full Name"} placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Email"} placeholder={'Enter full email'} onChange={(v) => { setValues({ ...values, email: v }) }} />
                     <InputComponent label={"Phone"} placeholder={'Enter full phone'} onChange={(v) => { setValues({ ...values, phone: v }) }} />
@@ -85,7 +75,7 @@ const CreateSupplier = ({ state }) => {
                     active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"State"} className='rounded-l' />
-                            <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>

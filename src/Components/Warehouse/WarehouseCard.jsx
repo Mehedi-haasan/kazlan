@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const WarehouseCard = ({ item, i }) => {
+const WarehouseCard = ({ item, i, FetchShop }) => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [image_url, setImage_Url] = useState();
@@ -33,6 +33,7 @@ const WarehouseCard = ({ item, i }) => {
 
             const data = await response.json();
             setShow(false)
+            FetchShop()
             alert(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -77,13 +78,16 @@ const WarehouseCard = ({ item, i }) => {
         });
         const data = await response.json();
         toast(data?.message)
+        FetchShop()
+        setShow(false)
+        toast(data?.message)
     }
 
     return (
 
         <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-100' : ''}`}>
             <th className="w-4 py-2 px-4 border-x">
-            <ToastContainer />
+                <ToastContainer />
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>

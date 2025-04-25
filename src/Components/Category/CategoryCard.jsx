@@ -7,21 +7,28 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import logo from '../Logo/userProfile.png'
 import ImageSelect from "../Input/ImageSelect";
+import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
+import { useLottie } from "lottie-react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-const CategoryCard = ({ item, i, isChecked, info = {} }) => {
+
+const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [image_url, setImage_Url] = useState();
     const [imageFile, setImageFile] = useState(null);
     const [values, setValues] = useState({ name: item?.name, });
     const [isLoading, setIsLoading] = useState(false)
+    const [showlotti, setLottiShow] = useState(false)
 
     const handleUpdate = async (image_url, url, id) => {
 
         values.image_url = image_url;
         values.url = url;
         values.id = id;
+        setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/update/category`, {
@@ -34,8 +41,11 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
             });
 
             const data = await response.json();
-            setShow(false)
-            alert(data?.message)
+            setEdit(false)
+            getCategory()
+            setLottiShow(true)
+            toast(data?.message)
+            setIsLoading(false)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -69,6 +79,7 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
     }
 
     const handleDelete = async () => {
+        setIsLoading(true)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/delete/category`, {
             method: 'POST',
@@ -79,7 +90,11 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
             body: JSON.stringify({ id: item?.id, url: item?.image_url }),
         });
         const data = await response.json();
-        alert(data?.message)
+        setIsLoading(false);
+        setShow(false)
+        getCategory();
+        setLottiShow(true)
+        toast(data?.message)
     }
 
     const handleImageChange = (e) => {
@@ -100,11 +115,26 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
         return `${day} ${month} ${year}`;
     }
 
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 200,
+            height: 200,
+        },
+    };
+
+    const { View } = useLottie(options);
+
     return (
 
         <tr className={`${i % 2 == 0 ? " " : "bg-gray-100"} border-b`}>
             <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
+                    <ToastContainer />
+                    <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                        <>{View}</>
+                    </Modal>
                     <input id="checkbox-table-search-1" type="checkbox" isChecked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
@@ -122,7 +152,7 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
                     <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
-                        <button onClick={handleDelete} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
+                        <button onClick={handleDelete} disabled={isLoading} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
                     </div>
                 </Modal>
 
@@ -136,7 +166,7 @@ const CategoryCard = ({ item, i, isChecked, info = {} }) => {
                         </div>
                         <div className="px-6 py-4">
                             <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                            <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                            <Button isDisable={isLoading} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>
                 </Modal>

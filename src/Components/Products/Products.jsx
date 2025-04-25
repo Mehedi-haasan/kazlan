@@ -198,7 +198,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                         </thead>
                         <tbody>
                             {data?.map((item, i) => (
-                                <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info}/>
+                                <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info} getProduct={getProduct}/>
                             ))}
                         </tbody>
                     </table>

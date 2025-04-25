@@ -50,7 +50,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
       <h1 className="mb-2 text-start text-sm font-semibold text-black">{label}</h1>
       <div ref={outside} className={`${hide ? 'border-t border-x pr-[1px]' : 'border '} rounded-l relative bg-white z-10`}>
         <RightArrow onClick={() => { setHide(!hide) }} className='rotate-90 absolute top-1.5 right-1 font-thin cursor-pointer' />
-        {value && <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setValue(``); onSelect({ id: null, name: null }); setSelect('Select a filter') }} className='absolute top-2 right-6 font-thin cursor-pointer' width="17" height="17" viewBox="0 0 24 24">
+        {value && <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setValue(``); onSelect({ id: null, name: null }); setSelect('Select a filter') }} className='absolute z-10 top-2 right-6 font-thin cursor-pointer' width="17" height="17" viewBox="0 0 24 24">
           <path fill="currentColor" d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z" />
         </svg>}
 

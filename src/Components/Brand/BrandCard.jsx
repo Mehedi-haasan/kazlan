@@ -7,15 +7,21 @@ import BaseUrl from "../../Constant";
 import Button from "../Input/Button";
 import logo from '../Logo/userProfile.png'
 import ImageSelect from "../Input/ImageSelect";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
+import { useLottie } from "lottie-react";
 
 
-const BrandCard = ({ item, i, isChecked, info = {} }) => {
+const BrandCard = ({ item, i, isChecked, info = {}, getBrand }) => {
+
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
     const [image_url, setImage_Url] = useState();
     const [values, setValues] = useState({ name: item?.name, });
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
+    const [showlotti, setLottiShow] = useState(false)
 
     const handleUpdate = async (image_url, url, id) => {
         values.image_url = image_url;
@@ -34,7 +40,8 @@ const BrandCard = ({ item, i, isChecked, info = {} }) => {
 
             const data = await response.json();
             setEdit(false)
-            alert(data?.message)
+            getBrand()
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -81,7 +88,9 @@ const BrandCard = ({ item, i, isChecked, info = {} }) => {
         });
         const data = await response.json();
         setShow(false)
-        alert(data?.message)
+        getBrand();
+        setLottiShow(true)
+        toast(data?.message)
     }
 
 
@@ -105,10 +114,25 @@ const BrandCard = ({ item, i, isChecked, info = {} }) => {
     }
 
 
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 200,
+            height: 200,
+        },
+    };
+
+    const { View } = useLottie(options);
+
     return (
         <tr className={`${i % 2 == 0 ? " " : "bg-gray-100"} border-b`}>
             <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
+                    <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                        <>{View}</>
+                    </Modal>
+                    <ToastContainer />
                     <input id="checkbox-table-search-1" checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>

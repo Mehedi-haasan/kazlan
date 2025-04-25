@@ -87,7 +87,7 @@
             },
             {
                 "id": 63,
-                "name": "Vouchers",
+                "name": "Purchase Orders",
                 "route": "update/product"
             },
             {
@@ -138,6 +138,12 @@
                 "isLink": true,
                 "name": "Getintopc",
                 "route": "https://getintopc.com/"
+            },
+            {
+                "id": 53,
+                "isLink": true,
+                "name": "FileCR",
+                "route": "https://filecr.com/en/"
             }
         ]
     },

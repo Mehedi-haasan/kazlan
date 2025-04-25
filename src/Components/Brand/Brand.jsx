@@ -9,13 +9,15 @@ import BrandCard from "./BrandCard";
 import Loading from "../../icons/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { NavLink } from "react-router-dom";
 import logo from '../Logo/userProfile.png'
 import Excel from '../Input/Excel'
 import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 
-const Brand = ({ brands, entries, info = {} }) => {
+const Brand = ({ entries, info = {} }) => {
+
 
     const [image_url, setImage_Url] = useState();
     const [bran, setBran] = useState([])
@@ -27,6 +29,7 @@ const Brand = ({ brands, entries, info = {} }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isChecked, setIsChecked] = useState(false)
     const [imageFile, setImageFile] = useState(null);
+    const [showlotti, setLottiShow] = useState(false)
 
     const handleCreate = async (image_url) => {
         setIsLoading(true)
@@ -44,6 +47,7 @@ const Brand = ({ brands, entries, info = {} }) => {
 
             const data = await response.json();
             setShow(false);
+            setLottiShow(true)
             getBrand();
             setValues({ ...values, name: '' })
             toast(data?.message)
@@ -55,7 +59,11 @@ const Brand = ({ brands, entries, info = {} }) => {
 
 
     const handleUpload = async () => {
-        setIsLoading(true)
+
+        if (!values?.name) {
+            toast("Required field is missing")
+            return
+        }
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
@@ -64,6 +72,7 @@ const Brand = ({ brands, entries, info = {} }) => {
             setIsLoading(false)
             return;
         }
+        setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/upload/image`, {
@@ -84,12 +93,6 @@ const Brand = ({ brands, entries, info = {} }) => {
         setIsLoading(false)
     }
 
-    useEffect(() => {
-        document.title = `Brands - Kazaland Brothers`;
-        getBrand()
-    }, [page, pageSize]);
-
-
 
     const getBrand = async () => {
         setIsLoading(true)
@@ -107,20 +110,27 @@ const Brand = ({ brands, entries, info = {} }) => {
         setIsLoading(false)
     }
 
+    useEffect(() => {
+        document.title = `Brands - Kazaland Brothers`;
+        getBrand()
+    }, [page, pageSize]);
 
-    const SearchBrand = async (e) => {
-        e.preventDefault();
-        const name = e.target.value
+
+
+    const SearchBrand = async (value) => {
+        const name = value
+        console.log(value)
         const token = localStorage.getItem('token')
         if (name) {
-            const response = await fetch(`${BaseUrl}/api/get/brand/search/${name}`, {
+            const response = await fetch(`${BaseUrl}/api/get/brand/filter/search/${name}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
                 },
             });
             const data = await response.json();
-            setBran(data?.items)
+            setBran(data?.items);
+            console.log(data?.items)
         }
     }
 
@@ -134,10 +144,25 @@ const Brand = ({ brands, entries, info = {} }) => {
         }
     };
 
+
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 200,
+            height: 200,
+        },
+    };
+
+    const { View } = useLottie(options);
+
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <ToastContainer />
             <div>
+                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                    <>{View}</>
+                </Modal>
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                         <div className="border-b">
@@ -165,7 +190,7 @@ const Brand = ({ brands, entries, info = {} }) => {
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel />
-                        <Search SearchProduct={() => { }} />
+                        <Search SearchProduct={SearchBrand} />
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
@@ -210,7 +235,7 @@ const Brand = ({ brands, entries, info = {} }) => {
 
                             {
                                 bran?.map((item, i) => (
-                                    <BrandCard item={item} i={i} isChecked={isChecked} info={info} />
+                                    <BrandCard item={item} i={i} isChecked={isChecked} info={info} getBrand={getBrand} />
                                 ))
                             }
 

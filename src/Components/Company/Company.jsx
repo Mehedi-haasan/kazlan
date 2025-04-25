@@ -139,6 +139,7 @@ const Company = () => {
                     <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} placeholder={values?.email || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone'} placeholder={values?.phone || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, address: e }) }} label={'Address'} placeholder={values?.address || 'N/A'} className={`text-[#32393f] font-thin`} />
+                    <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={'Shop Code'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, footertext: e }) }} label={'Footer Text'} placeholder={values?.footertext || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <Button onClick={handleUpload} name={'Create'} />
                 </div>

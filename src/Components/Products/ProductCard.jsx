@@ -8,14 +8,18 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import InputComponent from "../Input/InputComponent";
 import { NavLink } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-const ProductCard = ({ item, i, isChecked, info = {} }) => {
+const ProductCard = ({ item, i, isChecked, info = {},getProduct }) => {
+  
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);
   const [image_url, setImage_Url] = useState();
   const [value, setValue] = useState('');
-  const [option, setOption] = useState(false)
+  const [option, setOption] = useState(false);
+  const [isLoading, setIsLoading]=useState(false)
   const [values, setValues] = useState({
     categoryId: 1,
     brandId: 1,
@@ -27,6 +31,7 @@ const ProductCard = ({ item, i, isChecked, info = {} }) => {
 
     values.image_url = image_url;
     const token = localStorage.getItem('token');
+    setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/api/update/category`, {
         method: 'PATCH',
@@ -38,8 +43,10 @@ const ProductCard = ({ item, i, isChecked, info = {} }) => {
       });
 
       const data = await response.json();
+      setIsLoading(true)
+      getProduct()
       setShow(false)
-      alert(data?.message)
+      toast(data?.message);
     } catch (error) {
       console.error('Error updating variant:', error);
     }
@@ -83,7 +90,9 @@ const ProductCard = ({ item, i, isChecked, info = {} }) => {
       body: JSON.stringify({ id: item?.id, url: item?.image_url }),
     });
     const data = await response.json();
-    alert(data?.message)
+    setShow(false)
+    toast(data?.message);
+    getProduct()
   }
 
   function formatDate(isoString) {
@@ -100,6 +109,7 @@ const ProductCard = ({ item, i, isChecked, info = {} }) => {
     <tr className={`border-b ${i % 2 == 0 ? 'bg-gray-100' : ''}`}>
       <th className="w-4 py-2 px-4 border-x">
         <div className="flex items-center">
+          <ToastContainer/>
           <input id="checkbox-table-search-1" checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
@@ -153,7 +163,7 @@ const ProductCard = ({ item, i, isChecked, info = {} }) => {
                 </div>
               </div>
               <div className=''>
-                <Button onClick={handleUpload} isDisable={false} name={"Create"} />
+                <Button onClick={handleUpload} isDisable={isLoading} name={"Update"} />
               </div>
 
             </div>

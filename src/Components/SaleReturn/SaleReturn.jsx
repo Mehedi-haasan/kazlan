@@ -3,13 +3,13 @@ import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
-import PurchaseProductCard from '../PurchaseProduct/PurchaseProductCard';
 import RightArrow from '../../icons/RightArrow';
 import Button from '../Input/Button';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SaleReturnCard from './SaleReturnCard';
 
 
 
@@ -17,6 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const SaleReturn = ({ shop = [] }) => {
 
     const [user, setUser] = useState({});
+    const [prevAll, setPrevAll] = useState([])
+    const [prevTotal, setPrevTotal] = useState(0)
     const [total, setTotal] = useState(0);
     const [allData, setAllData] = useState([])
     const [invoice, setInvoice] = useState(0)
@@ -34,6 +36,7 @@ const SaleReturn = ({ shop = [] }) => {
         });
         const data = await response.json();
         setAllData(data?.items);
+        setPrevAll(data?.items)
         setUser(data?.user)
 
     }
@@ -48,7 +51,9 @@ const SaleReturn = ({ shop = [] }) => {
             },
             body: JSON.stringify({
                 invoiceId: invoice,
-                data: allData
+                data: allData,
+                total: total,
+                returnamount: parseInt(prevTotal) - parseInt(total)
             }),
         });
         const data = await response.json();
@@ -60,28 +65,42 @@ const SaleReturn = ({ shop = [] }) => {
         document.title = "Sale Return - KazalandBrothers";
     }, [])
 
-    let paytype = [
-        {
-            id: 23,
-            name: "Cash"
-        },
-        {
-            id: 24,
-            name: "Due"
-        }
-    ]
+
+    const CalculatePrevAmount = () => {
+        let amount = prevAll?.reduce((acc, item) => {
+            return acc + (parseInt(item?.price) * parseInt(item?.qty))
+        }, 0);
+
+        setPrevTotal(parseInt(amount));
+    }
 
     useEffect(() => {
+        CalculatePrevAmount()
+    }, []);
+
+
+    const CalculateAmount = () => {
         let amount = allData?.reduce((acc, item) => {
-            return acc + (parseInt(item?.sellprice))
+            return acc + (parseInt(item?.price) * parseInt(item?.qty))
         }, 0);
 
         setTotal(parseInt(amount));
+    }
+
+    useEffect(() => {
+        CalculateAmount()
     }, [allData]);
 
 
+    const ChangeQty = (id, qty) => {
+        const updatedData = allData.map(item =>
+            item.id === id ? { ...item, qty } : item
+        );
+        setAllData(updatedData);
+    };
 
-    console.log(allData)
+    console.log(allData);
+
     return (
         <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
             <ToastContainer />
@@ -96,7 +115,7 @@ const SaleReturn = ({ shop = [] }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div>
-                        <InputComponent placeholder={user?.stateId} label={'State'} readOnly={true} />
+                        <InputComponent placeholder={user?.state} label={'State'} readOnly={true} />
                     </div>
                     <div>
                         <InputComponent placeholder={user?.name} label={'Customer'} readOnly={true} />
@@ -122,40 +141,29 @@ const SaleReturn = ({ shop = [] }) => {
                     <div>
                         <InputComponent placeholder={user?.phone} label={'Mobile'} readOnly={true} />
                     </div>
-                    <div>
-                        <InputComponent placeholder={'BDT'} label={'Exchange Rate'} onChange={(v) => { }} />
-                    </div>
+
                 </div>
 
-                {/* <div className='border-b p-4'>
-                    <h1>Items</h1>
-                </div> */}
-                {/* <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div>
-                        <SelectionComponent options={shop} onChange={(v) => { }} label={"Warehouse"} />
-                    </div>
-
-                </div> */}
 
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="min-w-[800px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-sm text-gray-900 dark:text-gray-400">
-                            <tr className='border-b border-gray-400 text-[16px]'>
-                                <th scope="col" className="pr-6 py-2 ">Serial</th>
-                                <th scope="col" className="px-4 py-2 text-center">Item</th>
-                                <th scope="col" className="px-4 py-2 text-center">Qty</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Unit</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Price/unit</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Discount</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Total</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Action</th>
+                    <table class="min-w-[800px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                        <thead class="text-sm text-gray-900 ">
+                            <tr className='border-y text-[16px] py-1'>
+                                <th scope="col" className="pl-4 py-2.5 font-thin border-x">Serial</th>
+                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Item name</th>
+                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Qty</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">M.R.P</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Discount</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Sale Price</th>
+                                <th scope="col" className="pl-4 py-2.5 text-left font-thin">Total price</th>
+                                <th scope="col" className="py-2.5 text-center font-thin border-x">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <PurchaseProductCard item={item} />
+                                return <SaleReturnCard item={item} changeqty={ChangeQty} />
                             })}
                         </tbody>
                     </table>
@@ -165,16 +173,16 @@ const SaleReturn = ({ shop = [] }) => {
                     <h1 className='pb-2'>Payment</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
                         <div>
-                            <InputComponent label={'Amount'} placeholder={total} />
+                            <InputComponent label={'Amount'} placeholder={total} value={total} readOnly={true} />
                         </div>
                         <div>
-                            <InputComponent label={'Due'} placeholder={parseInt(user?.balance || 0)} />
+                            <InputComponent label={'Due'} placeholder={parseInt(user?.balance || 0)} value={user?.balance} readOnly={true} />
                         </div>
                         <div>
-                            <InputComponent label={'Return Amount'} placeholder={total - parseInt(user?.balance || 0)} />
+                            <InputComponent label={'Return Amount'} placeholder={total - parseInt(user?.balance || 0)} readOnly={true} />
                         </div>
                         <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
+                            <SelectionComponent options={[{ id: 23, name: "Cash" }, { id: 24, name: "Due" }]} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>

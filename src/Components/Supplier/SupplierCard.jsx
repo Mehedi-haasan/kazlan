@@ -16,7 +16,7 @@ const SupplierCard = ({ item, state = [], info = {} }) => {
     const [edit, setEdit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [active, setActive] = useState("Address")
-  const [option, setOption] = useState(false)
+    const [option, setOption] = useState(false)
 
     const DeleteCustomer = async () => {
 
@@ -86,22 +86,25 @@ const SupplierCard = ({ item, state = [], info = {} }) => {
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.address}</th>
 
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
-                <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? 'text-red-600 bg-red-100 border-red-100' : 'text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]'} `}>{item?.balance}</button>
+                <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
+                    {item?.balance}
+                </button>
+                {/* <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`} `}>{item?.balance}</button> */}
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
             {info?.role === "superadmin" && <th scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative">
                 {
                     option && <div className="absolute top-1 bg-white shadow-xl rounded-md right-14 w-[150px] p-3 z-50 border border-red-500">
-                        <div onClick={()=>{setEdit(!edit);setOption(false)}} className="flex justify-start items-center gap-2 pb-2 cursor-pointer hover:bg-gray-200 p-1 rounded">
+                        <div onClick={() => { setEdit(!edit); setOption(false) }} className="flex justify-start items-center gap-2 pb-2 cursor-pointer hover:bg-gray-200 p-1 rounded">
                             <Edit />Edit
                         </div>
-                        <NavLink to={`/payment/history/${item?.id}`} onClick={()=>setOption(false)} className="flex justify-start items-center gap-2 pb-2 cursor-pointer hover:bg-gray-200 p-1 rounded">
+                        <NavLink to={`/payment/history/${item?.id}`} onClick={() => setOption(false)} className="flex justify-start items-center gap-2 pb-2 cursor-pointer hover:bg-gray-200 p-1 rounded">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <path fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
                             </svg>Payment History
                         </NavLink>
-                        <div onClick={() => { setShow(true);setOption(false) }} className="flex justify-start items-center gap-2 cursor-pointer text-red-500 hover:bg-gray-200 p-1 rounded">
+                        <div onClick={() => { setShow(true); setOption(false) }} className="flex justify-start items-center gap-2 cursor-pointer text-red-500 hover:bg-gray-200 p-1 rounded">
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} />Delete
                         </div>
                     </div>
@@ -161,7 +164,7 @@ const SupplierCard = ({ item, state = [], info = {} }) => {
 
                     <div className='p-3'>
                         <Button onClick={handleSubmit} name={'Submit'} />
-                        <Button name={'Cancel'}  onClick={() => { setEdit(false) }} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
+                        <Button name={'Cancel'} onClick={() => { setEdit(false) }} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                     </div>
                 </Modal>
 
@@ -173,9 +176,10 @@ const SupplierCard = ({ item, state = [], info = {} }) => {
                     </div>
                 </Modal>
 
-            </th>}
+            </th>
+            }
 
-        </tr>
+        </tr >
     )
 }
 

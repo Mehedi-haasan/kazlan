@@ -9,12 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import Selection from "../Input/Selection";
 
 const CreateCustomer = () => {
-    const [selectedOption, setSelectedOption] = useState("Party-Wholesaler");
+
     const [state, setState] = useState([])
     const [active, setActive] = useState("Address")
     const [values, setValues] = useState({
         "stateId": 1,
-        "usertype": "Wholesaler"
+        "usertype": "Customer"
     })
     const handleSubmit = async (e) => {
         console.log(values)
@@ -85,7 +85,7 @@ const CreateCustomer = () => {
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="">
-                        <Selection options={cus} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={'Customer Type*'} />
+                        <Selection options={cus} onSelect={(v) => { setValues({ ...values, usertype: "Customer" }) }} label={'Customer Type*'} />
                     </div>
                     <InputComponent label={"Full Name*"} placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Phone*"} placeholder={'Enter full phone'} onChange={(v) => { setValues({ ...values, phone: v }) }} />

@@ -39,6 +39,7 @@ const Login = ({ auth }) => {
       localStorage.setItem('logo', data.logo);
       localStorage.setItem('shopname', data.shopname);
       localStorage.setItem('compId', data?.compId);
+      localStorage.setItem('shopcode', data?.shopcode);
       auth(true)
       goto('/dashboard')
     }

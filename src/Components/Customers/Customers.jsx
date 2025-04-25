@@ -8,6 +8,7 @@ import CustomerCard from "./CustomerCard";
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 
+
 const Customers = ({ entries, state = [], info = {} }) => {
 
     const [customer, setCustomer] = useState([])
@@ -19,7 +20,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const GetCustomer = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/wholesell/customers/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -37,8 +38,12 @@ const Customers = ({ entries, state = [], info = {} }) => {
     }, [])
 
 
+
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
+
+
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Customer List</h1>
                 <NavLink to={`/create/customer`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Customer</NavLink>
@@ -123,7 +128,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="py-2 text-center">Action</th>
+                                {info?.role === "superadmin" && <th scope="col" className="py-2 text-center">Action</th>}
                             </tr>
                         </thead>
                         <tbody>

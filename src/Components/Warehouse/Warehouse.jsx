@@ -28,6 +28,7 @@ const Warehouse = ({ entries }) => {
         });
         const data = await response.json();
         setShop(data?.items)
+        setTotalItem(data?.count)
         setIsLoading(false)
     }
 
@@ -121,7 +122,7 @@ const Warehouse = ({ entries }) => {
                         </thead>
                         <tbody>
                             {shop?.map((item, i) => (
-                                <WarehouseCard item={item} i={i} />
+                                <WarehouseCard item={item} i={i} FetchShop={FetchShop}/>
                             ))}
                         </tbody>
                     </table>

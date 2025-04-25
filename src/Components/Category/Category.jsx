@@ -9,11 +9,12 @@ import CategoryCard from "./CategoryCard";
 import Loading from "../../icons/Loading";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { NavLink } from "react-router-dom";
 import logo from '../Logo/userProfile.png'
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 
 
 const Category = ({ entries, info = {} }) => {
@@ -28,6 +29,7 @@ const Category = ({ entries, info = {} }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
+    const [showlotti, setLottiShow] = useState(false)
 
     const getCategory = async () => {
         setIsLoading(true)
@@ -67,7 +69,10 @@ const Category = ({ entries, info = {} }) => {
             });
 
             const data = await response.json();
-            setValues({ ...values, name: '' })
+            setValues({ ...values, name: '' });
+            setShow(false)
+            getCategory();
+            setLottiShow(true)
             toast(data?.message)
         } catch (error) {
             setIsLoading(false)
@@ -77,7 +82,12 @@ const Category = ({ entries, info = {} }) => {
     }
 
     const handleUpload = async () => {
-        setIsLoading(true)
+
+        if (!values?.name) {
+            toast("Required field is missing")
+            return
+        }
+
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
@@ -86,6 +96,7 @@ const Category = ({ entries, info = {} }) => {
             setIsLoading(false)
             return;
         }
+        setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/upload/image`, {
@@ -107,7 +118,20 @@ const Category = ({ entries, info = {} }) => {
         setIsLoading(false)
     }
 
-    const SearchCategory = () => { }
+    const SearchCategory = async (value) => {
+        const name = value
+        const token = localStorage.getItem('token')
+        if (name) {
+            const response = await fetch(`${BaseUrl}/api/get/category/filter/search/${name}`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                },
+            });
+            const data = await response.json();
+            setCategory(data?.items);
+        }
+    }
 
 
     const handleImageChange = (e) => {
@@ -118,10 +142,23 @@ const Category = ({ entries, info = {} }) => {
         }
     };
 
+    const options = {
+        animationData: groovyWalkAnimation,
+        loop: true,
+        style: {
+            width: 200,
+            height: 200,
+        },
+    };
+
+    const { View } = useLottie(options);
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <ToastContainer />
+            <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                <>{View}</>
+            </Modal>
             <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Category List</h1>
                 <button onClick={() => { setShow(true) }} className={`bg-blue-500 rounded px-4 py-1.5 text-white font-thin`}>Create Category</button>
@@ -154,7 +191,7 @@ const Category = ({ entries, info = {} }) => {
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel />
-                        <Search SearchProduct={() => { }} />
+                        <Search SearchProduct={SearchCategory} />
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto">
@@ -199,7 +236,7 @@ const Category = ({ entries, info = {} }) => {
 
                             {
                                 category?.map((item, i) => (
-                                    <CategoryCard item={item} i={i} isChecked={isChecked} info={info} />
+                                    <CategoryCard item={item} i={i} isChecked={isChecked} info={info} getCategory={getCategory}/>
                                 ))
                             }
 

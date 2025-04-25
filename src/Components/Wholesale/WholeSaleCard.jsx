@@ -1,75 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Remove from '../../icons/Remove';
-import Edit from '../../icons/Edit'
-import Modal from '../Input/Modal';
-import MiniButton from '../Input/MiniButton';
 
-const SellCard = ({ item, onClick }) => {
-    const [edit, setEdit] = useState(false)
-    const [show, setShow] = useState(false)
+const SellCard = ({ item, changeqty, changeprice, changedis, onClick }) => {
 
     return (
         <tr className='border-b'>
-            <th scope="col" className="pr-6 py-2 font-thin">{item?.id}</th>
-            <th scope="col" className="px-4 py-2 text-center font-thin">{item?.name}</th>
-            <th scope="col" className="px-4 py-2 text-center font-thin">{item?.qty}</th>
-            <th scope="col" className="pl-4 py-2 text-right font-thin">{item?.price}</th>
-            <th scope="col" className="pl-4 py-2 text-right font-thin">{item?.comn}</th>
-            <th scope="col" className="pl-4 py-2 text-right font-thin">{item?.price}</th>
-            <th scope="col" className="pl-4 py-2 text-right font-thin">{parseInt(item?.price) * parseInt(item?.qty)}</th>
-            <th scope="col" className="px-2 py-2 flex justify-end items-center border-r">
-                <Modal show={edit} handleClose={() => { setEdit(false) }} size={``} className=''>
-                    <div className='flex justify-between items-center py-1'>
-                        <h1>Name</h1>
-                        <h1>{item?.name}</h1>
-                    </div>
-                    <div className='flex justify-between items-center py-1'>
-                        <h1>Price</h1>
-                        <h1>{item?.price}</h1>
-                    </div>
-                    <div className='flex justify-between items-center py-1'>
-                        <h1>Qty</h1>
-                        <input type='number'
-                            className="text-right focus:outline-none w-16 border rounded"
-                            // onChange={(e) => setData({ ...data, qty: e.target.value })}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    setShow(false);
-                                }
-                            }}
-                            placeholder={""}
-                        />
-                    </div>
-                    <div className='flex justify-between items-center py-1'>
-                        <h1>Comn</h1>
-                        <input type='number'
-                            className="text-right focus:outline-none w-16 border rounded"
-                            // onChange={(e) => setData({ ...data, comn: e.target.value })}
-                            // value={qty}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    setShow(false);
-                                }
-                            }}
-                            placeholder={""}
-                        />
-                    </div>
-                    <div className='flex justify-end items-center pt-1'>
-                        <MiniButton name={`Done`}
-                            // onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); }}
-                        />
-                    </div>
-                </Modal>
-                <Edit onClick={() => { setEdit(true) }} />
-
-                <Remove onClick={() => { setShow(true) }} />
-                <Modal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
-                    <h1 className="py-3 text-lg">Are you sure you want to delete this?</h1>
-                    <div className="flex justify-between items-center p-4">
-                        <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-red-500 text-red-500">Yes</button>
-                        <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 text-blue-500">No</button>
-                    </div>
-                </Modal>
+            <th scope="col" className="pl-4 py-2 font-thin text-left border-l">{item?.id}</th>
+            <th scope="col" className="px-4 py-2 text-left font-thin border-l">{item?.name}</th>
+            <th scope="col" className="text-left font-thin">
+                <input placeholder={item?.qty} value={item?.qty} onChange={(e) => { changeqty(item?.id, e.target.value) }} className='w-full h-full py-2 focus:outline-none pl-4 border-l' />
+            </th>
+            <th scope="col" className="pl-4 py-2 text-left font-thin border-l">{item?.cost}</th>
+            <th scope="col" className="pl-0 text-left font-thin">
+                <input placeholder={item?.discount} value={item?.discount} onChange={(e) => { changedis(item?.id, e.target.value) }} className='w-full h-full py-2 focus:outline-none pl-4 border-l' />
+            </th>
+            <th scope="col" className="pl-4 text-left font-thin border-l">
+                <input placeholder={item?.price} value={item?.price} readOnly={true} onChange={(e) => { changeprice(item?.id, e.target.value) }} className='w-full h-full py-2 focus:outline-none' />
+            </th>
+            <th scope="col" className="pl-4 py-2 text-left font-thin border-l">{parseInt(item?.price) * parseInt(item?.qty)}</th>
+            <th scope="col" className="py-2 flex justify-center items-center border-x gap-2 ">
+                <Remove onClick={onClick} />
             </th>
         </tr>
     );
