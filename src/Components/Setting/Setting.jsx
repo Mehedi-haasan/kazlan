@@ -185,9 +185,11 @@ const Setting = ({ userinfo = {} }) => {
                             <InputComponent label={'Footer text'} placeholder={user?.footertext} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
                             <InputComponent label={'Email'} placeholder={user?.email} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, email: v }) }} />
                             <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
+                            <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
                             <InputComponent label={'Address'} placeholder={user?.address} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, address: v }) }} />
+                            <InputComponent label={'Invoice Prefix'} placeholder={user?.salecode} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
                             <InputComponent label={'Description'} placeholder={user?.description} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
-
+                            <InputComponent label={'Employee'} placeholder={1} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
                             <div className='py-3'>
                                 <Button onClick={() => { image_url !== null ? handleUploadUpdate() : UpdateSetting(user?.image_url, "") }} isDisable={userinfo?.role === "superadmin" ? false : true} name={'Update'} />
                                 <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />

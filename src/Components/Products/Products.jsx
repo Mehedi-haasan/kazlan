@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import generatePDF from 'react-to-pdf';
 import ProductCard from './ProductCard';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
@@ -9,13 +10,14 @@ import Loading from '../../icons/Loading';
 import { NavLink } from 'react-router-dom';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import { useToImage } from '@hcorta/react-to-image'
 
 
 const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
 
+    const targetRef = useRef();
+    const option = { width: 1600, backgroundColor: '#ffffff' };
+    const { ref, getPng } = useToImage(option)
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [totalItem, setTotalItem] = useState(0)
@@ -26,13 +28,6 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     const [comId, setComId] = useState(null);
     const [isChecked, setIsChecked] = useState(false)
     let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
-    const options = {
-        width: 1000,
-        backgroundColor: '#ffffff'
-    };
-    const { ref, getPng } = useToImage(options)
-    const [isPdf, setPdf] = useState(false);
-
 
     useEffect(() => {
         if (info?.role === "superadmin") {
@@ -80,20 +75,6 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
 
 
 
-    const downloadPDF = () => {
-        const capture = document.querySelector('.actual-receipt');
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('img/png');
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const componentWidth = doc.internal.pageSize.getWidth();
-            const componentHeight = doc.internal.pageSize.getHeight();
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-            doc.save('receipt.pdf');
-        })
-        setPdf(false)
-    }
-
-
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
@@ -123,87 +104,89 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel onClick={() => { downloadPDF() }} Jpg={getPng} />
+                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={(e) => { SearchProduct(e) }} />
                     </div>
                 </div>
-                <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
-                    <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                        <thead class="text-md text-gray-900 ">
-                            <tr className='border'>
-                                <th className="w-4 py-2 px-4 border-r">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 rounded text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Item Name
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Brand
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Category
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        Warehouse
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center">
-                                        M.R.P
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Sale price
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Quantity
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Created by
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
-                                    <div className="flex justify-between items-center">
-                                        Created at
-                                        <Updown />
-                                    </div>
-                                </th>
-                                {
-                                    info?.role === "superadmin" && <th scope="col" className="pl-2 pr-1 py-2 text-center">Action</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data?.map((item, i) => (
-                                <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info} getProduct={getProduct}/>
-                            ))}
-                        </tbody>
-                    </table>
+                <div ref={ref}>
+                    <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >
+                        <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                            <thead class="text-md text-gray-900 ">
+                                <tr className='border'>
+                                    <th className="w-4 py-2 px-4 border-r">
+                                        <div className="flex items-center">
+                                            <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 rounded text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                            <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center">
+                                            Item Name
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
+                                            Brand
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
+                                            Category
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
+                                            Warehouse
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
+                                            M.R.P
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-right border-r">
+                                        <div className="flex justify-between items-center">
+                                            Sale price
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-right border-r">
+                                        <div className="flex justify-between items-center">
+                                            Quantity
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-right border-r">
+                                        <div className="flex justify-between items-center">
+                                            Created by
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-right border-r">
+                                        <div className="flex justify-between items-center">
+                                            Created at
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    {
+                                        info?.role === "superadmin" && <th scope="col" className="pl-2 pr-1 py-2 text-center">Action</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data?.map((item, i) => (
+                                    <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info} getProduct={getProduct} />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div className="flex justify-between items-center pt-3">
+                <div className="flex justify-between items-center pt-3  z-10">
                     <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
                         <button disabled={page === 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>

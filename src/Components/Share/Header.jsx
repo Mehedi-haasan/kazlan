@@ -98,7 +98,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
                         <h1 className="text-red-600 absolute -top-1.5 right-[2px] font-semibold text-sm">{noti?.length > 0 ? noti?.length : null}</h1>
                     </NavLink>
-
+                    
                 </div>
             </div>
 

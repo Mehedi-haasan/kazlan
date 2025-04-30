@@ -13,7 +13,7 @@ import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import { useLottie } from "lottie-react";
 
 
-const BrandCard = ({ item, i, isChecked, info = {}, getBrand }) => {
+const BrandCard = ({ item, i, isChecked, info = {}, getBrand,isDownloadMode }) => {
 
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
@@ -144,7 +144,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand }) => {
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
             {
-                info?.role === "superadmin" && <th scope="col" className="px-2 py-1.5 flex justify-center items-center border-r gap-2">
+                info?.role === "superadmin" && <th scope="col" className="px-2 py-3 flex justify-center items-center border-r gap-2">
                     <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
                         <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                             <div className="border-b">

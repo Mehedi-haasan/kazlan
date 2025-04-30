@@ -216,7 +216,7 @@ function App() {
           <Route path="/profile" element={auth ? <Profile /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/users" element={auth ? <User entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
-          <Route path="/sale/return" element={auth ? <SaleReturn shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/sale/return" element={auth ? <SaleReturn shop={shop} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/purchase/return" element={auth ? <PruchaseReturn shop={shop} paytype={paytype} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/customers" element={auth ? <Customers entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
           <Route path="/payment/history/:id" element={auth ? <PaymentHistory category={category} brand={brand} info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />

@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import BaseUrl from '../../Constant';
 import { useToImage } from '@hcorta/react-to-image'
 import SelectionComponent from '../Input/SelectionComponent';
@@ -22,6 +20,8 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
+    const [paking, setPaking] = useState(0);
+    const [delivary, setDelivery] = useState(0)
     const [customer, setCustomer] = useState([])
     const [name, setName] = useState('Mehedi hasan')
     const [due, setDue] = useState(0);
@@ -29,9 +29,13 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     const [searchData, setSearchData] = useState([]);
     const [userId, setUserId] = useState(null);
     const [stateId, setStateId] = useState(1);
-    const options = { width: 1000, backgroundColor: '#ffffff' };
-    const { ref, getPng } = useToImage(options)
-    const [values, setValues] = useState({})
+    const [lastTotal, setLastTotal] = useState(0)
+    const [values, setValues] = useState({
+        pay: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed"
+    })
 
     useEffect(() => {
         document.title = "Sale - KazalandBrothers";
@@ -56,21 +60,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         }
     }
 
-    const downloadPDF = () => {
-        const capture = document.querySelector('.actual-receipt');
-        html2canvas(capture).then((canvas) => {
-            const imgData = canvas.toDataURL('img/png');
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const componentWidth = doc.internal.pageSize.getWidth();
-            const componentHeight = doc.internal.pageSize.getHeight();
-            doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-            doc.save('receipt.pdf');
-        })
-    }
-
-    const PrintfPdf = () => {
-        window.print()
-    }
 
     const Order = async () => {
         if (!userId || !values?.pay || !values?.pay_type) {
@@ -88,7 +77,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 "name": v?.name,
                 "shop": info?.shopname,
                 "price": v?.price,
-                "discount": v?.comn,
+                "discount": v?.discount,
                 "sellprice": (v?.price * v?.qty),
                 "qty": v?.qty,
                 "contact": values?.phone,
@@ -107,10 +96,13 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     customername: name,
                     userId: userId,
                     date: getFormattedDate(),
-                    total: total,
+                    total: lastTotal,
+                    packing: paking,
+                    delivery: delivary,
+                    lastdiscount: values?.lastdiscount,
                     previousdue: due,
                     paidamount: values?.pay,
-                    amount: total - values?.pay,
+                    amount: lastTotal - values?.pay,
                     orders: orderData
                 }),
             });
@@ -128,6 +120,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
             return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
         }, 0);
         setTotal(amount);
+        setLastTotal(amount)
     }
 
     useEffect(() => {
@@ -151,24 +144,20 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
 
 
+    const GetCustomer = async (id) => {
+        const token = localStorage.getItem(`token`);
+        const response = await fetch(`${BaseUrl}/api/get/customers/${id}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json();
+        setCustomer(data?.items);
+    }
 
-    useEffect(() => {
-        const GetCustomer = async () => {
-            const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/get/customers/${stateId}`, {
-                method: 'GET',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            });
-            const data = await response.json();
-            setCustomer(data?.items);
-        }
 
-        GetCustomer()
-
-    }, [stateId])
 
 
     const ChangeQty = (id, qty) => {
@@ -186,12 +175,40 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     };
 
     const ChangeDiscount = (id, discount) => {
-        const updatedData = allData.map(item =>
-            item.id === id ? { ...item, discount } : item
-        );
+        const updatedData = allData.map(item => {
+            if (item.id === id) {
+                const originalPrice = item.price;
+                const discountedPrice = originalPrice - (originalPrice * parseFloat(discount) / 100);
+
+                return {
+                    ...item,
+                    discount,
+                    disPrice: discountedPrice,
+                };
+            }
+            return item;
+        });
+
         setAllData(updatedData);
     };
 
+
+
+    const ChangeLastDiscountType = (type, amount) => {
+        setValues({
+            ...values,
+            lastdiscounttype: type,
+            lastdiscount: amount
+        });
+        if (type === "Fixed") {
+            let temp = parseInt(total) - parseInt(amount);
+            setLastTotal(parseInt(temp) + parseInt(paking) + parseInt(delivary));
+        } else if (type === "Percentage") {
+            let discount = parseInt(parseInt(total) * parseInt(amount) / 100);
+            let temp = parseInt(total) - parseInt(discount);
+            setLastTotal(parseInt(temp) + parseInt(paking) + parseInt(delivary));
+        }
+    }
 
     return (
         <div className="min-h-screen pb-12 pl-4 pt-5 pr-2 w-full">
@@ -207,7 +224,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setCustomer([]) }} label={"Thana Name"} className='rounded-l' />
+                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
                         <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -220,9 +237,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     </div>
                     <div>
                         <InputComponent placeholder={getFormattedDate()} label={'Date'} readOnly={true} />
-                    </div>
-                    <div>
-                        <InputComponent placeholder={`${info?.shopcode}`} label={'Sale Code'} readOnly={true} />
                     </div>
 
                 </div>
@@ -282,17 +296,18 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="min-w-[1600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-900 dark:text-gray-400">
                             <tr className='border-y text-[16px] py-1'>
-                                <th scope="col" className="pl-4 py-2.5 font-thin border-x">Serial</th>
-                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Item name</th>
-                                <th scope="col" className="px-4 py-2.5 text-left font-thin border-r">Qty</th>
-                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">M.R.P</th>
-                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Discount</th>
-                                <th scope="col" className="pl-4 py-2.5 text-left font-thin border-r">Sale Price</th>
-                                <th scope="col" className="pl-4 py-2.5 text-left font-thin">Total price</th>
-                                <th scope="col" className="py-2.5 text-center font-thin border-x">Action</th>
+                                <th scope="col" className="p-2 text-center font-thin border-x">Action</th>
+                                <th scope="col" className="pl-2 py-2.5 font-thin border-x">Item Code</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Item name</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Qty</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">M.R.P</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Discount</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Sale Price</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r rounded">Total price</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -304,14 +319,10 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 </div>
 
                 <div className='p-4'>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+                    <div className='flex justify-between gap-5'>
                         <div>
                             <div className=''>
                                 <InputComponent placeholder={due} label={'Balance'} readOnly={true} className={`font-thin`} />
-                            </div>
-
-                            <div>
-                                <InputComponent label={'Total Amount'} placeholder={total} onChange={(v) => { }} readOnly={true} className={`font-thin`} />
                             </div>
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
@@ -326,6 +337,43 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
                                 </div>
                             </div>
+                        </div>
+
+                        <div>
+                            <div className=''>
+                                <InputComponent placeholder={total} label={'Total'} readOnly={true} className={`font-thin`} />
+                            </div>
+
+                            <div className='flex justify-between items-center gap-4'>
+                                <InputComponent label={'Packing Charge'} type={'number'} placeholder={paking} onChange={(v) => { setPaking(v); setLastTotal(parseInt(total) + parseInt(v)) }} className={`font-thin`} />
+                                <InputComponent label={'Delivery Charge'} type={'number'} placeholder={delivary} onChange={(v) => { setDelivery(v); setLastTotal(parseInt(total) + parseInt(v) + parseInt(paking)) }} className={`font-thin`} />
+                            </div>
+                            <div className='pb-4'>
+                                <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
+                                <div className='flex justify-start items-end pb-1 pt-1'>
+                                    <input type='number' value={values?.lastdiscount} onChange={(e) => { ChangeLastDiscountType(values?.lastdiscounttype, e.target.value) }} placeholder='' className='border-y border-l px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                    <select value={values?.lastdiscounttype} onChange={(e) => { ChangeLastDiscountType(e.target.value, values?.lastdiscount) }}
+                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {[{ id: 1, name: "Fixed" }, { id: 2, name: "Percentage" }].map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className='border-t pt-2 border-black flex justify-start gap-2 '>
+                                <div><h1 className='pt-[5px] w-[100px]'>Total Amount</h1></div>
+                                <div className='w-full'>
+                                    <input type='number' value={lastTotal} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder=''
+                                        className='border text-[#6B7280] px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className='flex justify-between  gap-5'>
+                        <div className='border-t border-black'>
+                            <h1 className='text-center'>Mehedi Hasan</h1>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { useToImage } from '@hcorta/react-to-image'
+import generatePDF from 'react-to-pdf';
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
 import BaseUrl from '../../Constant';
@@ -16,9 +18,12 @@ import ImageSelect from "../Input/ImageSelect";
 import { useLottie } from "lottie-react";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 
+
 const Brand = ({ entries, info = {} }) => {
 
-
+    const targetRef = useRef();
+    const option = { backgroundColor: '#ffffff' };
+    const { ref, getPng } = useToImage(option)
     const [image_url, setImage_Url] = useState();
     const [bran, setBran] = useState([])
     const [values, setValues] = useState({ name: "", });
@@ -30,6 +35,7 @@ const Brand = ({ entries, info = {} }) => {
     const [isChecked, setIsChecked] = useState(false)
     const [imageFile, setImageFile] = useState(null);
     const [showlotti, setLottiShow] = useState(false)
+
 
     const handleCreate = async (image_url) => {
         setIsLoading(true)
@@ -119,7 +125,6 @@ const Brand = ({ entries, info = {} }) => {
 
     const SearchBrand = async (value) => {
         const name = value
-        console.log(value)
         const token = localStorage.getItem('token')
         if (name) {
             const response = await fetch(`${BaseUrl}/api/get/brand/filter/search/${name}`, {
@@ -148,13 +153,11 @@ const Brand = ({ entries, info = {} }) => {
     const options = {
         animationData: groovyWalkAnimation,
         loop: true,
-        style: {
-            width: 200,
-            height: 200,
-        },
+        style: { width: 200, height: 200, },
     };
 
     const { View } = useLottie(options);
+
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
@@ -189,59 +192,61 @@ const Brand = ({ entries, info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel />
+                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={SearchBrand} />
                     </div>
                 </div>
-                <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                    <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                        <thead class="text-md text-gray-900">
-                            <tr className='border text-black font-bold'>
-                                <th className="w-4 py-2 px-4 border-r">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 border-r ">
-                                    <div className="flex justify-between items-center font-bold text-[16px]">
-                                        Brand
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
-                                    <div className="flex justify-between items-center text-[16px]">
-                                        Logo
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r text-[16px]">
-                                    <div className="flex justify-between items-center">
-                                        Created by
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r text-[16px]">
-                                    <div className="flex justify-between items-center">
-                                        Created at
-                                        <Updown />
-                                    </div>
-                                </th>
-                                {info?.role === "superadmin" && <th scope="col" className="pl-1 pr-1 py-2 text-center text-[16px]">Action</th>}
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div ref={ref}>
+                    <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto">
+                        <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                            <thead class="text-md text-gray-900">
+                                <tr className='border text-black font-bold'>
+                                    <th className="w-4 py-2 px-4 border-r">
+                                        <div className="flex items-center">
+                                            <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                            <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center font-bold text-[16px]">
+                                            Brand
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center text-[16px]">
+                                            Logo
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r text-[16px]">
+                                        <div className="flex justify-between items-center">
+                                            Created by
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-right border-r text-[16px]">
+                                        <div className="flex justify-between items-center">
+                                            Created at
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    {info?.role === "superadmin" && <th scope="col" className="pl-1 pr-1 py-2 text-center text-[16px]">Action</th>}
+                                </tr>
+                            </thead>
+                            <tbody>
 
 
-                            {
-                                bran?.map((item, i) => (
-                                    <BrandCard item={item} i={i} isChecked={isChecked} info={info} getBrand={getBrand} />
-                                ))
-                            }
+                                {
+                                    bran?.map((item, i) => (
+                                        <BrandCard item={item} i={i} isChecked={isChecked} info={info} getBrand={getBrand} />
+                                    ))
+                                }
 
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + bran?.length} of {totalItem} entries</h1>
@@ -256,6 +261,7 @@ const Brand = ({ entries, info = {} }) => {
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }

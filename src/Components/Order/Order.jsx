@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useToImage } from '@hcorta/react-to-image'
+import generatePDF from 'react-to-pdf';
 import BaseUrl from '../../Constant';
 import Button from '../Input/Button';
 import SelectionComponent from '../Input/SelectionComponent';
@@ -10,6 +12,10 @@ import Search from '../Input/Search';
 import Loading from '../../icons/Loading';
 
 const Order = ({ type = [], entries = [], user = [] }) => {
+
+    const targetRef = useRef();
+    const option = { backgroundColor: '#ffffff' };
+    const { ref, getPng } = useToImage(option)
     const [data, setData] = useState([]);
     const [searchData, setSearchData] = useState([])
     const [page, setPage] = useState(1);
@@ -84,12 +90,14 @@ const Order = ({ type = [], entries = [], user = [] }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel />
+                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={() => { }} />
                     </div>
                 </div>
-                <div className="w-full overflow-hidden overflow-x-auto">
-                    <Invoice />
+                <div ref={ref}>
+                    <div ref={targetRef} className="w-full overflow-hidden overflow-x-auto">
+                        <Invoice />
+                    </div>
                 </div>
                 <div className="flex justify-between items-center pt-3">
                     <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>

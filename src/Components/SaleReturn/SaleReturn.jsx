@@ -10,11 +10,12 @@ import Search from '../../icons/Search';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SaleReturnCard from './SaleReturnCard';
+import { getFormattedDate } from '../Input/Time';
 
 
 
 
-const SaleReturn = ({ shop = [] }) => {
+const SaleReturn = ({ shop = [], info = {} }) => {
 
     const [user, setUser] = useState({});
     const [prevAll, setPrevAll] = useState([])
@@ -36,9 +37,13 @@ const SaleReturn = ({ shop = [] }) => {
         });
         const data = await response.json();
         setAllData(data?.items);
-        setPrevAll(data?.items)
-        setUser(data?.user)
+        let amount = allData?.reduce((acc, item) => {
+            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+        }, 0);
 
+        setPrevTotal(parseInt(amount));
+        setUser(data?.user)
     }
 
     const ReturnSaleProduct = async (e) => {
@@ -52,8 +57,12 @@ const SaleReturn = ({ shop = [] }) => {
             body: JSON.stringify({
                 invoiceId: invoice,
                 data: allData,
-                total: total,
-                returnamount: parseInt(prevTotal) - parseInt(total)
+                total: parseInt(prevTotal) - parseInt(total),
+                returnamount: total,
+                shopname: info?.shopname,
+                userId: user?.id,
+                customername: user?.name,
+                "date": getFormattedDate()
             }),
         });
         const data = await response.json();
@@ -66,22 +75,10 @@ const SaleReturn = ({ shop = [] }) => {
     }, [])
 
 
-    const CalculatePrevAmount = () => {
-        let amount = prevAll?.reduce((acc, item) => {
-            return acc + (parseInt(item?.price) * parseInt(item?.qty))
-        }, 0);
-
-        setPrevTotal(parseInt(amount));
-    }
-
-    useEffect(() => {
-        CalculatePrevAmount()
-    }, []);
-
-
     const CalculateAmount = () => {
         let amount = allData?.reduce((acc, item) => {
-            return acc + (parseInt(item?.price) * parseInt(item?.qty))
+            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
         }, 0);
 
         setTotal(parseInt(amount));
@@ -99,7 +96,7 @@ const SaleReturn = ({ shop = [] }) => {
         setAllData(updatedData);
     };
 
-    console.log(allData);
+
 
     return (
         <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
@@ -120,7 +117,7 @@ const SaleReturn = ({ shop = [] }) => {
                     <div>
                         <InputComponent placeholder={user?.name} label={'Customer'} readOnly={true} />
                     </div>
-                    <div className=''>
+                    <div className='pt-1'>
                         <h1 className='pb-[7px]'>Invoice number</h1>
                         <div className='flex justify-center w-full'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
@@ -179,7 +176,7 @@ const SaleReturn = ({ shop = [] }) => {
                             <InputComponent label={'Due'} placeholder={parseInt(user?.balance || 0)} value={user?.balance} readOnly={true} />
                         </div>
                         <div>
-                            <InputComponent label={'Return Amount'} placeholder={total - parseInt(user?.balance || 0)} readOnly={true} />
+                            <InputComponent label={'Return Amount'} placeholder={total} readOnly={true} />
                         </div>
                         <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={[{ id: 23, name: "Cash" }, { id: 24, name: "Due" }]} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />

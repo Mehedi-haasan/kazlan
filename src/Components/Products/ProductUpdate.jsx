@@ -135,9 +135,9 @@ const ProductUpdate = () => {
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
                                         <InputComponent label={"M.R.P*"} value={values?.cost} placeholder={values?.cost} type={'number'} isRequered={true} onChange={(v) => { setValues({ ...values, cost: v }) }} />
-                                        <InputComponent label={"Sale Price*"} value={values?.price} placeholder={values?.price} type={'number'} isRequered={true} onChange={(v) => { setValues({ ...values, price: v }) }} />
+                                        <InputComponent label={"Sale Price"} value={values?.price} placeholder={values?.price} type={'number'} isRequered={true} onChange={(v) => { setValues({ ...values, price: v }) }} />
                                         <div>
-                                            <p className='pb-2 pt-2 font-semibold text-sm'>Discount on Sale</p>
+                                            <p className='pb-2 pt-2 font-semibold text-sm'>Offer</p>
                                             <div className='flex justify-start items-end pb-1'>
                                                 <input type='number' value={values?.discount} placeholder={values?.discount} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%]' />
                                                 <select value={values?.discount_type} onChange={(e) => { setValues({ ...values, discount_type: e.target.value }) }}
