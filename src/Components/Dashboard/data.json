@@ -11,7 +11,7 @@
         "id": "2",
         "name": "Items",
         "route": "product",
-        "icon": "fluent-mdl2:product-variant",
+        "icon": "fluent-mdl2:work-item",
         "class": "mt-2",
         "option": true,
         "items": [
@@ -40,7 +40,7 @@
         "name": "Sales",
         "route": "",
         "icon": "mdi:cart-outline",
-        "class": "",
+        "className": "mt-4",
         "option": true,
         "items": [
             {
@@ -52,18 +52,18 @@
             {
                 "id": 32,
                 "parent": "32",
-                "name": "Invoice",
+                "name": "All Invoice",
                 "route": "order"
             },
             {
                 "id": 33,
                 "name": "Sale Order",
-                "route": "sale/order"
+                "route": "sale/items"
             },
             {
                 "id": 34,
                 "name": "Sale Return",
-                "route": "sale/return"
+                "route": "return/items"
             }
         ]
     },
@@ -77,23 +77,18 @@
         "items": [
             {
                 "id": 61,
-                "name": "Supplier",
+                "name": "Suppliers",
                 "route": "suppliers"
             },
             {
-                "id": 62,
-                "name": "Purchase  Items",
-                "route": "update/product"
-            },
-            {
                 "id": 63,
-                "name": "Purchase Orders",
-                "route": "update/product"
+                "name": "Purchase Items",
+                "route": "purchase/items"
             },
             {
                 "id": 64,
                 "name": "Purchase  Return",
-                "route": "purchase/return"
+                "route": "purchase/return/items"
             }
         ]
     },
@@ -102,7 +97,7 @@
         "name": "Server",
         "route": "server",
         "icon": "solar:server-minimalistic-bold",
-        "class": "",
+        "className": "mt-4",
         "option": true,
         "items": [
             {
@@ -148,19 +143,11 @@
         ]
     },
     {
-        "id": "7",
-        "name": "Sale History",
-        "route": "order",
-        "icon": "material-symbols:order-approve",
-        "class": "",
-        "option": false
-    },
-    {
-        "id": "6",
+        "id": "8",
         "name": "Warehouse",
         "route": "update/product",
         "icon": "dashicons:update",
-        "class": "pt-3",
+        "className": "mt-4",
         "option": true,
         "items": [
             {
@@ -177,8 +164,8 @@
         ]
     },
     {
-        "id": "8",
-        "name": "Setting",
+        "id": "10",
+        "name": "Settings",
         "route": "setting",
         "icon": "uil:setting",
         "class": "my-3",
@@ -190,24 +177,14 @@
                 "route": "profile"
             },
             {
-                "id": 83,
-                "name": "App Setting",
-                "route": "app/setting"
-            }
-        ]
-    },
-    {
-        "id": "9",
-        "name": "Users",
-        "route": "setting",
-        "icon": "uil:setting",
-        "class": "my-3",
-        "option": true,
-        "items": [
-            {
                 "id": 81,
                 "name": "Users and Roles",
                 "route": "users"
+            },
+            {
+                "id": 83,
+                "name": "App Setting",
+                "route": "app/setting"
             }
         ]
     }

@@ -3,16 +3,17 @@ import BaseUrl from '../../Constant';
 import Updown from '../../icons/Updown';
 import ShowEntries from '../Input/ShowEntries';
 import Loading from '../../icons/Loading';
-import { useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
 import { useToImage } from '@hcorta/react-to-image'
-import logo from '../Logo/userProfile.png'
-import PayHisCard from './PayHisCard';
+import logo from '../Logo/photo.png'
+import Calander from '../Wholesale/Calender'
 
 
 const PaymentHistory = ({ entries = [] }) => {
 
+    const goto = useNavigate()
     const params = useParams()
     const [data, setData] = useState([]);
     const [values, setValues] = useState({})
@@ -20,7 +21,15 @@ const PaymentHistory = ({ entries = [] }) => {
     const [totalItem, setTotalItem] = useState(0)
     const [pageSize, setPageSize] = useState(20);
     const [isLoading, setIsLoading] = useState(false);
-    const [isChecked, setIsChecked] = useState(false)
+    const [time, setTime] = useState({});
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toISOString(),
+        toDate: today.toISOString()
+    });
     const options = {
         width: 1000,
         backgroundColor: '#ffffff'
@@ -30,64 +39,88 @@ const PaymentHistory = ({ entries = [] }) => {
 
     const GetProduct = async () => {
         const token = localStorage.getItem('token')
+        setIsLoading(true)
         const res = await fetch(`${BaseUrl}/api/get/payment/history/${params?.id}`, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 "authorization": token,
                 'Content-type': 'application/json; charset=UTF-8',
             },
+            body: JSON.stringify(raw)
         });
         const data = await res.json()
         setValues(data?.items);
         setData(data?.history);
-        console.log(data)
+        setIsLoading(false)
+        setTotalItem(4)
     }
 
     useEffect(() => {
         GetProduct()
-    }, [])
+    }, [raw])
 
-
+    const handleDateConvert = (date) => {
+        const formatted = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        return formatted
+    };
 
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-4 py-2 bg-[#FFFFFF] rounded shadow">
-                <div className='border-r p-3'>
-                    <img
-                        src={values?.image_url ? values?.image_url : logo}
-                        alt="image"
-                        className="h-full w-full object-cover"
-                    />
-                </div>
-                <div className='grid col-span-1 lg:col-span-2 p-3'>
-                    <div className='text-[#4C5258] font-thin text-md'>
-                        <h1 className='text-2xl py-3 font-semibold'>{values?.name}</h1>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold'>Due</h1>
-                            <h1 className='py-2 '>{values?.balance}</h1>
-                        </div>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold   '>Customer Type </h1>
-                            <h1 className='py-2 '>{values?.usertype}</h1>
-                        </div>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold'>Phone</h1>
-                            <h1 className='py-2 '>{values?.phone}</h1>
-                        </div>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold'>Email</h1>
-                            <h1 className='py-2 '>{values?.email}</h1>
-                        </div>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold'>Account Number</h1>
-                            <h1 className='py-2 '>{values?.accountnumber}</h1>
-                        </div>
-                        <div className='flex justify-between items-center w-[350px]'>
-                            <h1 className='py-2 font-semibold'>Address</h1>
-                            <h1 className='py-2 '>{values?.address}</h1>
+
+
+            <div className="bg-[#FFFFFF] rounded shadow flex justify-between">
+                <div className='flex justify-start items-start gap-5 px-4 py-2'>
+                    <div className=' p-3'>
+                        <img
+                            src={values?.image_url ? values?.image_url : logo}
+                            alt="image"
+                            className="h-56 w-56 object-cover"
+                        />
+                    </div>
+                    <div className='grid col-span-1 lg:col-span-2 p-3 border-l'>
+                        <div className='text-[#4C5258] font-thin text-md'>
+                            <h1 className='text-2xl py-3 font-semibold'>{values?.name}</h1>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Balance</h1>
+                                <h1 className='py-2 '>{values?.balance}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Customer Type </h1>
+                                <h1 className='py-2 '>{values?.customertype}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Phone</h1>
+                                <h1 className='py-2 '>{values?.phone}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Email</h1>
+                                <h1 className='py-2 '>{values?.email}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Account Number</h1>
+                                <h1 className='py-2 '>{values?.accountnumber}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[350px]'>
+                                <h1 className='py-2 font-semibold'>Address</h1>
+                                <h1 className='py-2 '>{values?.address}</h1>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div className='pt-5 w-[270px]'>
+                    <Calander label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(data) => { setTime({ ...time, from: data }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                </div>
+                <div className='pt-5 w-[270px]'>
+                    <Calander label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(data) => { setTime({ ...time, to: data }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                </div>
+
+                <div className='pt-10'>
+                    <NavLink to={`/customer/balance/${values?.id}`} className={`border text-white rounded-lg font-thin shadow py-2 px-5 bg-blue-600`}>Make Payment</NavLink>
                 </div>
             </div>
 
@@ -103,57 +136,90 @@ const PaymentHistory = ({ entries = [] }) => {
                     </div>
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                        <thead class="text-md text-gray-900 ">
+
+                    <table className="text-sm text-left rtl:text-right text-gray-500 w-full min-w-[700px] ">
+                        <thead className=" text-sm text-left rtl:text-right text-gray-500">
                             <tr className='border'>
-                                <th className="w-4 py-2 px-4 border-r">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 rounded text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-2 py-2 border-r ">
+                                <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
-                                        Item Name
+                                        Date
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-center border-r">
+
+                                <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
-                                        Total 
+                                        Invoice
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Type
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Assigned Person
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Total
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
                                         Paid
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
                                         Due
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
                                         Created by
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
-                                        Created at
+                                        Status
+                                        <Updown />
+                                    </div>
+                                </th>
+
+                                <th scope="col" className="px-3 py-3 text-right border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Delivery Date
                                         <Updown />
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((item, i) => (
-                                <PayHisCard key={i} item={item} i={i} isChecked={isChecked} />
-                            ))}
+                            {data?.map((item) => (
+                                <tr className='border-b border-x cursor-pointer' onClick={() => { goto(`/invoice/${item?.id}`) }}>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">11 May 2025</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">#{item?.id}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.type}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.paidamount}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.due}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.status}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.deliverydate}</th>
+                                </tr>
+                            ))
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -20,6 +20,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
+    const [select, setSelect] = useState(null)
 
     const GetSupplier = async () => {
         const token = localStorage.getItem('token')
@@ -35,12 +36,19 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     }
 
     useEffect(() => {
+        document.title = `Suppliers - Kazaland Brothers`;
         GetSupplier()
     }, [])
 
-    useEffect(() => {
-        document.title = `Suppliers - Kazaland Brothers`;
-    }, []);
+
+
+    const OpenModal = (id) => {
+        if (id === select) {
+            setSelect(null)
+        } else {
+            setSelect(id)
+        }
+    }
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
@@ -137,7 +145,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
                                 {
                                     supplier?.map((item, i) => {
-                                        return <SupplierCard item={item} key={i} state={state} info={info} />
+                                        return <SupplierCard item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
                                     })
                                 }
 

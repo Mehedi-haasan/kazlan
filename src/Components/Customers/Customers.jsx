@@ -9,6 +9,7 @@ import Loading from "../../icons/Loading";
 import CustomerCard from "./CustomerCard";
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
+import Selection from "../Input/Selection";
 
 
 const Customers = ({ entries, state = [], info = {} }) => {
@@ -20,7 +21,9 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
-    const [totalItem, setTotalItem] = useState(0)
+    const [totalItem, setTotalItem] = useState(0);
+    const [select, setSelect] = useState(null);
+    const [values, setValues]=useState({})
 
     const GetCustomer = async () => {
         setIsLoading(true)
@@ -34,6 +37,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
         })
         const data = await response.json();
         setCustomer(data?.items)
+        setTotalItem(data?.count)
         setIsLoading(false)
     }
 
@@ -42,7 +46,13 @@ const Customers = ({ entries, state = [], info = {} }) => {
         GetCustomer()
     }, [])
 
-
+    const OpenModal = (id) => {
+        if (id === select) {
+            setSelect(null)
+        } else {
+            setSelect(id)
+        }
+    }
 
 
     return (
@@ -54,6 +64,9 @@ const Customers = ({ entries, state = [], info = {} }) => {
                 <NavLink to={`/create/customer`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Customer</NavLink>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+                <div className="w-[200px] pb-3">
+                    <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Party" }, { id: 3, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={'Customer Type*'} />
+                </div>
                 <div className="flex justify-between items-center ">
                     <div>
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
@@ -112,6 +125,12 @@ const Customers = ({ entries, state = [], info = {} }) => {
                                     </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r">
                                         <div className="flex justify-between items-center">
+                                            Thana
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
                                             Address
                                             <Updown />
                                         </div>
@@ -139,7 +158,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 {customer?.map((item, i) => {
-                                    return <CustomerCard item={item} state={state} i={i} info={info} />
+                                    return <CustomerCard item={item} state={state} i={i} info={info} select={select} OpenModal={OpenModal} />
                                 })}
                             </tbody>
                         </table>

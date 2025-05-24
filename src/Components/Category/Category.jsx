@@ -126,7 +126,7 @@ const Category = ({ entries, info = {} }) => {
     const SearchCategory = async (value) => {
         const name = value
         const token = localStorage.getItem('token')
-        if (name) {
+        if (name !== '') {
             const response = await fetch(`${BaseUrl}/api/get/category/filter/search/${name}`, {
                 method: 'GET',
                 headers: {
@@ -135,6 +135,8 @@ const Category = ({ entries, info = {} }) => {
             });
             const data = await response.json();
             setCategory(data?.items);
+        }else{
+            getCategory() 
         }
     }
 
@@ -179,7 +181,7 @@ const Category = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} handleEnter={()=>{handleCreate('')}} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>

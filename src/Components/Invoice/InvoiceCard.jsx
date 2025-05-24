@@ -1,29 +1,37 @@
 import React from 'react'
 
-const InvoiceCard = ({ id, name, qty, cost, price }) => {
+const InvoiceCard = ({ item }) => {
+
     function convertToBengaliNumber(num) {
         const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
     }
+
+    const CalculateSale = (item) => {
+        let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+        let price = parseInt(item?.price)
+        return price - parseInt(discount)
+    }
+
     return (
-        <tr key={id} className="dark:bg-gray-800 border-b">
-            <th scope="row" className="pr-6 pl-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {convertToBengaliNumber(qty)}
+        <tr key={item?.id} className="border-b border-x">
+            <th className="p-2 font-thin text-center">
+                {convertToBengaliNumber(item?.qty)}
             </th>
-            <td className="px-6 py-3 text-center">
-                {name}
+            <td className="p-2 border-l font-thin text-center">
+                {item?.name}
             </td>
-            <td className="px-6 py-3 text-center">
-                {"Islamia Library"}
+            <td className="p-2 border-l font-thin text-center">
+                {item?.product?.brand?.name}
             </td>
-            <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(parseInt(cost))}
+            <td className="p-2 border-l font-thin text-center">
+                {convertToBengaliNumber(parseInt(item?.price))}.০
             </td>
-            <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(price)}
+            <td className="p-2 border-l font-thin text-center">
+                {convertToBengaliNumber(CalculateSale(item))}.০
             </td>
-            <td className="pl-6 py-3 text-right">
-                {convertToBengaliNumber(price * qty)}
+            <td className="p-2 text-right border-l font-thin">
+                {convertToBengaliNumber(item?.sellprice)}.০
             </td>
         </tr>
     )

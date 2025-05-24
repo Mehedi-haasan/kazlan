@@ -11,9 +11,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import { useLottie } from "lottie-react";
+import DownModal from "../Input/DownModal";
 
 
-const BrandCard = ({ item, i, isChecked, info = {}, getBrand,isDownloadMode }) => {
+const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) => {
 
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
@@ -126,7 +127,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand,isDownloadMode }) =
     const { View } = useLottie(options);
 
     return (
-        <tr className={`${i % 2 == 0 ? " " : "bg-gray-100"} border-b`}>
+        <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b`}>
             <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
                     <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
@@ -162,13 +163,13 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand,isDownloadMode }) =
                     <Edit onClick={() => { setEdit(true) }} />
 
                     <Remove onClick={() => { setShow(true) }} />
-                    <Modal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
+                    <DownModal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
                         <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
                         <div className="flex justify-between items-center p-4">
-                            <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
                             <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
+                            <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
                         </div>
-                    </Modal>
+                    </DownModal>
                 </th>
             }
         </tr>

@@ -45,9 +45,8 @@ const StateCard = ({ item }) => {
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-r">{item?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r">#{item?.id}</th>
-            <th scope="col" className="px-2 py-2 border-r">Active</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin">#{item?.id}</th>
             <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                 <Edit />
                 <Remove />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Selection = ({ options, onSelect, label, className = 'rounded' }) => {
+const Selection = ({ options, onSelect, label, className = 'rounded', text = false }) => {
     const [selectedId, setSelectedId] = useState(0);
     const [select, setSelect] = useState('ALL')
     const [hide, setHide] = useState(false)
@@ -18,9 +18,9 @@ const Selection = ({ options, onSelect, label, className = 'rounded' }) => {
 
     return (
         <div className='w-full'>
-            <h1 className="mb-2 text-start text-sm font-semibold text-black"> {label} </h1>
+            <h1 className="mb-2 text-start text-[15px] font-semibold text-black"> {label} </h1>
             <select id={selectedId} value={selectedId} onChange={handleSelect}
-                className={`border text-[#6B7280] w-full min-w-[205px] border-gray-300 text-sm focus:ring-blue-500 focus:outline-none font-thin focus:border-blue-500 block p-2 ${className} `}
+                className={`border ${text ? "text-[#6B7280]" : "text-black"} w-full min-w-[205px] border-gray-300 text-sm focus:ring-blue-500 focus:outline-none  font-thin focus:border-blue-500 block p-2 ${className} `}
             >
                 {options?.map(({ id, name }) => (
 

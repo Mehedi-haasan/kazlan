@@ -5,7 +5,7 @@ import BaseUrl from "../../Constant";
 import SelectionComponent from "../Input/SelectionComponent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import logo from '../Logo/userProfile.png'
+import ImageSelect from "../Input/ImageSelect";
 
 const Setting = ({ userinfo = {} }) => {
     const [user, setUser] = useState({});
@@ -13,7 +13,7 @@ const Setting = ({ userinfo = {} }) => {
     const [compId, setCompId] = useState(1)
     const [info, setInfo] = useState({});
     const [select, setSelect] = useState('General');
-    const [image_url, setImage_Url] = useState();
+    const [image_url, setImage_Url] = useState(null);
     const [imageFile, setImageFile] = useState(null);
 
     const AppInfo = async () => {
@@ -124,7 +124,7 @@ const Setting = ({ userinfo = {} }) => {
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
                         <h1 className='py-2 text-lg'>Setting</h1>
                         <button onClick={() => setSelect('General')} className="flex justify-start items-center gap-2 p-2 hover:bg-blue-500 hover:text-white rounded w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
                             <h1>General</h1>
                         </button>
                         <button onClick={() => setSelect('App')} className="flex justify-start items-center gap-2 p-2 hover:bg-blue-500 hover:text-white rounded w-full">
@@ -152,47 +152,26 @@ const Setting = ({ userinfo = {} }) => {
                                 <SelectionComponent options={allComp} onSelect={(v) => { setCompId(v?.id) }} />
                             </div>}
                         </div>
-                        <div className='px-3 md:px-4 lg:px-5 py-3 md:py-4 lg:py-5 bg-[#FFFFFF] rounded-b shadow'>
+                        <div className=' bg-[#FFFFFF] rounded-b shadow'>
                             {
-                                userinfo?.role === "superadmin" && <div className="flex justify-start items-center gap-5 pb-2 pt-2">
-                                    <div>
-                                        <p className='pb-2 font-semibold'>Shop Logo</p>
-                                        <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
-                                    </div>
-                                    <div>
-                                        <div className='flex justify-start items-center gap-2 pt-10'>
-                                            <div className='border rounded-lg px-4 py-1'>
-                                                <label>
-                                                    <h1 className="font-semibold pt-1 pb-2">Browse</h1>
-                                                    <input
-                                                        type="file"
-                                                        accept="image/*"
-                                                        onChange={handleImageChange}
-                                                        className="hidden"
-                                                    />
-                                                </label>
-                                            </div>
-                                            <div className='border rounded-lg px-4 py-1.5'>
-                                                <h1 className="font-semibold py-1">Reset</h1>
-                                            </div>
-
-                                        </div>
-                                        <p className='font-thin py-1 text-sm'>Allowed JPG, GIF or PNG. Max size of 1MB</p>
-                                    </div>
+                                userinfo?.role === "superadmin" && <div className="py-4">
+                                    <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={user?.image_url} />
                                 </div>
                             }
-                            <InputComponent label={'Application Name'} placeholder={user?.name} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, name: v }) }} />
-                            <InputComponent label={'Footer text'} placeholder={user?.footertext} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
-                            <InputComponent label={'Email'} placeholder={user?.email} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, email: v }) }} />
-                            <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
-                            <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
-                            <InputComponent label={'Address'} placeholder={user?.address} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, address: v }) }} />
-                            <InputComponent label={'Invoice Prefix'} placeholder={user?.salecode} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
-                            <InputComponent label={'Description'} placeholder={user?.description} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
-                            <InputComponent label={'Employee'} placeholder={1} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
-                            <div className='py-3'>
-                                <Button onClick={() => { image_url !== null ? handleUploadUpdate() : UpdateSetting(user?.image_url, "") }} isDisable={userinfo?.role === "superadmin" ? false : true} name={'Update'} />
-                                <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
+                            <div className="px-3 md:px-4 lg:px-5 pb-3 md:pb-4 lg:pb-5">
+                                <InputComponent label={'Application Name'} placeholder={user?.name} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, name: v }) }} />
+                                <InputComponent label={'Footer text'} placeholder={user?.footertext} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, footertext: v }) }} />
+                                <InputComponent label={'Email'} placeholder={user?.email} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, email: v }) }} />
+                                <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
+                                <InputComponent label={'Mobile'} placeholder={user?.phone} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, phone: v }) }} />
+                                <InputComponent label={'Address'} placeholder={user?.address} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, address: v }) }} />
+                                <InputComponent label={'Invoice Prefix'} placeholder={user?.shopcode} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, shopcode: v }) }} />
+                                <InputComponent label={'Description'} placeholder={user?.description} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
+                                <InputComponent label={'Employee'} placeholder={1} readOnly={userinfo?.role === "superadmin" ? false : true} onChange={(v) => { setUser({ ...user, description: v }) }} />
+                                <div className='py-3'>
+                                    <Button onClick={() => { image_url !== null ? handleUploadUpdate() : UpdateSetting(user?.image_url, "") }} isDisable={userinfo?.role === "superadmin" ? false : true} name={'Update'} />
+                                    <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
+                                </div>
                             </div>
                         </div>
                     </div>

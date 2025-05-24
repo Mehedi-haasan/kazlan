@@ -126,7 +126,7 @@ const Brand = ({ entries, info = {} }) => {
     const SearchBrand = async (value) => {
         const name = value
         const token = localStorage.getItem('token')
-        if (name) {
+        if (name !== '') {
             const response = await fetch(`${BaseUrl}/api/get/brand/filter/search/${name}`, {
                 method: 'GET',
                 headers: {
@@ -136,8 +136,13 @@ const Brand = ({ entries, info = {} }) => {
             const data = await response.json();
             setBran(data?.items);
             console.log(data?.items)
+        }else{
+            getBrand()
         }
     }
+
+    
+
 
 
 

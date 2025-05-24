@@ -73,7 +73,7 @@ const Login = ({ auth }) => {
               <p className="text-center mt-2 font-normal">Please Login to your account</p>
 
               <div className='mb-2'>
-                <label className="block  text-sm font-semibold mb-1">Email</label>
+                <label className="block  text-sm font-semibold mb-1">Email / Phone Number</label>
                 <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300" placeholder="Enter your email" />
               </div>
               <div className='relative mb-5'>

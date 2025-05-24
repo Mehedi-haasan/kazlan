@@ -1,33 +1,67 @@
 import { useEffect, useState } from 'react';
 import BaseUrl from '../../Constant';
-import { useToImage } from '@hcorta/react-to-image'
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import PurchaseProductCard from '../PurchaseProduct/PurchaseProductCard';
-import RightArrow from '../../icons/RightArrow';
-import MiniButton from '../Input/MiniButton';
-import Modal from '../Input/Modal';
+import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getFormattedDate } from '../Input/Time';
+import { useNavigate } from 'react-router-dom';
+import Calender from '../Wholesale/Calender';
 
 
 
-const PruchaseReturn = ({ shop = [], paytype = [] }) => {
 
-    const [data, setData] = useState({});
-    const [due, setDue] = useState(0)
-    const [total, setTotal] = useState(0)
-    const [userId, setUserId] = useState(null)
+const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
+
+    const goto = useNavigate()
+    const [searchItem, setSearchItem] = useState('')
+    const [total, setTotal] = useState(0);
+    const [paking, setPaking] = useState(0);
+    const [delivary, setDelivery] = useState(0)
+    const [customer, setCustomer] = useState([])
+    const [name, setName] = useState('Mehedi hasan')
+    const [due, setDue] = useState(0);
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
-    const [show, setShow] = useState(false);
-    const [supplier, setSupplier] = useState([]);
-    const [searchItem, setSearchItem] = useState('')
+    const [userId, setUserId] = useState(null);
+    const [lastTotal, setLastTotal] = useState(0)
+    const today = new Date();
+    const [values, setValues] = useState({
+        pay: 0,
+        paking: 0,
+        delivary: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
+    })
+
+
+    const [raw, setRaw] = useState({
+        fromDate: today.toISOString(),
+        toDate: today.toISOString()
+    });
+
+
+    const handleDateConvert = (date) => {
+        const formatted = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        return formatted
+    };
+
+
+    useEffect(() => {
+        document.title = "Purchase Return - KazalandBrothers";
+    }, []);
+
 
     const SearchProduct = async (e) => {
         const name = e.target.value
@@ -48,16 +82,42 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
     }
 
 
-
-
-    const PurchaseReturn = async () => {
+    const Order = async () => {
         if (!userId) {
-            toast("Please Select Supplier first");
+            toast("Supplier are required");
             return
         }
         const token = localStorage.getItem('token');
         let orderData = [];
-        allData?.map((v) => orderData.push({ "id": v?.id, "qty": v?.qty }))
+        allData?.forEach((v) => {
+            let sale = 0;
+            const price = parseInt(v?.price) || 0;
+            const discount = parseInt(v?.discount) || 0;
+            const qty = parseInt(v?.qty) || 0;
+            if (v?.discount_type === "Fixed") {
+                sale = (price - discount) * qty;
+            } else if (v?.discount_type === "Percentage") {
+                const discountedPrice = price - (price * discount / 100);
+                sale = discountedPrice * qty;
+            }
+
+            orderData.push({
+                active: true,
+                product_id: v?.id,
+                username: name,
+                userId: userId,
+                name: v?.name,
+                shop: info?.shopname,
+                price: price,
+                discount: discount,
+                discount_type:v?.discount_type,
+                sellprice: sale,
+                qty: qty,
+                contact: values?.phone,
+                date: getFormattedDate(),
+                deliverydate: values?.deliverydate
+            });
+        });
         try {
             const response = await fetch(`${BaseUrl}/api/return/purchase`, {
                 method: 'POST',
@@ -66,44 +126,47 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
                 body: JSON.stringify({
-                    data: orderData,
+                    shop: info?.shopname,
+                    customername: name,
                     userId: userId,
-                    total: total
+                    date: getFormattedDate(),
+                    total: lastTotal,
+                    packing: paking,
+                    delivery: delivary,
+                    lastdiscount: values?.lastdiscount,
+                    previousdue: due,
+                    paidamount: values?.pay,
+                    amount: lastTotal - values?.pay,
+                    orders: orderData,
+                    deliverydate: values?.deliverydate
                 }),
             });
 
             const data = await response.json();
-            toast(data?.message)
+            toast(data?.message);
+            goto(`/invoice/${data?.invoice}`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
     }
 
-    useEffect(() => {
-        const GetSupplier = async () => {
-            const token = localStorage.getItem(`token`);
-            const response = await fetch(`${BaseUrl}/api/get/suppliers/1/100`, {
-                method: 'GET',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-            });
-            const data = await response.json();
-            setSupplier(data?.items);
-        }
-        document.title = "Purchase Return - KazalandBrothers";
-        GetSupplier()
-
-    }, [])
-
-
-    useEffect(() => {
+    const CalculateAmount = () => {
         let amount = allData?.reduce((acc, item) => {
-            return acc + (parseInt(item?.qty) * parseInt(item?.price))
-        }, 0);
+            if (item?.discount_type === "Fixed") {
+                let price = parseInt(parseInt(item?.price) - item?.discount);
+                return acc + (parseInt(item?.qty) * parseInt(price))
+            } else {
+                let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+                return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+            }
 
-        setTotal(parseInt(amount));
+        }, 0);
+        setTotal(amount);
+        setLastTotal(amount)
+    }
+
+    useEffect(() => {
+        CalculateAmount()
     }, [allData]);
 
 
@@ -118,7 +181,25 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
         });
         const data = await response.json();
         setDue(data?.balance);
+        setValues({ ...values, phone: data?.phone })
     }
+
+
+
+    const GetCustomer = async (id) => {
+        const token = localStorage.getItem(`token`);
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/${id}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json();
+        setCustomer(data?.items);
+    }
+
+
 
 
     const ChangeQty = (id, qty) => {
@@ -136,50 +217,123 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
     };
 
     const ChangeDiscount = (id, discount) => {
-        const updatedData = allData.map(item =>
-            item.id === id ? { ...item, discount } : item
-        );
+        const updatedData = allData.map(item => {
+            if (item.id === id) {
+                const originalPrice = item.price;
+                const discountedPrice = originalPrice - (originalPrice * parseFloat(discount) / 100);
+
+                return {
+                    ...item,
+                    discount,
+                    disPrice: discountedPrice,
+                };
+            }
+            return item;
+        });
+
         setAllData(updatedData);
     };
 
 
+
+    const ChangeLastDiscountType = (type, amount) => {
+        setValues({
+            ...values,
+            lastdiscounttype: type,
+            lastdiscount: amount
+        });
+        if (type === "Fixed") {
+            let temp = parseInt(total) - parseInt(amount);
+            setLastTotal(parseInt(temp) + parseInt(paking) + parseInt(delivary));
+        } else if (type === "Percentage") {
+            let discount = parseInt(parseInt(total) * parseInt(amount) / 100);
+            let temp = parseInt(total) - parseInt(discount);
+            setLastTotal(parseInt(temp) + parseInt(paking) + parseInt(delivary));
+        }
+    }
+
+    const HandleDelete = (id) => {
+        if (!id) return;
+        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
+        if (!confirmDelete) return;
+
+        const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
+        setAllData(updatedData);
+    };
+
+    const ChangeDiscountType = (type, id) => {
+        const updatedData = allData.map(item => {
+            if (item.id === id) {
+                if (type === "Percentage") {
+                    const discountedPrice = item?.price - (item?.price * parseFloat(item?.discount) / 100);
+                    return {
+                        ...item,
+                        discount_type: type,
+                        disPrice: discountedPrice
+                    };
+                } else if (type === "Fixed") {
+                    const discountedPrice = item?.price - parseFloat(item?.discount)
+                    return {
+                        ...item,
+                        discount_type: type,
+                        disPrice: discountedPrice
+                    };
+                }
+
+            }
+            return item;
+        });
+        setAllData(updatedData)
+    }
+
     return (
-        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2">
+        <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
             <ToastContainer />
-            <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Purchase Return</h1>
-            </div>
+
 
 
             <div className='bg-[#FFFFFF]'>
-                <div className='border-b p-4'>
-                    <h1>Sale Details</h1>
+                <div className='border-b p-4 flex justify-between items-center'>
+                    <h1>Purchase Return Details</h1>
+                    {/* <NavLink to={`/sale/return`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Sale Return</NavLink> */}
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={supplier} onSelect={(v) => { fetchUserDue(v?.id); setUserId(v?.id) }} label={"Supplair"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                    <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
+                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
-                    <div>
-                        <InputComponent placeholder={getFormattedDate()} label={'Date'} />
+                    <div></div>
+
+                    <div className='relative'>
+
+                        <Calender label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
                     </div>
-                    <div>
-                        <InputComponent placeholder={'Shop1/111'} label={'Sale Code'} />
+
+                    <div className='flex justify-start items-end pb-1'>
+                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l' />
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <Add />
+                        </div>
                     </div>
+                    <div></div>
+                    <div className='relative'>
+                        <Calender label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                    </div>
+
                 </div>
 
                 <div className='border-b p-4'>
                     <h1>Items</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4 '>
                     <div>
-                        <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} />
+                        {info?.role === "superadmin" ? <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} /> : <InputComponent placeholder={info?.shopname} label={'Warehouse'} readOnly={true} />}
                     </div>
                     <div className='grid col-span-2'>
-                        <h1 className='pb-1'>Enter item name</h1>
-                        <div className='flex justify-center w-full'>
+                        <h1 className='pb-1 font-thin'>Enter Item Name</h1>
+                        <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
@@ -191,6 +345,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                                         <thead class="text-xs text-gray-900">
                                             <tr className='border-b border-black text-[16px]'>
                                                 <th scope="col" className="px-1 py-2 font-thin">Name</th>
+                                                <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
                                                 <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
@@ -202,7 +357,8 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                                             {searchData?.map((item) => {
                                                 return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{"Cate"}</th>
+                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
+                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
@@ -215,7 +371,7 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
                                 }
 
                             </div>
-                            <div className='border px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
+                            <div onClick={() => { goto('/create') }} className='border px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>
                         </div>
@@ -225,79 +381,95 @@ const PruchaseReturn = ({ shop = [], paytype = [] }) => {
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="min-w-[800px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-sm text-gray-900  dark:text-gray-400">
-                            <tr className='border-b border-gray-400 text-[16px]'>
-                                <th scope="col" className="pr-6 py-2 ">Serial</th>
-                                <th scope="col" className="px-4 py-2 text-center">Item</th>
-                                <th scope="col" className="px-4 py-2 text-center">Qty</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Unit</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Price/unit</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Discount</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Total</th>
-                                <th scope="col" className="pl-4 py-2 text-right">Action</th>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-900 dark:text-gray-400">
+                            <tr className='border-y text-[16px] py-1'>
+                                <th scope="col" className="p-2 text-center font-thin border-x">Action</th>
+                                <th scope="col" className="pl-2 py-2.5 font-thin border-x">Item Code</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Item name</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Qty</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">M.R.P</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Discount</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Sale Price</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r rounded">Total price</th>
+
                             </tr>
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <PurchaseProductCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} changeprice={ChangePrice} onClick={() => { }} />
+                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
                             })}
                         </tbody>
                     </table>
                 </div>
 
                 <div className='p-4'>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
+                    <div className='flex justify-between gap-5'>
                         <div>
-                            <InputComponent label={'Balance'} placeholder={due} />
-                        </div>
-                        <div>
-                            <InputComponent label={'Amount'} placeholder={total} />
-                        </div>
-                        <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={paytype} onSelect={() => { }} label={"Payment Type"} className='rounded-l' />
-                            <div className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE]'>
-                                <Add />
+                            <div className=''>
+                                <InputComponent placeholder={due} label={'Balance'} readOnly={true} className={``} />
                             </div>
+                            <div>
+                                <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
+                                <div className='flex justify-start items-end pb-1 pt-1'>
+                                    <input type='number' value={values?.pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                    <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
+                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {[{ id: 201, name: "Cash" }, { id: 202, name: "Due" }].map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div className=''>
+                                <InputComponent placeholder={total} label={'Total'} readOnly={true} className={``} />
+                            </div>
+
+                            <div className='flex justify-between items-center gap-4'>
+                                <InputComponent label={'Packing Charge'} type={'number'} placeholder={paking} onChange={(v) => { setPaking(v); setLastTotal(parseInt(total) + parseInt(v)) }} className={``} />
+                                <InputComponent label={'Delivery Charge'} type={'number'} placeholder={delivary} onChange={(v) => { setDelivery(v); setLastTotal(parseInt(total) + parseInt(v) + parseInt(paking)) }} className={``} />
+                            </div>
+                            <div className='pb-4'>
+                                <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
+                                <div className='flex justify-start items-end pb-1 pt-1'>
+                                    <input type='number' value={values?.lastdiscount} onChange={(e) => { ChangeLastDiscountType(values?.lastdiscounttype, e.target.value) }} placeholder='' className='border-y border-l px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                    <select value={values?.lastdiscounttype} onChange={(e) => { ChangeLastDiscountType(e.target.value, values?.lastdiscount) }}
+                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {[{ id: 1, name: "Fixed" }, { id: 2, name: "Percentage" }].map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className='border-t pt-2 border-black flex justify-start gap-2 '>
+                                <div><h1 className='pt-[5px] w-[100px]'>Total Amount</h1></div>
+                                <div className='w-full'>
+                                    <input type='number' value={total} readOnly={true} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder={total}
+                                        className='border text-[#6B7280] px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className='flex justify-between  gap-5'>
+                        <div className='border-t border-black'>
+                            <h1 className='text-center'>{info?.name}</h1>
                         </div>
                     </div>
                 </div>
-                <div className='p-4 '>
-                    <Button name={'Submit'} onClick={PurchaseReturn} />
+                <div className='p-4 border-t'>
+                    <Button onClick={Order} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
 
-            <Modal show={show} handleClose={() => { setShow(false) }} className={`w-[500px]`}>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Name</h1>
-                    <h1>{data?.name}</h1>
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Price</h1>
-                    <h1>{data?.price}</h1>
-                </div>
-                <div className='flex justify-between items-center py-1'>
-                    <h1>Qty</h1>
-                    <input type='number'
-                        className="text-right focus:outline-none w-16 border rounded"
-                        onChange={(e) => setData({ ...data, qty: e.target.value })}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                setAllData([...allData, data]);
-                                setData([]);
-                                setShow(false);
-                            }
-                        }}
-                        placeholder={""}
-                    />
-                </div>
-                <div className='flex justify-end items-center pt-1'>
-                    <MiniButton name={`Done`} onClick={() => { setAllData([...allData, data]); setData([]); setShow(false); }} />
-                </div>
-            </Modal>
         </div>
     );
 }
 
-export default PruchaseReturn;
+export default PurchaseReturn;

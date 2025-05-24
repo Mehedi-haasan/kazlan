@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Edit = ({ size = '20px', color = 'currentColor',onClick}) => {
+const Edit = ({ size = '20px', color = 'currentColor', onClick }) => {
     return (
         <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg"
-            className='hover:text-red-300 cursor-pointer text-[#212529]'
-            width="20px" height="20px"
+            className='text-green-600 cursor-pointer '
+            width={size} height={size}
             viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                 <path d="M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" />

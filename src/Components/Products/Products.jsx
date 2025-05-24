@@ -26,7 +26,8 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     const [brandId, setBrandId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [comId, setComId] = useState(null);
-    const [isChecked, setIsChecked] = useState(false)
+    const [isChecked, setIsChecked] = useState(false);
+    const [selected, setSelected] = useState(null)
     let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
 
     useEffect(() => {
@@ -61,8 +62,8 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     const SearchProduct = async (e) => {
         const name = e
         const token = localStorage.getItem('token')
-        if (name) {
-            const response = await fetch(`${BaseUrl}/api/get/product/search/${name}`, {
+        if (name !== '') {
+            const response = await fetch(`${BaseUrl}/api/get/product/search/with/${name}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -70,9 +71,22 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
             });
             const data = await response.json();
             setData(data.items)
+        } else {
+            getProduct()
         }
+
+
     }
 
+
+    const ModalOpen = (id) => {
+        console.log(id);
+        if (id === selected) {
+            setSelected(null)
+        } else {
+            setSelected(id)
+        }
+    }
 
 
     return (
@@ -111,7 +125,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >
                         <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-md text-gray-900 ">
+                            <thead class="text-md text-gray-900 z-10">
                                 <tr className='border'>
                                     <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
@@ -145,13 +159,13 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                                     </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r">
                                         <div className="flex justify-between items-center">
-                                            M.R.P
+                                            Purchase price
                                             <Updown />
                                         </div>
                                     </th>
                                     <th scope="col" className="px-2 py-2 text-right border-r">
                                         <div className="flex justify-between items-center">
-                                            Sale price
+                                            M.R.P
                                             <Updown />
                                         </div>
                                     </th>
@@ -180,7 +194,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 {data?.map((item, i) => (
-                                    <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info} getProduct={getProduct} />
+                                    <ProductCard key={i} item={item} i={i} isChecked={isChecked} info={info} getProduct={getProduct} modalOpen={ModalOpen} selected={selected} />
                                 ))}
                             </tbody>
                         </table>

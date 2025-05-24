@@ -60,11 +60,11 @@ const Profile = () => {
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
                         <h1 className='py-2 text-lg'>Options</h1>
                         <button onClick={() => { setSelect("Profile") }} className={`flex justify-start items-center gap-2 p-2 ${select === "Profile" ? 'bg-blue-500 text-white' : ''} hover:bg-blue-500 hover:text-white rounded w-full`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
                             <h1>Profile</h1>
                         </button>
                         <button onClick={() => { setSelect("Password") }} className={`flex justify-start items-center gap-2 mt-1 p-2 ${select === "Password" ? 'bg-blue-500 text-white' : ''} hover:bg-blue-500 hover:text-white rounded w-full`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M5 10h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z" opacity="0.16" /><path stroke="currentColor" strokeLinecap="round" stroke-width="2" d="M8 10V7a4 4 0 0 1 7.874-1" /><path stroke="currentColor" stroke-linejoin="round" strokeWidth="2" d="M5 10h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z" /><path stroke="currentColor" stroke-linejoin="round" stroke-width="3" d="M14.5 15.5h.01v.01h-.01z" /></g></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" d="M5 10h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z" opacity="0.16" /><path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M8 10V7a4 4 0 0 1 7.874-1" /><path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M5 10h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z" /><path stroke="currentColor" strokeLinejoin="round" strokeWidth="3" d="M14.5 15.5h.01v.01h-.01z" /></g></svg>
                             <h1>Change Password</h1>
                         </button>
                     </div>
@@ -95,8 +95,8 @@ const Profile = () => {
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
                         <h1 className='pb-5 pt-1'>Change Password</h1>
 
-                        <InputComponent label={'New Password'} onChange={(v) => { setUser({ ...user, password: v }) }} placeholder={"Enter new password"} />
-                        <InputComponent label={'Confirm Password'} onChange={(v) => { setUser({ ...user, password: v }) }} placeholder={"Enter Confirm password"} />
+                        <InputComponent label={'Old Password'} onChange={(v) => { setUser({ ...user, password: v }) }} placeholder={"Enter new password"} />
+                        <InputComponent label={'New Password'} onChange={(v) => { setUser({ ...user, newpassword: v }) }} placeholder={"Enter Confirm password"} />
 
                         <div className='py-3'>
                             <Button onClick={ChangePassword} name={'Change Password'} />

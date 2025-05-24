@@ -1,6 +1,7 @@
 import Remove from "../../icons/Remove";
 import Edit from "../../icons/Edit";
 import Modal from "../Input/Modal";
+import DownModal from '../Input/DownModal'
 import { useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
@@ -128,8 +129,8 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
 
     return (
 
-        <tr className={`${i % 2 == 0 ? " " : "bg-gray-100"} border-b`}>
-            <th className="w-4 py-2 px-4 border-x">
+        <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b border-x`}>
+            <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
                     <ToastContainer />
                     <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
@@ -145,16 +146,16 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-            {info?.role === "superadmin" && <th scope="col" className=" py-2 flex justify-center items-center border-r gap-2">
-                <Edit size='25px' onClick={() => { setEdit(true) }} />
-                <Remove size='25px' onClick={() => { setShow(true) }} />
-                <Modal show={show} handleClose={() => { setShow(false) }} size="350px" className="">
+            {info?.role === "superadmin" && <th scope="col" className=" py-3 flex justify-center items-center gap-2">
+                <Edit size='20px' onClick={() => { setEdit(true) }} />
+                <Remove size='18px' onClick={() => { setShow(true) }} />
+                <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
                     <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
                         <button onClick={handleDelete} disabled={isLoading} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
                     </div>
-                </Modal>
+                </DownModal>
 
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className="w-[450px]">
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">

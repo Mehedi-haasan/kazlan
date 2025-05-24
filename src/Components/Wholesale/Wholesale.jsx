@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import BaseUrl from '../../Constant';
-import { useToImage } from '@hcorta/react-to-image'
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
-import RightArrow from '../../icons/RightArrow';
 import Button from '../Input/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getFormattedDate } from '../Input/Time';
+import { useNavigate } from 'react-router-dom';
+import Calendar from './Calender'
 
 
 
 const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
-
+    const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
     const [paking, setPaking] = useState(0);
@@ -28,19 +28,34 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
     const [userId, setUserId] = useState(null);
-    const [stateId, setStateId] = useState(1);
     const [lastTotal, setLastTotal] = useState(0)
+    const today = new Date();
+    const [raw, setRaw] = useState({
+        fromDate: today.toISOString(),
+        toDate: today.toISOString()
+    });
+
+
+
+
+    const handleDateConvert = (date) => {
+        const formatted = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        return formatted
+    };
+
     const [values, setValues] = useState({
         pay: 0,
+        paking: 0,
+        delivary: 0,
         pay_type: 'Cash',
         lastdiscount: 0,
-        lastdiscounttype: "Fixed"
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
     })
-
-    useEffect(() => {
-        document.title = "Sale - KazalandBrothers";
-    }, []);
-
 
     const SearchProduct = async (e) => {
         const name = e.target.value
@@ -60,30 +75,43 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         }
     }
 
-
     const Order = async () => {
-        if (!userId || !values?.pay || !values?.pay_type) {
+        if (!userId || !values?.pay) {
             toast("Customer Pay Amount and Pay Type are required");
             return
         }
         const token = localStorage.getItem('token');
         let orderData = [];
-        allData?.map((v) => (
+        allData?.forEach((v) => {
+            let sale = 0;
+            const price = parseInt(v?.price) || 0;
+            const discount = parseInt(v?.discount) || 0;
+            const qty = parseInt(v?.qty) || 0;
+            if (v?.discount_type === "Fixed") {
+                sale = (price - discount) * qty;
+            } else if (v?.discount_type === "Percentage") {
+                const discountedPrice = price - (price * discount / 100);
+                sale = discountedPrice * qty;
+            }
+
             orderData.push({
-                "active": true,
-                "product_id": v?.id,
-                "username": name,
-                "userId": userId,
-                "name": v?.name,
-                "shop": info?.shopname,
-                "price": v?.price,
-                "discount": v?.discount,
-                "sellprice": (v?.price * v?.qty),
-                "qty": v?.qty,
-                "contact": values?.phone,
-                "date": getFormattedDate()
-            })
-        ))
+                active: true,
+                product_id: v?.id,
+                username: name,
+                userId: userId,
+                name: v?.name,
+                shop: info?.shopname,
+                price: price,
+                discount: discount,
+                discount_type:v?.discount_type,
+                sellprice: sale,
+                qty: qty,
+                contact: values?.phone,
+                date: getFormattedDate(),
+                deliverydate: values?.deliverydate
+            });
+        });
+
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -103,28 +131,38 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     previousdue: due,
                     paidamount: values?.pay,
                     amount: lastTotal - values?.pay,
-                    orders: orderData
+                    orders: orderData,
+                    deliverydate: values?.deliverydate
                 }),
             });
 
             const data = await response.json();
-            toast(data?.message)
+            toast(data?.message);
+            goto(`/invoice/${data?.invoice}`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
     }
 
+
     const CalculateAmount = () => {
         let amount = allData?.reduce((acc, item) => {
-            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
-            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+            if (item?.discount_type === "Fixed") {
+                let price = parseInt(parseInt(item?.price) - item?.discount);
+                return acc + (parseInt(item?.qty) * parseInt(price))
+            } else {
+                let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+                return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+            }
+
         }, 0);
         setTotal(amount);
-        setLastTotal(amount)
+
     }
 
     useEffect(() => {
         CalculateAmount()
+        document.title = "Sale - KazalandBrothers";
     }, [allData]);
 
 
@@ -142,8 +180,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         setValues({ ...values, phone: data?.phone })
     }
 
-
-
     const GetCustomer = async (id) => {
         const token = localStorage.getItem(`token`);
         const response = await fetch(`${BaseUrl}/api/get/customers/${id}`, {
@@ -156,9 +192,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         const data = await response.json();
         setCustomer(data?.items);
     }
-
-
-
 
     const ChangeQty = (id, qty) => {
         const updatedData = allData.map(item =>
@@ -192,8 +225,6 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         setAllData(updatedData);
     };
 
-
-
     const ChangeLastDiscountType = (type, amount) => {
         setValues({
             ...values,
@@ -210,34 +241,71 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
         }
     }
 
+
+    const HandleDelete = (id) => {
+        if (!id) return;
+        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
+        if (!confirmDelete) return;
+
+        const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
+        setAllData(updatedData);
+    };
+
+    const ChangeDiscountType = (type, id) => {
+        const updatedData = allData.map(item => {
+            if (item.id === id) {
+                if (type === "Percentage") {
+                    const discountedPrice = item?.price - (item?.price * parseFloat(item?.discount) / 100);
+                    return {
+                        ...item,
+                        discount_type: type,
+                        disPrice: discountedPrice
+                    };
+                } else if (type === "Fixed") {
+                    const discountedPrice = item?.price - parseFloat(item?.discount)
+                    return {
+                        ...item,
+                        discount_type: type,
+                        disPrice: discountedPrice
+                    };
+                }
+
+            }
+            return item;
+        });
+        setAllData(updatedData)
+    }
+
+
     return (
-        <div className="min-h-screen pb-12 pl-4 pt-5 pr-2 w-full">
+        <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
             <ToastContainer />
-            <div className='flex justify-start items-center gap-2 p-3'>
-                <h1>Home</h1><RightArrow /><h1>Create Sale</h1>
-            </div>
-
-
-            <div className='bg-[#FFFFFF]'>
-                <div className='border-b p-4'>
+            <div className='bg-[#FFFFFF] rounded-md'>
+                <div className='border-b p-4 flex justify-between items-center'>
                     <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={state} onSelect={(v) => { setStateId(v?.id); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                    <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l z-50' />
+                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
+                    <div></div>
+
+                    <div className='relative'>
+                        <Calendar label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                    </div>
+
+
                     <div className='flex justify-start items-end pb-1'>
                         <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
-                        <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
-                    <div>
-                        <InputComponent placeholder={getFormattedDate()} label={'Date'} readOnly={true} />
-                    </div>
+                    <div></div>
+                    <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
 
                 </div>
 
@@ -248,8 +316,8 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <div>
                         {info?.role === "superadmin" ? <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} /> : <InputComponent placeholder={info?.shopname} label={'Warehouse'} readOnly={true} />}
                     </div>
-                    <div className='grid col-span-2 pt-[2px]'>
-                        <h1 className='pb-1 font-thin'>Enter Item Name</h1>
+                    <div className='grid col-span-2'>
+                        <h1 className='pb-1'>Enter Item Name</h1>
                         <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
@@ -262,6 +330,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                         <thead class="text-xs text-gray-900">
                                             <tr className='border-b border-black text-[16px]'>
                                                 <th scope="col" className="px-1 py-2 font-thin">Name</th>
+                                                <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
                                                 <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
@@ -273,7 +342,8 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                             {searchData?.map((item) => {
                                                 return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{"Cate"}</th>
+                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
+                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
@@ -286,7 +356,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 }
 
                             </div>
-                            <div className='border px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE]'>
+                            <div onClick={() => { goto('/create') }} className='border px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>
                         </div>
@@ -312,7 +382,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                         </thead>
                         <tbody>
                             {allData?.map((item) => {
-                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} changeprice={ChangePrice} onClick={() => { }} />
+                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
                             })}
                         </tbody>
                     </table>
@@ -322,7 +392,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <div className='flex justify-between gap-5'>
                         <div>
                             <div className=''>
-                                <InputComponent placeholder={due} label={'Balance'} readOnly={true} className={`font-thin`} />
+                                <InputComponent placeholder={due} label={'Balance'} readOnly={true} className={``} />
                             </div>
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
@@ -337,16 +407,22 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
                                 </div>
                             </div>
+                            <div className='flex justify-between pt-24'>
+                                <div className='border-t border-black'>
+                                    <h1 className='text-center pt-[2px] text-[15px]'>{info?.name}</h1>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div>
                             <div className=''>
-                                <InputComponent placeholder={total} label={'Total'} readOnly={true} className={`font-thin`} />
+                                <InputComponent placeholder={total} label={'Total'} readOnly={true} className={``} />
                             </div>
 
                             <div className='flex justify-between items-center gap-4'>
-                                <InputComponent label={'Packing Charge'} type={'number'} placeholder={paking} onChange={(v) => { setPaking(v); setLastTotal(parseInt(total) + parseInt(v)) }} className={`font-thin`} />
-                                <InputComponent label={'Delivery Charge'} type={'number'} placeholder={delivary} onChange={(v) => { setDelivery(v); setLastTotal(parseInt(total) + parseInt(v) + parseInt(paking)) }} className={`font-thin`} />
+                                <InputComponent label={'Packing Charge'} type={'number'} placeholder={paking} onChange={(v) => { setPaking(v); setLastTotal(parseInt(total) + parseInt(v)) }} className={``} />
+                                <InputComponent label={'Delivery Charge'} type={'number'} placeholder={delivary} onChange={(v) => { setDelivery(v); setLastTotal(parseInt(total) + parseInt(v) + parseInt(paking)) }} className={``} />
                             </div>
                             <div className='pb-4'>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
@@ -364,25 +440,20 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                             <div className='border-t pt-2 border-black flex justify-start gap-2 '>
                                 <div><h1 className='pt-[5px] w-[100px]'>Total Amount</h1></div>
                                 <div className='w-full'>
-                                    <input type='number' value={lastTotal} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder=''
+                                    <input type='number' value={lastTotal} readOnly={true} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder={lastTotal}
                                         className='border text-[#6B7280] px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    <div className='flex justify-between  gap-5'>
-                        <div className='border-t border-black'>
-                            <h1 className='text-center'>Mehedi Hasan</h1>
-                        </div>
-                    </div>
+
                 </div>
                 <div className='p-4 border-t'>
                     <Button onClick={Order} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
-
         </div>
     );
 }

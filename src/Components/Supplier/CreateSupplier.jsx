@@ -6,16 +6,26 @@ import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 const CreateSupplier = ({ state }) => {
 
+    const goto = useNavigate()
     const [active, setActive] = useState("Address");
     const [isLoading, setIsLoading] = useState(false)
     const [values, setValues] = useState({
         "stateId": 1,
-        "usertype": "Supplier"
+        "usertype": "Supplier",
+        "balance": 0,
+        "balance_type": 'To Receive',
+        "address": "",
+        "customertype": "Supplier"
     })
     const handleSubmit = async (e) => {
+        if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
+            toast("Required Field are missing");
+            return
+        }
         setIsLoading(true)
         const token = localStorage.getItem('token')
         e.preventDefault()
@@ -30,26 +40,10 @@ const CreateSupplier = ({ state }) => {
         const data = await response.json();
         setIsLoading(false);
         toast(data.message)
+        goto('/suppliers')
     }
 
 
-    let qt = [{
-        id: 1,
-        name: "To Pay"
-    },
-    {
-        id: 2,
-        name: "To Receive"
-    }]
-
-    let cus = [{
-        id: 1,
-        name: "Wholesaler"
-    },
-    {
-        id: 2,
-        name: "Retailer"
-    }]
 
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
@@ -65,21 +59,28 @@ const CreateSupplier = ({ state }) => {
                     <InputComponent label={"Account Number"} placeholder={'Enter account number'} onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
                 </div>
                 <div className="p-3">
+
+
+
                     <div className="flex justify-start items-end">
-                        <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Address</button>
-                        <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Balence</button>
+                        <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t gap-1 border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center font-thin`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"><path d="M13 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" /><path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z" /></g></svg>
+                            Address</button>
+                        <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t flex justify-start items-center gap-1`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M16 12h2v4h-2z" /><path fill="currentColor" d="M20 7V5c0-1.103-.897-2-2-2H5C3.346 3 2 4.346 2 6v12c0 2.201 1.794 3 3 3h15c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2M5 5h13v2H5a1.001 1.001 0 0 1 0-2m15 14H5.012C4.55 18.988 4 18.805 4 18V8.815c.314.113.647.185 1 .185h15z" /></svg>
+                            Balance</button>
                         <div className="border-b w-full"></div>
                     </div>
                 </div>
                 {
                     active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"State"} className='rounded-l' />
+                            <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"Thana Name"} className='rounded-l' />
                             <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
-                        <InputComponent label={"Address"} placeholder={'Enter address'} onChange={(v) => { setValues({ ...values, address: v }) }} />
+                        <InputComponent label={"Address"} placeholder={'Enter address'} value={values?.address} onChange={(v) => { setValues({ ...values, address: v }) }} />
                     </div>
                 }
                 {
@@ -87,13 +88,12 @@ const CreateSupplier = ({ state }) => {
                         <div>
                             <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
                             <div className='flex justify-start items-end pb-1'>
-                                <input type='number' onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
-                                <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
-                                    className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
+                                <input type='number' value={values?.balance} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                                <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
+                                    className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                 >
-                                    {qt.map(({ id, name }) => (
-
-                                        <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                    {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                        <option key={id} value={name} className=''>{name}</option>
                                     ))}
                                 </select>
 
@@ -103,7 +103,7 @@ const CreateSupplier = ({ state }) => {
                 }
 
                 <div className='p-3'>
-                    <Button onClick={handleSubmit} name={'Submit'} />
+                    <Button onClick={handleSubmit} isDisable={isLoading} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>

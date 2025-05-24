@@ -7,12 +7,16 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DownModal from "../Input/DownModal";
+import ImageSelect from "../Input/ImageSelect";
+import logo from '../Logo/logu (2).png'
 
 
 const WarehouseCard = ({ item, i, FetchShop }) => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
-    const [image_url, setImage_Url] = useState();
+    const [image_url, setImage_Url] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
     const [values, setValues] = useState({ name: item?.name, });
 
     const handleUpdate = async (image_url, url, id) => {
@@ -83,9 +87,17 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
         toast(data?.message)
     }
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage_Url(file);
+            setImageFile(URL.createObjectURL(file));
+        }
+    };
+
     return (
 
-        <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-100' : ''}`}>
+        <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-50' : ''}`}>
             <th className="w-4 py-2 px-4 border-x">
                 <ToastContainer />
                 <div className="flex items-center">
@@ -99,26 +111,30 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.TotalCost}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth - item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {2}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">Admin</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.employee}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2">
-                <Edit size='25px' onClick={() => { setEdit(true) }} />
-                <Remove size='25px' onClick={() => { setShow(true) }} />
-                <Modal show={show} handleClose={() => { setShow(false) }} size="350px" className="">
+                <Edit size='22px' onClick={() => { setEdit(true) }} />
+                <Remove size='18px' onClick={() => { setShow(true) }} />
+                <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
                     <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
                         <button onClick={handleDelete} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
                     </div>
-                </Modal>
+                </DownModal>
 
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="450px" className="w-[450px]">
                     <div className="pt-1">
-                        <InputComponent placeholder={values?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={values?.name} value={values?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
                         <div className="pt-1">
                             <h1 className="py-1 font-semibold">Select image</h1>
                             <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
                         </div>
+                        <div>
+                            <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                        </div>
+
                         <Button isDisable={false} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item?.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
