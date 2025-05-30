@@ -11,7 +11,7 @@ const Notification = ({ data }) => {
         <div className='pt-5 px-2 min-h-screen pb-12'>
             <div className='flex justify-between items-center pb-2'>
                 <h1 className='text-center font-semibold'>Announcement</h1>
-                <NavLink>Create Announcement</NavLink>
+                <NavLink className={`border px-5 py-1.5 rounded-md shadow bg-blue-500 text-white`}>Create Announcement</NavLink>
             </div>
             <hr className='py-1' />
 

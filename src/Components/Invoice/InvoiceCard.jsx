@@ -8,9 +8,15 @@ const InvoiceCard = ({ item }) => {
     }
 
     const CalculateSale = (item) => {
-        let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
-        let price = parseInt(item?.price)
-        return price - parseInt(discount)
+        let sale = 0;
+
+        if (item?.discount_type === "Fixed") {
+            sale = parseInt(item?.discount)
+        } else if (item?.discount_type === "Percentage") {
+            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+            sale = discount
+        }
+        return parseInt(item?.price) - parseInt(sale)
     }
 
     return (

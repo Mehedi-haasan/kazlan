@@ -30,6 +30,9 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
     const [searchData, setSearchData] = useState([]);
     const [userId, setUserId] = useState(null);
     const [lastTotal, setLastTotal] = useState(0)
+    const [user, setUser] = useState({});
+    const [invoId, setInvoId] = useState(null)
+    const [loadInvo, setLoadInvo] = useState(true)
     const today = new Date();
     const [values, setValues] = useState({
         pay: 0,
@@ -56,11 +59,6 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
         });
         return formatted
     };
-
-
-    useEffect(() => {
-        document.title = "Purchase Return - KazalandBrothers";
-    }, []);
 
 
     const SearchProduct = async (e) => {
@@ -103,14 +101,14 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
 
             orderData.push({
                 active: true,
-                product_id: v?.id,
+                product_id: v?.product ? v?.product?.id : v?.id,
                 username: name,
                 userId: userId,
                 name: v?.name,
                 shop: info?.shopname,
                 price: price,
                 discount: discount,
-                discount_type:v?.discount_type,
+                discount_type: v?.discount_type,
                 sellprice: sale,
                 qty: qty,
                 contact: values?.phone,
@@ -166,6 +164,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
     }
 
     useEffect(() => {
+        document.title = "Purchase Return - KazalandBrothers";
         CalculateAmount()
     }, [allData]);
 
@@ -199,9 +198,6 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
         setCustomer(data?.items);
     }
 
-
-
-
     const ChangeQty = (id, qty) => {
         const updatedData = allData.map(item =>
             item.id === id ? { ...item, qty } : item
@@ -233,8 +229,6 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
 
         setAllData(updatedData);
     };
-
-
 
     const ChangeLastDiscountType = (type, amount) => {
         setValues({
@@ -286,6 +280,25 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
         setAllData(updatedData)
     }
 
+
+    const GetInvoiceData = async (id) => {
+
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token
+            }
+        });
+        const data = await response.json();
+        setAllData(data?.items);
+        setUser(data?.user);
+        setName(data?.user?.name);
+        setUserId(data?.user?.id)
+        setLoadInvo(false)
+
+    }
+
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
             <ToastContainer />
@@ -295,28 +308,61 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
             <div className='bg-[#FFFFFF]'>
                 <div className='border-b p-4 flex justify-between items-center'>
                     <h1>Purchase Return Details</h1>
-                    {/* <NavLink to={`/sale/return`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Sale Return</NavLink> */}
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
-                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                    {loadInvo ? <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent defaultvalue={user?.state} options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
+                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
-                    </div>
+                    </div> : <div>
+                        <h1 className='py-1 text-[15px]'>Thana Name</h1>
+                        <div className='flex justify-start items-end pb-1 z-30'>
+                            <div className='relative border  text-black w-full h-[38px] rounded-l'>
+                                <h1 className='font-thin p-1.5 '>{user?.state}</h1>
+                            </div>
+                            <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                <Add />
+                            </div>
+                        </div>
+                    </div>}
                     <div></div>
-
-                    <div className='relative'>
-
-                        <Calender label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
-                    </div>
-
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l' />
-                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
-                            <Add />
+                    <div className=''>
+                        <h1 className='pb-1 text-[15px]'>Load Previous Invoice </h1>
+                        <div className='flex justify-center w-full h-[39px]'>
+                            <div className='border px-3 py-1 rounded-l cursor-pointer'>
+                                <BarCode className='text-[#3C96EE]' />
+                            </div>
+                            <div className='relative border-y  text-black w-full px-1'>
+                                <input type='number' placeholder={'Enter Invoice number'}
+                                    onKeyDown={(e) => { if (e.key === "Enter") { GetInvoiceData(e.target.value) } }}
+                                    onChange={(e) => { setInvoId(e.target.value) }}
+                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                            </div>
+                            <div onClick={() => { GetInvoiceData(invoId) }} className='border px-3 pt-[7px] pb-[7px] rounded-r cursor-pointer text-white bg-blue-500'>
+                                Load
+                            </div>
                         </div>
                     </div>
+
+                    {loadInvo ? <div className='flex justify-start items-end pb-1'>
+                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <Add />
+                        </div>
+                    </div> : <div>
+                        <h1 className='py-1 text-[15px]'>Customer Name</h1>
+                        <div className='flex justify-start items-end pb-1 z-30'>
+                            <div className='relative border  text-black w-full h-[38px] rounded-l'>
+                                <h1 className='font-thin p-1.5 '>{user?.name}</h1>
+                            </div>
+                            <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                <Add />
+                            </div>
+                        </div>
+                    </div>}
+
+
                     <div></div>
                     <div className='relative'>
                         <Calender label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
@@ -357,8 +403,8 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                                             {searchData?.map((item) => {
                                                 return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>

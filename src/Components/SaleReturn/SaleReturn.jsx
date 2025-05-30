@@ -90,7 +90,7 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
         }
         const token = localStorage.getItem('token');
         let orderData = [];
-           allData?.forEach((v) => {
+        allData?.forEach((v) => {
             let sale = 0;
             const price = parseInt(v?.price) || 0;
             const discount = parseInt(v?.discount) || 0;
@@ -104,14 +104,14 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
 
             orderData.push({
                 active: true,
-                product_id: v?.product_id,
+                product_id: v?.product ? v?.product?.id : v?.id,
                 username: name,
                 userId: userId,
                 name: v?.name,
                 shop: info?.shopname,
                 price: price,
                 discount: discount,
-                discount_type:v?.discount_type,
+                discount_type: v?.discount_type,
                 sellprice: sale,
                 qty: qty,
                 contact: values?.phone,
@@ -401,7 +401,7 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
                                         <thead class="text-xs text-gray-900">
                                             <tr className='border-b border-black text-[16px]'>
                                                 <th scope="col" className="px-1 py-2 font-thin">Name</th>
-                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
+                                                <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
                                                 <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
@@ -414,7 +414,7 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
                                                 return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
