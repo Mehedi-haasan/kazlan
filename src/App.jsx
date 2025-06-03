@@ -183,8 +183,8 @@ function App() {
 
 
     if (auth && role === "superadmin") {
-      getShop()
-    } else {
+      // getShop()
+    } else if(auth && role === "admin"){
       setShop([{
         id: id,
         name: shopname
@@ -208,9 +208,9 @@ function App() {
       <Header auth={auth} isLoggedOut={(v) => setAuth(v)} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
       <div className={`min-h-[calc(80vh-160px)] mt-12 bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-200 ${!auth ? "pl-0" : open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
-          <Route path="/" element={auth ? <Dashboard data={data} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/" element={auth ? <Dashboard data={data} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/dashboard" element={auth ? <Dashboard data={data} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/dashboard" element={auth ? <Dashboard data={data} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/registration" element={auth && info?.role === "superadmin" ? <Registration state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -250,9 +250,9 @@ function App() {
 
           <Route path="/create/supplier" element={<CreateSupplier state={state} />} />
 
-           <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} />} />
+          <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} />} />
 
-          <Route path="/order" element={auth ? <Order type={type}  user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/order" element={auth ? <Order type={type} user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/state" element={auth ? <State entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -287,7 +287,7 @@ function App() {
           <Route path="/purchase/product" element={auth ? <PurchaseProduct shop={shop} paytype={paytype} info={info} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/purchase/items" element={auth ? <PurchaseItems shop={shop} info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
-            
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

@@ -22,6 +22,7 @@ import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 const Brand = ({ entries, info = {} }) => {
 
     const targetRef = useRef();
+    const input_focus = useRef(null)
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [image_url, setImage_Url] = useState();
@@ -163,6 +164,9 @@ const Brand = ({ entries, info = {} }) => {
 
     const { View } = useLottie(options);
 
+    useEffect(()=>{
+       input_focus.current.focus()
+    },[show  ])
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
@@ -180,7 +184,7 @@ const Brand = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Brand name`} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Brand name`} input_focus={input_focus} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>

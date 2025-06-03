@@ -16,7 +16,7 @@ const User = ({ entries, info = {} }) => {
     const targetRef = useRef();
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
     const options = { width: 1600, backgroundColor: '#ffffff' };
@@ -33,6 +33,7 @@ const User = ({ entries, info = {} }) => {
         })
         const data = await response.json();
         setUsers(data?.items)
+        console.log(data,"sehfffffffffffffff");
     }
 
     useEffect(() => {

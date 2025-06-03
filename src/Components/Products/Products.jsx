@@ -16,6 +16,7 @@ import { useToImage } from '@hcorta/react-to-image'
 const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
 
     const targetRef = useRef();
+    const outside = useRef(null)
     const option = { width: 1600, backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [data, setData] = useState([]);
@@ -31,6 +32,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
 
     useEffect(() => {
+        document.title = "Items"
         if (info?.role === "superadmin") {
             setComId(null)
         } else {
@@ -80,13 +82,24 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
 
 
     const ModalOpen = (id) => {
-        console.log(id);
         if (id === selected) {
             setSelected(null)
         } else {
             setSelected(id)
         }
     }
+
+    // useEffect(() => {
+    //     function handleClickOutside(event) {
+    //         if (outside.current && !outside.current.contains(event.target)) {
+    //             setSelected(null)
+    //         }
+    //     }
+    //     document.addEventListener('mousedown', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
 
 
     return (

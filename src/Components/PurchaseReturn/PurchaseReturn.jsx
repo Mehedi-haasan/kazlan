@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
@@ -18,6 +18,11 @@ import Calender from '../Wholesale/Calender';
 
 const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
 
+
+    const [first, setFirst] = useState(true)
+    const [second, setSecond] = useState(false)
+    const inputRef = useRef(null)
+    const inputQty = useRef(null)
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
@@ -33,6 +38,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
     const [user, setUser] = useState({});
     const [invoId, setInvoId] = useState(null)
     const [loadInvo, setLoadInvo] = useState(true)
+    const [selectedId, setSelectedId] = useState(0)
     const today = new Date();
     const [values, setValues] = useState({
         pay: 0,
@@ -160,7 +166,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
 
         }, 0);
         setTotal(amount);
-        setLastTotal(amount)
+        setLastTotal(parseInt(amount) + parseInt(delivary) + parseInt(paking))
     }
 
     useEffect(() => {
@@ -311,7 +317,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     {loadInvo ? <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent defaultvalue={user?.state} options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
+                        <SelectionComponent defaultvalue={user?.state} default_select={first} options={state} onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l' />
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -346,7 +352,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                     </div>
 
                     {loadInvo ? <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
+                        <SelectionComponent options={customer} default_select={second} onSelect={(v) => { setSecond(false); setFirst(false); inputRef.current.focus(); setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -378,13 +384,48 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                         {info?.role === "superadmin" ? <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} /> : <InputComponent placeholder={info?.shopname} label={'Warehouse'} readOnly={true} />}
                     </div>
                     <div className='grid col-span-2'>
-                        <h1 className='pb-1 font-thin'>Enter Item Name</h1>
+                        <h1 className='pb-1 text-black text-[15px]'>Enter Item Name</h1>
                         <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "ArrowDown") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                            }
+                                            if (selectedId === searchData?.length - 1) {
+                                                setSelectedId(0)
+                                            } else {
+                                                setSelectedId(selectedId + 1)
+                                            }
+
+                                        } else if (e.key === "ArrowUp") {
+                                            if (searchData?.length === 0) {
+                                                setSecond(true)
+                                            }
+                                            if (selectedId === 0) {
+                                                setSelectedId(searchData?.length - 1)
+                                            } else {
+                                                setSelectedId(selectedId - 1)
+                                            }
+
+                                        } else if (e.key === "Enter") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                                setSelectedId(0)
+                                            } else {
+                                                setAllData([...allData, searchData[selectedId]]);
+                                                setSearchData([]);
+                                                setSearchItem('');
+                                                setSelectedId(0)
+                                            }
+
+                                        }
+                                    }}
+                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -400,8 +441,8 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {searchData?.map((item) => {
-                                                return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
+                                            {searchData?.map((item, i) => {
+                                                return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
@@ -427,23 +468,26 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 dark:text-gray-400">
-                            <tr className='border-y text-[16px] py-1'>
-                                <th scope="col" className="p-2 text-center font-thin border-x">Action</th>
-                                <th scope="col" className="pl-2 py-2.5 font-thin border-x">Item Code</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Item name</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Qty</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">M.R.P</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Discount</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Sale Price</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r rounded">Total price</th>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-900">
+                            <tr className='border-y text-[15px] py-1'>
+                                <th scope="col" className="p-2 text-center font-semibold border-x">Action</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Qty</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Year</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Category</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Brand</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">M.R.P</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Discount</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Sale Price</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r rounded">Total price</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            {allData?.map((item) => {
-                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
+                            {allData?.map((item, i) => {
+                                return <WholeSaleCard item={item} key={i} changeqty={ChangeQty} inputQty={inputQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
                             })}
                         </tbody>
                     </table>
@@ -460,9 +504,9 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                                 <div className='flex justify-start items-end pb-1 pt-1'>
                                     <input type='number' value={values?.pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
                                     <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
-                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
-                                        {[{ id: 201, name: "Cash" }, { id: 202, name: "Due" }].map(({ id, name }) => (
-                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        className={`border text-black w-[40%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {[{ id: 201, name: "Chalan/Due" }, { id: 202, name: "Cash Memo" }, { id: 203, name: "Paid" }].map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-black'> {name}</option>
                                         ))}
                                     </select>
 
@@ -509,7 +553,7 @@ const PurchaseReturn = ({ shop = [], state = [], info = {} }) => {
                     </div>
                 </div>
                 <div className='p-4 border-t'>
-                    <Button onClick={Order} name={'Submit'} />
+                    <Button onClick={Order} name={'Save'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>

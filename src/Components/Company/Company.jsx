@@ -53,7 +53,7 @@ const Company = () => {
 
     useEffect(() => {
         const compId = localStorage.getItem('compId')
-        GetCompInfo(compId)
+        // GetCompInfo(compId)
     }, [])
 
 
@@ -137,10 +137,11 @@ const Company = () => {
                     <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Warehouse Name'} placeholder={values?.name || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, description: e }) }} label={'Description'} placeholder={values?.description || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} placeholder={values?.email || 'N/A'} className={`text-[#32393f] font-thin`} />
-                    <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone'} placeholder={values?.phone || 'N/A'} className={`text-[#32393f] font-thin`} />
+                    <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone*'} placeholder={values?.phone || 'N/A'} className={`text-[#32393f] font-thin`} />
                     <InputComponent onChange={(e) => { setValues({ ...values, address: e }) }} label={'Address'} placeholder={values?.address || 'N/A'} className={`text-[#32393f] font-thin`} />
-                    <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={'Shop Code'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} />
-                    <InputComponent onChange={(e) => { setValues({ ...values, footertext: e }) }} label={'Footer Text'} placeholder={values?.footertext || 'N/A'} className={`text-[#32393f] font-thin`} />
+                    <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={'Shop Code*'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} />
+                    {/* <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={' Sale Prefix'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} /> */}
+                    {/* <InputComponent onChange={(e) => { setValues({ ...values, footertext: e }) }} label={'Footer Text'} placeholder={values?.footertext || 'N/A'} className={`text-[#32393f] font-thin`} /> */}
                     <Button onClick={handleUpload} name={'Create'} />
                 </div>
             </div>

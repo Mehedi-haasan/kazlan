@@ -3,7 +3,7 @@ import InvoiceTemp from "./InvoiceTemp";
 import BaseUrl from "../../Constant";
 
 
-const Invoice = () => {
+const Invoice = ({info={}}) => {
 
     const [invoices, setInvoices] = useState([]);
     const RecentInvoice = async () => {
@@ -28,7 +28,7 @@ const Invoice = () => {
     return (
         <div className="pt-3">
             <div className="w-full overflow-hidden overflow-x-auto">
-                <InvoiceTemp invoices={invoices} />
+                <InvoiceTemp invoices={invoices}  prefix={info?.shopcode}/>
             </div>
         </div>
     )

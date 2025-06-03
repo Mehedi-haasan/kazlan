@@ -10,7 +10,7 @@ import SelectionComponent from "../Input/SelectionComponent";
 import Add from "../../icons/Add";
 import { NavLink } from "react-router-dom";
 
-const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal }) => {
+const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outside }) => {
     const [values, setValues] = useState({})
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -78,7 +78,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal }) => 
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
 
-            {info?.role === "superadmin" && <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
+             <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
                 {
                     select === item?.id && <div className="absolute -top-10 bg-white shadow-xl rounded-md right-14 w-[140px] p-1 z-50">
                         <div onClick={() => { setEdit(!edit) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
@@ -91,7 +91,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal }) => 
                         <NavLink to={`/payment/history/${item?.id}`} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 text-xs rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"/></svg>Payment History
                         </NavLink>
-                        <div onClick={() => { setShow(true) }} className="flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded">
+                        <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden':''}flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
                         </div>
                     </div>
@@ -162,7 +162,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal }) => 
                     </div>
                 </Modal>
 
-            </th>}
+            </th>
 
         </tr>
     )

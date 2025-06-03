@@ -4,7 +4,7 @@ import Updown from "../../icons/Updown";
 import { useNavigate } from "react-router-dom";
 
 
-const InvoiceTemp = ({ invoices = [] }) => {
+const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
     const goto = useNavigate()
 
     function formatDate(isoString) {
@@ -15,6 +15,21 @@ const InvoiceTemp = ({ invoices = [] }) => {
         const year = date.getFullYear();
 
         return `${day} ${month} ${year}`;
+    }
+
+    const ReturnSaleCode = (type) => {
+        let saleType = "SL"
+        if (type === "Sale") {
+            saleType = "SL"
+        } else if (type === "Sale Return") {
+            saleType = "SR"
+        }else if(type === "Return Purchase"){
+            saleType = "RP"
+        }else if(type === "Purchase items"){
+            saleType = "PI"
+        }
+
+        return saleType
     }
 
     return (
@@ -107,7 +122,7 @@ const InvoiceTemp = ({ invoices = [] }) => {
                                     </div>
                                 </th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">#{item?.id}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-000{item?.id}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.customername}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>

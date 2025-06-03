@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
@@ -16,7 +16,10 @@ import Calander from '../Wholesale/Calender';
 
 
 const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => {
-
+    const [first, setFirst] = useState(true)
+    const [second, setSecond] = useState(false)
+    const inputRef = useRef(null)
+    const inputQty = useRef(null)
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
@@ -29,6 +32,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
     const [searchData, setSearchData] = useState([]);
     const [userId, setUserId] = useState(null);
     const [lastTotal, setLastTotal] = useState(0)
+    const [selectedId, setSelectedId] = useState(0)
     const today = new Date();
     const [values, setValues] = useState({
         pay: 0,
@@ -77,7 +81,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
 
 
     const Order = async () => {
-        if (!userId || !values?.pay) {
+        if (!userId ) {
             toast("Customer Pay Amount and Pay Type are required");
             return
         }
@@ -132,7 +136,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                     paidamount: values?.pay,
                     amount: lastTotal - values?.pay,
                     orders: orderData,
-                    updatedata:allData,
+                    updatedata: allData,
                     deliverydate: values?.deliverydate
                 }),
             });
@@ -151,7 +155,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
             return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
         }, 0);
         setTotal(amount);
-        setLastTotal(amount)
+        setLastTotal(parseInt(amount) + parseInt(delivary) + parseInt(paking))
     }
 
     useEffect(() => {
@@ -287,7 +291,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className={`rounded-l z-50`} />
+                        <SelectionComponent options={state} default_select={first} onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className={`rounded-l z-50`} />
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -303,7 +307,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
 
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l ' />
+                        <SelectionComponent options={customer} default_select={second} onSelect={(v) => { setSecond(false); setFirst(false); inputRef.current.focus(); setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l ' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -334,7 +338,42 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct}
+                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin'
+                                    onKeyDown={(e) => {
+                                        if (e.key === "ArrowDown") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                            }
+                                            if (selectedId === searchData?.length - 1) {
+                                                setSelectedId(0)
+                                            } else {
+                                                setSelectedId(selectedId + 1)
+                                            }
+
+                                        } else if (e.key === "ArrowUp") {
+                                            if (searchData?.length === 0) {
+                                                setSecond(true)
+                                            }
+                                            if (selectedId === 0) {
+                                                setSelectedId(searchData?.length - 1)
+                                            } else {
+                                                setSelectedId(selectedId - 1)
+                                            }
+
+                                        } else if (e.key === "Enter") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                                setSelectedId(0)
+                                            } else {
+                                                setAllData([...allData, searchData[selectedId]]);
+                                                setSearchData([]);
+                                                setSearchItem('');
+                                                setSelectedId(0)
+                                            }
+                                        }
+                                    }}
+                                />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -350,11 +389,11 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {searchData?.map((item) => {
-                                                return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
+                                            {searchData?.map((item, i) => {
+                                                return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
@@ -377,23 +416,24 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 dark:text-gray-400">
-                            <tr className='border-y text-[16px] py-1'>
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead class="text-xs text-gray-900">
+                            <tr className='border-y text-[16px] py-1 font-semibold'>
                                 <th scope="col" className="p-2 text-center border-x">Action</th>
-                                <th scope="col" className="pl-2 py-2.5 border-x text-center">Item Code</th>
-                                <th scope="col" className="px-2 py-2.5 text-left border-r">Item name</th>
                                 <th scope="col" className="px-2 py-2.5 text-left border-r">Qty</th>
+                                <th scope="col" className="pl-2 py-2.5 border-x text-center">Year</th>
+                                <th scope="col" className="pl-2 py-2.5 border-x text-center">Category</th>
+                                <th scope="col" className="px-2 py-2.5 text-left border-r">Brand</th>
+                                <th scope="col" className="px-2 py-2.5 text-left border-r">Item name</th>
                                 <th scope="col" className="py-2.5 border-r text-center">M.R.P</th>
                                 <th scope="col" className="pl-2 py-2.5 text-left border-r">Discount</th>
                                 <th scope="col" className="pl-2 py-2.5 text-center border-r">Purchase Price</th>
                                 <th scope="col" className=" py-2.5 text-center border-r rounded">Total Price</th>
-
                             </tr>
                         </thead>
                         <tbody>
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard i={i} item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
+                                return <WholeSaleCard i={i} item={item} changeqty={ChangeQty} inputQty={inputQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
                             })}
                         </tbody>
                     </table>

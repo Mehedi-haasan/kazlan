@@ -12,6 +12,7 @@ import Loading from "../../icons/Loading";
 
 const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
+    const outside = useRef(null)
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
@@ -49,6 +50,18 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
             setSelect(id)
         }
     }
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (outside.current && !outside.current.contains(event.target)) {
+                setSelect(null)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
@@ -141,15 +154,9 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                                 </tr>
                             </thead>
                             <tbody>
-
-
-                                {
-                                    supplier?.map((item, i) => {
-                                        return <SupplierCard item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
-                                    })
-                                }
-
-
+                                { supplier?.map((item, i) => {
+                                        return <SupplierCard outside={outside} item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
+                                    })  }
                             </tbody>
                         </table>
                     </div>

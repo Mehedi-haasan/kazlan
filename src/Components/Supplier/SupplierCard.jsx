@@ -10,7 +10,7 @@ import SelectionComponent from "../Input/SelectionComponent";
 import Add from "../../icons/Add";
 import { NavLink } from "react-router-dom";
 
-const SupplierCard = ({ item, state = [], info = {}, select, OpenModal }) => {
+const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside }) => {
     const [values, setValues] = useState({})
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -89,7 +89,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal }) => {
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-            {info?.role === "superadmin" && <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
+            <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
                 {
                     select === item?.id && <div className="absolute -top-[50px] bg-white shadow-xl rounded-md right-12 w-[140px] p-1 z-50 border border-red-500">
                         <div onClick={() => { setEdit(!edit); setOption(false) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
@@ -105,12 +105,12 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal }) => {
                                 <path fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
                             </svg>Payment History
                         </NavLink>
-                        <div onClick={() => { setShow(true); setOption(false) }} className="flex justify-start items-center gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-1.5 py-1 rounded text-xs">
+                        <div onClick={() => { setShow(true); setOption(false) }} className={`${info?.role === 'admin' ? 'hidden' : ''} flex justify-start items-center gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-1.5 py-1 rounded text-xs`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
                         </div>
                     </div>
                 }
-                <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { OpenModal(item?.id) }} className="cursor-pointer" width="25" height="22" viewBox="0 0 40 40">
+                <svg xmlns="http://www.w3.org/2000/svg" ref={outside} onClick={() => { OpenModal(item?.id) }} className="cursor-pointer" width="25" height="22" viewBox="0 0 40 40">
                     <g fill="currentColor"><path d="M23.112 9.315a3.113 3.113 0 1 1-6.226.002a3.113 3.113 0 0 1 6.226-.002" />
                         <circle cx="20" cy="19.999" r="3.112" /><circle cx="20" cy="30.685" r="3.112" />
                     </g>
@@ -178,7 +178,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal }) => {
                 </Modal>
 
             </th>
-            }
+
 
         </tr >
     )

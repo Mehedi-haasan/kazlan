@@ -131,7 +131,7 @@ const Registration = ({ state }) => {
               <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='' />
             </div>
             <div>
-              <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, rules: v?.name }) }} label={`User Role`} className='' />
+              <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, rules: [v?.name] }) }} label={`User Role`} className='' />
             </div>
             <div className='relative'>
               <label className="block  text-sm  mb-1 font-thin">Password</label>

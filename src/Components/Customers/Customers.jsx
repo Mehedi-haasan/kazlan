@@ -14,6 +14,8 @@ import Selection from "../Input/Selection";
 
 const Customers = ({ entries, state = [], info = {} }) => {
 
+
+    const outside = useRef(null)
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
@@ -53,6 +55,18 @@ const Customers = ({ entries, state = [], info = {} }) => {
             setSelect(id)
         }
     }
+
+        // useEffect(() => {
+        //     function handleClickOutside(event) {
+        //         if (outside.current && !outside.current.contains(event.target)) {
+        //             setSelect(null)
+        //         }
+        //     }
+        //     document.addEventListener('mousedown', handleClickOutside);
+        //     return () => {
+        //         document.removeEventListener('mousedown', handleClickOutside);
+        //     };
+        // }, []);
 
 
     return (
@@ -158,7 +172,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 {customer?.map((item, i) => {
-                                    return <CustomerCard item={item} state={state} i={i} info={info} select={select} OpenModal={OpenModal} />
+                                    return <CustomerCard outside={outside} item={item} state={state} i={i} info={info} select={select} OpenModal={OpenModal} />
                                 })}
                             </tbody>
                         </table>

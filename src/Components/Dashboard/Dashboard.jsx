@@ -8,7 +8,7 @@ import Invoice from '../RecentInvoice/Invoice';
 
 
 
-const Dashboard = ({ data }) => {
+const Dashboard = ({ data, info = {} }) => {
 
     const [hourSales, setHourSales] = useState([]);
     const [month, setMonthly] = useState([]);
@@ -120,7 +120,7 @@ const Dashboard = ({ data }) => {
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
-                        <Notification height="35px" width="35px"  className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`}/>
+                        <Notification height="35px" width="35px" className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`} />
                     </div>
                     <div className='flex justify-start items-end gap-1'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
@@ -144,7 +144,7 @@ const Dashboard = ({ data }) => {
                         <div className=''>
                             <h1 className='pb-2'>Recent Invoices</h1>
                         </div>
-                        <Invoice />
+                        <Invoice info={info} />
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     }
 
                     {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-4 py-1 border-green-600 flex float-start text-md items-center gap-1 text-green-600 hover:bg-green-600 hover:text-white"><Add />Sale</NavLink>}
-                    {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>}
+                    {auth && <NavLink to={`/sales/update/`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>}
                     <div className="flex justify-start items-start gap-2 cursor-pointer relative">
                         <div className={`absolute ${lan ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-8 rounded-lg`}>
                             <div className="">
@@ -171,7 +171,10 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                                             {
                                                 it?.isLink ? <a key={index} href={`${it?.route}`} target="_blank" rel="noopener noreferrer"
                                                     onClick={() => { child?.id === it?.id ? setChaild({}) : setChaild(it) }}
-                                                    className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''} text-[#5F5F5F] w-full text-lg ${(it?.name === "Users and Roles" || (it?.name === "App Setting" && info?.role === "admin")) ? "hidden" : ""} hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-8 py-1.5`}>
+                                                    className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''} text-[#5F5F5F] w-full text-lg
+                                                      ${it?.name === "Users and Roles" && info?.role === "admin" ? "hidden" : ""}
+                                                       ${it?.name === "App Setting" && info?.role === "admin" ? "hidden" : ""}
+                                                      hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 pl-8 py-1.5`}>
                                                     <div className="flex justify-start items-center gap-2 ">
                                                         <Circle />
                                                         <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>
@@ -179,7 +182,10 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                                                 </a> : <NavLink key={index} to={`/${it?.route}`}
                                                     onClick={() => { child?.id === it?.id ? setChaild({}) : setChaild(it) }}
                                                     className={`flex ${child?.id === it?.id ? 'bg-blue-50 text-blue-500' : ''}
-                                               text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded ${(it?.name === "Users and Roles" || (it?.name === "App Setting" && info?.role === "admin")) ? "hidden" : ""} justify-start items-center gap-2 pl-8 py-1.5`}>
+                                               text-[#5F5F5F] w-full mt-1 text-lg hover:bg-blue-50 hover:text-blue-500 rounded
+                                                ${it?.name === "Users and Roles" && info?.role === "admin" ? "hidden" : ""}
+                                                ${it?.name === "App Setting" && info?.role === "admin" ? "hidden" : ""}
+                                                 justify-start items-center gap-2 pl-8 py-1.5`}>
                                                     <div className="flex justify-start items-center gap-2">
                                                         <Circle />
                                                         <h1 className={`${open ? '' : 'hidden'} text-sm`}>{it.name}</h1>

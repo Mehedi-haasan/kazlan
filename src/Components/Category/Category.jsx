@@ -22,6 +22,7 @@ import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 const Category = ({ entries, info = {} }) => {
 
     const targetRef = useRef();
+    const input_focus = useRef(null)
     const option = { width: 1600, backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [image_url, setImage_Url] = useState();
@@ -160,6 +161,10 @@ const Category = ({ entries, info = {} }) => {
 
     const { View } = useLottie(options);
 
+        useEffect(()=>{
+           input_focus.current.focus()
+        },[show  ])
+
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <ToastContainer />
@@ -181,7 +186,7 @@ const Category = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} handleEnter={()=>{handleCreate('')}} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} input_focus={input_focus} value={values?.name} label={`Category Name`} handleEnter={()=>{handleCreate('')}} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>

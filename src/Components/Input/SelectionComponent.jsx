@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import RightArrow from '../../icons/RightArrow';
 
-const SelectionComponent = ({ options, onSelect, label, className = 'rounded' }) => {
+const SelectionComponent = ({ options, onSelect, label, className = 'rounded', default_select = false }) => {
 
   const inputRef = useRef(null);
   const outside = useRef(null);
   const [selectedId, setSelectedId] = useState(0);
   const [select, setSelect] = useState('Select a filter');
   const [value, setValue] = useState('')
-  const [hide, setHide] = useState(false);
+  const [hide, setHide] = useState(default_select);
   const [data, setData] = useState([])
 
 
@@ -16,6 +16,10 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
   useEffect(() => {
     setData(options)
   }, [options])
+
+  useEffect(() => {
+    setHide(default_select)
+  }, [default_select])
 
 
   useEffect(() => {
@@ -37,12 +41,14 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
   }, []);
 
   const handleFilter = (e) => {
+    setSelectedId(0)
     const searchValue = e.target.value.toLowerCase();
     const filterData = options.filter(item =>
       item?.name?.toLowerCase().includes(searchValue)
     );
     setData(filterData);
   };
+
 
 
   return (
@@ -57,12 +63,44 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded' })
         <div className={`font-thin p-1.5 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280]' : 'text-black'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{select}</div>
         <div className={` ${hide ? '' : 'hidden'} absolute left-[-1px] right-[-1px] border-x border-b rounded-b bg-white`}>
           <div className='px-2'>
-            <input type='text' ref={inputRef} className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
+            <input type='text' ref={inputRef}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") {
+                  if (selectedId === data?.length - 1) {
+                    setSelectedId(0)
+                  } else {
+                    setSelectedId(selectedId + 1)
+                  }
+
+                } else if (e.key === "ArrowUp") {
+                  if (selectedId === 0) {
+                    setSelectedId(data?.length - 1)
+                  } else {
+                    setSelectedId(selectedId - 1)
+                  }
+                } else if (e.key === "Enter") {
+                  onSelect({ id: data[selectedId]?.id, name: data[selectedId]?.name });
+                  setSelect(data[selectedId]?.name);
+                  setHide(false);
+                  setValue(data[selectedId]?.name)
+                }
+              }}
+              className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
           </div>
-          <div className={`px-0 max-h-[100px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white ${className} pt-1 `}>
+          <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white ${className} pt-1 `}>
             {
               data?.map((opt, i) => {
-                return <div onMouseEnter={() => { setSelectedId(i) }} onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); setValue(opt?.name) }} className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>{opt?.name}</div>
+                return <div onMouseEnter={() => { setSelectedId(i) }}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowDown") {
+                      setSelectedId(i + 2)
+                    }
+                  }}
+
+                  onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); setValue(opt?.name) }}
+                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                  {opt?.name}
+                </div>
               })
             }
           </div>

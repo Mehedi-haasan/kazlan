@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
 import Add from '../../icons/Add';
@@ -17,6 +17,10 @@ import Calendar from './Calender'
 
 const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
+    const [first, setFirst] = useState(true)
+    const [second, setSecond] = useState(false)
+    const inputRef = useRef(null)
+    const inputQty = useRef(null)
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
@@ -29,6 +33,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     const [searchData, setSearchData] = useState([]);
     const [userId, setUserId] = useState(null);
     const [lastTotal, setLastTotal] = useState(0)
+    const [selectedId, setSelectedId] = useState(0)
     const today = new Date();
     const [raw, setRaw] = useState({
         fromDate: today.toISOString(),
@@ -58,6 +63,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     })
 
     const SearchProduct = async (e) => {
+        setSelectedId(0)
         const name = e.target.value
         setSearchItem(name)
         const token = localStorage.getItem('token')
@@ -76,7 +82,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
     }
 
     const Order = async () => {
-        if (!userId || !values?.pay) {
+        if (!userId) {
             toast("Customer Pay Amount and Pay Type are required");
             return
         }
@@ -103,7 +109,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 shop: info?.shopname,
                 price: price,
                 discount: discount,
-                discount_type:v?.discount_type,
+                discount_type: v?.discount_type,
                 sellprice: sale,
                 qty: qty,
                 contact: values?.phone,
@@ -130,7 +136,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     lastdiscount: values?.lastdiscount,
                     previousdue: due,
                     paidamount: values?.pay,
-                    amount: lastTotal - values?.pay,
+                    amount: parseInt(lastTotal) - parseInt(values?.pay),
                     orders: orderData,
                     deliverydate: values?.deliverydate
                 }),
@@ -157,7 +163,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
         }, 0);
         setTotal(amount);
-
+        setLastTotal(parseInt(amount) + parseInt(delivary) + parseInt(paking))
     }
 
     useEffect(() => {
@@ -285,9 +291,9 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent options={state} onSelect={(v) => { setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l z-50' />
-                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                    <div className='flex justify-start items-end pb-1 z-40'>
+                        <SelectionComponent default_select={first} options={state} onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className='rounded-l z-50' />
+                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
@@ -298,9 +304,9 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                     </div>
 
 
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} onSelect={(v) => { setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
-                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                    <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent default_select={second} options={customer} onSelect={(v) => { setSecond(false); setFirst(false); inputRef.current.focus(); setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Customer"} className='rounded-l' />
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
@@ -323,11 +329,47 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem}
+                                    onChange={SearchProduct} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin'
+                                    onKeyDown={(e) => {
+                                        if (e.key === "ArrowDown") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                            }
+                                            if (selectedId === searchData?.length - 1) {
+                                                setSelectedId(0)
+                                            } else {
+                                                setSelectedId(selectedId + 1)
+                                            }
+
+                                        } else if (e.key === "ArrowUp") {
+                                            if (searchData?.length === 0) {
+                                                setSecond(true)
+                                            }
+                                            if (selectedId === 0) {
+                                                setSelectedId(searchData?.length - 1)
+                                            } else {
+                                                setSelectedId(selectedId - 1)
+                                            }
+
+                                        } else if (e.key === "Enter") {
+                                            if (searchData?.length === 0 && allData?.length > 0) {
+                                                inputQty.current.focus()
+                                                setSelectedId(0)
+                                            } else {
+                                                setAllData([...allData, searchData[selectedId]]);
+                                                setSearchData([]);
+                                                setSearchItem('');
+                                                setSelectedId(0)
+                                            }
+
+                                        }
+                                    }}
+                                />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                        <thead class="text-xs text-gray-900">
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead className="text-xs text-gray-900">
                                             <tr className='border-b border-black text-[16px]'>
                                                 <th scope="col" className="px-1 py-2 font-thin">Name</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
@@ -339,11 +381,11 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {searchData?.map((item) => {
-                                                return <tr className='border-b cursor-pointer' onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
+                                            {searchData?.map((item, i) => {
+                                                return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
-                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
+                                                    <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.price}</th>
                                                     <th scope="col" className="pl-4 py-2 text-left font-thin">{item?.discount}</th>
@@ -366,23 +408,25 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-900 dark:text-gray-400">
-                            <tr className='border-y text-[16px] py-1'>
-                                <th scope="col" className="p-2 text-center font-thin border-x">Action</th>
-                                <th scope="col" className="pl-2 py-2.5 font-thin border-x">Item Code</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Item name</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-thin border-r">Qty</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">M.R.P</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Discount</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r">Sale Price</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-thin border-r rounded">Total price</th>
-
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                        <thead className="text-xs text-gray-900 ">
+                            <tr className='border-y text-[15px] py-1'>
+                                <th scope="col" className="p-2 text-center font-semibold border-x">Action</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Qty</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Year</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Category</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Brand</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
+                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">M.R.P</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Discount</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Sale Price</th>
+                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r rounded">Total price</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {allData?.map((item) => {
-                                return <WholeSaleCard item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
+                            {allData?.map((item, i) => {
+                                return <WholeSaleCard key={i} inputQty={inputQty} item={item} changeqty={ChangeQty} changedis={ChangeDiscount} ChangeDiscountType={ChangeDiscountType} changeprice={ChangePrice} onClick={HandleDelete} />
                             })}
                         </tbody>
                     </table>

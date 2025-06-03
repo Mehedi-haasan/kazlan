@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import InputComponent from '../Input/InputComponent'
 import Button from '../Input/Button';
@@ -14,6 +14,21 @@ import ImageSelect from '../Input/ImageSelect'
 
 const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
+
+    const input_name = useRef(null);
+    const desc = useRef(null)
+    const mrp = useRef(null)
+    const sale = useRef(null)
+    const dis = useRef(null)
+    const qt = useRef(null)
+    useEffect(() => {
+        input_name.current?.focus();
+    }, []);
+
+
+    const [first, setFirst] = useState(false)
+    const [second, setSecond] = useState(false)
+    const [third, setThird] = useState(false)
     const [category, setCategory] = useState([]);
     const [image_url, setImage_Url] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
@@ -33,7 +48,9 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         discount: 0,
         discount_type: "Percentage",
         product_type: "Physical",
-        description: ''
+        description: '',
+        year: '2026',
+        edition: ''
     })
 
 
@@ -182,6 +199,10 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         }
     };
 
+    useEffect(() => {
+        qt.current.focus()
+    }, [active])
+
 
     return (
         <div className='min-h-screen pb-12 p-6 relative'>
@@ -193,33 +214,77 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
-                        <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Item Name*"} isRequered={true} placeholder={"Enter Item Name"} type={""} className={``} />
+                        <div>
+
+
+                            <div className='flex justify-start items-center w-full'>
+                                <div className='w-[65%]'>
+                                    <h1 className='text-[15px] pb-1.5'>Item Name</h1>
+                                    <input
+                                        type="text"
+                                        ref={input_name}
+                                        value={values?.name}
+                                        placeholder="Enter item name"
+                                        onChange={(e) => setValues({ ...values, name: e.target.value })}
+                                        className="px-2 pt-[8px] pb-[7px] text-[#6B7280] focus:outline-none rounded-l font-thin border w-full"
+
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                // desc.current?.focus();
+                                                setFirst(true)
+                                            } else if (e.key === "Escape") { }
+                                        }}
+                                    />
+
+                                </div>
+
+                                <div className='w-[35%]'>
+                                    <h1 className='text-[15px] pb-1.5'>Edition</h1>
+                                    <select value={values?.year} onChange={(e) => { setValues({ ...values, year: e.target.value }) }}
+                                        className={`border-y border-r rounded-r text-[#6B7280]  text-sm  focus:outline-none font-thin block p-2.5 w-full`}>
+                                        {[{ id: 1, name: "2026" }, { id: 2, name: "2025" }, { id: 3, name: "2024" }, { id: 4, name: "2023" }].map(({ id, name }) => (
+                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                        </div>
 
                         <div className='flex justify-start items-end pb-1 z-40'>
-                            <SelectionComponent options={brand} onSelect={(v) => { setValues({ ...values, brandId: v?.id }) }} label={"Brand / Publishers*"} className='rounded-l' />
-                            <div onClick={()=>goto(`/brand`)} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <SelectionComponent options={brand} default_select={first} onSelect={(v) => { setFirst(false); setSecond(true); setValues({ ...values, brandId: v?.id }) }} label={"Brand / Publishers*"} className='rounded-l' />
+                            <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
 
                         <div className='flex justify-start items-end pb-1 '>
-                            <SelectionComponent options={category} onSelect={(v) => { setValues({ ...values, categoryId: v?.id }) }} label={"Category*"} className='rounded-l' />
-                            <div onClick={()=>goto(`/category`)} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <SelectionComponent options={category} default_select={second} onSelect={(v) => { setSecond(false); setThird(true); setValues({ ...values, categoryId: v?.id }) }} label={"Category*"} className='rounded-l' />
+                            <div onClick={() => goto(`/category`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
 
 
                         <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={supplier} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Supplier*"} className='rounded-l' />
-                            <div onClick={()=>goto(`/create/supplier`)} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <SelectionComponent options={supplier} default_select={third} onSelect={(v) => { desc.current?.focus(); setValues({ ...values, supplier: v?.name }) }} label={"Supplier*"} className='rounded-l' />
+                            <div onClick={() => goto(`/create/supplier`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
                         <div className='my-2 grid col-span-1 pb-2'>
                             <div>
                                 <h1 className="py-1">Description</h1>
-                                <textarea placeholder="Enter your note" value={values?.description} onChange={(e) => { setValues({ ...values, description: e?.target?.value }) }} className="font-thin focus:outline-none border p-1.5 w-full rounded" />
+                                <textarea placeholder="Enter your note" ref={desc} value={values?.description}
+                                    onChange={(e) => { setValues({ ...values, description: e?.target?.value }) }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            mrp.current?.focus();
+                                        }
+                                    }}
+                                    className="font-thin focus:outline-none border p-1.5 w-full rounded" />
                             </div>
                         </div>
 
@@ -245,17 +310,18 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                             <div className='h-[120px]'>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                        <InputComponent label={"M.R.P*"} placeholder={'Enter M.R.P'} type={'number'} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v, cost: v }) }} />
-                                        <InputComponent label={"Sale Price"} placeholder={'Enter sale price'} type={'number'} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v }) }} />
+                                        <InputComponent label={"M.R.P*"} input_focus={mrp} placeholder={'Enter M.R.P'} type={'number'} handleEnter={(e) => { sale.current.focus() }} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v, cost: v }) }} />
+                                        <InputComponent label={"Sale Price"} input_focus={sale} placeholder={'Enter sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v }) }} />
                                         <div>
                                             <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
                                             <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' value={values?.discount} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[50%]' />
+                                                <input type='number' ref={dis} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }}
+                                                    onKeyDown={(e) => { if (e.key === "Enter") { setActive("Stock"); qt.current.focus() } }}
+                                                    placeholder={values?.discount} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[50%]' />
                                                 <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, discount_type: v.target.value }) }}
                                                     className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
                                                     {[{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }].map(({ id, name }) => (
-
                                                         <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                                     ))}
                                                 </select>
@@ -264,37 +330,34 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                         </div>
                                     </div>
                                 }
-                                {
-                                    active === "Stock" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                        {
-                                            info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
-                                                <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Warehouse Stock*"} className='rounded-l' />
-                                                <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
-                                                    <Add />
-                                                </div>
-                                            </div>
-
-
-
-                                        }
-
-                                        <div>
-                                            <p className='pb-2 font-semibold text-sm'>Quantity</p>
-                                            <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' placeholder='' value={values?.qty} onChange={(e) => { setValues({ ...values, qty: e.target.value }) }} className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
-                                                <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
-                                                    className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}
-                                                >
-                                                    {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (
-
-                                                        <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
-                                                    ))}
-                                                </select>
-
+                                <div className={`${active === "Stock" ? '' : 'hidden'} p-3 grid grid-cols-1 lg:grid-cols-2 gap-4`}>
+                                    {
+                                        info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
+                                            <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Warehouse Stock*"} className='rounded-l' />
+                                            <div className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                                <Add />
                                             </div>
                                         </div>
+                                    }
+
+                                    <div>
+                                        <p className='pb-2 font-semibold text-sm'>Quantity</p>
+                                        <div className='flex justify-start items-end pb-1'>
+                                            <input type='number' ref={qt} placeholder={values?.qty}
+                                                onChange={(e) => { setValues({ ...values, qty: e.target.value }) }}
+                                                onKeyDown={(e) => { if (e.key === "Enter") { handleCreate('') } }}
+                                                className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
+                                            <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
+                                                className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                                {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (
+                                                    <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
+                                                ))}
+                                            </select>
+
+                                        </div>
                                     </div>
-                                }
+                                </div>
+
 
                                 {
                                     active === "Image" && <div className=" grid grid-cols-1 gap-4">
