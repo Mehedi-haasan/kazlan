@@ -441,6 +441,7 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
                                         <thead class="text-xs text-gray-900">
                                             <tr className='border-b border-black text-[16px]'>
                                                 <th scope="col" className="px-1 py-2 font-thin">Name</th>
+                                                <th scope="col" className="px-1 py-2 font-thin">Edition</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
                                                 <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
@@ -453,6 +454,7 @@ const SaleReturn = ({ shop = [], state = [], info = {} }) => {
                                             {searchData?.map((item, i) => {
                                                 return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
+                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>

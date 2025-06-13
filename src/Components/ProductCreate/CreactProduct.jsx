@@ -16,6 +16,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
 
     const input_name = useRef(null);
+    const edit = useRef(null)
     const desc = useRef(null)
     const mrp = useRef(null)
     const sale = useRef(null)
@@ -218,7 +219,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
 
                             <div className='flex justify-start items-center w-full'>
-                                <div className='w-[65%]'>
+                                <div className='w-[55%]'>
                                     <h1 className='text-[15px] pb-1.5'>Item Name</h1>
                                     <input
                                         type="text"
@@ -226,26 +227,32 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                         value={values?.name}
                                         placeholder="Enter item name"
                                         onChange={(e) => setValues({ ...values, name: e.target.value })}
-                                        className="px-2 pt-[8px] pb-[7px] text-[#6B7280] focus:outline-none rounded-l font-thin border w-full"
+                                        className="px-2 pt-[8px] pb-[7px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-x w-full"
 
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
-                                                // desc.current?.focus();
-                                                setFirst(true)
+                                                edit.current.focus()
                                             } else if (e.key === "Escape") { }
                                         }}
                                     />
 
                                 </div>
 
-                                <div className='w-[35%]'>
+                                <div className='w-[45%]'>
                                     <h1 className='text-[15px] pb-1.5'>Edition</h1>
-                                    <select value={values?.year} onChange={(e) => { setValues({ ...values, year: e.target.value }) }}
-                                        className={`border-y border-r rounded-r text-[#6B7280]  text-sm  focus:outline-none font-thin block p-2.5 w-full`}>
-                                        {[{ id: 1, name: "2026" }, { id: 2, name: "2025" }, { id: 3, name: "2024" }, { id: 4, name: "2023" }].map(({ id, name }) => (
-                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
-                                        ))}
-                                    </select>
+                                    <input
+                                        type="text"
+                                        ref={edit}
+                                        value={values?.edition}
+                                        placeholder="Enter edition"
+                                        onChange={(e) => setValues({ ...values, edition: e.target.value })}
+                                        className="px-2 pt-[7px] pb-[8px] text-[#6B7280] focus:outline-none rounded-r font-thin border-y border-r w-full"
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                setFirst(true)
+                                            } else if (e.key === "Escape") { }
+                                        }}
+                                    />
 
                                 </div>
                             </div>

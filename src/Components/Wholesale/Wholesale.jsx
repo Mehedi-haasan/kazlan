@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getFormattedDate } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calendar from './Calender'
+import SearchResultHeader from '../Common/SearchResultHeader';
+import DataHeader from '../Common/DataHeader';
 
 
 
@@ -370,20 +372,13 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
                                     <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                                         <thead className="text-xs text-gray-900">
-                                            <tr className='border-b border-black text-[16px]'>
-                                                <th scope="col" className="px-1 py-2 font-thin">Name</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
-                                                <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
-                                                <th scope="col" className="pl-4 py-2 text-left font-thin ">Discount</th>
-                                                <th scope="col" className="pr-3 py-2 text-right font-thin">Stock</th>
-                                            </tr>
+                                            <SearchResultHeader/>
                                         </thead>
                                         <tbody>
                                             {searchData?.map((item, i) => {
                                                 return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
+                                                    <th scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
@@ -410,19 +405,7 @@ const WholeSell = ({ shop = [], state = [], paytype = [], info = {} }) => {
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead className="text-xs text-gray-900 ">
-                            <tr className='border-y text-[15px] py-1'>
-                                <th scope="col" className="p-2 text-center font-semibold border-x">Action</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Qty</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Year</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Category</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Brand</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
-                                <th scope="col" className="px-2 py-2.5 text-left font-semibold border-r">Item name</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">M.R.P</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Discount</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r">Sale Price</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left font-semibold border-r rounded">Total price</th>
-                            </tr>
+                            <DataHeader/>
                         </thead>
                         <tbody>
                             {allData?.map((item, i) => {

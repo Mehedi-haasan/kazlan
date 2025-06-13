@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Remove from '../../icons/Remove'
 import Edit from "../../icons/Edit";
 import BaseUrl from "../../Constant";
-import Loading from "../../icons/Loading";
 import Modal from "../Input/Modal";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
@@ -56,14 +55,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
         return `${day} ${month} ${year}`;
     }
 
-    let qt = [{
-        id: 1,
-        name: "To Pay"
-    },
-    {
-        id: 2,
-        name: "To Receive"
-    }]
+
 
     return (
         <tr className='border-b'>
@@ -85,7 +77,6 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                     {item?.balance}
                 </button>
-                {/* <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`} `}>{item?.balance}</button> */}
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
@@ -152,8 +143,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                                     <select value={item?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                     >
-                                        {qt.map(({ id, name }) => (
-
+                                        {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                         ))}
                                     </select>

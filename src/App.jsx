@@ -37,16 +37,12 @@ import ProTransaction from "./Components/Products/ProTransaction.jsx";
 import PaymentHistory from "./Components/Payment/PaymentHistory.jsx";
 import Invoice from "./Components/Invoice/Invoice.jsx";
 import PurchaseItems from "./Components/PurchaseItem/PurchaseItems.jsx";
-import ExcelShit from "./Components/Excel/ExcelShit.jsx";
 import CustomerPayment from "./Components/Payment/CustomerPayment.jsx";
 import SupplierPayment from "./Components/Payment/SupplierPayment.jsx";
 import WholeSell from "./Components/Wholesale/Wholesale.jsx";
 import ReturnPurchaseItem from "./Components/PurchaseReturn/ReturnPurchaseItem.jsx";
 import SaleItems from "./Components/SaleReturn/SaleItems.jsx";
 import ReturnItems from "./Components/SaleReturn/ReturnItems.jsx";
-
-
-
 
 
 
@@ -148,7 +144,7 @@ function App() {
       },
     });
     const data = await response.json()
-    setShop([...shop, ...data.items])
+    setShop(data.items)
   }
 
   useEffect(() => {
@@ -183,8 +179,8 @@ function App() {
 
 
     if (auth && role === "superadmin") {
-      // getShop()
-    } else if(auth && role === "admin"){
+      getShop()
+    } else if (auth && role === "admin") {
       setShop([{
         id: id,
         name: shopname
@@ -208,9 +204,9 @@ function App() {
       <Header auth={auth} isLoggedOut={(v) => setAuth(v)} open={open} isOpen={(v) => { setopen(v) }} notification={data} info={info} />
       <div className={`min-h-[calc(80vh-160px)] mt-12 bg-[#F7F7FF] transition-all font-bold w-full top-12 ease-in duration-200 ${!auth ? "pl-0" : open ? "pl-[230px]" : "pl-[60px]"} font-roboto`}>
         <Routes>
-          <Route path="/" element={auth ? <Dashboard data={data} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/" element={auth ? <Dashboard data={data} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/dashboard" element={auth ? <Dashboard data={data} info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/dashboard" element={auth ? <Dashboard data={data} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/registration" element={auth && info?.role === "superadmin" ? <Registration state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -241,8 +237,6 @@ function App() {
           <Route path="/sale/items" element={<SaleItems />} />
 
           <Route path="/return/items" element={<ReturnItems />} />
-
-          <Route path="/dailyhisab" element={<ExcelShit />} />
 
           <Route path="/app/setting" element={<Setting userinfo={info} />} />
 

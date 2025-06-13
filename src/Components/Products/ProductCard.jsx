@@ -114,7 +114,7 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
       </th>
-      <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.name}</th>
+      <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.name} {item?.edition}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.brand?.name}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.category?.name}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.company?.name}</th>
