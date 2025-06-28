@@ -4,28 +4,40 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getFormattedDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 import { NavLink } from "react-router-dom";
 
-const CustomerPayment = ({ state }) => {
+const CustomerPayment = ({ info, state }) => {
 
     const params = useParams()
+    const goto = useNavigate()
     const [isLoading, setIsLoading] = useState(false);
     const [values, setValues] = useState({
         balance: 0,
         paid: 0,
         email: '',
         phone: '',
-        accountnumber: ''
+        accountnumber: '',
+        balance_type: ''
     })
 
+
     const handleSubmit = async (e) => {
-        setIsLoading(true)
-        const token = localStorage.getItem('token')
         e.preventDefault()
-        const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}`, {
+        setIsLoading(true)
+        values.shop = info?.shopname;
+        values.date = ""
+        values.deliverydate = ""
+        const token = localStorage.getItem('token')
+        let type = 1;
+        if (values?.balance_type === "To Receive") {
+            type = 1;
+        } else if (values?.balance_type === "To Pay") {
+            type = 1;
+        }
+        const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +47,13 @@ const CustomerPayment = ({ state }) => {
         });
         const data = await response.json();
         setIsLoading(false);
-        toast(data.message)
+        toast(data.message);
+        if (data?.customertype === "Supplier") {
+            goto(`/suppliers`)
+        } else {
+            goto(`/customers`)
+        }
+
     }
 
     const GetUser = async () => {
@@ -70,21 +88,32 @@ const CustomerPayment = ({ state }) => {
                     <InputComponent label={"Date"} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
 
                     <div className="pt-2">
-                        <SelectionComponent label={"Payment Type"} options={[{ id: 1, name: 'Cash' }, { id: 2, name: 'Check' }, { id: 3, name: 'Bank Transfar' }, { id: 4, name: 'Mobile Banking' }]} />
+                        <SelectionComponent label={"Payment Type"}
+                            options={[{ id: 1, name: 'Cash' }, { id: 2, name: 'Check' }, { id: 3, name: 'Bank Transfar' }, { id: 4, name: 'Mobile Banking' }]}
+                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
+                        />
                     </div>
                     <InputComponent label={"Balance"} placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1'>
 
-                            <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
+                            <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value }) }}
                                 className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2`}
                             >
                                 {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
                                     <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                 ))}
                             </select>
-                            <input type='number' value={values?.paid} onChange={(e) => { setValues({ ...values, paid: e.target.value }) }} placeholder={values?.paid} className='border-y border-r px-2 focus:outline-none rounded-r  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                            <input type='number' value={values?.paid}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        if (values?.paid !== 0) {
+                                            handleSubmit()
+                                        }
+                                    }
+                                }}
+                                onChange={(e) => { setValues({ ...values, paid: e.target.value }) }} placeholder={values?.paid} className='border-y border-r px-2 focus:outline-none rounded-r  pt-[6px] pb-[5px] w-[50%] font-thin' />
                         </div>
                     </div>
 
@@ -97,7 +126,7 @@ const CustomerPayment = ({ state }) => {
 
                 <div className='p-3 flex justify-start items-center gap-3'>
                     <Button onClick={handleSubmit} isDisable={isLoading} name={'Submit'} />
-                    <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
+                    <Button name={'Cancel'} onClick={() => { goto(`/customers`) }} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
         </div>

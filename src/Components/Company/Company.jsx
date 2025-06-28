@@ -5,9 +5,11 @@ import BaseUrl from '../../Constant'
 import logo from '../Logo/userProfile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Company = () => {
 
+    const goto = useNavigate()
     const [values, setValues] = useState({})
     const [companyInfo, setCompanyInfo] = useState({})
     const [isLoading, setIsLoading] = useState(false)
@@ -32,8 +34,9 @@ const Company = () => {
             body: JSON.stringify(values),
         });
         const data = await response.json();
-        toast(data?.message)
-        setIsLoading(false)
+        toast(data?.message);
+        setIsLoading(false);
+        goto(`/warehouses`)
     }
 
     const GetCompInfo = async (compId) => {
@@ -142,7 +145,7 @@ const Company = () => {
                     <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={'Shop Code*'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} />
                     {/* <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={' Sale Prefix'} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} /> */}
                     {/* <InputComponent onChange={(e) => { setValues({ ...values, footertext: e }) }} label={'Footer Text'} placeholder={values?.footertext || 'N/A'} className={`text-[#32393f] font-thin`} /> */}
-                    <Button onClick={handleUpload} name={'Create'} />
+                    <Button onClick={() => { imageFile ? handleUpload() : PostInfo("") }} name={'Create'} />
                 </div>
             </div>
         </div>

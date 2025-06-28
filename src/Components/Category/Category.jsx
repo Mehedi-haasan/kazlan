@@ -136,8 +136,8 @@ const Category = ({ entries, info = {} }) => {
             });
             const data = await response.json();
             setCategory(data?.items);
-        }else{
-            getCategory() 
+        } else {
+            getCategory()
         }
     }
 
@@ -161,9 +161,19 @@ const Category = ({ entries, info = {} }) => {
 
     const { View } = useLottie(options);
 
-        useEffect(()=>{
-           input_focus.current.focus()
-        },[show  ])
+    useEffect(() => {
+        input_focus.current.focus()
+    }, [show])
+
+
+    useEffect(() => {
+        if (showlotti) {
+            const timer = setTimeout(() => {
+                setLottiShow(false);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [showlotti]);
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
@@ -186,7 +196,7 @@ const Category = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} input_focus={input_focus} value={values?.name} label={`Category Name`} handleEnter={()=>{handleCreate('')}} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} input_focus={input_focus} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate('') }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>

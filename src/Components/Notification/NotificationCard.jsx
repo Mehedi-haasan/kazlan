@@ -30,7 +30,8 @@ const NotificationCard = ({ item }) => {
 
             <div>
                 <h1 className='font-semibold'>{item?.creator}</h1>
-                <h1 className='text-sm'><span className='font-bold text-black'>{item?.shop}</span> has new order with invoice id # <span className='font-bold text-black'>{item?.invoiceId}</span></h1>
+                {item?.status === "success" ? <h1 className='text-sm'><span className='font-bold text-black'>{item?.shop}</span> has new order with invoice id # <span className='font-bold text-black'>{item?.invoiceId}</span></h1> :
+                    <h1 className='font-semibold text-sm'>{item?.status}</h1>}
             </div>
         </div>
     );

@@ -137,12 +137,12 @@ const Brand = ({ entries, info = {} }) => {
             const data = await response.json();
             setBran(data?.items);
             console.log(data?.items)
-        }else{
+        } else {
             getBrand()
         }
     }
 
-    
+
 
 
 
@@ -164,9 +164,19 @@ const Brand = ({ entries, info = {} }) => {
 
     const { View } = useLottie(options);
 
-    useEffect(()=>{
-       input_focus.current.focus()
-    },[show  ])
+    useEffect(() => {
+        input_focus.current.focus()
+    }, [show])
+
+
+    useEffect(() => {
+        if (showlotti) {
+            const timer = setTimeout(() => {
+                setLottiShow(false);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [showlotti]);
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
@@ -184,7 +194,7 @@ const Brand = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Brand name`} input_focus={input_focus} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Brand name`} input_focus={input_focus} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate("") }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>

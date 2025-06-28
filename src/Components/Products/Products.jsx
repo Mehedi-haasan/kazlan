@@ -103,7 +103,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
 
 
     return (
-        <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
+        <div className="pl-3 pt-5 pr-2 min-h-screen pb-12">
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Item List</h1>
                 <NavLink to='/create' className={`border text-white rounded-lg font-thin shadow py-2 px-5 bg-blue-600`}>Create Item</NavLink>

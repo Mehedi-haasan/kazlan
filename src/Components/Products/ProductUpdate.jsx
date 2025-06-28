@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import InputComponent from '../Input/InputComponent'
@@ -13,15 +13,16 @@ import logo from '../Logo/photo.png'
 import SelectionComponent from '../Input/SelectionComponent'
 
 
-const ProductUpdate = ({ info = {}, shop = [] }) => {
+const ProductUpdate = ({ info = {}, shop = [], editio }) => {
     const goto = useNavigate()
     const params = useParams()
+    const [edition, setEdition] = useState(false)
     const [image_url, setImage_Url] = useState();
     const [isLoading, setIsLoading] = useState(false)
     const [imageFile, setImageFile] = useState(null);
-    const [value, setValue] = useState('')
     const [active, setActive] = useState("Pricing")
     const [values, setValues] = useState({})
+    const input_name = useRef(null);
 
 
     const GetProduct = async () => {
@@ -61,7 +62,6 @@ const ProductUpdate = ({ info = {}, shop = [] }) => {
 
 
 
-
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -69,39 +69,6 @@ const ProductUpdate = ({ info = {}, shop = [] }) => {
             setImageFile(URL.createObjectURL(file));
         }
     };
-
-
-
-    let dis = [{
-        id: 1,
-        name: "Percentage"
-    },
-    {
-        id: 2,
-        name: "Fixed"
-    }]
-
-    let qt = [{
-        id: 1,
-        name: "None"
-    },
-    {
-        id: 2,
-        name: "Pcs"
-    },
-    {
-        id: 3,
-        name: "Kgs"
-    },
-    {
-        id: 4,
-        name: "Bgs"
-    },
-    {
-        id: 5,
-        name: "Bottol"
-    }]
-
 
 
     return (
@@ -114,7 +81,37 @@ const ProductUpdate = ({ info = {}, shop = [] }) => {
 
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
-                        <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Item Name*"} isRequered={true} value={values?.name} placeholder={values?.name} type={""} className={``} />
+                        {/* <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Item Name*"} isRequered={true} value={values?.name} placeholder={values?.name} type={""} className={``} /> */}
+                        <div className='flex justify-start items-center w-full z-50'>
+                            <div className='w-[60%]'>
+                                <h1 className='text-[15px] pb-1.5'>Item Name</h1>
+                                <input
+                                    type="text"
+                                    ref={input_name}
+                                    value={values?.name}
+                                    placeholder="Enter item name"
+                                    onChange={(e) => setValues({ ...values, name: e.target.value })}
+                                    className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-l w-full"
+
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            setEdition(true)
+                                        } else if (e.key === "Escape") { }
+                                    }}
+                                />
+
+                            </div>
+
+                            <div className='w-[40%] z-50'>
+                                <div className='flex justify-start items-end z-40'>
+                                    <SelectionComponent options={editio} default_select={edition} onSelect={(v) => { setEdition(false); setValues({ ...values, brandId: v?.id }) }} label={"Edition*"} className='rounded-r' />
+                                    <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                        <Add />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
 
                         <InputComponent onChange={(e) => { }} label={"Brand / Publishers*"} value={values?.brand?.name} placeholder={values?.brand?.name} readOnly={true} />
 
@@ -160,7 +157,7 @@ const ProductUpdate = ({ info = {}, shop = [] }) => {
                                                 <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, discount_type: v.target.value }) }}
                                                     className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
-                                                    {dis.map(({ id, name }) => (
+                                                    {[{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }].map(({ id, name }) => (
 
                                                         <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                                     ))}
@@ -191,7 +188,7 @@ const ProductUpdate = ({ info = {}, shop = [] }) => {
                                                 <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
                                                     className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
-                                                    {qt.map(({ id, name }) => (
+                                                    {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (
 
                                                         <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                                     ))}

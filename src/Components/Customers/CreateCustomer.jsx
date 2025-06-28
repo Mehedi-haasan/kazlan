@@ -24,7 +24,7 @@ const CreateCustomer = () => {
 
     })
     const handleSubmit = async (e) => {
-        if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
+        if (!values?.phone) {
             toast("Required Field are missing");
             return
         }
@@ -75,7 +75,7 @@ const CreateCustomer = () => {
             </div>
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div className="">
+                    <div className="pt-1.5">
                         <Selection options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type*'} />
                     </div>
                     <InputComponent label={values?.customertype === "Party" ? "Full Name*" : "Full Name"} placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />

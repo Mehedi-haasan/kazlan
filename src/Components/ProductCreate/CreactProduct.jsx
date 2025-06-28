@@ -12,7 +12,7 @@ import logo from '../Logo/photo.png'
 import ImageSelect from '../Input/ImageSelect'
 
 
-const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
+const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
 
     const input_name = useRef(null);
@@ -26,7 +26,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         input_name.current?.focus();
     }, []);
 
-
+    const [edition, setEdition]=useState(false)
     const [first, setFirst] = useState(false)
     const [second, setSecond] = useState(false)
     const [third, setThird] = useState(false)
@@ -113,7 +113,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
     useEffect(() => {
         document.title = "Items - KazalandBrothers";
-        FetchShop()
+        // FetchShop()
         getCategory()
         getBrand()
         GetSupplier()
@@ -131,6 +131,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             toast("Required field is missing");
             return;
         }
+
         values.image_url = image_url;
         setIsLoading(true)
         const token = localStorage.getItem('token');
@@ -218,8 +219,8 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                         <div>
 
 
-                            <div className='flex justify-start items-center w-full'>
-                                <div className='w-[55%]'>
+                            <div className='flex justify-start items-center w-full z-50'>
+                                <div className='w-[60%]'>
                                     <h1 className='text-[15px] pb-1.5'>Item Name</h1>
                                     <input
                                         type="text"
@@ -227,19 +228,19 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                         value={values?.name}
                                         placeholder="Enter item name"
                                         onChange={(e) => setValues({ ...values, name: e.target.value })}
-                                        className="px-2 pt-[8px] pb-[7px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-x w-full"
+                                        className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-l w-full"
 
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
-                                                edit.current.focus()
+                                                setEdition(true)
                                             } else if (e.key === "Escape") { }
                                         }}
                                     />
 
                                 </div>
 
-                                <div className='w-[45%]'>
-                                    <h1 className='text-[15px] pb-1.5'>Edition</h1>
+                                <div className='w-[40%] z-50'>
+                                    {/* <h1 className='text-[15px] pb-1.5'>Edition</h1>
                                     <input
                                         type="text"
                                         ref={edit}
@@ -252,7 +253,13 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                                 setFirst(true)
                                             } else if (e.key === "Escape") { }
                                         }}
-                                    />
+                                    /> */}
+                                    <div className='flex justify-start items-end z-40 pt-[1px]'>
+                                        <SelectionComponent options={years} default_select={edition} onSelect={(v) => { setFirst(true); setEdition(false); setValues({ ...values, brandId: v?.id }) }} label={"Edition*"} className='rounded-r' />
+                                        <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                            <Add />
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -288,7 +295,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                     onChange={(e) => { setValues({ ...values, description: e?.target?.value }) }}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                            mrp.current?.focus();
+                                            sale.current?.focus();
                                         }
                                     }}
                                     className="font-thin focus:outline-none border p-1.5 w-full rounded" />
@@ -317,8 +324,8 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                             <div className='h-[120px]'>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                        <InputComponent label={"M.R.P*"} input_focus={mrp} placeholder={'Enter M.R.P'} type={'number'} handleEnter={(e) => { sale.current.focus() }} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v, cost: v }) }} />
-                                        <InputComponent label={"Sale Price"} input_focus={sale} placeholder={'Enter sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v }) }} />
+                                        <InputComponent label={"Cost Price"} input_focus={mrp} placeholder={'Enter Cost Price'} type={'number'} handleEnter={(e) => { sale.current.focus() }} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v }) }} />
+                                        <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v, cost: v - 1 }) }} />
                                         <div>
                                             <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
                                             <div className='flex justify-start items-end pb-1'>
@@ -341,7 +348,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                     {
                                         info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
                                             <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Warehouse Stock*"} className='rounded-l' />
-                                            <div className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                            <div onClick={() => { goto(`/warehouses`) }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                                 <Add />
                                             </div>
                                         </div>

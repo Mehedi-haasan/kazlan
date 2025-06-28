@@ -71,7 +71,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.address}</th>
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                    {item?.balance}
+                    {Math.abs(item?.balance)}
                 </button>
                 {/* <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? 'text-red-600 bg-red-100 border-red-100' : 'text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]'} `}>{item?.balance}</button> */}
             </th>
@@ -91,7 +91,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                         <NavLink to={`/payment/history/${item?.id}`} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 text-xs rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"/></svg>Payment History
                         </NavLink>
-                        <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden':''}flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
+                        <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden':''} flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
                         </div>
                     </div>

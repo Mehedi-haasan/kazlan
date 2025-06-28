@@ -22,10 +22,10 @@ const SellCard = ({ i, item, changeqty, changeprice, changedis, onClick, ChangeD
             <th scope="col" className="px-2 py-2 text-left font-thin border-l">{item?.edition}</th>
             <th scope="col" className="px-2 py-2 text-left font-thin border-l">{item?.category?.name}</th>
             <th scope="col" className="px-2 py-2 text-left font-thin border-l">{item?.brand?.name}</th>
-            <th scope="col" className="px-2 py-2 text-left font-thin border-l">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 text-left font-thin border-l grid col-span-2">{item?.name}</th>
             <th scope="col" className="py-2 text-center font-thin border-l">{item?.price}</th>
-            <th scope="col" className="border-l text-left font-thin min-w-[200px]">
-                <div className='flex justify-start items-center'>
+            <th scope="col" className="border-l text-left font-thin min-w-[200px] grid col-span-2">
+                <th className='flex justify-start items-center'>
                     <input type='number' value={item?.discount}
                         placeholder={item?.discount}
                         onChange={(e) => { changedis(item?.id, e.target.value) }}
@@ -37,11 +37,11 @@ const SellCard = ({ i, item, changeqty, changeprice, changedis, onClick, ChangeD
                         ))}
                     </select>
 
-                </div>
+                </th>
 
             </th>
-            <th scope="col" className="pl-2 text-center font-thin border-l">{item?.disPrice || item?.price}</th>
-            <th scope="col" className="pl-2 py-2 text-center font-thin border-l">{parseInt(item?.disPrice || item?.price) * parseInt(item?.qty)}</th>
+            <th scope="col" className="pl-2 py-2 text-center font-thin border-l">{item?.disPrice || item?.price}</th>
+            <th scope="col" className="pl-2 py-2 text-right font-thin border-l">{parseInt(item?.disPrice || item?.price) * parseInt(item?.qty)}</th>
 
         </tr>
     );

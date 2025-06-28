@@ -38,6 +38,7 @@ const State = ({ entries = [] }) => {
         });
         const data = await response.json()
         setState(data.items)
+        setTotalItem(data?.items?.length)
     }
 
 
@@ -75,11 +76,11 @@ const State = ({ entries = [] }) => {
         <div className="pt-5 px-2 min-h-screen pb-12">
             <ToastContainer />
             <div>
-                <Modal show={show} handleClose={() => { setShow(false) }} size="500px" className="">
+                <Modal show={show} handleClose={() => { setShow(false) }} size={`500px`} className="">
                     <div className="pt-1">
                         <InputComponent placeholder={`Enter State name`} label={`State name`} value={values} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
 
-                        <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3" />
+                        <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3 border bg-blue-500 text-white" />
                     </div>
                 </Modal>
             </div>
@@ -126,15 +127,7 @@ const State = ({ entries = [] }) => {
                                 </tr>
                             </thead>
                             <tbody>
-
-
-                                {
-                                    state?.map((item) => (
-                                        <StateCard item={item} />
-                                    ))
-                                }
-
-
+                                {state?.map((item) => (<StateCard item={item} callState={getState} />))}
                             </tbody>
                         </table>
                     </div>

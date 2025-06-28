@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectionComponent';
 import ShowEntries from '../Input/ShowEntries';
-import InputComponent from '../Input/InputComponent';
-import Invoice from '../RecentInvoice/Invoice';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
 import Loading from '../../icons/Loading';
+import Calendar from '../Wholesale/Calender';
+import { handleDateConvert } from '../Input/Time'
+import InvoiceTemp from '../RecentInvoice/InvoiceTemp'
 
-const Order = ({ type = [], user = [] }) => {
+const Order = ({ user = [], info = {} }) => {
 
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
@@ -20,28 +21,70 @@ const Order = ({ type = [], user = [] }) => {
     const [pageSize, setPageSize] = useState(10);
     const [totalItem, setTotalItem] = useState(0);
     const [isLoading, setIsLoading] = useState(false)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toISOString(),
+        toDate: today.toISOString()
+    });
+    const [values, setValues] = useState({
+        pay: 0,
+        paking: 0,
+        delivary: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
+    })
+
+
+
+    const GetOrder = async () => {
+        const token = localStorage.getItem('token')
+        setIsLoading(true)
+        const res = await fetch(`${BaseUrl}/api/get/user/recent/order/from/to`, {
+            method: 'POST',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify(raw)
+        });
+        const data = await res.json()
+        setData(data?.items);
+        setTotalItem(data?.items?.length)
+        setIsLoading(false)
+    }
+
+
+    useEffect(() => {
+        document.title = "Orders"
+        GetOrder()
+    }, [raw])
 
 
 
     return (
-        <div className='bg-white relative pt-5 px-2 min-h-screen pb-12'>
+        <div className='bg-white relative pt-5 px-2 min-h-screen pb-12' >
 
             <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Order List</h1>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
+                    <div className='pt-1'>
                         <SelectionComponent options={[{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]} label={'Customer'} />
                     </div>
-                    <div>
+                    <div className='pt-1'>
                         <SelectionComponent options={user} label={'User'} />
                     </div>
                     <div>
-                        <InputComponent placeholder={"From Date"} label={"From Date"} />
+                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
                     </div>
                     <div>
-                        <InputComponent placeholder={"To Date"} label={"To Date"} />
+                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
                     </div>
 
                 </div>
@@ -57,7 +100,7 @@ const Order = ({ type = [], user = [] }) => {
                 </div>
                 <div ref={ref}>
                     <div ref={targetRef} className="w-full overflow-hidden overflow-x-auto">
-                        <Invoice />
+                        <InvoiceTemp invoices={data} prefix={info?.shopcode} />
                     </div>
                 </div>
                 <div className="flex justify-between items-center pt-3">

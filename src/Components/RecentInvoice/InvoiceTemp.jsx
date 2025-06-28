@@ -23,10 +23,10 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
             saleType = "SL"
         } else if (type === "Sale Return") {
             saleType = "SR"
-        }else if(type === "Return Purchase"){
-            saleType = "RP"
-        }else if(type === "Purchase items"){
-            saleType = "PI"
+        } else if (type === "Return Purchase") {
+            saleType = "PR"
+        } else if (type === "Purchase items") {
+            saleType = "PO"
         }
 
         return saleType
@@ -64,7 +64,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Assigned Person
+                                    Warehouse
                                     <Updown />
                                 </div>
                             </th>
@@ -114,7 +114,13 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                     </thead>
                     <tbody>
                         {invoices?.map((item, i) => (
-                            <tr key={i} className='border-b cursor-pointer' onClick={() => { goto(`/invoice/${item?.id}`) }}>
+                            <tr key={i} className='border-b cursor-pointer' onClick={() => {
+                                if (item?.type === "Sale" || item?.type === "Purchase items") {
+                                    goto(`/invoice/${item?.id}`)
+                                } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
+                                    goto(`/return/invoice/${item?.id}`)
+                                }
+                            }}>
                                 <th className="w-4 py-3 px-4 border-x">
                                     <div className="flex items-center">
                                         <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RightArrow from '../../icons/RightArrow';
 
 
-const Calendar = ({ label, readOnly = true, getDate, getTime,value }) => {
+const Calendar = ({ label, readOnly = true, getDate, getTime, value }) => {
     const today = new Date();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isFocus, setIsFocus] = useState(false)
@@ -46,26 +46,38 @@ const Calendar = ({ label, readOnly = true, getDate, getTime,value }) => {
         getDate(formatted);
     };
 
-
-
-
     useEffect(() => {
         handleDateSelection(new Date());
     }, []);
 
+    const cal = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (cal.current && !cal.current.contains(event.target)) {
+                setIsFocus(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className='w-full'>
+        <div className='w-full' ref={cal}>
             <h1 className='pb-[5px] pt-1 text-[15px]'>{label}</h1>
 
             <div className='flex justify-start items-center relative w-full'>
-                <div onClick={() => { setIsFocus(true) }} className='border-y border-l px-3 pt-[6px] pb-[5px] rounded-l cursor-pointer text-green-500 '>
+                <div onClick={() => { setIsFocus(!isFocus) }} className='border-y border-l px-3 pt-[6px] pb-[5px] rounded-l cursor-pointer text-green-500 '>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
                     </svg>
                 </div>
 
                 <div className='w-full'>
-                    <input readOnly={readOnly} className='focus:outline-none border pt-[7px] pb-[6px] px-1.5 rounded-r w-full font-thin text-[15px]' value={value} onChange={(e) => { }} placeholder={value} />
+                    <input readOnly={readOnly} onClick={() => setIsFocus(false)} className='focus:outline-none border pt-[7px] pb-[6px] px-1.5 rounded-r w-full font-thin text-[15px]' value={value} onChange={(e) => { }} placeholder={value} />
 
                     {isFocus && <div className={`max-w-md mx-auto top-10 bg-white rounded-xl shadow-md border overflow-hidden absolute z-40`}>
                         <div className="flex justify-between items-center bg-gray-100 px-1 pt-2 pb-2">

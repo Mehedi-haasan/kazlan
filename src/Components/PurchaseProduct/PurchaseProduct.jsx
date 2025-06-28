@@ -9,15 +9,20 @@ import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getFormattedDate } from '../Input/Time';
+import { getFormattedDate, handleDateConvert, PrepareOrderData } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calander from '../Wholesale/Calender';
+import DataHeader from '../Common/DataHeader';
+import SearchResultHeader from '../Common/SearchResultHeader';
 
 
 
-const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => {
+const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
     const [first, setFirst] = useState(true)
     const [second, setSecond] = useState(false)
+    const [edition, setEdition] = useState(false)
+    const [bran, setBrand] = useState(false)
+    const [catego, setCatego] = useState(false)
     const inputRef = useRef(null)
     const inputQty = useRef(null)
     const goto = useNavigate()
@@ -38,26 +43,21 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
         pay: 0,
         paking: 0,
         delivary: 0,
-        pay_type: 'Cash',
+        pay_type: 'Chalan/Due',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: ''
+    })
+    const [filter, setFilter] = useState({
+        cate: null,
+        bran: null,
+        edit: null
     })
 
     const [raw, setRaw] = useState({
         fromDate: today.toISOString(),
         toDate: today.toISOString()
     });
-
-
-    const handleDateConvert = (date) => {
-        const formatted = date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        return formatted
-    };
 
 
 
@@ -79,43 +79,33 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
         }
     }
 
+    const SecondSearchProduct = async (edit, cate, bran, value) => {
+        setSelectedId(0)
+        setSearchItem(value)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/product/search/with/${edit}/${cate}/${bran}/${value}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+            },
+        });
+        const data = await response.json();
+
+        if (data?.items && data?.items?.length > 0) {
+            setSearchData(data.items)
+        } else {
+            setSearchData([]);
+        }
+    }
+
 
     const Order = async () => {
-        if (!userId ) {
+        if (!userId) {
             toast("Customer Pay Amount and Pay Type are required");
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = [];
-        allData?.forEach((v) => {
-            let sale = 0;
-            const price = parseInt(v?.price) || 0;
-            const discount = parseInt(v?.discount) || 0;
-            const qty = parseInt(v?.qty) || 0;
-            if (v?.discount_type === "Fixed") {
-                sale = (price - discount) * qty;
-            } else if (v?.discount_type === "Percentage") {
-                const discountedPrice = price - (price * discount / 100);
-                sale = discountedPrice * qty;
-            }
-
-            orderData.push({
-                active: true,
-                product_id: v?.id,
-                username: name,
-                userId: userId,
-                name: v?.name,
-                shop: info?.shopname,
-                price: price,
-                discount: discount,
-                discount_type: v?.discount_type,
-                sellprice: sale,
-                qty: qty,
-                contact: values?.phone,
-                date: getFormattedDate(),
-                deliverydate: values?.deliverydate
-            });
-        });
+        let orderData = await PrepareOrderData(allData, userId, name, values, info);
         try {
             const response = await fetch(`${BaseUrl}/api/purchase/product`, {
                 method: 'POST',
@@ -128,11 +118,13 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                     customername: name,
                     userId: userId,
                     date: getFormattedDate(),
+                    paymentmethod:"",
                     total: lastTotal,
                     packing: paking,
                     delivery: delivary,
                     lastdiscount: values?.lastdiscount,
                     previousdue: due,
+                    pay_type: values?.pay_type,
                     paidamount: values?.pay,
                     amount: lastTotal - values?.pay,
                     orders: orderData,
@@ -290,7 +282,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                     <h1>Purchase Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1 z-30'>
+                    <div className='flex justify-start items-end pb-1 z-40'>
                         <SelectionComponent options={state} default_select={first} onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id) }} label={"Thana Name"} className={`rounded-l z-50`} />
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
@@ -306,8 +298,8 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
 
 
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1'>
-                        <SelectionComponent options={customer} default_select={second} onSelect={(v) => { setSecond(false); setFirst(false); inputRef.current.focus(); setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l ' />
+                    <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent options={customer} default_select={second} onSelect={(v) => { setSecond(false); setFirst(false);  setEdition(true); setUserId(v.id); setName(v?.name); fetchUserDue(v.id) }} label={"Supplier"} className='rounded-l ' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 py-1.5 rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -327,18 +319,46 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                 <div className='border-b p-4'>
                     <h1>Items</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4 '>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 p-4 '>
                     <div>
-                        {info?.role === "superadmin" ? <SelectionComponent options={shop} onSelect={() => { }} label={'Warehouse'} /> : <InputComponent placeholder={info?.shopname} label={'Warehouse'} readOnly={true} />}
+                        <SelectionComponent options={editio} default_select={edition}
+                            onSelect={(v) => {
+                                setCatego(true);
+                                setEdition(false);
+                                setFilter({ ...filter, edit: v?.id });
+                                SecondSearchProduct(v?.id, filter?.cate, filter?.bran, null)
+                            }}
+                            label={'Edition'}
+                        />
                     </div>
-                    <div className='grid col-span-2'>
+                    <div>
+                        <SelectionComponent options={category} default_select={catego}
+                            onSelect={(v) => {
+                                setFilter({ ...filter, cate: v?.id })
+                                setCatego(false)
+                                setBrand(true)
+                                SecondSearchProduct(filter?.edit, v?.id, filter?.bran, null)
+                            }} label={'Category'} />
+                    </div>
+                    <div>
+                        <SelectionComponent options={brand} default_select={bran}
+                            onSelect={(v) => {
+                                setBrand(false)
+                                inputRef.current.focus()
+                                setFilter({ ...filter, bran: v?.id })
+                                SecondSearchProduct(filter?.edit, filter?.cate, v?.id, null)
+                            }}
+                            label={'Brand'} />
+                    </div>
+                    <div className='grid col-span-3'>
                         <h1 className='pb-1'>Enter Item Name</h1>
                         <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y text-black w-full'>
-                                <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem} onChange={SearchProduct}
+                                <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem}
+                                    onChange={(e) => { SecondSearchProduct(filter?.edit, filter?.cate, filter?.bran, e.target.value) }}
                                     className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin'
                                     onKeyDown={(e) => {
                                         if (e.key === "ArrowDown") {
@@ -376,24 +396,15 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                                 />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
-                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                                        <thead class="text-xs text-gray-900">
-                                            <tr className='border-b border-black text-[16px]'>
-                                                <th scope="col" className="px-1 py-2 font-thin">Name</th>
-                                                <th scope="col" className="px-1 py-2 font-thin">Edition</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
-                                                <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
-                                                <th scope="col" className="pl-4 py-2 text-left font-thin">M.R.P</th>
-                                                <th scope="col" className="pl-4 py-2 text-left font-thin ">Discount</th>
-                                                <th scope="col" className="pr-3 py-2 text-right font-thin">Stock</th>
-                                            </tr>
+                                    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                        <thead className="text-xs text-gray-900">
+                                            <SearchResultHeader />
                                         </thead>
                                         <tbody>
                                             {searchData?.map((item, i) => {
                                                 return <tr key={i} className={`border-b cursor-pointer ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => { setAllData([...allData, item]); setSearchData([]); setSearchItem('') }}>
                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.name}</th>
-                                                     <th scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</th>
+                                                    <th scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.brand?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.category?.name}</th>
                                                     <th scope="col" className="px-4 py-2 text-left font-thin">{item?.cost}</th>
@@ -419,19 +430,8 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
 
                 <div className='p-4 w-full overflow-hidden overflow-x-auto'>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-900">
-                            <tr className='border-y text-[16px] py-1 font-semibold'>
-                                <th scope="col" className="p-2 text-center border-x">Action</th>
-                                <th scope="col" className="px-2 py-2.5 text-left border-r">Qty</th>
-                                <th scope="col" className="pl-2 py-2.5 border-x text-center">Year</th>
-                                <th scope="col" className="pl-2 py-2.5 border-x text-center">Category</th>
-                                <th scope="col" className="px-2 py-2.5 text-left border-r">Brand</th>
-                                <th scope="col" className="px-2 py-2.5 text-left border-r">Item name</th>
-                                <th scope="col" className="py-2.5 border-r text-center">M.R.P</th>
-                                <th scope="col" className="pl-2 py-2.5 text-left border-r">Discount</th>
-                                <th scope="col" className="pl-2 py-2.5 text-center border-r">Purchase Price</th>
-                                <th scope="col" className=" py-2.5 text-center border-r rounded">Total Price</th>
-                            </tr>
+                        <thead className="text-xs text-gray-900">
+                            <DataHeader />
                         </thead>
                         <tbody>
                             {allData?.map((item, i) => {
@@ -450,10 +450,10 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' value={values?.pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                    <input type='number' value={values?.pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[55%]' />
                                     <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
-                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
-                                        {paytype.map(({ id, name }) => (
+                                        className={`border text-[#6B7280] w-[45%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
+                                        {[{ id: 201, name: "Chalan/Due" }, { id: 202, name: "Cash Memo" }, { id: 203, name: "Paid" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                         ))}
                                     </select>
@@ -502,7 +502,7 @@ const PurchaseProduct = ({ shop = [], state = [], paytype = [], info = {} }) => 
                 </div>
                 <div className='p-4 border-t'>
                     <Button onClick={Order} name={'Submit'} />
-                    <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
+                    <Button name={'Cancel'} onClick={()=>{goto(`/dashboard`)}} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>
 

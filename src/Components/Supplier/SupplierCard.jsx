@@ -75,7 +75,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
 
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                    {item?.balance}
+                    {Math.abs(item?.balance)}
                 </button>
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>

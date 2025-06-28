@@ -38,14 +38,14 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
     return (
-        <div className="w-full top-0 z-40 shadow fixed">
+        <div className="w-full top-0 z-50 shadow fixed">
 
-            <div className="flex justify-between items-center z-40 w-[100%] px-2 mx-auto bg-[#FFFFFF] py-2">
+            <div className="flex justify-between items-center z-50 w-[100%] px-2 mx-auto bg-[#FFFFFF] py-2">
                 <div></div>
                 <div className="flex justify-end items-center gap-3">
                     {
                         auth && <div className="hidden md:block">
-                            <NavLink to={`/purchase/product`} className="border font-thin rounded-full px-5 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add />Purchase</NavLink>
+                            <NavLink to={`/purchase/product`} className="border font-thin hover:bg-blue-500 hover:text-white rounded-full px-5 py-1 text-md border-[#3A95EE] flex float-start items-center gap-1 text-[#3A95EE]"><Add />Purchase</NavLink>
                         </div>
                     }
 

@@ -155,7 +155,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 { supplier?.map((item, i) => {
-                                        return <SupplierCard outside={outside} item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
+                                        return <SupplierCard  item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
                                     })  }
                             </tbody>
                         </table>
@@ -164,7 +164,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                 <div className="flex justify-between items-center pt-3">
                     <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + supplier?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
-                        <button disabled={page == 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
+                        <button disabled={page === 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
                             {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}
                         </button>
                         <button className="border-y bg-blue-500 text-white py-[7px] px-3 font-thin">{page}</button>
