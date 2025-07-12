@@ -6,6 +6,7 @@ import SelectionComponent from "../Input/SelectionComponent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageSelect from "../Input/ImageSelect";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 const Setting = ({ userinfo = {} }) => {
     const [user, setUser] = useState({});
@@ -76,7 +77,7 @@ const Setting = ({ userinfo = {} }) => {
         toast(data?.message)
     }
 
-
+ EscapeRedirect('/dashboard')
 
     const handleUploadUpdate = async () => {
         const formData = new FormData();

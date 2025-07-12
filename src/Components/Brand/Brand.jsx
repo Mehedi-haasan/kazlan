@@ -17,12 +17,13 @@ import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
 import { useLottie } from "lottie-react";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 
 const Brand = ({ entries, info = {} }) => {
 
     const targetRef = useRef();
-    const input_focus = useRef(null)
+    const [inpo, setInpo] = useState(false)
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [image_url, setImage_Url] = useState();
@@ -164,9 +165,9 @@ const Brand = ({ entries, info = {} }) => {
 
     const { View } = useLottie(options);
 
-    useEffect(() => {
-        input_focus.current.focus()
-    }, [show])
+    // useEffect(() => {
+    //     input_focus.current.focus()
+    // }, [show])
 
 
     useEffect(() => {
@@ -177,6 +178,8 @@ const Brand = ({ entries, info = {} }) => {
             return () => clearTimeout(timer);
         }
     }, [showlotti]);
+
+    EscapeRedirect()
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
@@ -194,7 +197,7 @@ const Brand = ({ entries, info = {} }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Brand name`} input_focus={input_focus} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate("") }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Brand name`} input_focus={inpo} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate("") }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>
@@ -203,7 +206,7 @@ const Brand = ({ entries, info = {} }) => {
             <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Brand List</h1>
 
-                <button onClick={() => { setShow(true) }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Brand</button>
+                <button onClick={() => { setShow(true); setInpo(true) }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Brand</button>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>

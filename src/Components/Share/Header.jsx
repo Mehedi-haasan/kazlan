@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Notification from "../../icons/Notification";
 import data from '../Dashboard/data.json'
 import logo from '../Logo/logo_delta.png'
@@ -19,6 +19,8 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
     const [lan, setLan] = useState(false);
     const [noti, setNoti] = useState([]);
     const [mood, setMode] = useState(true)
+    const lan_ref = useRef(null)
+    const wiz_pro = useRef(null)
 
     const options = {
         animationData: groovyWalkAnimation,
@@ -34,6 +36,24 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
     useEffect(() => {
         setNoti(notification)
     }, [notification, noti])
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (lan_ref.current && !lan_ref.current.contains(event.target)) {
+                setLan(false);
+            }
+            if (wiz_pro.current && !wiz_pro.current.contains(event.target)) {
+                setIsShowProfile(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
 
 
 
@@ -52,7 +72,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-4 py-1 border-green-600 flex float-start text-md items-center gap-1 text-green-600 hover:bg-green-600 hover:text-white"><Add />Sale</NavLink>}
                     {auth && <NavLink to={`/sales/update/`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>}
                     <div className="flex justify-start items-start gap-2 cursor-pointer relative">
-                        <div className={`absolute ${lan ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-8 rounded-lg`}>
+                        <div ref={lan_ref} className={`absolute ${lan ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-8 rounded-lg`}>
                             <div className="">
                                 <button onClick={() => { setLan(!lan) }} className="flex justify-start items-center gap-1 border-b p-2">
                                     <img src={flag} alt="flag" className="h-7 w-7 p-1 cursor-pointer" />
@@ -68,11 +88,11 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
 
-                    <svg onClick={() => { setLan(!lan) }} className="h-10 w-10 p-1 cursor-pointer text-gray-600"
+                    <svg onClick={() => { setLan(!lan) }} className="h-[36px] w-[36px] p-1 cursor-pointer text-gray-600 hidden md:block"
                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" strokeWidth="2" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11Zm0 0c3 0 4-5 4-11S15 1 12 1S8 6 8 12s1 11 4 11ZM2 16h20M2 8h20" />
                     </svg>
-                    <div className="border-r pr-3">
+                    <div className="border-r pr-3 hidden md:block">
                         {
                             mood ? <svg onClick={() => setMode(!mood)} className="h-10 w-10 p-1 cursor-pointer text-gray-600 rotate-[130deg]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5 2q2.075 0 3.9.788t3.175 2.137T18.713 8.1T19.5 12t-.788 3.9t-2.137 3.175t-3.175 2.138T9.5 22q-1.325 0-2.588-.337T4.5 20.65Q6.825 19.3 8.163 17T9.5 12T8.162 7T4.5 3.35q1.15-.675 2.413-1.012T9.5 2" /></svg> :
                                 <svg onClick={() => setMode(!mood)} className="h-10 w-10 p-1 cursor-pointer text-gray-600" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
@@ -86,11 +106,11 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                         <button className='font-bold text-sm xl:text-md cursor-pointer' onClick={() => setIsShowProfile(!isShowProfile)}>
                             <img src={info?.image} alt="profile" className="h-10 w-10 rounded-full cursor-pointer" />
                         </button>
-                        <div onClick={() => setIsShowProfile(!isShowProfile)}>
+                        <div onClick={() => setIsShowProfile(!isShowProfile)} className="hidden md:block">
                             <h1 className="text-sm font-semibold pt-1">{info?.name}</h1>
                             <p className="text-xs">{info?.role}</p>
                         </div>
-                        <div className={`absolute ${isShowProfile ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-[52px] rounded-lg`}>
+                        <div ref={wiz_pro} className={`absolute ${isShowProfile ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-[52px] rounded-lg`}>
                             <div className="">
                                 <NavLink to={`/profile`} onClick={() => setIsShowProfile(!isShowProfile)} className="flex justify-start items-center gap-2 border-b p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
@@ -103,6 +123,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                             </div>
                         </div>
                     </div> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
+
                     <NavLink to='/notification' className="relative p-1 rounded-full mr-1">
                         <div className={`w-8 h-8 ${noti?.length === 0 ? 'hidden' : ''}`}>
                             {View}
@@ -118,9 +139,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
             </div>
 
             {
-                auth && <div
-                    // onMouseEnter={() => isOpen(true)}
-                    className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-170px]"}`}>
+                auth && <div className={`absolute bg-[#FFFFFF] transition-all top-0 ease-in duration-200 z-50 shadow-xl border-r border-red-300 w-[230px] min-h-[100vh]   ${open ? "left-[0px]" : "left-[-230px] md:left-[-170px]"}`}>
                     <div className={`flex items-center border-b py-2 ${open ? 'justify-between ml-3' : 'justify-end mr-2.5'}`} >
                         <div className="">
                             <NavLink className={`pb-1`} onClick={() => { isOpen(!open); setSelected({}) }}>
@@ -202,7 +221,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
                         <NavLink to={`/`} onClick={() => { localStorage.setItem('token', ''); isLoggedOut(false); }} className={`flex  group ${open ? 'justify-between ml-2 mt-4 hover:bg-blue-50' : 'justify-end'} text-[#5F5F5F] text-md hover:bg-blue-50 hover:text-blue-500 rounded justify-start items-center gap-2 py-1.5 px-2 mb-1`}>
-                            <div className={`flex justify-start items-center gap-2 ${open ? '' : 'hover:bg-blue-50 p-1.5 rounded'}`}>
+                            <div className={`flex justify-start items-center gap-2 ${open ? '' : 'hover:bg-blue-50 lg:pl-1.6 pr-2 py-1.5 rounded'}`}>
                                 <Icon icon={"uiw:logout"} width='18px' className="group-hover:text-blue-500" />
                                 <h1 className={`${open ? '' : 'hidden'} font-roboto group-hover:text-blue-500 font-normal text-[17px]`}>Logout</h1>
                             </div>

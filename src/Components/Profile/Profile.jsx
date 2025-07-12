@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BaseUrl from '../../Constant';
 import InputComponent from '../Input/InputComponent';
 import Button from '../Input/Button';
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 const Profile = () => {
     const [user, setUser] = useState({});
@@ -52,6 +53,8 @@ const Profile = () => {
         });
         const data = await response.json()
     }
+
+    EscapeRedirect()
 
     return (
         <div className='min-h-screen pb-12'>

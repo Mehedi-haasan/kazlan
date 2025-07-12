@@ -85,7 +85,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
                 'authorization': token,
                 'Content-type': 'application/json; charset=UTF-8',
             },
-            body: JSON.stringify({ id: item?.id, url: item?.image_url }),
+            body: JSON.stringify(item),
         });
         const data = await response.json();
         setShow(false)

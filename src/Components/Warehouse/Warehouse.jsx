@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import Loading from "../../icons/Loading";
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 const Warehouse = ({ entries }) => {
 
@@ -44,7 +45,7 @@ const Warehouse = ({ entries }) => {
     }, [page, pageSize])
 
 
-
+    EscapeRedirect()
     return (
         <div className="px-2 pt-5 min-h-screen pb-12">
 

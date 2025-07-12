@@ -3,16 +3,16 @@
 
 const SearchResultHeader = () => {
     return (
-        <tr className='border-b border-black text-[16px]'>
-            <th scope="col" className="px-1 py-2 font-thin">Name</th>
-            <th scope="col" className="px-1 py-2 font-thin">Edition</th>
-            <th scope="col" className="px-4 py-2 text-left font-thin">Brand</th>
-            <th scope="col" className="px-4 py-2 text-left font-thin">Category</th>
-            <th scope="col" className="px-4 py-2 text-left font-thin">Purchase Price</th>
-            <th scope="col" className="pl-4 py-2 text-left font-thin">Salse Price</th>
-            <th scope="col" className="pl-4 py-2 text-left font-thin ">Discount</th>
-            <th scope="col" className="pr-3 py-2 text-right font-thin">Stock</th>
-        </tr>
+        <div className='border-b border-black text-[16px] grid grid-cols-8'>
+            <div scope="col" className="px-1 py-2 font-thin grid col-span-2">Name</div>
+            <div scope="col" className="px-1 py-2 font-thin">Edition</div>
+            <div scope="col" className="px-2 py-2 text-left font-thin">Brand</div>
+            <div scope="col" className="px-2 py-2 text-left font-thin">Category</div>
+            {/* <div scope="col" className="px-2 py-2 text-left font-thin">P Price</div> */}
+            <div scope="col" className="pl-2 py-2 text-left font-thin">M.R.P</div>
+            <div scope="col" className="pl-2 py-2 text-left font-thin ">Discount</div>
+            <div scope="col" className="pr-3 py-2 text-right font-thin">Stock</div>
+        </div>
     )
 }
 

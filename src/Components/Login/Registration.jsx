@@ -6,10 +6,12 @@ import Show from '../Input/Show';
 import logo from '../Logo/userProfile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 
 const Registration = ({ state }) => {
-
+  const goto = useNavigate()
   const [image_url, setImage_Url] = useState();
   const [imageFile, setImageFile] = useState(null);
   const [warehouses, setWarehouses] = useState([])
@@ -20,8 +22,6 @@ const Registration = ({ state }) => {
     stateId: 1
   });
   const [showPassword, setShowPassword] = useState(false)
-
-  let user = [{ id: 1, name: "admin" }, { id: 2, name: "superadmin" }]
 
   const handleSubmit = async (e) => {
     const token = localStorage.getItem('token')
@@ -34,6 +34,9 @@ const Registration = ({ state }) => {
       body: JSON.stringify(values)
     });
     const data = await response.json();
+    if (data && data?.success) {
+      goto(`/users`)
+    }
     toast(data.message)
   }
 
@@ -64,10 +67,12 @@ const Registration = ({ state }) => {
     }
   };
 
+  EscapeRedirect('/users')
+
   return (
-    <div className="min-h-screen pb-12 p-5">
+    <div className="min-h-screen pb-12 py-5 px-4">
       <ToastContainer />
-      <div className='bg-[#FFFFFF] rounded-xl shadow-lg m-8'>
+      <div className='bg-[#FFFFFF] rounded-xl shadow-lg'>
         <div className='border-b'>
           <h1 className='py-4 pl-8'>User Details</h1>
         </div>
@@ -131,7 +136,7 @@ const Registration = ({ state }) => {
               <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='' />
             </div>
             <div>
-              <SelectionComponent options={user} onSelect={(v) => { setValues({ ...values, rules: [v?.name] }) }} label={`User Role`} className='' />
+              <SelectionComponent options={[{ id: 1, name: "admin" }, { id: 2, name: "superadmin" }]} onSelect={(v) => { setValues({ ...values, rules: [v?.name] }) }} label={`User Role`} className='' />
             </div>
             <div className='relative'>
               <label className="block  text-sm  mb-1 font-thin">Password</label>

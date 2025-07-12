@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
@@ -8,10 +8,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Selection from "../Input/Selection";
 import { useNavigate } from "react-router-dom";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 const CreateCustomer = () => {
 
     const goto = useNavigate()
+    const open_bala = useRef(null)
     const [state, setState] = useState([])
     const [active, setActive] = useState("Address")
     const [values, setValues] = useState({
@@ -20,8 +22,20 @@ const CreateCustomer = () => {
         "balance": 0,
         "balance_type": 'To Receive',
         "address": "",
-        "customertype":'Party'
+        "customertype": 'Party'
 
+    })
+    const [auto, setAuto] = useState({
+        fame: true,
+        phone: false,
+        email: false,
+        bname: false,
+        aname: false,
+        anum: false,
+        tname: false,
+        t_value: "Select a filter",
+        addres: false,
+        open_b: false
     })
     const handleSubmit = async (e) => {
         if (!values?.phone) {
@@ -64,7 +78,13 @@ const CreateCustomer = () => {
 
 
 
+    EscapeRedirect("/customers")
 
+    useEffect(() => {
+        if (auto?.open_b) {
+            open_bala.current.focus()
+        }
+    }, [auto])
 
 
     return (
@@ -76,15 +96,25 @@ const CreateCustomer = () => {
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="pt-1.5">
-                        <Selection options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type*'} />
+                        <Selection options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
+                            onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type*'} />
                     </div>
-                    <InputComponent label={values?.customertype === "Party" ? "Full Name*" : "Full Name"} placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />
-                    <InputComponent label={values?.customertype === "Party" ? "Phone*" : "Phone*"} placeholder={'Enter phone number'} onChange={(v) => { setValues({ ...values, phone: v }) }} />
-                    <InputComponent label={"Email"} placeholder={'Enter email'} onChange={(v) => { setValues({ ...values, email: v }) }} />
 
-                    <InputComponent label={"Bank Name"} placeholder={'Enter bank name'} onChange={(v) => { setValues({ ...values, bankname: v }) }} />
-                    <InputComponent label={"Account Name"} placeholder={'Enter account name'} onChange={(v) => { setValues({ ...values, accountname: v }) }} />
-                    <InputComponent label={"Account Number"} placeholder={'Enter account number'} onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
+                    <InputComponent label={values?.customertype === "Party" ? "Full Name*" : "Full Name"} input_focus={auto?.fame} handleEnter={() => { setAuto({ ...auto, fame: false, phone: true }) }}
+                        placeholder={'Enter full name'} onChange={(v) => { setValues({ ...values, name: v }) }} />
+
+                    <InputComponent label={values?.customertype === "Party" ? "Phone*" : "Phone*"} input_focus={auto?.phone} handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }}
+                        placeholder={'Enter phone number'} onChange={(v) => { setValues({ ...values, phone: v }) }} />
+
+                    <InputComponent label={"Email"} placeholder={'Enter email'} input_focus={auto?.email} handleEnter={() => { setAuto({ ...auto, phone: false, bname: true }) }}
+                        onChange={(v) => { setValues({ ...values, email: v }) }} />
+
+                    <InputComponent label={"Bank Name"} placeholder={'Enter bank name'} input_focus={auto?.bname} handleEnter={() => { setAuto({ ...auto, bname: false, aname: true }) }}
+                        onChange={(v) => { setValues({ ...values, bankname: v }) }} />
+                    <InputComponent label={"Account Name"} placeholder={'Enter account name'} input_focus={auto?.aname} handleEnter={() => { setAuto({ ...auto, aname: false, anum: true }) }}
+                        onChange={(v) => { setValues({ ...values, accountname: v }) }} />
+                    <InputComponent label={"Account Number"} placeholder={'Enter account number'} input_focus={auto?.anum} handleEnter={() => { setAuto({ ...auto, anum: false, tname: true }) }}
+                        onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
                     <div>
                         <div className="py-3">
                             <div className="flex justify-start items-end">
@@ -100,12 +130,23 @@ const CreateCustomer = () => {
                         {
                             active === "Address" && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 <div className='flex justify-start items-end pb-1'>
-                                    <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={values?.usertype === "Party" ? "Thana Name*" : "Thana Name"} className='rounded-l' />
-                                    <div onClick={()=>goto('/state')} className='border-y border-r px-3 pt-[6px] pb-[5px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                    <SelectionComponent options={state} default_select={auto?.tname}
+                                        default_value={auto?.t_value}
+                                        onSelect={(v) => {
+                                            setValues({ ...values, stateId: v?.id });
+                                            setAuto({ ...auto, t_value: v?.name, tname: false, addres: true });
+
+                                        }} label={values?.usertype === "Party" ? "Thana Name*" : "Thana Name"} className='rounded-l' />
+                                    <div onClick={() => goto('/state')} className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] '>
                                         <Add />
                                     </div>
                                 </div>
-                                <InputComponent label={"Address"} placeholder={'Enter address'} value={values?.address} onChange={(v) => { setValues({ ...values, address: v }) }} />
+                                <InputComponent label={"Address"} placeholder={'Enter address'} input_focus={auto?.addres}
+                                    handleEnter={() => {
+                                        setActive("Balance")
+                                        setAuto({ ...auto, addres: false, open_b: true });
+                                    }}
+                                    value={values?.address} onChange={(v) => { setValues({ ...values, address: v }) }} />
                             </div>
                         }
                         {
@@ -113,7 +154,11 @@ const CreateCustomer = () => {
                                 <div>
                                     <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
                                     <div className='flex justify-start items-end pb-1'>
-                                        <input type='number' value={values?.balance} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                                        <input type='number' ref={open_bala} onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                handleSubmit(e)
+                                            }
+                                        }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder={0} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
                                         <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                             className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                         >

@@ -10,6 +10,7 @@ import CustomerCard from "./CustomerCard";
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 import Selection from "../Input/Selection";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 
 const Customers = ({ entries, state = [], info = {} }) => {
@@ -25,7 +26,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0);
     const [select, setSelect] = useState(null);
-    const [values, setValues]=useState({})
+    const [values, setValues] = useState({})
 
     const GetCustomer = async () => {
         setIsLoading(true)
@@ -56,17 +57,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
         }
     }
 
-        // useEffect(() => {
-        //     function handleClickOutside(event) {
-        //         if (outside.current && !outside.current.contains(event.target)) {
-        //             setSelect(null)
-        //         }
-        //     }
-        //     document.addEventListener('mousedown', handleClickOutside);
-        //     return () => {
-        //         document.removeEventListener('mousedown', handleClickOutside);
-        //     };
-        // }, []);
+    EscapeRedirect()
 
 
     return (

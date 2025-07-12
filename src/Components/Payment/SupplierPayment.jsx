@@ -83,11 +83,23 @@ const SupplierPayment = ({ info, state }) => {
                     <InputComponent label={"Supplier"} placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Date"} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
 
-                    <div className="pt-2">
+                    <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
                             options={[{ id: 1, name: 'Cash' }, { id: 2, name: 'Check' }, { id: 3, name: 'Bank Transfar' }, { id: 4, name: 'Mobile Banking' }]}
                             onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
                         />
+                        {
+                            values?.paymentmethod === "Bank Transfar" && <SelectionComponent label={"Select Method"}
+                                options={[{ id: 1, name: 'ISB' }, { id: 2, name: 'City Bank' }]}
+                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            />
+                        }
+                        {
+                            values?.paymentmethod === "Mobile Banking" && <SelectionComponent label={"Select Method"}
+                                options={[{ id: 1, name: 'Nagad' }, { id: 2, name: 'Bkash' }]}
+                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            />
+                        }
                     </div>
                     <InputComponent label={"Balance"} placeholder={values?.balance} value={values?.balance} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>

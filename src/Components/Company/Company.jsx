@@ -6,6 +6,8 @@ import logo from '../Logo/userProfile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import ExcelUploader from '../ExcelUpload/ExcelUploader';
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 const Company = () => {
 
@@ -93,7 +95,8 @@ const Company = () => {
     }
 
 
-
+    EscapeRedirect('/warehouses')
+    
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -105,11 +108,11 @@ const Company = () => {
     return (
         <div className='px-3 py-5 min-h-screen pb-12 text-[#32393f]'>
             <ToastContainer />
-            <div className='bg-[#FFFFFF] rounded shadow w-[50%]'>
+            <div className='bg-[#FFFFFF] rounded shadow w-full'>
                 <div className='border-b px-5'>
                     <h1 className='py-3 text-2xl text-[#32393f]'>Warehouse Details</h1>
                 </div>
-
+                <ExcelUploader />
                 <div className="flex justify-start items-center gap-5 pb-2 px-5 pt-2">
                     <div>
                         <p className='pb-2 font-thin'>Shop Logo</p>

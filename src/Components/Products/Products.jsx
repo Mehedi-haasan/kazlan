@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
 import { useToImage } from '@hcorta/react-to-image'
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 
 const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
@@ -29,14 +30,20 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
     const [comId, setComId] = useState(null);
     const [isChecked, setIsChecked] = useState(false);
     const [selected, setSelected] = useState(null)
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+    })
     let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
 
     useEffect(() => {
         document.title = "Items"
         if (info?.role === "superadmin") {
-            setComId(null)
-        } else {
             setComId(info?.compId)
+        } else {
+            setComId(null)
         }
     }, [info])
 
@@ -88,6 +95,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
             setSelected(id)
         }
     }
+    EscapeRedirect()
 
     // useEffect(() => {
     //     function handleClickOutside(event) {
@@ -111,10 +119,13 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                        <SelectionComponent options={brand} onSelect={(v) => { setBrandId(v?.id) }} label={'Brand / Publishers'} />
+
+                        <SelectionComponent options={brand} default_select={filter?.bran} default_value={filter?.bran_value}
+                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); setBrandId(v?.id) }} label={'Brand / Publishers'} />
                     </div>
                     <div>
-                        <SelectionComponent options={category ? category : []} onSelect={(v) => { setCatId(v?.id) }} label={'Categories'} />
+                        <SelectionComponent options={category ? category : []} default_select={filter?.cate} default_value={filter?.cate_value}
+                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setCatId(v?.id) }} label={'Categories'} />
                     </div>
                     {
                         info?.role === "superadmin" && <div>

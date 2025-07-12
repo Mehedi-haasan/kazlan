@@ -33,10 +33,11 @@ const CustomerPayment = ({ info, state }) => {
         const token = localStorage.getItem('token')
         let type = 1;
         if (values?.balance_type === "To Receive") {
-            type = 1;
+            type = 2;
         } else if (values?.balance_type === "To Pay") {
             type = 1;
         }
+
         const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
@@ -87,13 +88,25 @@ const CustomerPayment = ({ info, state }) => {
                     <InputComponent label={"Customer"} placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Date"} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
 
-                    <div className="pt-2">
+                    <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
                             options={[{ id: 1, name: 'Cash' }, { id: 2, name: 'Check' }, { id: 3, name: 'Bank Transfar' }, { id: 4, name: 'Mobile Banking' }]}
                             onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
                         />
+                        {
+                            values?.paymentmethod === "Bank Transfar" && <SelectionComponent label={"Select Method"}
+                                options={[{ id: 1, name: 'ISB' }, { id: 2, name: 'City Bank' }]}
+                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            />
+                        }
+                        {
+                            values?.paymentmethod === "Mobile Banking" && <SelectionComponent label={"Select Method"}
+                                options={[{ id: 1, name: 'Nagad' }, { id: 2, name: 'Bkash' }]}
+                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            />
+                        }
                     </div>
-                    <InputComponent label={"Balance"} placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
+                    <InputComponent label={"Balance"}  placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1'>

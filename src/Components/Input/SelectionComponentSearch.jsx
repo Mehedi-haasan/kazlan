@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import RightArrow from '../../icons/RightArrow';
 
-const SelectionComponent = ({ options, onSelect, label, className = 'rounded', default_select = false, default_value = "Select a filter" }) => {
+const SelectionComponentSearch = ({ options, onSelect, label, className = 'rounded', default_select = false, default_value = "Select a filter", handleLeft, handleRight }) => {
 
   const inputRef = useRef(null);
   const outside = useRef(null);
@@ -88,6 +88,10 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
                   onSelect({ id: data[selectedId]?.id, name: data[selectedId]?.name });
                   setSelect(data[selectedId]?.name);
                   setHide(false);
+                } else if (e.key === "ArrowRight") {
+                  handleRight()
+                } else if (e.key === "ArrowLeft") {
+                  handleLeft()
                 }
               }}
               className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
@@ -116,4 +120,4 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
   );
 };
 
-export default SelectionComponent;
+export default SelectionComponentSearch;

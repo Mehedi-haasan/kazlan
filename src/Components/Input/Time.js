@@ -16,7 +16,7 @@ export function handleDateConvert(date) {
 
 
 
-export async function PrepareOrderData(allData, userId, name, values, info) {
+export async function PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
@@ -47,11 +47,29 @@ export async function PrepareOrderData(allData, userId, name, values, info) {
             deliverydate: values?.deliverydate
         });
     });
-    return orderData
+    return {
+        shop: info?.shopname,
+        customername: name,
+        userId: userId,
+        date: getFormattedDate(),
+        paymentmethod: "",
+        methodname: "",
+        total: lastTotal,
+        packing: paking,
+        delivery: delivary,
+        lastdiscount: values?.lastdiscount,
+        previousdue: due,
+        pay_type: values?.pay_type,
+        paidamount: values?.pay,
+        amount: lastTotal - values?.pay,
+        orders: orderData,
+        updatedata: allData,
+        deliverydate: values?.deliverydate
+    }
 }
 
 
-export async function PrepareData(allData, userId, name, values, info) {
+export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
@@ -83,25 +101,51 @@ export async function PrepareData(allData, userId, name, values, info) {
         });
     });
 
-    return orderData
+    return {
+        shop: info?.shopname,
+        customername: name,
+        userId: userId,
+        date: getFormattedDate(),
+        paymentmethod: "",
+        methodname: "",
+        total: lastTotal,
+        packing: paking,
+        delivery: delivary,
+        lastdiscount: values?.lastdiscount,
+        previousdue: due,
+        pay_type: values?.pay_type,
+        paidamount: values?.pay,
+        amount: lastTotal - values?.pay,
+        orders: orderData,
+        deliverydate: values?.deliverydate
+    }
 }
 
 
-export async function CalculateAmount(allData, delivary = 0, paking = 0) {
+export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdiscount = 0) {
+
     let amount = allData?.reduce((acc, item) => {
+        let cost = item?.cost ? item?.cost : item?.price
+        let discount = item?.discount;
         if (item?.discount_type === "Fixed") {
-            let price = parseInt(parseInt(item?.price) - item?.discount);
-            return acc + (parseInt(item?.qty) * parseInt(price))
+            let price = cost - discount
+            return acc + (parseInt(item?.qty) * price)
         } else {
-            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
-            return acc + (parseInt(item?.qty) * parseInt(item?.price - discount))
+            let dis = cost * discount / 100;
+            return acc + (parseInt(item?.qty) * cost - dis)
         }
 
     }, 0);
-    let lastamount = (parseInt(amount) + parseInt(delivary) + parseInt(paking))
 
     return {
-        amount,
-        lastamount
+        amount: parseInt(amount),
+        lastTotal: parseInt(amount) + parseInt(delivary) + parseInt(paking) - parseInt(lastdiscount)
     }
 }
+
+
+
+
+
+
+

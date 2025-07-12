@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import BaseUrl from '../../Constant';
@@ -10,6 +10,7 @@ import Loading from '../../icons/Loading';
 import Calendar from '../Wholesale/Calender';
 import { handleDateConvert } from '../Input/Time'
 import InvoiceTemp from '../RecentInvoice/InvoiceTemp'
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 const Order = ({ user = [], info = {} }) => {
 
@@ -38,8 +39,13 @@ const Order = ({ user = [], info = {} }) => {
         lastdiscounttype: "Fixed",
         deliverydate: ''
     })
-
-
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+    })
+    EscapeRedirect()
 
     const GetOrder = async () => {
         const token = localStorage.getItem('token')
@@ -75,10 +81,16 @@ const Order = ({ user = [], info = {} }) => {
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]} label={'Customer'} />
+                        <SelectionComponent options={[{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]}
+                            default_select={filter?.bran} default_value={filter?.bran_value}
+                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
+                            label={'Customer'} />
                     </div>
                     <div className='pt-1'>
-                        <SelectionComponent options={user} label={'User'} />
+                        <SelectionComponent options={user}
+                            default_select={filter?.cate} default_value={filter?.cate_value}
+                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); }}
+                            label={'User'} />
                     </div>
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />

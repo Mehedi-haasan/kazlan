@@ -1,7 +1,9 @@
 import React from "react";
 import Setting from "./Setting";
+import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 const AppSetting = ({ info = {} }) => {
+    EscapeRedirect()
     return (
         <div>
             {

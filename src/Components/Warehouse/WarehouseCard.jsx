@@ -1,7 +1,7 @@
 import Remove from "../../icons/Remove";
 import Edit from "../../icons/Edit";
 import Modal from "../Input/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
@@ -26,8 +26,8 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
         values.id = id;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/update/category`, {
-                method: 'PATCH',
+            const response = await fetch(`${BaseUrl}/api/update/company/info`, {
+                method: 'POST',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
@@ -36,9 +36,9 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
             });
 
             const data = await response.json();
-            setShow(false)
+            setEdit(false)
             FetchShop()
-            alert(data?.message)
+            toast(data?.message)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -95,6 +95,10 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
         }
     };
 
+    useEffect(()=>{
+        setValues(item)
+    },[item])
+
     return (
 
         <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-50' : ''}`}>
@@ -124,18 +128,24 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
                     </div>
                 </DownModal>
 
-                <Modal show={edit} handleClose={() => { setEdit(false) }} size="450px" className="w-[450px]">
+                <Modal show={edit} handleClose={() => { setEdit(false) }} size="450px" className="w-[650px]">
                     <div className="pt-1">
-                        <InputComponent placeholder={values?.name} value={values?.name} label={"Enter Category name"} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
-                        <div className="pt-1">
-                            <h1 className="py-1 font-semibold">Select image</h1>
-                            <input accept="image/*" onChange={(e) => { setImage_Url(e.target.files[0]) }} type='file' />
-                        </div>
+
                         <div>
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
+                        <div className="pl-6">
+                            <InputComponent onChange={(e) => { setValues({ ...values, name: e }) }} label={'Warehouse Name'} value={values?.name} placeholder={values?.name || 'N/A'} className={`text-[#32393f] font-thin`} />
+                            <InputComponent onChange={(e) => { setValues({ ...values, description: e }) }} label={'Description'} value={values?.description} placeholder={values?.description || 'N/A'} className={`text-[#32393f] font-thin`} />
+                            <InputComponent onChange={(e) => { setValues({ ...values, email: e }) }} label={'Email'} value={values?.email} placeholder={values?.email || 'N/A'} className={`text-[#32393f] font-thin`} />
+                            <InputComponent onChange={(e) => { setValues({ ...values, phone: e }) }} label={'Phone*'} value={values?.phone} placeholder={values?.phone || 'N/A'} className={`text-[#32393f] font-thin`} />
+                            <InputComponent onChange={(e) => { setValues({ ...values, address: e }) }} label={'Address'} value={values?.address} placeholder={values?.address || 'N/A'} className={`text-[#32393f] font-thin`} />
+                            <InputComponent onChange={(e) => { setValues({ ...values, shopcode: e }) }} label={'Shop Code*'} value={values?.shopcode} placeholder={values?.shopcode || 'N/A'} className={`text-[#32393f] font-thin`} />
+                        </div>
 
-                        <Button isDisable={false} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item?.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
+                        <div className="pl-6">
+                            <Button isDisable={false} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item?.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
+                        </div>
                     </div>
                 </Modal>
             </th>

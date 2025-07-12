@@ -120,8 +120,8 @@ const CreateCategory = ({ entries }) => {
                     </div>
                 </div>
                 <div className="px-6 py-4">
-                    <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                    <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
+                    <InputComponent placeholder={`Enter Category name`} handleEnter={imageFile ? handleUpload() : handleCreate('')} value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                    <Button isDisable={isLoading} name="Create" onClick={imageFile ? handleUpload() : handleCreate('')} className="mt-3 border bg-blue-500 text-white" />
                 </div>
             </div>
         </div>

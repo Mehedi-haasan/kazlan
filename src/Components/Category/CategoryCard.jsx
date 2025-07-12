@@ -72,7 +72,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
 
             const data = await response.json();
             if (data) {
-                handleUpdate(data.image_url, item?.image_url, item?.id)
+                handleUpdate(data.image_url, item?.image_url, item?.id);
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -88,7 +88,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
                 'authorization': token,
                 'Content-type': 'application/json; charset=UTF-8',
             },
-            body: JSON.stringify({ id: item?.id, url: item?.image_url }),
+            body: JSON.stringify(item),
         });
         const data = await response.json();
         setIsLoading(false);

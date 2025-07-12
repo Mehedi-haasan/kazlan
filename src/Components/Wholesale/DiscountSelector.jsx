@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import RightArrow from '../../icons/RightArrow';
 
-const SelectionComponent = ({ options, onSelect, label, className = 'rounded', default_select = false, default_value = "Select a filter" }) => {
+const DiscountSelector = ({ options, onSelect,  className = 'rounded', default_select = false, default_value = "Select a filter" }) => {
 
   const inputRef = useRef(null);
   const outside = useRef(null);
   const [selectedId, setSelectedId] = useState(0);
   const [select, setSelect] = useState('Select a filter');
-  // const [value, setValue] = useState('')
   const [hide, setHide] = useState(default_select);
   const [data, setData] = useState([])
 
@@ -59,13 +58,8 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
 
   return (
     <div className='w-full bg-white'>
-      <h1 className="mb-2 text-start text-sm font-semibold text-black">{label}</h1>
-      <div ref={outside} className={`${hide ? 'border-t border-x pr-[1px]' : 'border '} rounded-l relative bg-white h-[39px] z-10`}>
+      <div ref={outside} className={`${hide ? 'border-t border-x pr-[1px]' : 'border'} rounded-l relative bg-white h-[39px] z-10`}>
         <RightArrow onClick={() => { setHide(!hide) }} className='rotate-90 absolute top-1.5 right-1 font-thin cursor-pointer' />
-        {default_value !== "Select a filter" && default_value !== '' && <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { onSelect({ id: null, name: "Select a filter" }); setSelect('Select a filter') }} className='absolute z-10 top-2 right-6 font-thin cursor-pointer' width="17" height="17" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z" />
-        </svg>}
-
         <div className={`font-thin p-1.5 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280]' : 'text-black'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{default_value}</div>
         <div className={` ${hide ? '' : 'hidden'} absolute left-[-1px] right-[-1px] border-x border-b rounded-b bg-white`}>
           <div className='px-2'>
@@ -90,7 +84,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
                   setHide(false);
                 }
               }}
-              className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
+              className='rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
           </div>
           <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white ${className} pt-1 `}>
             {
@@ -116,4 +110,4 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
   );
 };
 
-export default SelectionComponent;
+export default DiscountSelector;

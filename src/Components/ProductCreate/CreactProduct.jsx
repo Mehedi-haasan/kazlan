@@ -10,23 +10,30 @@ import { useNavigate } from 'react-router-dom';
 import Add from '../../icons/Add';
 import logo from '../Logo/photo.png'
 import ImageSelect from '../Input/ImageSelect'
+import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 
-const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
+const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
 
     const input_name = useRef(null);
+    const [filter, setFilter] = useState({
+        edit_value: "Select a filter",
+        bran_value: 'Select a filter',
+        cate_value: 'Select a filter',
+        sup_value: 'Select a filter'
+    })
     const edit = useRef(null)
     const desc = useRef(null)
-    const mrp = useRef(null)
-    const sale = useRef(null)
     const dis = useRef(null)
     const qt = useRef(null)
     useEffect(() => {
         input_name.current?.focus();
     }, []);
 
-    const [edition, setEdition]=useState(false)
+    const [sale, setSale] = useState(false);
+    const [mrp, setMrp] = useState(false)
+    const [edition, setEdition] = useState(false)
     const [first, setFirst] = useState(false)
     const [second, setSecond] = useState(false)
     const [third, setThird] = useState(false)
@@ -41,6 +48,7 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
     const [active, setActive] = useState("Pricing")
     const [values, setValues] = useState({
         categoryId: 1,
+        editionId: 1,
         compId: 1,
         brandId: 1,
         image_url: "",
@@ -54,6 +62,7 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
         edition: ''
     })
 
+    EscapeRedirect("/items")
 
     const getCategory = async () => {
         const token = localStorage.getItem('token')
@@ -240,7 +249,7 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
                                 </div>
 
                                 <div className='w-[40%] z-50'>
-                                    {/* <h1 className='text-[15px] pb-1.5'>Edition</h1>
+                                    {/* <h1 className='text-[15px] pb-1.5'>Edition</h1>ra
                                     <input
                                         type="text"
                                         ref={edit}
@@ -255,8 +264,17 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
                                         }}
                                     /> */}
                                     <div className='flex justify-start items-end z-40 pt-[1px]'>
-                                        <SelectionComponent options={years} default_select={edition} onSelect={(v) => { setFirst(true); setEdition(false); setValues({ ...values, brandId: v?.id }) }} label={"Edition*"} className='rounded-r' />
-                                        <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                        <SelectionComponent options={years} default_select={edition} default_value={filter?.edit_value}
+                                            onSelect={(v) => {
+                                                setFirst(true); setEdition(false);
+                                                setValues({
+                                                    ...values,
+                                                    editionId: v?.id,
+                                                    edition: v?.name,
+                                                })
+                                                setFilter({ ...filter, edit_value: v?.name })
+                                            }} label={"Edition*"} className='rounded-r' />
+                                        <div onClick={() => { }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                             <Add />
                                         </div>
                                     </div>
@@ -268,14 +286,16 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
                         </div>
 
                         <div className='flex justify-start items-end pb-1 z-40'>
-                            <SelectionComponent options={brand} default_select={first} onSelect={(v) => { setFirst(false); setSecond(true); setValues({ ...values, brandId: v?.id }) }} label={"Brand / Publishers*"} className='rounded-l' />
+                            <SelectionComponent options={brand} default_select={first} default_value={filter?.bran_value}
+                                onSelect={(v) => { setFirst(false); setSecond(true); setValues({ ...values, brandId: v?.id }); setFilter({ ...filter, bran_value: v?.name }) }} label={"Brand / Publishers*"} className='rounded-l' />
                             <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
 
                         <div className='flex justify-start items-end pb-1 '>
-                            <SelectionComponent options={category} default_select={second} onSelect={(v) => { setSecond(false); setThird(true); setValues({ ...values, categoryId: v?.id }) }} label={"Category*"} className='rounded-l' />
+                            <SelectionComponent options={category} default_select={second} default_value={filter?.cate_value}
+                                onSelect={(v) => { setSecond(false); setThird(true); setValues({ ...values, categoryId: v?.id }); setFilter({ ...filter, cate_value: v?.name }) }} label={"Category*"} className='rounded-l' />
                             <div onClick={() => goto(`/category`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
@@ -283,7 +303,7 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
 
 
                         <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={supplier} default_select={third} onSelect={(v) => { desc.current?.focus(); setValues({ ...values, supplier: v?.name }) }} label={"Supplier*"} className='rounded-l' />
+                            <SelectionComponent options={supplier} default_select={third} default_value={filter?.sup_value} onSelect={(v) => { desc.current?.focus(); setValues({ ...values, supplier: v?.name }); setFilter({ ...filter, sup_value: v?.name }) }} label={"Supplier*"} className='rounded-l' />
                             <div onClick={() => goto(`/create/supplier`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
@@ -295,7 +315,7 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
                                     onChange={(e) => { setValues({ ...values, description: e?.target?.value }) }}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                            sale.current?.focus();
+                                            setSale(true)
                                         }
                                     }}
                                     className="font-thin focus:outline-none border p-1.5 w-full rounded" />
@@ -323,9 +343,9 @@ const CreactProduct = ({years, handleClose, callAgain, info = {} }) => {
 
                             <div className='h-[120px]'>
                                 {
-                                    active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                        <InputComponent label={"Cost Price"} input_focus={mrp} placeholder={'Enter Cost Price'} type={'number'} handleEnter={(e) => { sale.current.focus() }} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v }) }} />
-                                        <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v, cost: v - 1 }) }} />
+                                    active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        {/* <InputComponent label={"Cost Price"} input_focus={mrp} placeholder={'Enter Cost Price'} type={'number'} handleEnter={(e) => { setMrp(true) }} readOnly={true} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v }) }} /> */}
+                                        <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v, cost: v }) }} />
                                         <div>
                                             <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
                                             <div className='flex justify-start items-end pb-1'>
