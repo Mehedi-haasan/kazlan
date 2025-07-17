@@ -227,6 +227,20 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
         }
     }
 
+    const ChangeQty = (id, qty) => {
+        let updateId = parseInt(id)
+        let updateQty = parseInt(qty)
+        const updatedData = allData.map((item) => {
+            if (item?.id === updateId) {
+                return { ...item, qty: updateQty };
+            } else {
+                return item;
+            }
+        });
+        setAllData(updatedData);
+    };
+
+
 
 
     return (
@@ -547,7 +561,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                 </div>
                             )}
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} />
+                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} />
                             })}
                         </div>
                     </div>
