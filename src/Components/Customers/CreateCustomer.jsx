@@ -16,6 +16,7 @@ const CreateCustomer = () => {
     const open_bala = useRef(null)
     const [state, setState] = useState([])
     const [active, setActive] = useState("Address")
+    const [isLocal, setIsLocal] = useState(true);
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Customer",
@@ -45,6 +46,25 @@ const CreateCustomer = () => {
         const token = localStorage.getItem('token')
         e.preventDefault()
         const response = await fetch(`${BaseUrl}/api/create/customers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': token,
+            },
+            body: JSON.stringify(values)
+        });
+        const data = await response.json();
+        toast(data.message);
+        goto('/customers')
+    }
+
+    const handleSubmitOffline = async (e) => {
+        if (!values?.phone) {
+            toast("Required Field are missing");
+            return
+        }
+        const token = localStorage.getItem('token')
+        const response = await fetch(`http://localhost:8050/api/create/customers`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,8 +110,17 @@ const CreateCustomer = () => {
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
             <ToastContainer />
-            <div className="p-3 shadow bg-white rounded mb-2">
+            <div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
                 <h1 className="py-2 px-3">Customer Details</h1>
+                {/* <div className="flex justify-end gap-1 items-center w-[200px]">
+                    <input
+                        type="checkbox"
+                        checked={isLocal}
+                        onChange={(e) => setIsLocal(e.target.checked)}
+                        className="border rounded h-5 w-5"
+                    />
+                    <p>Also for local</p>
+                </div> */}
             </div>
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -156,7 +185,10 @@ const CreateCustomer = () => {
                                     <div className='flex justify-start items-end pb-1'>
                                         <input type='number' ref={open_bala} onKeyDown={(e) => {
                                             if (e.key === "Enter") {
-                                                handleSubmit(e)
+                                                handleSubmit(e);
+                                                if (isLocal) {
+                                                    handleSubmitOffline()
+                                                }
                                             }
                                         }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder={0} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
                                         <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
@@ -176,7 +208,11 @@ const CreateCustomer = () => {
 
 
                 <div className='p-3 '>
-                    <Button onClick={handleSubmit} name={'Submit'} />
+                    <Button onClick={() => {
+                        handleSubmit(); if (isLocal) {
+                            handleSubmitOffline()
+                        }
+                    }} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>

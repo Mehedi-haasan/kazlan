@@ -13,6 +13,7 @@ const CreateSupplier = ({ state }) => {
     const goto = useNavigate()
     const [active, setActive] = useState("Address");
     const [isLoading, setIsLoading] = useState(false)
+    const [isLocal, setIsLocal] = useState(true);
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Supplier",
@@ -55,6 +56,28 @@ const CreateSupplier = ({ state }) => {
         goto('/suppliers')
     }
 
+
+    const handleSubmitOffline = async () => {
+        if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
+            toast("Required Field are missing");
+            return
+        }
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`http://localhost:8050/api/create/customers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': token,
+            },
+            body: JSON.stringify(values)
+        });
+        const data = await response.json();
+        setIsLoading(false);
+        toast(data.message)
+        goto('/suppliers')
+    }
+
     useEffect(() => {
         if (auto?.open_b) {
             open_bala.current.focus()
@@ -64,9 +87,21 @@ const CreateSupplier = ({ state }) => {
 
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
-            <ToastContainer />
-            <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
+            <ToastContainer /><div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
                 <h1 className="py-2 px-3">Supplier Details</h1>
+                {/* <div className="flex justify-end gap-1 items-center w-[200px]">
+                    <input
+                        type="checkbox"
+                        checked={isLocal}
+                        onChange={(e) => setIsLocal(e.target.checked)}
+                        className="border rounded h-5 w-5"
+                    />
+                    <p>Also for local</p>
+                </div> */}
+            </div>
+
+            <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
+
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <InputComponent label={"Full Name"} placeholder={'Enter full name'} input_focus={auto?.fame} handleEnter={() => { setAuto({ ...auto, fame: false, phone: true }) }} onChange={(v) => { setValues({ ...values, name: v }) }} />
                     <InputComponent label={"Phone"} placeholder={'Enter full phone'} input_focus={auto?.phone} handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }} onChange={(v) => { setValues({ ...values, phone: v }) }} />
@@ -117,7 +152,11 @@ const CreateSupplier = ({ state }) => {
                                 <input type='number' value={values?.balance}
                                     ref={open_bala} onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                            handleSubmit(e)
+                                            handleSubmit(e);
+                                            if (isLocal) {
+                                                handleSubmitOffline();
+                                            }
+
                                         }
                                     }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
                                 <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
@@ -134,7 +173,7 @@ const CreateSupplier = ({ state }) => {
                 }
 
                 <div className='p-3'>
-                    <Button onClick={handleSubmit} isDisable={isLoading} name={'Submit'} />
+                    <Button onClick={() => { handleSubmit(); if (isLocal) { handleSubmitOffline() } }} isDisable={isLoading} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>

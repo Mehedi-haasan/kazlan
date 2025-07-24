@@ -134,6 +134,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
             orderData.push({
                 active: true,
                 product_id: v?.id,
+                code: v?.code,
                 username: name,
                 userId: userId,
                 name: v?.name,

@@ -111,7 +111,7 @@ const Dashboard = ({ data, info = {} }) => {
     const UploadToServer = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/postget/offline/data`, {
+            const response = await fetch(`https://portal.kazalandbrothers.xyz/api/postget/offline/data`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,

@@ -37,6 +37,7 @@ const Brand = ({ entries, info = {} }) => {
     const [isChecked, setIsChecked] = useState(false)
     const [imageFile, setImageFile] = useState(null);
     const [showlotti, setLottiShow] = useState(false)
+    const [isLocal, setIsLocal] = useState(true);
 
 
     const handleCreate = async (image_url) => {
@@ -65,6 +66,31 @@ const Brand = ({ entries, info = {} }) => {
         setIsLoading(false)
     }
 
+    const handleCreateLocally = async (image_url) => {
+        setIsLoading(true)
+        values.image_url = image_url;
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8050/api/create/brand`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+            setShow(false);
+            setLottiShow(true)
+            getBrand();
+            setValues({ ...values, name: '' })
+            toast(data?.message)
+        } catch (error) {
+            console.error('Error updating variant:', error);
+        }
+        setIsLoading(false)
+    }
 
     const handleUpload = async () => {
 
@@ -93,7 +119,11 @@ const Brand = ({ entries, info = {} }) => {
 
             const data = await response.json();
             if (data) {
-                handleCreate(data.image_url)
+                handleCreate(data.image_url);
+                if (isLocal) {
+                    handleCreateLocally('')
+                }
+
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -193,11 +223,17 @@ const Brand = ({ entries, info = {} }) => {
                         <div className="border-b">
                             <h1 className="pl-5 text-xl py-2">Brand Details</h1>
                         </div>
-                        <div className="pt-5">
+                        <div className="pt-5 flex justify-between items-start">
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                            {/* <div className="flex justify-end gap-1 items-center  w-[200px]">
+                                <input type="checkbox" checked={isLocal}
+                                    onChange={(e) => setIsLocal(e.target.checked)}
+                                    className="border rounded h-5 w-5" />
+                                <p>Also for local</p>
+                            </div> */}
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Brand name`} input_focus={inpo} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate("") }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Brand name`} input_focus={inpo} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate(""); if (isLocal) { handleCreateLocally('') } }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>

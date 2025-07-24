@@ -37,6 +37,7 @@ const Category = ({ entries, info = {} }) => {
     const [totalItem, setTotalItem] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
     const [showlotti, setLottiShow] = useState(false)
+    const [isLocal, setIsLocal] = useState(true);
 
     const getCategory = async () => {
         setIsLoading(true)
@@ -88,6 +89,35 @@ const Category = ({ entries, info = {} }) => {
         setIsLoading(false)
     }
 
+
+    const handleCreateLocally = async (image_url) => {
+        setIsLoading(true)
+        values.image_url = image_url;
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8050/api/create/category`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+            setValues({ ...values, name: '' });
+            setShow(false)
+            getCategory();
+            setLottiShow(true)
+            toast(data?.message)
+        } catch (error) {
+            setIsLoading(false)
+            toast('Error updating variant:', error);
+        }
+        setIsLoading(false)
+    }
+
+
     const handleUpload = async () => {
 
         if (!values?.name) {
@@ -116,7 +146,11 @@ const Category = ({ entries, info = {} }) => {
 
             const data = await response.json();
             if (data) {
-                handleCreate(data.image_url)
+                handleCreate(data.image_url);
+                if (isLocal) {
+                    handleCreateLocally('')
+                }
+
             }
         } catch (error) {
             setIsLoading(false)
@@ -191,11 +225,17 @@ const Category = ({ entries, info = {} }) => {
                         <div className="border-b">
                             <h1 className="pl-5 text-xl py-2">Category Details</h1>
                         </div>
-                        <div className="pt-5">
+                        <div className="pt-5 flex justify-between items-start">
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                            {/* <div className="flex justify-end gap-1 items-center  w-[200px]">
+                                <input type="checkbox" checked={isLocal}
+                                    onChange={(e) => setIsLocal(e.target.checked)}
+                                    className="border rounded h-5 w-5" />
+                                <p>Also for local</p>
+                            </div> */}
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} input_focus={inpo} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate('') }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} input_focus={inpo} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate(''); if (isLocal) { handleCreateLocally('') } }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>

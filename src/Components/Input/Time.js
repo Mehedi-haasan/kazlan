@@ -33,6 +33,7 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
         orderData.push({
             active: true,
             product_id: v?.product ? v?.product?.id : v?.id,
+            code: v?.product ? v?.product?.code : v?.code,
             username: name,
             userId: userId,
             name: v?.name,
@@ -86,6 +87,7 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
         orderData.push({
             active: true,
             product_id: v?.product ? v?.product?.id : v?.id,
+            code: v?.product ? v?.product?.code : v?.code,
             username: name,
             userId: userId,
             name: v?.name,

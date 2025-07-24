@@ -17,6 +17,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
 
     const input_name = useRef(null);
+    const item_code = useRef(null)
     const [filter, setFilter] = useState({
         edit_value: "Select a filter",
         bran_value: 'Select a filter',
@@ -28,7 +29,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const dis = useRef(null)
     const qt = useRef(null)
     useEffect(() => {
-        input_name.current?.focus();
+        item_code.current?.focus();
     }, []);
 
     const [sale, setSale] = useState(false);
@@ -44,7 +45,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const [shop, setShop] = useState([])
     const [supplier, setSupplier] = useState([])
     const [brand, setBrand] = useState([])
-
+    const [isLocal, setIsLocal] = useState(true);
     const [active, setActive] = useState("Pricing")
     const [values, setValues] = useState({
         categoryId: 1,
@@ -166,6 +167,38 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         }
     }
 
+    const handleCreateOffline = async (image_url) => {
+
+        if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
+            toast("Required field is missing");
+            return;
+        }
+
+        values.image_url = image_url;
+        setIsLoading(true)
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8050/api/create/product`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+            setIsLoading(false)
+            toast(data?.message)
+            anotherFunction();
+            handleClose(false);
+            callAgain()
+            goto('/items')
+        } catch (error) {
+            console.error('Error updating variant:', error);
+        }
+    }
+
     const handleUpload = async () => {
 
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price || !values?.qty) {
@@ -193,7 +226,8 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
 
             const data = await response.json();
             if (data) {
-                handleCreate(data.image_url)
+                handleCreate(data.image_url);
+                if (isLocal) { handleCreateOffline("") }
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -215,16 +249,42 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     }, [active])
 
 
+
+    const handleUp = () => {
+        handleCreate('');
+        if (isLocal) { handleCreateOffline("") }
+    }
+
     return (
-        <div className='min-h-screen pb-12 p-6 relative'>
+        <div className='min-h-screen pb-12 py-5 px-3 relative'>
             <ToastContainer />
             <div className='shadow-lg bg-[#FFFFFF] rounded-xl'>
-                <div className='border-b px-5'>
+                <div className='border-b px-5 flex justify-between items-center'>
                     <h1 className='text-2xl font-semibold  py-5'>Item Details</h1>
+                    {/* <div className="flex justify-end gap-1 items-center w-[200px]">
+                        <input
+                            type="checkbox"
+                            checked={isLocal}
+                            onChange={(e) => setIsLocal(e.target.checked)}
+                            className="border rounded h-5 w-5"
+                        />
+                        <p>Also for local</p>
+                    </div> */}
                 </div>
 
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
+                        <div className='gris col-span-1 lg:col-span-2'>
+                            <h1 className='pb-1.5'>Item Code*</h1>
+                            <input placeholder='Item Code' ref={item_code}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        input_name.current?.focus();
+                                    }
+                                }}
+                                onChange={(e) => { setValues({ ...values, code: e.target.value }) }}
+                                className='px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border w-full' />
+                        </div>
                         <div>
 
 
@@ -249,20 +309,6 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
                                 </div>
 
                                 <div className='w-[40%] z-50'>
-                                    {/* <h1 className='text-[15px] pb-1.5'>Edition</h1>ra
-                                    <input
-                                        type="text"
-                                        ref={edit}
-                                        value={values?.edition}
-                                        placeholder="Enter edition"
-                                        onChange={(e) => setValues({ ...values, edition: e.target.value })}
-                                        className="px-2 pt-[7px] pb-[8px] text-[#6B7280] focus:outline-none rounded-r font-thin border-y border-r w-full"
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                setFirst(true)
-                                            } else if (e.key === "Escape") { }
-                                        }}
-                                    /> */}
                                     <div className='flex justify-start items-end z-40 pt-[1px]'>
                                         <SelectionComponent options={years} default_select={edition} default_value={filter?.edit_value}
                                             onSelect={(v) => {
@@ -344,7 +390,6 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
                             <div className='h-[120px]'>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                        {/* <InputComponent label={"Cost Price"} input_focus={mrp} placeholder={'Enter Cost Price'} type={'number'} handleEnter={(e) => { setMrp(true) }} readOnly={true} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v }) }} /> */}
                                         <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v, cost: v }) }} />
                                         <div>
                                             <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
@@ -380,7 +425,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
                                             <input type='number' ref={qt} placeholder={values?.qty}
                                                 onChange={(e) => { setValues({ ...values, qty: e.target.value }) }}
                                                 onKeyDown={(e) => { if (e.key === "Enter") { handleCreate('') } }}
-                                                className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
+                                                className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[170px]' />
                                             <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
                                                 className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                                 {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (
@@ -404,7 +449,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
 
                     </div>
                     <div className='flex justify-start items-center gap-2'>
-                        <Button onClick={() => { image_url == null ? handleCreate('') : handleUpload() }} isDisable={isLoading} name={isLoading ? 'Creating' : 'Create'} />
+                        <Button onClick={() => { image_url == null ? handleUp() : handleUpload() }} isDisable={isLoading} name={isLoading ? 'Creating' : 'Create'} />
                         <button onClick={() => { goto('/items') }} className='bg-gray-100 rounded-md px-5 py-2 font-thin hover:bg-gray-300'>Close</button>
                     </div>
 
