@@ -90,11 +90,12 @@ const Dashboard = ({ data, info = {} }) => {
         document.title = "Dashboard - KazalandBrothers";
     }, []);
 
-    const FetchData = async () => {
+
+    const DeleteLocalData = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`http://localhost:8050/api/get/offline/data`, {
-                method: 'GET',
+            const response = await fetch(`http://localhost:8050/api/delete/offline/data`, {
+                method: 'DELETE',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
@@ -102,13 +103,14 @@ const Dashboard = ({ data, info = {} }) => {
             });
 
             const data = await response.json();
-            setAllData(data?.items)
+            toast(data?.message);
         } catch (error) {
             toast(error);
         }
     }
 
-    const UploadToServer = async () => {
+
+    const UploadToServer = async (allData) => {
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`https://portal.kazalandbrothers.xyz/api/postget/offline/data`, {
@@ -121,11 +123,38 @@ const Dashboard = ({ data, info = {} }) => {
             });
 
             const data = await response.json();
-            toast(data?.message);
+            if (data && data?.success === true) {
+                DeleteLocalData()
+            }
         } catch (error) {
             toast(error);
         }
     }
+
+    const FetchData = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8050/api/get/offline/data`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            });
+
+            const data = await response.json();
+            if (data && data?.success === true) {
+                UploadToServer(data?.items)
+            }
+            setAllData(data?.items)
+        } catch (error) {
+            toast(error);
+        }
+    }
+
+
+
+
 
     return (
         <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen pb-12 relative'>
@@ -184,8 +213,10 @@ const Dashboard = ({ data, info = {} }) => {
                     <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-4 shadow-lg'>
                         <div className='flex justify-between items-center'>
                             <h1 className='pb-2'>Recent Invoices</h1>
-                            {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'FetchData'} />}
-                            {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={UploadToServer} name={'Upload to Server'} />}
+                            <div>
+                                {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload'} />}
+                                {/* {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={UploadToServer} name={'Upload to Server'} />} */}
+                            </div>
                         </div>
                         <Invoice info={info} />
                     </div>
