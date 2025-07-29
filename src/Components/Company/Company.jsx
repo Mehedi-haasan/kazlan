@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import InputComponent from '../Input/InputComponent';
 import Button from '../Input/Button';
 import BaseUrl from '../../Constant'
-import logo from '../Logo/userProfile.png'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import logo from '../Logo/photo.png'
+import Notification from '../Input/Notification';
 import { useNavigate } from 'react-router-dom';
 import ExcelUploader from '../ExcelUpload/ExcelUploader';
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
@@ -14,6 +13,7 @@ const Company = () => {
     const goto = useNavigate()
     const [values, setValues] = useState({})
     const [companyInfo, setCompanyInfo] = useState({})
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [isLoading, setIsLoading] = useState(false)
     const [image_url, setImage_Url] = useState();
     const [imageFile, setImageFile] = useState(null);
@@ -36,7 +36,7 @@ const Company = () => {
             body: JSON.stringify(values),
         });
         const data = await response.json();
-        toast(data?.message);
+        setMessage({ id: Date.now(), mgs: data?.message });
         setIsLoading(false);
         goto(`/warehouses`)
     }
@@ -96,7 +96,7 @@ const Company = () => {
 
 
     EscapeRedirect('/warehouses')
-    
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -107,15 +107,15 @@ const Company = () => {
 
     return (
         <div className='px-3 py-5 min-h-screen pb-12 text-[#32393f]'>
-            <ToastContainer />
+            <Notification message={message} />
             <div className='bg-[#FFFFFF] rounded shadow w-full'>
                 <div className='border-b px-5'>
                     <h1 className='py-3 text-2xl text-[#32393f]'>Warehouse Details</h1>
                 </div>
-                <ExcelUploader />
+                {/* <ExcelUploader /> */}
                 <div className="flex justify-start items-center gap-5 pb-2 px-5 pt-2">
                     <div>
-                        <p className='pb-2 font-thin'>Shop Logo</p>
+                        <p className='pb-2 font-semibold'>Shop Logo</p>
                         <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
                     </div>
                     <div>

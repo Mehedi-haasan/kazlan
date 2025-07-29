@@ -4,8 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import InputComponent from '../Input/InputComponent'
 import Button from '../Input/Button';
 import BaseUrl from '../../Constant';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification';
 import { useNavigate, useParams } from 'react-router-dom';
 import ImageSelect from '../Input/ImageSelect'
 import Add from '../../icons/Add';
@@ -21,6 +20,7 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [imageFile, setImageFile] = useState(null);
     const [active, setActive] = useState("Pricing")
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [values, setValues] = useState({})
     const input_name = useRef(null);
 
@@ -53,7 +53,7 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
             });
 
             const data = await response.json();
-            toast(data?.message);
+            setMessage({ id: Date.now(), mgs: data?.message });
             goto('/items')
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -73,7 +73,7 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
 
     return (
         <div className='min-h-screen pb-12 p-6'>
-            <ToastContainer />
+            <Notification message={message} />
             <div className='shadow-lg bg-[#FFFFFF] rounded-xl'>
                 <div className='border-b px-5'>
                     <h1 className='text-2xl font-semibold  py-5'>Update Item Details</h1>

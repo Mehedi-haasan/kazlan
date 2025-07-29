@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification'
 import DownModal from "../Input/DownModal";
 import ImageSelect from "../Input/ImageSelect";
 import logo from '../Logo/logu (2).png'
@@ -18,6 +17,7 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
     const [image_url, setImage_Url] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [values, setValues] = useState({ name: item?.name, });
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
     const handleUpdate = async (image_url, url, id) => {
 
@@ -38,7 +38,7 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
             const data = await response.json();
             setEdit(false)
             FetchShop()
-            toast(data?.message)
+            setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -81,10 +81,10 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
             }
         });
         const data = await response.json();
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
         FetchShop()
         setShow(false)
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
     const handleImageChange = (e) => {
@@ -95,21 +95,21 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         setValues(item)
-    },[item])
+    }, [item])
 
     return (
 
         <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-50' : ''}`}>
-            <th className="w-4 py-2 px-4 border-x">
-                <ToastContainer />
+            {/* <th className="w-4 py-2 px-4 border-x">
+
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.name}</th>
+            </th> */}
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.count}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalCost}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.TotalCost}</th>
@@ -118,6 +118,7 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.employee}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2">
+                <Notification message={message} />
                 <Edit size='22px' onClick={() => { setEdit(true) }} />
                 <Remove size='18px' onClick={() => { setShow(true) }} />
                 <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">

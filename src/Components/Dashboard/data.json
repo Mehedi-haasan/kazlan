@@ -32,6 +32,12 @@
                 "parent": "2",
                 "name": "Category List",
                 "route": "category"
+            },
+            {
+                "id": 24,
+                "parent": "2",
+                "name": "Attribute List",
+                "route": "attribute"
             }
         ]
     },

@@ -4,8 +4,7 @@ import InputComponent from '../Input/InputComponent'
 import Button from '../Input/Button';
 import SelectionComponent from '../Input/SelectionComponent'
 import BaseUrl from '../../Constant';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification';
 import { useNavigate } from 'react-router-dom';
 import Add from '../../icons/Add';
 import logo from '../Logo/photo.png'
@@ -13,11 +12,10 @@ import ImageSelect from '../Input/ImageSelect'
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 
-const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
+const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const goto = useNavigate()
 
     const input_name = useRef(null);
-    const item_code = useRef(null)
     const [filter, setFilter] = useState({
         edit_value: "Select a filter",
         bran_value: 'Select a filter',
@@ -29,11 +27,11 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const dis = useRef(null)
     const qt = useRef(null)
     useEffect(() => {
-        item_code.current?.focus();
+        input_name.current?.focus();
     }, []);
 
     const [sale, setSale] = useState(false);
-    const [mrp, setMrp] = useState(false)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [edition, setEdition] = useState(false)
     const [first, setFirst] = useState(false)
     const [second, setSecond] = useState(false)
@@ -47,6 +45,8 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
     const [brand, setBrand] = useState([])
     const [isLocal, setIsLocal] = useState(true);
     const [active, setActive] = useState("Pricing")
+    const [years, setyears] = useState([]);
+    const [quanType, setQuanType] = useState([])
     const [values, setValues] = useState({
         categoryId: 1,
         editionId: 1,
@@ -60,7 +60,8 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         product_type: "Physical",
         description: '',
         year: '2026',
-        edition: ''
+        edition: '',
+        code: ''
     })
 
     EscapeRedirect("/items")
@@ -92,6 +93,34 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         const data = await response.json()
         setBrand(data.items);
         setValues({ ...values, brandId: data?.items[0]?.id })
+    }
+
+
+
+    const Attribute = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Edition`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setyears(data.items);
+    }
+
+    const GetQuantity = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Quantity`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setQuanType(data.items);
     }
 
     const GetSupplier = async () => {
@@ -126,6 +155,8 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         // FetchShop()
         getCategory()
         getBrand()
+        Attribute()
+        GetQuantity()
         GetSupplier()
     }, []);
 
@@ -134,43 +165,10 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         goto('/items')
     }
 
-
-    const handleCreate = async (image_url) => {
-
-        if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
-            toast("Required field is missing");
-            return;
-        }
-
-        values.image_url = image_url;
-        setIsLoading(true)
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`${BaseUrl}/api/create/product`, {
-                method: 'POST',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-                body: JSON.stringify(values),
-            });
-
-            const data = await response.json();
-            setIsLoading(false)
-            toast(data?.message)
-            anotherFunction();
-            handleClose(false);
-            callAgain()
-            goto('/items')
-        } catch (error) {
-            console.error('Error updating variant:', error);
-        }
-    }
-
     const handleCreateOffline = async (image_url) => {
 
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
-            toast("Required field is missing");
+            setMessage({ id: Date.now(), mgs: "Required field is missing" });
             return;
         }
 
@@ -189,7 +187,40 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
 
             const data = await response.json();
             setIsLoading(false)
-            toast(data?.message)
+            anotherFunction();
+            handleClose(false);
+            callAgain()
+            goto('/items')
+        } catch (error) {
+            setMessage({ id: Date.now(), mgs: error });
+        }
+    }
+
+
+
+    const handleCreate = async (image_url) => {
+
+        if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
+            setMessage({ id: Date.now(), mgs: "Required field is missing" });
+            return;
+        }
+
+        values.image_url = image_url;
+        setIsLoading(true)
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BaseUrl}/api/create/product`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+            setIsLoading(false)
+            setMessage({ id: Date.now(), mgs: data?.message });
             anotherFunction();
             handleClose(false);
             callAgain()
@@ -199,17 +230,18 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
         }
     }
 
+
     const handleUpload = async () => {
 
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price || !values?.qty) {
-            toast("Required field is missing");
+            setMessage({ id: Date.now(), mgs: "Required field is missing" });
             return;
         }
         const formData = new FormData();
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            toast("Image file is missing in the payload");
+            setMessage({ id: Date.now(), mgs: "Image file is missing in the payload" });
             setIsLoading(false)
             return;
         }
@@ -227,7 +259,7 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
             const data = await response.json();
             if (data) {
                 handleCreate(data.image_url);
-                if (isLocal) { handleCreateOffline("") }
+                handleCreateOffline("")
             }
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -252,39 +284,21 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
 
     const handleUp = () => {
         handleCreate('');
-        if (isLocal) { handleCreateOffline("") }
+        handleCreateOffline("")
     }
 
     return (
         <div className='min-h-screen pb-12 py-5 px-3 relative'>
-            <ToastContainer />
+
             <div className='shadow-lg bg-[#FFFFFF] rounded-xl'>
                 <div className='border-b px-5 flex justify-between items-center'>
                     <h1 className='text-2xl font-semibold  py-5'>Item Details</h1>
-                    {/* <div className="flex justify-end gap-1 items-center w-[200px]">
-                        <input
-                            type="checkbox"
-                            checked={isLocal}
-                            onChange={(e) => setIsLocal(e.target.checked)}
-                            className="border rounded h-5 w-5"
-                        />
-                        <p>Also for local</p>
-                    </div> */}
+                    <Notification message={message} />
                 </div>
 
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
-                        <div className='gris col-span-1 lg:col-span-2'>
-                            <h1 className='pb-1.5'>Item Code*</h1>
-                            <input placeholder='Item Code' ref={item_code}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        input_name.current?.focus();
-                                    }
-                                }}
-                                onChange={(e) => { setValues({ ...values, code: e.target.value }) }}
-                                className='px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border w-full' />
-                        </div>
+
                         <div>
 
 
@@ -424,11 +438,11 @@ const CreactProduct = ({ years, handleClose, callAgain, info = {} }) => {
                                         <div className='flex justify-start items-end pb-1'>
                                             <input type='number' ref={qt} placeholder={values?.qty}
                                                 onChange={(e) => { setValues({ ...values, qty: e.target.value }) }}
-                                                onKeyDown={(e) => { if (e.key === "Enter") { handleCreate('') } }}
+                                                onKeyDown={(e) => { if (e.key === "Enter") { handleCreate(''); handleCreateOffline("") } }}
                                                 className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[170px]' />
                                             <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
                                                 className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
-                                                {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (
+                                                {quanType?.map(({ id, name }) => (
                                                     <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                                 ))}
                                             </select>

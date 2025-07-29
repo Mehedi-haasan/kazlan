@@ -70,6 +70,42 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
 }
 
 
+export async function EditPrepareOrderData(allData, userId, name, values, info) {
+    let orderData = [];
+    allData?.forEach((v) => {
+        let sale = 0;
+        const price = parseInt(v?.price) || 0;
+        const discount = parseInt(v?.discount) || 0;
+        const qty = parseInt(v?.qty) || 0;
+        if (v?.discount_type === "Fixed") {
+            sale = (price - discount) * qty;
+        } else if (v?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice * qty;
+        }
+
+        orderData.push({
+            active: true,
+            product_id: v?.product ? v?.product?.id : v?.id,
+            code: v?.product ? v?.product?.code : v?.code,
+            username: name,
+            userId: userId,
+            name: v?.name,
+            shop: info?.shopname,
+            price: price,
+            discount: discount,
+            discount_type: v?.discount_type,
+            sellprice: sale,
+            qty: qty,
+            contact: values?.phone,
+            date: getFormattedDate(),
+            deliverydate: values?.deliverydate
+        });
+    });
+    return orderData
+}
+
+
 export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due) {
     let orderData = [];
     allData?.forEach((v) => {

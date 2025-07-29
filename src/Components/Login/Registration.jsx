@@ -3,9 +3,8 @@ import BaseUrl from '../../Constant';
 import SelectionComponent from '../Input/SelectComp';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
-import logo from '../Logo/userProfile.png'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import logo from '../Logo/photo.png'
+
 import { useNavigate } from 'react-router-dom';
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
@@ -37,7 +36,7 @@ const Registration = ({ state }) => {
     if (data && data?.success) {
       goto(`/users`)
     }
-    toast(data.message)
+
   }
 
   const GetWarehouse = async () => {
@@ -71,7 +70,7 @@ const Registration = ({ state }) => {
 
   return (
     <div className="min-h-screen pb-12 py-5 px-4">
-      <ToastContainer />
+  
       <div className='bg-[#FFFFFF] rounded-xl shadow-lg'>
         <div className='border-b'>
           <h1 className='py-4 pl-8'>User Details</h1>
@@ -80,7 +79,7 @@ const Registration = ({ state }) => {
           <div className="space-y-0 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div className="flex justify-start items-center gap-5">
               <div>
-                <p className='pb-2 font-thin'>User Picture</p>
+                <p className='pb-2 font-semibold'>User Picture</p>
                 <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
               </div>
               <div>

@@ -4,16 +4,15 @@ import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import Notification from "../Input/Notification";
 
 const CreateSupplier = ({ state }) => {
     const open_bala = useRef(null)
     const goto = useNavigate()
     const [active, setActive] = useState("Address");
     const [isLoading, setIsLoading] = useState(false)
-    const [isLocal, setIsLocal] = useState(true);
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Supplier",
@@ -34,14 +33,13 @@ const CreateSupplier = ({ state }) => {
         addres: false,
         open_b: false
     })
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
         if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
-            toast("Required Field are missing");
+            setMessage({ id: Date.now(), mgs: "Required Field are missing" });
             return
         }
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        e.preventDefault()
         const response = await fetch(`${BaseUrl}/api/create/customers`, {
             method: 'POST',
             headers: {
@@ -52,14 +50,13 @@ const CreateSupplier = ({ state }) => {
         });
         const data = await response.json();
         setIsLoading(false);
-        toast(data.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
         goto('/suppliers')
     }
 
 
     const handleSubmitOffline = async () => {
         if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
-            toast("Required Field are missing");
             return
         }
         setIsLoading(true)
@@ -74,7 +71,6 @@ const CreateSupplier = ({ state }) => {
         });
         const data = await response.json();
         setIsLoading(false);
-        toast(data.message)
         goto('/suppliers')
     }
 
@@ -87,17 +83,10 @@ const CreateSupplier = ({ state }) => {
 
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
-            <ToastContainer /><div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
+            <Notification message={message} />
+            <div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
                 <h1 className="py-2 px-3">Supplier Details</h1>
-                {/* <div className="flex justify-end gap-1 items-center w-[200px]">
-                    <input
-                        type="checkbox"
-                        checked={isLocal}
-                        onChange={(e) => setIsLocal(e.target.checked)}
-                        className="border rounded h-5 w-5"
-                    />
-                    <p>Also for local</p>
-                </div> */}
+
             </div>
 
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
@@ -152,11 +141,8 @@ const CreateSupplier = ({ state }) => {
                                 <input type='number' value={values?.balance}
                                     ref={open_bala} onKeyDown={(e) => {
                                         if (e.key === "Enter") {
-                                            handleSubmit(e);
-                                            if (isLocal) {
-                                                handleSubmitOffline();
-                                            }
-
+                                            handleSubmit();
+                                            handleSubmitOffline();
                                         }
                                     }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder='Enter opening balance' className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
                                 <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
@@ -173,7 +159,7 @@ const CreateSupplier = ({ state }) => {
                 }
 
                 <div className='p-3'>
-                    <Button onClick={() => { handleSubmit(); if (isLocal) { handleSubmitOffline() } }} isDisable={isLoading} name={'Submit'} />
+                    <Button onClick={() => { handleSubmit(); handleSubmitOffline(); }} isDisable={isLoading} name={'Submit'} />
                     <Button name={'Cancel'} className={'bg-blue-50 hover:bg-red-500 text-black hover:text-white'} />
                 </div>
             </div>

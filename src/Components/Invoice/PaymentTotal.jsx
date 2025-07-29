@@ -74,7 +74,7 @@ const PaymentTotal = ({ user, total }) => {
                 <th className="p-2"></th>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
-                <td className="p-2 border-b">আগের বকেয়া</td>
+                <td className="p-2 border-b">পুর্বের বকেয়া</td>
                 <td className="p-2 text-right border-b">{convertToBengaliNumber(parseInt(user?.previousdue))}.০</td>
             </tr>
             <tr className="bg-white">

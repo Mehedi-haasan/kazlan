@@ -51,7 +51,6 @@ const CreateBrand = ({ entries }) => {
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-
             setMessage({ id: Date.now(), mgs: "Image file is missing in the payload" });
             setIsLoading(false)
             return;
@@ -95,27 +94,7 @@ const CreateBrand = ({ entries }) => {
                 <div className="flex justify-start items-center gap-5 px-6 pt-5">
                     <div>
                         <p className='pb-2 font-thin'>Brand Picture</p>
-                        <img src={imageFile ? imageFile : logo} alt="Preview" className="w-24 h-24 object-cover rounded-lg border border-red-500 p-1" />
-                    </div>
-                    <div>
-                        <div className='flex justify-start items-center gap-2 pt-10'>
-                            <div className='border rounded-lg px-4 py-1'>
-                                <label>
-                                    <h1 className="font-semibold pt-1 pb-2">Browse</h1>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                        className="hidden"
-                                    />
-                                </label>
-                            </div>
-                            <div className='border rounded-lg px-4 py-1.5'>
-                                <h1 className="font-semibold py-1">Reset</h1>
-                            </div>
-
-                        </div>
-                        <p className='font-thin py-1 text-sm'>Allowed JPG, GIF or PNG. Max size of 1MB</p>
+                        <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                     </div>
                 </div>
                 <div className="px-6 py-4">

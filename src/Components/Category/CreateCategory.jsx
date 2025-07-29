@@ -2,8 +2,7 @@ import { useState, useEffect } from "react"
 import InputComponent from "../Input/InputComponent"
 import BaseUrl from '../../Constant';
 import Button from "../Input/Button";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification'
 import logo from '../Logo/userProfile.png'
 
 
@@ -13,7 +12,7 @@ const CreateCategory = ({ entries }) => {
     const [imageFile, setImageFile] = useState(null);
     const [values, setValues] = useState({ name: "", });
     const [isLoading, setIsLoading] = useState(false)
-
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
 
     useEffect(() => {
@@ -37,10 +36,10 @@ const CreateCategory = ({ entries }) => {
 
             const data = await response.json();
             setValues({ ...values, name: '' })
-            toast(data?.message)
+            setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
             setIsLoading(false)
-            toast('Error updating variant:', error);
+            setMessage({ id: Date.now(), mgs: error });
         }
         setIsLoading(false)
     }
@@ -52,7 +51,7 @@ const CreateCategory = ({ entries }) => {
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            toast("Image file is missing in the payload");
+            setMessage({ id: Date.now(), mgs: "Image file is missing in the payload" });
             setIsLoading(false)
             return;
         }
@@ -72,7 +71,7 @@ const CreateCategory = ({ entries }) => {
             }
         } catch (error) {
             setIsLoading(false)
-            toast('Error uploading image:', error);
+
         }
         setIsLoading(false)
     }
@@ -88,7 +87,7 @@ const CreateCategory = ({ entries }) => {
 
     return (
         <div className="px-2 pt-5 min-h-screen pb-12">
-            <ToastContainer />
+            <Notification message={message} />
             <div className="pt-1 bg-[#FFFFFF] shadow-lg rounded-lg w-[50%]">
                 <div className="border-b">
                     <h1 className="pl-5 text-xl py-2">Category Details</h1>

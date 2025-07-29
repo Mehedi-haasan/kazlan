@@ -5,25 +5,26 @@ import Add from '../../icons/Add';
 import InputComponent from '../Input/InputComponent';
 import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
-import WholeSaleCard from '../Wholesale/WholeSaleCard';
+import WholeSaleCard from './WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { handleDateConvert, PrepareOrderData, CalculateAmount } from '../Input/Time';
-import { useNavigate } from 'react-router-dom';
-import Calendar from '../Wholesale/Calender';
-import DataHeader from '../Common/DataHeader';
+import { CalculateAmount, EditPrepareOrderData } from '../Input/Time';
+import { useNavigate, useParams } from 'react-router-dom';
+import Calendar from './Calender'
 import SearchResultHeader from '../Common/SearchResultHeader';
-import EscapeRedirect from '../Wholesale/EscapeRedirect';
-import SelectionComponentSearch from '../Input/SelectionComponentSearch';
+import DataHeader from '../Common/DataHeader';
+import EscapeRedirect from './EscapeRedirect'
 import Remove from '../../icons/Remove';
+import SelectionComponentSearch from '../Input/SelectionComponentSearch';
 
 
 
-const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
 
+const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
+
+    const params = useParams();
     const [itemQuan, setItemQuan] = useState(null)
-    const [message, setMessage] = useState({ id: '', mgs: '' });
-    const [first, setFirst] = useState(true)
+    const [first, setFirst] = useState(false)
     const [second, setSecond] = useState(false)
     const [edition, setEdition] = useState(false)
     const [bran, setBrand] = useState(false)
@@ -31,11 +32,13 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     const [pack, setPack] = useState(false)
     const [deli, setDeli] = useState(false)
     const [quan, setQuan] = useState(false)
+    const [user, setUser] = useState({});
+    const [invoice, setInvoice] = useState({})
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const inputRef = useRef(null)
     const inputQty = useRef(null)
     const dis_ref = useRef(null)
     const typeRef = useRef(null);
-    const paytypeRef = useRef(null);
     const discount_ref = useRef(null)
     const last_pay = useRef()
     const goto = useNavigate()
@@ -54,18 +57,12 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     const [disValue, setDisValue] = useState(false);
     const [prepareData, setPrepareData] = useState({})
     const [prep_value, setPrep_Value] = useState(false)
-    const [payTypeShow, setPayTypeShow] = useState(false);
-    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Due" }, { id: 3, name: "Cash" }]
     const today = new Date();
-    const [values, setValues] = useState({
-        pay: 0,
-        paking: 0,
-        delivary: 0,
-        pay_type: 'Challan',
-        lastdiscount: 0,
-        lastdiscounttype: "Fixed",
-        deliverydate: ''
-    })
+    const [raw, setRaw] = useState({
+        fromDate: today.toISOString(),
+        toDate: today.toISOString()
+    });
+    let data = [{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }]
     const [filter, setFilter] = useState({
         cate: null,
         cate_value: "Select a filter",
@@ -77,11 +74,26 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         customer: 'Select a filter',
     })
 
-    const [raw, setRaw] = useState({
-        fromDate: today.toISOString(),
-        toDate: today.toISOString()
-    });
-    let data = [{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }]
+    const handleDateConvert = (date) => {
+        const formatted = date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        return formatted
+    };
+
+    const [values, setValues] = useState({
+        pay: 0,
+        paking: 0,
+        delivary: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
+    })
+
+    EscapeRedirect()
 
     const SecondSearchProduct = async (edit, cate, bran, value) => {
         setSelectedId(0)
@@ -102,23 +114,20 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         }
     }
 
-    EscapeRedirect()
-
     const Order = async () => {
-        if (!userId) {
-            setMessage({ id: Date.now(), mgs: "Customer Pay Amount and Pay Type are required" });
-            return
-        }
+        let orderData = await EditPrepareOrderData(allData, invoice?.userId, name, values, info)
         const token = localStorage.getItem('token');
-        let orderData = await PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due);
         try {
-            const response = await fetch(`${BaseUrl}/api/purchase/product`, {
+            const response = await fetch(`${BaseUrl}/api/update/order`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify(orderData),
+                body: JSON.stringify({
+                    invoice: invoice,
+                    allData: orderData
+                }),
             });
 
             const data = await response.json();
@@ -129,12 +138,17 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         }
     }
 
+
     useEffect(() => {
         const fetchAmount = async () => {
             let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount);
             setTotal(amount);
             setLastTotal(lastTotal);
-            document.title = "Purchase Items - KazalandBrothers";
+            setInvoice({
+                ...invoice,
+                total: lastTotal
+            })
+            document.title = "Sale Return Edit - KazalandBrothers";
         };
 
         fetchAmount();
@@ -155,11 +169,9 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         setValues({ ...values, phone: data?.phone })
     }
 
-
-
     const GetCustomer = async (id) => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/suppliers/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -171,6 +183,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     }
 
 
+
     const HandleDelete = (id) => {
         if (!id) return;
         const confirmDelete = window.confirm("Are you sure you want to delete this item?");
@@ -180,12 +193,44 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         setAllData(updatedData);
     };
 
+    const GetInvoiceData = async (id) => {
+
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token
+            }
+        });
+        const data = await response.json();
+        setAllData(data?.items);
+        setUser(data?.user);
+        setInvoice(data?.invoice);
+        setValues({
+            ...values,
+            pay: data?.user?.paidamount,
+            lastdiscount: data?.user?.lastdiscount
+        })
+        setPaking(data?.user?.packing);
+        setDelivery(data?.user?.delivery);
+        setFilter({
+            ...filter,
+            state: data?.user?.state,
+            name: data?.user?.name
+        });
+    }
+
+    useEffect(() => {
+        GetInvoiceData(params?.id)
+    }, [params?.id])
+
 
     useEffect(() => {
         if (prep_value) {
             discount_ref.current.focus()
         }
     }, [prep_value])
+
 
     const ChangeDis = (value, type) => {
         if (type === "Fixed") {
@@ -220,19 +265,24 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     };
 
 
+
     return (
-
-
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
+            <Notification message={message} />
             <div className='bg-[#FFFFFF] rounded-md'>
                 <div className='border-b p-4 flex justify-between items-center'>
-                    <h1>Purchase Details</h1>
-                    <Notification message={message} />
+                    <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1 z-40'>
                         <SelectionComponent default_select={first} options={state} default_value={filter?.state}
-                            onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id); setFilter({ ...filter, state: v?.name }) }}
+                            onSelect={(v) => {
+                                setSecond(true);
+                                setFirst(false);
+                                setCustomer([]);
+                                GetCustomer(v?.id);
+                                setFilter({ ...filter, state: v?.name });
+                            }}
                             label={"Thana Name"} className='rounded-l z-50' />
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
@@ -248,12 +298,12 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
 
                     <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
+                        <SelectionComponent default_select={second} options={customer} default_value={filter?.name}
                             onSelect={(v) => {
                                 setSecond(false); setFirst(false); setQuan(true);
                                 setFilter({ ...filter, customer: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
                             }}
-                            label={"Supplier"} className='rounded-l' />
+                            label={"Customer"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
@@ -388,7 +438,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                         bran_value: 'Select a filter',
                                                         cate_value: 'Select a filter'
                                                     });
-                                                    setPrep_Value(true)
+                                                    setPrep_Value(true);
                                                 }}>
                                                     <div className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
                                                     <div className="px-1 py-2 font-thin text-left">{item?.edition}</div>
@@ -513,68 +563,23 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={last_pay}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                Order()
-                                            } else if (e.key === "ArrowRight") {
-                                                paytypeRef.current.focus();
-                                                setPayTypeShow(true)
-                                            }
+                                    <input type='number' ref={last_pay} value={values?.pay}
+                                        onKeyDown={(e) => { if (e.key === "Enter") { Order() } }}
+                                        onChange={(e) => {
+                                            setValues({ ...values, pay: e.target.value });
+                                            setInvoice({
+                                                ...invoice,
+                                                paidamount: e.target.value,
+                                                due: lastTotal - e.target.value
+                                            })
                                         }}
-                                        onChange={(e) => { setValues({ ...values, pay: e.target.value }) }}
                                         placeholder={values?.pay} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
-                                    {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
+                                    <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 1, name: "Cash" }, { id: 2, name: "Due" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                         ))}
-                                    </select> */}
-
-                                    <div className='relative z-50 border'>
-                                        <input ref={paytypeRef} value={values?.pay_type} onKeyDown={(e) => {
-                                            if (e.key === "ArrowDown") {
-                                                if (selectedId === PayType?.length - 1) {
-                                                    setSelectedId(0)
-                                                } else {
-                                                    setSelectedId(selectedId + 1)
-                                                }
-
-                                            } else if (e.key === "ArrowUp") {
-                                                if (selectedId === 0) {
-                                                    setSelectedId(PayType?.length - 1)
-                                                } else {
-                                                    setSelectedId(selectedId - 1)
-                                                }
-                                            } else if (e.key === "Enter" && PayType[selectedId]) {
-                                                setPayTypeShow(false);
-                                                setSelectedId(0);
-                                                last_pay.current?.focus();
-                                                setValues({ ...values, pay_type: PayType[selectedId].name })
-                                            }
-                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
-                                        {
-                                            payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
-                                                {
-                                                    PayType?.map((opt, i) => {
-                                                        return <div onMouseEnter={() => { }}
-                                                            ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === "ArrowDown") {
-                                                                    setSelectedId(i + 2)
-
-                                                                }
-                                                            }}
-
-                                                            onClick={() => { }}
-                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
-                                                            {opt?.name}
-                                                        </div>
-                                                    })
-                                                }
-                                            </div>
-                                        }
-                                    </div>
+                                    </select>
 
                                 </div>
                             </div>
@@ -631,4 +636,4 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     );
 }
 
-export default PurchaseProduct;
+export default SaleOrderEdit;

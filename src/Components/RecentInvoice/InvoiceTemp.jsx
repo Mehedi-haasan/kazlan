@@ -38,12 +38,12 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                 <table className="text-sm text-left rtl:text-right text-gray-500 w-full min-w-[700px] ">
                     <thead className=" text-sm text-left rtl:text-right text-gray-500">
                         <tr className='border'>
-                            <th className="w-4 py-3 px-4 border-r ">
+                            {/* <th className="w-4 py-3 px-4 border-r ">
                                 <div className="flex items-center">
                                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 " />
                                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                 </div>
-                            </th>
+                            </th> */}
                             <th scope="col" className="px-3 py-3 border-r ">
                                 <div className="flex justify-between items-center">
                                     Date
@@ -121,13 +121,13 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                     goto(`/return/invoice/${item?.id}`)
                                 }
                             }}>
-                                <th className="w-4 py-3 px-4 border-x">
+                                {/* <th className="w-4 py-3 px-4 border-x">
                                     <div className="flex items-center">
                                         <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
-                                </th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
+                                </th> */}
+                                <th scope="col" className="px-3 py-3 border-x font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-000{item?.id}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.customername}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>

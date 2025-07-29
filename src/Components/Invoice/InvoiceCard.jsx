@@ -24,10 +24,10 @@ const InvoiceCard = ({ item }) => {
             <th className="p-2 font-thin text-center">
                 {convertToBengaliNumber(item?.qty)}
             </th>
-            <td className="p-2 border-l font-thin text-center">
-                {item?.name}
+            <td className="p-2 border-l font-thin">
+                {item?.name}, {item?.product?.category?.name}, {item?.edition}
             </td>
-            <td className="p-2 border-l font-thin text-center">
+            <td className="p-2 border-l font-thin">
                 {item?.product?.brand?.name}
             </td>
             <td className="p-2 border-l font-thin text-center">

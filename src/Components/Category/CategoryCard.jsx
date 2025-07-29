@@ -10,8 +10,7 @@ import logo from '../Logo/userProfile.png'
 import ImageSelect from "../Input/ImageSelect";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import { useLottie } from "lottie-react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 
 
 
@@ -23,7 +22,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
     const [values, setValues] = useState({ name: item?.name, });
     const [isLoading, setIsLoading] = useState(false)
     const [showlotti, setLottiShow] = useState(false)
-
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const handleUpdate = async (image_url, url, id) => {
 
         values.image_url = image_url;
@@ -45,7 +44,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
             setEdit(false)
             getCategory()
             setLottiShow(true)
-            toast(data?.message)
+            setMessage({ id: Date.now(), mgs: data?.message });
             setIsLoading(false)
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -95,7 +94,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
         setShow(false)
         getCategory();
         setLottiShow(true)
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
     const handleImageChange = (e) => {
@@ -130,17 +129,22 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
     return (
 
         <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b border-x`}>
-            <th className="w-4 py-2 px-4 border-r">
+            {/* <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
-                    <ToastContainer />
+                    <Notification message={message} />
                     <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
                         <>{View}</>
                     </Modal>
                     <input id="checkbox-table-search-1" type="checkbox" isChecked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
+            </th> */}
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
+                <Notification message={message} />
+                    <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                        <>{View}</>
+                    </Modal>
             </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">
                 <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
             </th>

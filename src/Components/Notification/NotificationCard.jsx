@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import BaseUrl from '../../Constant';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification';
 
 const NotificationCard = ({ item }) => {
     const [isChecked, setIsChecked] = useState(item?.isSeen === 'true' ? true : false)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
     const ReadNotification = async () => {
         setIsChecked(true);
@@ -18,13 +18,13 @@ const NotificationCard = ({ item }) => {
             body: JSON.stringify({ id: item?.id })
         });
         const data = await response.json()
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
     return (
         <div key={item?.id} onClick={ReadNotification} className={`${isChecked ? 'bg-white' : 'bg-gray-100'} p-2 cursor-pointer rounded-md m-1 flex justify-start gap-2`}>
             <div>
-                <ToastContainer />
+                <Notification message={message} />
                 <img src={`https://cdn-icons-png.flaticon.com/128/149/149071.png`} className='h-10 w-10 rounded-full' alt='dgviusd' />
             </div>
 

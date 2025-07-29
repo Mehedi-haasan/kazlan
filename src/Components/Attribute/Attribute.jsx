@@ -7,25 +7,23 @@ import BaseUrl from '../../Constant';
 import Button from "../Input/Button";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
-import BrandCard from "./BrandCard";
+import AttributeCard from "./AttributeCard";
 import Loading from "../../icons/Loading";
 import Notification from "../Input/Notification";
-import logo from '../Logo/photo.png'
 import Excel from '../Input/Excel'
 import Search from "../Input/Search";
-import ImageSelect from "../Input/ImageSelect";
 import { useLottie } from "lottie-react";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
+import SelectionComponent from "../Input/SelectionComponent";
 
 
-const Brand = ({ entries, info = {} }) => {
+const Attribute = ({ entries, info = {} }) => {
 
     const targetRef = useRef();
     const [inpo, setInpo] = useState(false)
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
-    const [image_url, setImage_Url] = useState();
     const [bran, setBran] = useState([])
     const [values, setValues] = useState({ name: "", });
     const [show, setShow] = useState(false);
@@ -34,16 +32,18 @@ const Brand = ({ entries, info = {} }) => {
     const [totalItem, setTotalItem] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const [isChecked, setIsChecked] = useState(false)
-    const [imageFile, setImageFile] = useState(null);
-    const [showlotti, setLottiShow] = useState(false)
+    const [showlotti, setLottiShow] = useState(false);
+    const [first, setFirst] = useState({
+        first: true,
+        value: 'Bank'
+    })
     const [message, setMessage] = useState({ id: '', mgs: '' });
 
-    const handleCreate = async (image_url) => {
+    const handleCreate = async () => {
         setIsLoading(true)
-        values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/create/brand`, {
+            const response = await fetch(`${BaseUrl}/api/create/attribute`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
@@ -55,7 +55,6 @@ const Brand = ({ entries, info = {} }) => {
             const data = await response.json();
             setShow(false);
             setLottiShow(true)
-            getBrand();
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
@@ -64,12 +63,11 @@ const Brand = ({ entries, info = {} }) => {
         setIsLoading(false)
     }
 
-    const handleCreateLocally = async (image_url) => {
+    const handleCreateLocally = async () => {
         setIsLoading(true)
-        values.image_url = image_url;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`http://localhost:8050/api/create/brand`, {
+            const response = await fetch(`http://localhost:8050/api/create/attribute`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
@@ -81,7 +79,6 @@ const Brand = ({ entries, info = {} }) => {
             const data = await response.json();
             setShow(false);
             setLottiShow(true)
-            getBrand();
             setValues({ ...values, name: '' })
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -89,47 +86,12 @@ const Brand = ({ entries, info = {} }) => {
         setIsLoading(false)
     }
 
-    const handleUpload = async () => {
-
-        if (!values?.name) {
-            setMessage({ id: Date.now(), mgs: "Required field is missing" });
-            return
-        }
-        const formData = new FormData();
-        if (image_url) {
-            formData.append('image_url', image_url);
-        } else {
-            setMessage({ id: Date.now(), mgs: "Image file is missing in the payload" });
-            setIsLoading(false)
-            return;
-        }
-        setIsLoading(true)
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`${BaseUrl}/api/upload/image`, {
-                method: 'POST',
-                headers: {
-                    'authorization': token,
-                },
-                body: formData,
-            });
-
-            const data = await response.json();
-            if (data) {
-                handleCreate(data.image_url);
-                handleCreateLocally('')
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-        }
-        setIsLoading(false)
-    }
 
 
-    const getBrand = async () => {
-        setIsLoading(true)
+    const GetAttribute = async () => {
+        // setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/brand/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute/${page}/${pageSize}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -143,8 +105,8 @@ const Brand = ({ entries, info = {} }) => {
     }
 
     useEffect(() => {
-        document.title = `Brands - Kazaland Brothers`;
-        getBrand()
+        document.title = `Attributes - Kazaland Brothers`;
+        GetAttribute()
     }, [page, pageSize]);
 
 
@@ -153,7 +115,7 @@ const Brand = ({ entries, info = {} }) => {
         const name = value
         const token = localStorage.getItem('token')
         if (name !== '') {
-            const response = await fetch(`${BaseUrl}/api/get/brand/filter/search/${name}`, {
+            const response = await fetch(`${BaseUrl}/api/get/attribute/filter/search/${name}`, {
                 method: 'GET',
                 headers: {
                     'authorization': token,
@@ -161,24 +123,10 @@ const Brand = ({ entries, info = {} }) => {
             });
             const data = await response.json();
             setBran(data?.items);
-            console.log(data?.items)
         } else {
-            getBrand()
         }
     }
 
-
-
-
-
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage_Url(file);
-            setImageFile(URL.createObjectURL(file));
-        }
-    };
 
 
     const options = {
@@ -188,10 +136,6 @@ const Brand = ({ entries, info = {} }) => {
     };
 
     const { View } = useLottie(options);
-
-    // useEffect(() => {
-    //     input_focus.current.focus()
-    // }, [show])
 
 
     useEffect(() => {
@@ -215,22 +159,27 @@ const Brand = ({ entries, info = {} }) => {
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                         <div className="border-b">
-                            <h1 className="pl-5 text-xl py-2">Brand Details</h1>
-                        </div>
-                        <div className="pt-5 flex justify-between items-start">
-                            <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                            <h1 className="pl-5 text-xl py-2">Attribute Details</h1>
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Brand name`} input_focus={inpo} value={values?.name} label={`Brand Name`} handleEnter={() => { handleCreate(""); handleCreateLocally('') }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                            <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
+                            <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' }]} default_select={first?.first} default_value={first?.value}
+                                onSelect={(v) => {
+                                    setValues({
+                                        ...values,
+                                        type: v?.name,
+                                    })
+                                    setFirst({ ...first, value: v?.name })
+                                }} label={"Type*"} className='rounded-r' />
+                            <InputComponent placeholder={`Enter name`} input_focus={inpo} value={values?.name} label={`Name`} handleEnter={() => { handleCreate(); handleCreateLocally() }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <Button isDisable={isLoading} name="Create" onClick={() => { handleCreate(); handleCreateLocally() }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>
                 </Modal>
             </div>
             <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
-                <h1 className="font-semibold text-lg">Brand List</h1>
+                <h1 className="font-semibold text-lg">Attribute List</h1>
 
-                <button onClick={() => { setShow(true); setInpo(true) }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Brand</button>
+                <button onClick={() => { setShow(true); setInpo(true) }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute</button>
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
@@ -255,13 +204,13 @@ const Brand = ({ entries, info = {} }) => {
                                     </th> */}
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center font-bold text-[16px]">
-                                            Brand
+                                            Attribute
                                             <Updown />
                                         </div>
                                     </th>
-                                    <th scope="col" className="px-2 py-2 text-center border-r">
-                                        <div className="flex justify-between items-center text-[16px]">
-                                            Logo
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center font-bold text-[16px]">
+                                            Type
                                             <Updown />
                                         </div>
                                     </th>
@@ -285,7 +234,7 @@ const Brand = ({ entries, info = {} }) => {
 
                                 {
                                     bran?.map((item, i) => (
-                                        <BrandCard item={item} i={i} isChecked={isChecked} info={info} getBrand={getBrand} />
+                                        <AttributeCard item={item} i={i} isChecked={isChecked} info={info} GetAttribute={GetAttribute} />
                                     ))
                                 }
 
@@ -312,4 +261,4 @@ const Brand = ({ entries, info = {} }) => {
     )
 }
 
-export default Brand
+export default Attribute

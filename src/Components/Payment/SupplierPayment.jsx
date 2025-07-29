@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 import { useNavigate, useParams } from "react-router-dom";
 import { getFormattedDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
@@ -13,17 +12,18 @@ const SupplierPayment = ({ info, state }) => {
     const goto = useNavigate()
     const params = useParams()
     const [isLoading, setIsLoading] = useState(false)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [values, setValues] = useState({
         balance: 0,
         paid: 0,
         email: '',
         phone: '',
         accountnumber: '',
-        balance_type: ''
+        balance_type: '',
+        note: ''
     })
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
         values.shop = info?.shopname;
@@ -43,7 +43,7 @@ const SupplierPayment = ({ info, state }) => {
         });
         const data = await response.json();
         setIsLoading(false);
-        toast(data.message);
+        setMessage({ id: Date.now(), mgs: data?.message });
         if (data?.customertype === "Supplier") {
             goto(`/suppliers`)
         } else {
@@ -62,7 +62,7 @@ const SupplierPayment = ({ info, state }) => {
         });
         const data = await response.json();
         setValues(data?.items)
-        toast(data.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
     useEffect(() => {
@@ -72,7 +72,7 @@ const SupplierPayment = ({ info, state }) => {
 
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
-            <ToastContainer />
+            <Notification message={message} />
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
 
                 <div className="flex justify-between items-center  py-2 bg-[#FFFFFF] border-b pr-2">
@@ -124,8 +124,8 @@ const SupplierPayment = ({ info, state }) => {
                         </div>
                     </div>
                     <div>
-                        <h1 className="py-1">Description</h1>
-                        <textarea placeholder="Enter your note" className="font-thin focus:outline-none border p-1.5 w-full rounded" />
+                        <h1 className="py-1">Note</h1>
+                        <textarea placeholder="Enter your note" onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin focus:outline-none border p-1.5 w-full rounded" />
                     </div>
                 </div>
 

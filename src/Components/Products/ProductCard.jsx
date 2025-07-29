@@ -8,8 +8,7 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import InputComponent from "../Input/InputComponent";
 import { NavLink } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 import DownModal from "../Input/DownModal";
 
 
@@ -20,6 +19,7 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
   const [image_url, setImage_Url] = useState();
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState({ id: '', mgs: '' });
   const [values, setValues] = useState({
     categoryId: 1,
     brandId: 1,
@@ -46,7 +46,7 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
       setIsLoading(true)
       getProduct()
       setShow(false)
-      toast(data?.message);
+      setMessage({ id: Date.now(), mgs: data?.message });
     } catch (error) {
       console.error('Error updating variant:', error);
     }
@@ -91,7 +91,7 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
     });
     const data = await response.json();
     setShow(false)
-    toast(data?.message);
+    setMessage({ id: Date.now(), mgs: data?.message });
     getProduct()
   }
 
@@ -107,14 +107,16 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
 
   return (
     <tr className={`border-b z-10 ${i % 2 == 0 ? 'bg-gray-100' : ''}`}>
-      <th className="w-4 py-2 px-4 border-x">
+      {/* <th className="w-4 py-2 px-4 border-x">
         <div className="flex items-center">
-          <ToastContainer />
+          <Notification message={message} />
           <input id="checkbox-table-search-1" checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
+      </th> */}
+      <th scope="col" className="px-2 py-2.5 border-x font-thin text-[#212529]">{item?.name} {item?.edition}
+        <Notification message={message} />
       </th>
-      <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.name} {item?.edition}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.brand?.name}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.category?.name}</th>
       <th scope="col" className="px-2 py-2.5 border-r font-thin text-[#212529]">{item?.company?.name}</th>
@@ -134,7 +136,7 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
                 <path fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
               </svg><h1 className="mt-[3px] text-xs">Transactions</h1>
             </NavLink>
-            <div onClick={() => { setShow(true); modalOpen(item?.id) }} className={`${info?.role === "admin" ? 'hidden':''} flex justify-start items-center gap-2.5 cursor-pointer text-red-500 hover:bg-gray-200 px-[5px] py-[2px] rounded`}>
+            <div onClick={() => { setShow(true); modalOpen(item?.id) }} className={`${info?.role === "admin" ? 'hidden' : ''} flex justify-start items-center gap-2.5 cursor-pointer text-red-500 hover:bg-gray-200 px-[5px] py-[2px] rounded`}>
               <Remove size="15px" onClick={() => { setShow(true) }} className={`text-red-500`} /><h1 className="mt-[3px] text-xs">Delete</h1>
             </div>
           </div>

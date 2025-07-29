@@ -6,8 +6,7 @@ import BaseUrl from '../../Constant'
 import StateCard from "./StateCard";
 import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 import Loading from "../../icons/Loading";
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
@@ -19,6 +18,7 @@ const State = ({ entries = [] }) => {
     const [values, setValues] = useState("");
     const [show, setShow] = useState(false);
     const [state, setState] = useState([])
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [totalItem, setTotalItem] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -65,7 +65,7 @@ const State = ({ entries = [] }) => {
             setShow(false)
             getState()
             setValues('')
-            toast(data?.message)
+            setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -74,7 +74,7 @@ const State = ({ entries = [] }) => {
 
     return (
         <div className="pt-5 px-2 min-h-screen pb-12">
-            <ToastContainer />
+            <Notification message={message} />
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`500px`} className="">
                     <div className="pt-1">

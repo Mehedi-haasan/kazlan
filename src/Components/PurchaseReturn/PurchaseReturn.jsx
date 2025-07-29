@@ -7,8 +7,7 @@ import BarCode from '../../icons/BarCode';
 import Search from '../../icons/Search';
 import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from '../Input/Notification';
 import { handleDateConvert, PrepareData, CalculateAmount } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calender from '../Wholesale/Calender';
@@ -22,6 +21,7 @@ import Remove from '../../icons/Remove';
 const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
 
     const [itemQuan, setItemQuan] = useState(null)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [first, setFirst] = useState(true)
     const [second, setSecond] = useState(false)
     const [edition, setEdition] = useState(false)
@@ -38,6 +38,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
     const dis_ref = useRef(null)
     const typeRef = useRef(null);
     const discount_ref = useRef(null)
+    const paytypeRef = useRef(null);
     const last_pay = useRef()
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
@@ -56,12 +57,14 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
     const [loadInvo, setLoadInvo] = useState(true)
     const [selectedId, setSelectedId] = useState(0)
     let data = [{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }]
+    const [payTypeShow, setPayTypeShow] = useState(false);
+    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Due" }, { id: 3, name: "Cash" }]
     const today = new Date();
     const [values, setValues] = useState({
         pay: 0,
         paking: 0,
         delivary: 0,
-        pay_type: 'Chalan/Due',
+        pay_type: 'Challan',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: ''
@@ -108,7 +111,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
     const Order = async () => {
         if (!userId) {
-            toast("Supplier are required");
+            setMessage({ id: Date.now(), mgs: "Supplier are required" });
             return
         }
         const token = localStorage.getItem('token');
@@ -124,7 +127,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
             });
 
             const data = await response.json();
-            toast(data?.message);
+            setMessage({ id: Date.now(), mgs: data?.message });
             goto(`/return/invoice/${data?.invoice}`)
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -245,13 +248,11 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
-            <ToastContainer />
-
-
 
             <div className='bg-[#FFFFFF]'>
                 <div className='border-b p-4 flex justify-between items-center'>
                     <h1>Sale Return Details</h1>
+                    <Notification message={message} />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
 
@@ -577,15 +578,65 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
                                     <input type='number' ref={last_pay} value={parseInt(total)} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }}
-                                        onKeyDown={(e) => { if (e.key === "Enter") { Order() } }}
-                                        readOnly={true} placeholder={total}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                Order()
+                                            } else if (e.key === "ArrowRight") {
+                                                paytypeRef.current.focus();
+                                                setPayTypeShow(true)
+                                            }
+                                        }}
+                                        placeholder={total}
                                         className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[55%]' />
-                                    <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
+                                    {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[45%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 201, name: "Chalan/Due" }, { id: 202, name: "Cash Memo" }, { id: 203, name: "Paid" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                         ))}
-                                    </select>
+                                    </select> */}
+                                    <div className='relative z-50 border'>
+                                        <input ref={paytypeRef} value={values?.pay_type} onKeyDown={(e) => {
+                                            if (e.key === "ArrowDown") {
+                                                if (selectedId === PayType?.length - 1) {
+                                                    setSelectedId(0)
+                                                } else {
+                                                    setSelectedId(selectedId + 1)
+                                                }
+
+                                            } else if (e.key === "ArrowUp") {
+                                                if (selectedId === 0) {
+                                                    setSelectedId(PayType?.length - 1)
+                                                } else {
+                                                    setSelectedId(selectedId - 1)
+                                                }
+                                            } else if (e.key === "Enter" && PayType[selectedId]) {
+                                                setPayTypeShow(false);
+                                                setSelectedId(0);
+                                                setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                last_pay.current?.focus();
+                                            }
+                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
+                                        {
+                                            payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                {
+                                                    PayType?.map((opt, i) => {
+                                                        return <div onMouseEnter={() => { }}
+                                                            ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === "ArrowDown") {
+                                                                    setSelectedId(i + 2)
+                                                                }
+                                                            }}
+
+                                                            onClick={() => { }}
+                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                                                            {opt?.name}
+                                                        </div>
+                                                    })
+                                                }
+                                            </div>
+                                        }
+                                    </div>
 
                                 </div>
                             </div>

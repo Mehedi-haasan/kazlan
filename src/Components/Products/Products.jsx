@@ -35,6 +35,8 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
         cate_value: "Select a filter",
         bran: false,
         bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
     })
     let entries = [{ id: 501, name: "20" }, { id: 502, name: "30" }, { id: 503, name: "40" }, { id: 504, name: "50" }]
 
@@ -129,7 +131,9 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                     </div>
                     {
                         info?.role === "superadmin" && <div>
-                            <Selection options={shop} onSelect={(v) => { setComId(v?.id) }} label={'Warehouse'} />
+                            {/* <Selection options={shop} onSelect={(v) => { setComId(v?.id) }} label={'Warehouse'} /> */}
+                            <SelectionComponent options={shop ? shop : []} default_select={filter?.war} default_value={filter?.war_value}
+                                onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
                         </div>
                     }
 
@@ -151,12 +155,12 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                         <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead class="text-md text-gray-900 z-10">
                                 <tr className='border'>
-                                    <th className="w-4 py-2 px-4 border-r">
+                                    {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
                                             <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 rounded text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th>
+                                    </th> */}
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center">
                                             Item Name

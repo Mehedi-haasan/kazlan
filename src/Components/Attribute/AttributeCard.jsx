@@ -11,26 +11,29 @@ import Notification from "../Input/Notification";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import { useLottie } from "lottie-react";
 import DownModal from "../Input/DownModal";
+import SelectionComponent from "../Input/SelectionComponent";
 
 
-const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) => {
+const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode }) => {
 
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
     const [image_url, setImage_Url] = useState();
     const [values, setValues] = useState({ name: item?.name, });
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
     const [showlotti, setLottiShow] = useState(false)
-    const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [first, setFirst] = useState({
+        first: true,
+        value: 'Bank'
+    })
 
-    const handleUpdate = async (image_url, url, id) => {
-        values.image_url = image_url;
-        values.url = url;
+    const handleUpdate = async (id) => {
         values.id = id;
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/update/brand`, {
+            const response = await fetch(`${BaseUrl}/api/update/attribute`, {
                 method: 'PATCH',
                 headers: {
                     'authorization': token,
@@ -41,7 +44,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
 
             const data = await response.json();
             setEdit(false)
-            getBrand()
+            GetAttribute()
             setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -49,37 +52,9 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
     }
 
 
-    const handleUpload = async () => {
-        const formData = new FormData();
-        if (image_url) {
-            formData.append('image_url', image_url);
-        } else {
-            console.error("Image file is missing in the payload");
-            return;
-        }
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`${BaseUrl}/api/upload/image`, {
-                method: 'POST',
-                headers: {
-                    'authorization': token,
-                },
-                body: formData,
-            });
-
-            const data = await response.json();
-            if (data) {
-                handleUpdate(data.image_url, item?.image_url, item?.id)
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-        }
-    }
-
-
     const handleDelete = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/delete/brand`, {
+        const response = await fetch(`${BaseUrl}/api/delete/attribute`, {
             method: 'POST',
             headers: {
                 'authorization': token,
@@ -89,19 +64,12 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
         });
         const data = await response.json();
         setShow(false)
-        getBrand();
+        GetAttribute();
         setLottiShow(true)
         setMessage({ id: Date.now(), mgs: data?.message });
     }
 
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage_Url(file);
-            setImageFile(URL.createObjectURL(file));
-        }
-    };
 
 
     function formatDate(isoString) {
@@ -140,13 +108,11 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
             </th> */}
             <th scope="col" className="px-2 py-1.5 border-x font-thin text-[#212529]">{item?.name}
                 <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                    <>{View}</>
-                </Modal>
-                <Notification message={message} />
+                        <>{View}</>
+                    </Modal>
+                    <Notification message={message} />
             </th>
-            <th scope="col" className="px-2 py-1.5 border-r">
-                <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
-            </th>
+            <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{item?.type}</th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
             {
@@ -154,14 +120,18 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
                     <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
                         <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                             <div className="border-b">
-                                <h1 className="pl-5 text-xl py-2 text-black">Update Brand Details</h1>
+                                <h1 className="pl-5 text-xl py-2 text-black">Update Attribute Details</h1>
                             </div>
-                            <div className="pt-5">
-                                <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                            <div className="pt-5 pl-5">
+                                <SelectionComponent options={[{ id: 1, name: 'Bank' }, { id: 2, name: "Mobile Banking" }]} default_select={first?.first} default_value={item?.type}
+                                    onSelect={(v) => {
+                                        setValues({ ...values, type: v?.name, })
+                                        setFirst({ ...first, value: v?.name })
+                                    }} label={"Type*"} className='rounded-r' />
                             </div>
                             <div className="px-6 py-4">
-                                <InputComponent placeholder={`Enter Brand name`} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                                <Button isDisable={isLoading} name="Update" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
+                                <InputComponent placeholder={values?.name} value={values?.name} label={`Name`} handleEnter={() => { handleUpdate(item?.id) }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                                <Button isDisable={isLoading} name="Update" onClick={() => { handleUpdate(item?.id) }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                             </div>
                         </div>
                     </Modal>

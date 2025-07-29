@@ -11,9 +11,7 @@ import Search from "../Input/Search";
 import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import Modal from "../Input/Modal";
-import SelectionComponent from '../Input/SelectComp';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 
@@ -21,6 +19,7 @@ const User = ({ entries, info = {} }) => {
 
     const targetRef = useRef();
     const [users, setUsers] = useState([]);
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false)
     const [page, setPage] = useState(1);
@@ -70,7 +69,7 @@ const User = ({ entries, info = {} }) => {
         })
         const data = await response.json()
         setOpen(false)
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
 
     }
 
@@ -86,14 +85,14 @@ const User = ({ entries, info = {} }) => {
         });
         const data = await response.json();
         setShow(false)
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
     EscapeRedirect()
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
-            <ToastContainer />
+            <Notification message={message} />
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">User List</h1>
                 <NavLink to={`/registration`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create user</NavLink>
@@ -178,12 +177,12 @@ const User = ({ entries, info = {} }) => {
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead class="text-sm text-gray-900">
                                 <tr className='border'>
-                                    <th className="w-4 py-2 px-4 border-r">
+                                    {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
                                             <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th>
+                                    </th> */}
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center">
                                             Name
@@ -244,13 +243,13 @@ const User = ({ entries, info = {} }) => {
                             <tbody>
                                 {users?.map((item, i) => (
                                     <tr className={`border-b font-thin ${i % 2 == 0 ? 'bg-gray-50' : ''}`}>
-                                        <th className="w-4 py-2 px-4 border-x">
+                                        {/* <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
                                                 <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
-                                        </th>
-                                        <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.name}</th>
+                                        </th> */}
+                                        <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
                                         <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.email}</th>
                                         <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.bankname}</th>

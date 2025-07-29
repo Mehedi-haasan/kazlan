@@ -3,8 +3,7 @@ import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import SelectionComponent from "../Input/SelectionComponent";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Notification from "../Input/Notification";
 import ImageSelect from "../Input/ImageSelect";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
@@ -16,6 +15,7 @@ const Setting = ({ userinfo = {} }) => {
     const [select, setSelect] = useState('General');
     const [image_url, setImage_Url] = useState(null);
     const [imageFile, setImageFile] = useState(null);
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
     const AppInfo = async () => {
         const token = localStorage.getItem('token')
@@ -74,10 +74,10 @@ const Setting = ({ userinfo = {} }) => {
         });
         const data = await response.json();
         AppInfo()
-        toast(data?.message)
+        setMessage({ id: Date.now(), mgs: data?.message });
     }
 
- EscapeRedirect('/dashboard')
+    EscapeRedirect('/dashboard')
 
     const handleUploadUpdate = async () => {
         const formData = new FormData();
@@ -119,7 +119,7 @@ const Setting = ({ userinfo = {} }) => {
 
     return (
         <div className='min-h-screen pb-12'>
-            <ToastContainer />
+            <Notification message={message} />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>

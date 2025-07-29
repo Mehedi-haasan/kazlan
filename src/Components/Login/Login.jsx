@@ -3,8 +3,7 @@ import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import logo from '../Logo/logo_delta.png'
 import login_logo from '../Logo/login-cover.svg'
 import us from '../Logo/united.png'
@@ -28,7 +27,6 @@ const Login = ({ auth }) => {
       body: JSON.stringify(values),
     });
     const data = await response.json();
-    toast(data?.message)
     if (data && data.accessToken && data.success) {
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('name', data.name);
@@ -54,7 +52,6 @@ const Login = ({ auth }) => {
 
   return (
     <div>
-      <ToastContainer />
       <div className='grid grid-cols-1 lg:grid-cols-3 min-h-[95vh] h-full bg-white'>
 
         <div className='grid lg:col-span-2 lg:bg-[#F7F7FF]'>
@@ -120,42 +117,3 @@ const Login = ({ auth }) => {
 
 export default Login
 
-
-
-{/* <div className="relative flex items-center justify-center min-h-screen pb-12 bg-cover bg-center" style={{ backgroundImage: `url('${BaseUrl}/uploads/bg.png')` }}>
-
-
-  <div>
-    <ToastContainer />
-    <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-    <div className="relative z-10 p-8 rounded-2xl bg-white/10 backdrop-blur-lg shadow-xl w-96">
-      <h2 className="text-2xl font-bold text-white text-center mb-6">Login</h2>
-
-      <div className='mb-2'>
-        <label className="block text-white text-sm font-semibold mb-1">Email</label>
-        <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your email" />
-      </div>
-      <div className='relative mb-5'>
-        <label className="block text-white text-sm font-semibold mb-1">Password</label>
-        {
-          showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer text-white' onClick={() => { setShowPassword(true); console.log("Hide") }} />
-        }
-        <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
-      </div>
-      <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
-        Sign In
-      </button>
-
-      <div>
-        <p className="text-center text-sm text-gray-300 mt-4">
-          Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
-        </p>
-        <p className="text-center text-sm text-gray-300 mt-4">
-          <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
-        </p>
-      </div>
-    </div>
-  </div>
-
-
-</div> */}

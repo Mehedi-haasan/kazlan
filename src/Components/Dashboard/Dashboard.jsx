@@ -6,8 +6,7 @@ import Cart from '../../icons/Cart';
 import Notification from '../../icons/Notification';
 import Invoice from '../RecentInvoice/Invoice';
 import Button from '../Input/Button';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import NotiFi from '../Input/Notification';
 
 
 
@@ -19,6 +18,7 @@ const Dashboard = ({ data, info = {} }) => {
     const [dailyreturn, setDailyReturn] = useState(0);
     const [dailyPurchase, setDailyPurchase] = useState(0);
     const [allData, setAllData] = useState([])
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
     const HourlySalesData = async () => {
         const token = localStorage.getItem('token')
@@ -103,9 +103,9 @@ const Dashboard = ({ data, info = {} }) => {
             });
 
             const data = await response.json();
-            toast(data?.message);
+            setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
-            toast(error);
+            setMessage({ id: Date.now(), mgs: error });
         }
     }
 
@@ -127,7 +127,7 @@ const Dashboard = ({ data, info = {} }) => {
                 DeleteLocalData()
             }
         } catch (error) {
-            toast(error);
+            setMessage({ id: Date.now(), mgs: error });
         }
     }
 
@@ -148,7 +148,7 @@ const Dashboard = ({ data, info = {} }) => {
             }
             setAllData(data?.items)
         } catch (error) {
-            toast(error);
+            setMessage({ id: Date.now(), mgs: error });
         }
     }
 
@@ -158,7 +158,7 @@ const Dashboard = ({ data, info = {} }) => {
 
     return (
         <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen pb-12 relative'>
-            <ToastContainer />
+            <NotiFi message={message} />
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
                 <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
@@ -214,11 +214,12 @@ const Dashboard = ({ data, info = {} }) => {
                         <div className='flex justify-between items-center'>
                             <h1 className='pb-2'>Recent Invoices</h1>
                             <div>
-                                {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload'} />}
+                                {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
                                 {/* {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={UploadToServer} name={'Upload to Server'} />} */}
                             </div>
                         </div>
                         <Invoice info={info} />
+
                     </div>
                 </div>
             </div>

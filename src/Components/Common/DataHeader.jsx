@@ -3,7 +3,7 @@
 
 const DataHeader = () => {
     return (
-        <div className='text-[15px] grid grid-cols-12'>
+        <div className='text-[15px] grid grid-cols-12 text-black'>
             <div className="p-2 text-center font-semibold border-y border-l">Action</div>
             <div className="p-2 border-y border-l h-full">Qty</div>
             <div className="p-2 border-y border-l">Year</div>

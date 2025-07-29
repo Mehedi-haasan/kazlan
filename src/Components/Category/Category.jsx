@@ -9,9 +9,8 @@ import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
 import CategoryCard from "./CategoryCard";
 import Loading from "../../icons/Loading";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import logo from '../Logo/userProfile.png'
+import Notification from "../Input/Notification";
+import logo from '../Logo/photo.png'
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
@@ -37,8 +36,7 @@ const Category = ({ entries, info = {} }) => {
     const [totalItem, setTotalItem] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
     const [showlotti, setLottiShow] = useState(false)
-    const [isLocal, setIsLocal] = useState(true);
-
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const getCategory = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
@@ -62,34 +60,6 @@ const Category = ({ entries, info = {} }) => {
     }, [page, pageSize]);
 
 
-    const handleCreate = async (image_url) => {
-        setIsLoading(true)
-        values.image_url = image_url;
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`${BaseUrl}/api/create/category`, {
-                method: 'POST',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-                body: JSON.stringify(values),
-            });
-
-            const data = await response.json();
-            setValues({ ...values, name: '' });
-            setShow(false)
-            getCategory();
-            setLottiShow(true)
-            toast(data?.message)
-        } catch (error) {
-            setIsLoading(false)
-            toast('Error updating variant:', error);
-        }
-        setIsLoading(false)
-    }
-
-
     const handleCreateLocally = async (image_url) => {
         setIsLoading(true)
         values.image_url = image_url;
@@ -109,19 +79,49 @@ const Category = ({ entries, info = {} }) => {
             setShow(false)
             getCategory();
             setLottiShow(true)
-            toast(data?.message)
         } catch (error) {
             setIsLoading(false)
-            toast('Error updating variant:', error);
+            setMessage({ id: Date.now(), mgs: error });
         }
         setIsLoading(false)
     }
 
 
+    const handleCreate = async (image_url) => {
+        setIsLoading(true)
+        values.image_url = image_url;
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BaseUrl}/api/create/category`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+            setValues({ ...values, name: '' });
+            setShow(false)
+            getCategory();
+            setLottiShow(true)
+            setMessage({ id: Date.now(), mgs: data?.message });
+        } catch (error) {
+            setIsLoading(false)
+            setMessage({ id: Date.now(), mgs: error });;
+        }
+        setIsLoading(false)
+    }
+
+
+
+
+
     const handleUpload = async () => {
 
         if (!values?.name) {
-            toast("Required field is missing")
+            setMessage({ id: Date.now(), mgs: "Required field is missing" });
             return
         }
 
@@ -129,7 +129,7 @@ const Category = ({ entries, info = {} }) => {
         if (image_url) {
             formData.append('image_url', image_url);
         } else {
-            toast("Image file is missing in the payload");
+            setMessage({ id: Date.now(), mgs: "Image file is missing in the payload" });
             setIsLoading(false)
             return;
         }
@@ -147,14 +147,11 @@ const Category = ({ entries, info = {} }) => {
             const data = await response.json();
             if (data) {
                 handleCreate(data.image_url);
-                if (isLocal) {
-                    handleCreateLocally('')
-                }
-
+                handleCreateLocally('')
             }
         } catch (error) {
             setIsLoading(false)
-            toast('Error uploading image:', error);
+            setMessage({ id: Date.now(), mgs: error });
         }
         setIsLoading(false)
     }
@@ -210,8 +207,8 @@ const Category = ({ entries, info = {} }) => {
 
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
-            <ToastContainer />
-            <Modal show={showlotti} handleClose={() => { setLottiShow(false); setInpo(true) }} size={`250px`}>
+            <Notification message={message} />
+            <Modal show={showlotti} handleClose={() => { setLottiShow(false); setInpo(true) }} size={`250px`} crosshidden={true}>
                 <>{View}</>
             </Modal>
             <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
@@ -235,7 +232,7 @@ const Category = ({ entries, info = {} }) => {
                             </div> */}
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} input_focus={inpo} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate(''); if (isLocal) { handleCreateLocally('') } }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} input_focus={inpo} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate(''); handleCreateLocally('') }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>
@@ -260,12 +257,12 @@ const Category = ({ entries, info = {} }) => {
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead class="text-xs text-gray-900 ">
                                 <tr className='border'>
-                                    <th className="w-4 py-2 px-4 border-r">
+                                    {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
                                             <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th>
+                                    </th> */}
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center text-[16px]">
                                             Category
