@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Edit = ({ size = '20px', color = 'currentColor', onClick }) => {
+const Edit = ({ size = '20px', color = 'currentColor', onClick, className }) => {
     return (
         <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg"
-            className='text-green-600 cursor-pointer '
+            className={`text-green-600 cursor-pointer ${className}`}
             width={size} height={size}
             viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">

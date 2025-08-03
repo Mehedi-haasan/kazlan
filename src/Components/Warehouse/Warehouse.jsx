@@ -49,11 +49,11 @@ const Warehouse = ({ entries }) => {
     return (
         <div className="px-2 pt-5 min-h-screen pb-12">
 
-            <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center p-4 bg-[#FFFFFF] rounded-md shadow-md">
                 <h1 className="font-semibold text-lg">Warehouse List</h1>
                 <NavLink to='/company' className={`border px-4 py-1.5 rounded-md bg-blue-500 text-white font-thin`}>Create Warehouse</NavLink>
             </div>
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-4">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
@@ -66,7 +66,7 @@ const Warehouse = ({ entries }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead class="text-sm text-gray-900">
+                            <thead class="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

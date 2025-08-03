@@ -152,7 +152,11 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
     useEffect(() => {
         document.title = "Items - KazalandBrothers";
-        // FetchShop()
+        if (info?.role === "superadmin") {
+            FetchShop()
+        } else {
+            setShop([{ id: 1, name: info?.shopname }])
+        }
         getCategory()
         getBrand()
         Attribute()
@@ -334,7 +338,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                                 })
                                                 setFilter({ ...filter, edit_value: v?.name })
                                             }} label={"Edition*"} className='rounded-r' />
-                                        <div onClick={() => { }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                        <div onClick={() => { goto('/attribute') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                             <Add />
                                         </div>
                                     </div>
@@ -426,7 +430,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                 <div className={`${active === "Stock" ? '' : 'hidden'} p-3 grid grid-cols-1 lg:grid-cols-2 gap-4`}>
                                     {
                                         info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
-                                            <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Warehouse Stock*"} className='rounded-l' />
+                                            <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} default_value={info?.shopname} label={"Warehouse Stock*"} className='rounded-l' />
                                             <div onClick={() => { goto(`/warehouses`) }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                                 <Add />
                                             </div>

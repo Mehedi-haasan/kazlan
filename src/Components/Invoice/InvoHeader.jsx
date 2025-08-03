@@ -41,7 +41,7 @@ const InvoHeader = ({ user, params, prefix = 'KB' }) => {
                     <h1 className='w-[80px] text-gray-900'>ঠিকানা</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-thin'>:</h1>
-                        <input placeholder={user?.state} value={user?.state} readOnly={true} className='border focus:outline-none rounded p-1 font-thin  w-[220px]' />
+                        <input placeholder={`${user?.address}, ${user?.state}`} value={`${user?.address}, ${user?.state}`} readOnly={true} className='border focus:outline-none rounded p-1 font-thin  w-[220px]' />
                     </div>
                 </div>
                 <div className='flex justify-start gap-3 items-center'>

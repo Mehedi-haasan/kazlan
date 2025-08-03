@@ -53,7 +53,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
         setValues(data?.items);
         setData(data?.history);
         setIsLoading(false)
-        setTotalItem(4)
+        setTotalItem(0)
     }
 
     useEffect(() => {
@@ -111,9 +111,9 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                         </div>
                     }
                     <div className='grid col-span-1 lg:col-span-2 p-2 '>
-                        <div className='text-[#4C5258] font-thin text-sm'>
+                        <div className='text-[#4C5258] font-thin text- '>
                             <h1 className='text-xl py-1.5 font-semibold'>{values?.name}</h1>
-                            <div className='flex justify-between items-center w-[250px]'>
+                            <div className='flex justify-between items-center w-[400px]'>
                                 <div>
                                     <h1 className='py-1.5 font-semibold'>Balance</h1>
                                 </div>
@@ -123,41 +123,47 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                     </button>
                                 </div>
                             </div>
-                            <div className='flex justify-between items-center w-[250px]'>
-                                <h1 className='py-1.5 font-semibold'>Customer Type </h1>
-                                <h1 className='py-1.5 '>{values?.customertype}</h1>
+                            <div className='flex justify-between items-center w-[400px]'>
+                                <h1 className='py-1.5 font-semibold'>{values?.usertype === "Customer" ? "Customer" : "Supplier"} Type</h1>
+                                <h1 className='py-1.5'>{values?.customertype}</h1>
                             </div>
-                            <div className='flex justify-between items-center w-[250px]'>
+                            <div className='flex justify-between items-center w-[400px]'>
+                                <h1 className='py-1.5 font-semibold'>{values?.usertype === "Customer" ? "Customer" : "Supplier"} Code</h1>
+                                <h1 className='py-1.5 '>#{values?.id}</h1>
+                            </div>
+                            <div className='flex justify-between items-center w-[400px]'>
                                 <h1 className='py-1.5 font-semibold'>Phone</h1>
                                 <h1 className='py-1.5 '>{values?.phone}</h1>
 
                             </div>
-                            <div className='flex justify-between items-center w-[250px]'>
+                            <div className='flex justify-between items-center w-[400px]'>
                                 <h1 className='py-1.5 font-semibold'>Email</h1>
                                 <h1 className='py-1.5 '>{values?.email}</h1>
                             </div>
-                            <div className='flex justify-between items-center w-[250px]'>
+                            <div className='flex justify-between items-center w-[400px]'>
                                 <h1 className='py-1.5 font-semibold'>Account Number</h1>
-                                <h1 className='py-1.5 '>{values?.accountnumber}</h1>
+                                <h1 className='py-1.5'>{values?.accountnumber}</h1>
                             </div>
-                            <div className='flex justify-between items-center w-[250px]'>
+                            <div className='flex justify-between items-center w-[400px]'>
                                 <h1 className='py-1.5 font-semibold'>Address</h1>
                                 <h1 className='py-1.5 '>{values?.address}</h1>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div className='pt-5 w-[250px]'>
+
+
+                <div className='pt-8 w-[400px] mr-4'>
+                    <div className='flex justify-end'>
+                        <NavLink to={`/customer/balance/${values?.id}`} className={`border text-white rounded-lg font-thin shadow py-1.5 px-4 bg-blue-600`}>Make Payment</NavLink>
+                    </div>
+
+                    <div className='pt-5 w-[400px]'>
                         <Calander label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(data) => { setTime({ ...time, from: data }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
                     </div>
-                    <div className='pt-5 w-[250px]'>
+                    <div className='pt-5 w-[400px]'>
                         <Calander label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(data) => { setTime({ ...time, to: data }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
                     </div>
-                </div>
-
-                <div className='pt-10 w-[150px]'>
-                    <NavLink to={`/customer/balance/${values?.id}`} className={`border text-white rounded-lg font-thin shadow py-1.5 px-4 bg-blue-600`}>Make Payment</NavLink>
                 </div>
             </div>
 
@@ -175,7 +181,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
 
                     <table className="text-sm text-left rtl:text-right text-gray-500 w-full min-w-[700px] ">
-                        <thead className=" text-sm text-left rtl:text-right text-gray-500">
+                        <thead className=" text-sm text-left rtl:text-right text-black">
                             <tr className='border'>
                                 <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
@@ -183,7 +189,6 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                         <Updown />
                                     </div>
                                 </th>
-
                                 <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
                                         Invoice
@@ -198,25 +203,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                 </th>
                                 <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
-                                        Assigned Person
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-3 py-3 text-center border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Total
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-3 py-3 text-center border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Paid
-                                        <Updown />
-                                    </div>
-                                </th>
-                                <th scope="col" className="px-3 py-3 text-center border-r ">
-                                    <div className="flex justify-between items-center">
-                                        Due
+                                        Warehouse
                                         <Updown />
                                     </div>
                                 </th>
@@ -228,11 +215,28 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                 </th>
                                 <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
+                                        Sale Amount
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Paid
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
+                                        Return
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
                                         Status
                                         <Updown />
                                     </div>
                                 </th>
-
                                 <th scope="col" className="px-3 py-3 text-right border-r ">
                                     <div className="flex justify-between items-center">
                                         Balance
@@ -245,17 +249,17 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                             {data?.map((item) => (
                                 <tr className='border-b border-x cursor-pointer' onClick={() => { goto(`/invoice/${item?.id}`) }}>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-000{item?.id}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.type}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.paidamount}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.due}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.return}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.status}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">
                                         <button className={`border rounded-full px-4 mx-auto  block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                                            {Math.abs(item?.previousdue)}
+                                            {Math.abs(item?.balance)}
                                         </button>
                                     </th>
                                 </tr>

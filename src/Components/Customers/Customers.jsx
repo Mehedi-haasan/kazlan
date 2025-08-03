@@ -26,12 +26,14 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0);
     const [select, setSelect] = useState(null);
-    const [values, setValues] = useState({})
+    const [values, setValues] = useState({
+        customertype: null
+    })
 
     const GetCustomer = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}/${values?.customertype}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -47,7 +49,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     useEffect(() => {
         document.title = "Customers - KazalandBrothers";
         GetCustomer()
-    }, [])
+    }, [pageSize, values])
 
     const OpenModal = (id) => {
         if (id === select) {
@@ -70,7 +72,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
             </div>
             <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
                 <div className="w-[200px] pb-3">
-                    <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Party" }, { id: 3, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, usertype: v?.name }) }} label={'Customer Type*'} />
+                    <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Party" }, { id: 3, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type'} />
                 </div>
                 <div className="flex justify-between items-center ">
                     <div>
@@ -84,7 +86,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3  w-full overflow-hidden overflow-x-auto">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead className="text-sm text-gray-900 ">
+                            <thead className="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
@@ -163,7 +165,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 {customer?.map((item, i) => {
-                                    return <CustomerCard outside={outside} item={item} state={state} i={i} info={info} select={select} OpenModal={OpenModal} />
+                                    return <CustomerCard outside={outside} item={item} state={state} i={i} GetCustomer={GetCustomer} info={info} select={select} OpenModal={OpenModal} />
                                 })}
                             </tbody>
                         </table>

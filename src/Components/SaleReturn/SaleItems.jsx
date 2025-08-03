@@ -8,9 +8,12 @@ import Search from "../Input/Search";
 import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import { NavLink } from "react-router-dom";
+import { handleDateConvert } from '../Input/Time'
+import SelectionComponent from "../Input/SelectionComponent";
+import Calendar from '../Wholesale/Calender';
 
 
-const SaleItems = ({ }) => {
+const SaleItems = ({ user = [] }) => {
 
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
@@ -20,6 +23,28 @@ const SaleItems = ({ }) => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toISOString(),
+        toDate: today.toISOString()
+    });
+    const [values, setValues] = useState({
+        pay: 0,
+        paking: 0,
+        delivary: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
+    })
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+    })
 
     const RecentInvoice = async () => {
         setIsLoading(true)
@@ -46,10 +71,36 @@ const SaleItems = ({ }) => {
 
     return (
         <div className="px-3 pt-5 rounded-md min-h-screen">
-            <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-4 shadow-lg'>
-                <div className='flex justify-between items-center py-3'>
-                    <h1 className='pb-2'>Recent Sale</h1>
-                    <NavLink to={`/sale/order`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Sale Items</NavLink>
+
+            <div className='flex justify-between items-center p-4 bg-[#FFFFFF] shadow-md rounded-lg'>
+                <h1 className=''>Recent Sales</h1>
+                <NavLink to={`/sale/order`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Sale</NavLink>
+            </div>
+
+
+            <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4'>
+
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div className='pt-1'>
+                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
+                            default_select={filter?.bran} default_value={filter?.bran_value}
+                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
+                            label={'Customer'} />
+                    </div>
+                    <div className='pt-1'>
+                        <SelectionComponent options={user}
+                            default_select={filter?.cate} default_value={filter?.cate_value}
+                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); }}
+                            label={'User'} />
+                    </div>
+                    <div>
+                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                    </div>
+                    <div>
+                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                    </div>
+
                 </div>
                 <div className="flex justify-between items-center ">
                     <div>
@@ -63,7 +114,7 @@ const SaleItems = ({ }) => {
                 <InvoiceTemp invoices={invoices} />
 
                 <div className="flex justify-between items-center pt-3">
-                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + invoices?.length} of {totalItem} entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1)} to {pageSize * (page - 1) + invoices?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
                         <button disabled={page == 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
                             {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}

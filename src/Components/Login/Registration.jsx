@@ -4,13 +4,14 @@ import SelectionComponent from '../Input/SelectComp';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
 import logo from '../Logo/photo.png'
-
+import Notification from '../Input/Notification';
 import { useNavigate } from 'react-router-dom';
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
 
 const Registration = ({ state }) => {
   const goto = useNavigate()
+  const [message, setMessage] = useState({ id: '', mgs: '' });
   const [image_url, setImage_Url] = useState();
   const [imageFile, setImageFile] = useState(null);
   const [warehouses, setWarehouses] = useState([])
@@ -23,6 +24,10 @@ const Registration = ({ state }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e) => {
+    if (!values?.username || !values?.name) {
+      setMessage({ id: Date.now(), mgs: "Phone Number and Full Name Are required" });
+      return
+    }
     const token = localStorage.getItem('token')
     const response = await fetch(`${BaseUrl}/api/auth/signup`, {
       method: 'POST',
@@ -33,6 +38,7 @@ const Registration = ({ state }) => {
       body: JSON.stringify(values)
     });
     const data = await response.json();
+    setMessage({ id: Date.now(), mgs: data?.message });
     if (data && data?.success) {
       goto(`/users`)
     }
@@ -70,7 +76,7 @@ const Registration = ({ state }) => {
 
   return (
     <div className="min-h-screen pb-12 py-5 px-4">
-  
+      <Notification message={message} />
       <div className='bg-[#FFFFFF] rounded-xl shadow-lg'>
         <div className='border-b'>
           <h1 className='py-4 pl-8'>User Details</h1>

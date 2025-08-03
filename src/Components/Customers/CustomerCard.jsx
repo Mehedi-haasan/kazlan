@@ -9,18 +9,41 @@ import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import Add from "../../icons/Add";
 import { NavLink } from "react-router-dom";
+import Notification from "../Input/Notification";
 
-const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outside }) => {
+const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, OpenModal, outside }) => {
     const [values, setValues] = useState({})
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [active, setActive] = useState("Address");
     const [option, setOption] = useState(false)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
-    const DeleteCustomer = async () => {
+    const DeleteCustomer = async (id) => {
+        try {
+            setIsLoading(true);
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/delete/customer/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': token,
+                }
+            });
 
-    }
+            const data = await response.json();
+            setIsLoading(false);
+            setMessage({ ...message, id: Date.now(), mgs: data?.message })
+            setShow(false)
+            GetCustomer()
+        } catch (error) {
+            console.error('Delete customer error:', error);
+            setMessage({ ...message, id: Date.now(), mgs: error?.message })
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
 
 
@@ -54,20 +77,22 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
 
 
     return (
-        <tr className={`border-b ${i % 2 == 0 ? 'bg-gray-50' : ''}`}>
+        <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
             {/* <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th> */}
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
+                <Notification message={message} />
+            </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.phone}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.email}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.bankname}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.accountname}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.accountnumber}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.stateId}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.state?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.address}</th>
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
@@ -78,9 +103,9 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
 
-             <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
+            <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
                 {
-                    select === item?.id && <div className="absolute -top-10 bg-white shadow-xl rounded-md right-14 w-[140px] p-1 z-50">
+                    select === item?.id && <div className="absolute -top-[58px] bg-white shadow-xl rounded-md right-14 w-[140px] p-1 z-50">
                         <div onClick={() => { setEdit(!edit) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
                             <Edit size="15px" />Edit
                         </div>
@@ -89,9 +114,9 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                             </svg>Make Payment
                         </NavLink>
                         <NavLink to={`/payment/history/${item?.id}`} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 text-xs rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z"/></svg>Payment History
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z" /></svg>Payment History
                         </NavLink>
-                        <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden':''} flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
+                        <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden' : ''} flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
                         </div>
                     </div>
@@ -113,8 +138,12 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                     </div>
                     <div className="p-3">
                         <div className="flex justify-start items-end">
-                            <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Address</button>
-                            <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Balence</button>
+                            <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t gap-1 border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center font-thin`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"><path d="M13 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" /><path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z" /></g></svg>
+                                Address</button>
+                            <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t  border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5  gap-1 rounded-t flex justify-start items-center font-thin`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M16 12h2v4h-2z" /><path fill="currentColor" d="M20 7V5c0-1.103-.897-2-2-2H5C3.346 3 2 4.346 2 6v12c0 2.201 1.794 3 3 3h15c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2M5 5h13v2H5a1.001 1.001 0 0 1 0-2m15 14H5.012C4.55 18.988 4 18.805 4 18V8.815c.314.113.647.185 1 .185h15z" /></svg>
+                                Balance</button>
                             <div className="border-b w-full"></div>
                         </div>
                     </div>
@@ -122,7 +151,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                         active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div className='flex justify-start items-end pb-1'>
                                 <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"Thana"} className='rounded-l' />
-                                <div className='border-y border-r font-thin text-[#212529] px-3 pt-[4px] pb-[4px] rounded-r cursor-pointer'>
+                                <div className='border-y border-r font-thin text-[#212529] px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer'>
                                     <Add />
                                 </div>
                             </div>
@@ -138,7 +167,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                                     <select value={item?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                     >
-                                        {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                        {[{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                         ))}
                                     </select>
@@ -157,7 +186,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, select, OpenModal,outsid
                 <Modal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
                     <h1 className="py-3 text-lg">Are you sure you want to delete this?</h1>
                     <div className="flex justify-between items-center p-4">
-                        <button onClick={DeleteCustomer} className="border px-4 py-1.5 rounded border-r font-thin text-[#212529]ed-500 text-red-500">Yes</button>
+                        <button onClick={() => { DeleteCustomer(item?.id) }} className="border px-4 py-1.5 rounded border-r font-thin text-[#212529]ed-500 text-red-500">Yes</button>
                         <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 text-blue-500">No</button>
                     </div>
                 </Modal>

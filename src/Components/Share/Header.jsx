@@ -58,7 +58,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
     return (
-        <div className="w-full top-0 z-50 shadow fixed">
+        <div className={`w-full top-0 z-50 shadow fixed ${auth ? '' : 'hidden'}`}>
 
             <div className="flex justify-between items-center z-50 w-[100%] px-2 mx-auto bg-[#FFFFFF] py-2">
                 <div></div>
@@ -70,7 +70,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                     }
 
                     {auth && <NavLink to={`/sale/order`} className="border font-thin rounded-full px-4 py-1 border-green-600 flex float-start text-md items-center gap-1 text-green-600 hover:bg-green-600 hover:text-white"><Add />Sale</NavLink>}
-                    {auth && <NavLink to={`/sales/update/`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>}
+                    {/* {auth && <NavLink to={`/sales/update/`} className="border font-thin rounded-full px-2 py-1 border-green-500 bg-green-500 flex float-start text-md items-center gap-1 text-white"><Add />POS</NavLink>} */}
                     <div className="flex justify-start items-start gap-2 cursor-pointer relative">
                         <div ref={lan_ref} className={`absolute ${lan ? '' : 'hidden'} bg-[#FFFFFF] shadow h-20 w-32 top-8 rounded-lg`}>
                             <div className="">
@@ -88,7 +88,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
 
 
 
-                    <svg onClick={() => { setLan(!lan) }} className="h-[36px] w-[36px] p-1 cursor-pointer text-gray-600 hidden md:block"
+                    {/* <svg onClick={() => { setLan(!lan) }} className="h-[36px] w-[36px] p-1 cursor-pointer text-gray-600 hidden md:block"
                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
                         <path fill="none" stroke="currentColor" strokeWidth="2" d="M12 23c6.075 0 11-4.925 11-11S18.075 1 12 1S1 5.925 1 12s4.925 11 11 11Zm0 0c3 0 4-5 4-11S15 1 12 1S8 6 8 12s1 11 4 11ZM2 16h20M2 8h20" />
                     </svg>
@@ -100,7 +100,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {} }) =>
                                 </svg>
                         }
 
-                    </div>
+                    </div> */}
 
                     {auth ? <div className="flex justify-start items-start gap-2 cursor-pointer relative">
                         <button className='font-bold text-sm xl:text-md cursor-pointer' onClick={() => setIsShowProfile(!isShowProfile)}>

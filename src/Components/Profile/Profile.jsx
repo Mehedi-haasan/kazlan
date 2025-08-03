@@ -3,9 +3,11 @@ import BaseUrl from '../../Constant';
 import InputComponent from '../Input/InputComponent';
 import Button from '../Input/Button';
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
+import Notification from "../Input/Notification";
 
 const Profile = () => {
     const [user, setUser] = useState({});
+    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [select, setSelect] = useState('Profile')
 
     useEffect(() => {
@@ -52,12 +54,15 @@ const Profile = () => {
             body: JSON.stringify(user)
         });
         const data = await response.json()
+        setMessage({ id: Date.now(), mgs: data?.message });
+        setSelect("Profile")
     }
 
     EscapeRedirect()
 
     return (
         <div className='min-h-screen pb-12'>
+            <Notification message={message} />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
                     <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>

@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification'
-import { getFormattedDate, CalculateAmount } from '../Input/Time';
+import { getFormattedDate, CalculateAmount, DiscountCal, DiscountCalculate } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calendar from './Calender'
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -16,6 +16,7 @@ import DataHeader from '../Common/DataHeader';
 import EscapeRedirect from './EscapeRedirect'
 import Remove from '../../icons/Remove';
 import SelectionComponentSearch from '../Input/SelectionComponentSearch';
+import RightArrow from '../../icons/RightArrow';
 
 
 
@@ -117,7 +118,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
     const Order = async () => {
         if (!userId) {
-            setMessage({ id: Date.now(), mgs: "Customer Pay Amount and Pay Type are required" });
+            setMessage({ id: Date.now(), mgs: "Customer Is required" });
             return
         }
         const token = localStorage.getItem('token');
@@ -163,11 +164,12 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                 body: JSON.stringify({
                     shop: info?.shopname,
                     customername: name,
-                    paymentmethod: "",
+                    paymentmethod: "Online",
                     userId: userId,
                     date: getFormattedDate(),
                     total: lastTotal,
-                    methodname: "",
+                    methodname: "Online",
+                    pay_type: values?.pay_type,
                     packing: paking,
                     delivery: delivary,
                     lastdiscount: values?.lastdiscount,
@@ -280,12 +282,14 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
 
 
+
+
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
 
             <div className='bg-[#FFFFFF] rounded-md'>
                 <div className='border-b p-4 flex justify-between items-center'>
-                    <h1>Sale Details</h1>
+                    <h1 className='text-[20px]'>Sale Details</h1>
                     <Notification message={message} />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
@@ -324,7 +328,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                 </div>
 
                 <div className='border-b p-4'>
-                    <h1>Items</h1>
+                    <h1 className='text-[20px]'>Items</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-3 p-4 '>
                     <div>
@@ -488,7 +492,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                     <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.brand?.name}</div>
                                     <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
                                     <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
-                                    <div className='flex justify-start items-center border-r'>
+                                    <div className='flex justify-start items-center border-r '>
                                         <input type='number' ref={discount_ref}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
@@ -510,32 +514,35 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                             className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
                                     </div>
                                     <div className='relative z-50 border-l'>
-                                        <input ref={typeRef} value={prepareData?.discount_type} onKeyDown={(e) => {
-                                            if (e.key === "ArrowDown") {
-                                                if (selectedId === data?.length - 1) {
-                                                    setSelectedId(0)
-                                                } else {
-                                                    setSelectedId(selectedId + 1)
-                                                }
+                                        <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                        <input ref={typeRef} value={prepareData?.discount_type}
+                                            onClick={() => { setDisValue(!disValue); setPayTypeShow(false) }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "ArrowDown") {
+                                                    if (selectedId === data?.length - 1) {
+                                                        setSelectedId(0)
+                                                    } else {
+                                                        setSelectedId(selectedId + 1)
+                                                    }
 
-                                            } else if (e.key === "ArrowUp") {
-                                                if (selectedId === 0) {
-                                                    setSelectedId(data?.length - 1)
-                                                } else {
-                                                    setSelectedId(selectedId - 1)
+                                                } else if (e.key === "ArrowUp") {
+                                                    if (selectedId === 0) {
+                                                        setSelectedId(data?.length - 1)
+                                                    } else {
+                                                        setSelectedId(selectedId - 1)
+                                                    }
+                                                } else if (e.key === "Enter" && data[selectedId]) {
+                                                    ChangeDis(prepareData?.discount, data[selectedId]?.name)
+                                                    setDisValue(false);
+                                                    setSelectedId(0);
+                                                    discount_ref.current?.focus();
                                                 }
-                                            } else if (e.key === "Enter" && data[selectedId]) {
-                                                ChangeDis(prepareData?.discount, data[selectedId]?.name)
-                                                setDisValue(false);
-                                                setSelectedId(0);
-                                                discount_ref.current?.focus();
-                                            }
-                                        }} className='p-2 focus:outline-none w-full text-[#212529] font-thin' />
+                                            }} className='p-2 focus:outline-none w-full text-[#212529] font-thin' />
                                         {
                                             disValue && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
                                                 {
                                                     data?.map((opt, i) => {
-                                                        return <div onMouseEnter={() => { }}
+                                                        return <div onMouseEnter={() => { setSelectedId(i) }}
                                                             ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
                                                             onKeyDown={(e) => {
                                                                 if (e.key === "ArrowDown") {
@@ -552,8 +559,8 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                             </div>
                                         }
                                     </div>
-                                    <div className="pl-2 py-2 text-center font-thin border-l">{prepareData?.disPrice || prepareData?.price}</div>
-                                    <div className="pl-2 py-2 text-right font-thin border-l">{parseInt(prepareData?.disPrice || prepareData?.price) * parseInt(prepareData?.qty)}</div>
+                                    <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
+                                    <div className="pl-2 py-2 text-right font-thin border-l">{DiscountCalculate(prepareData)}</div>
                                 </div>
                             )}
                             {allData?.map((item, i) => {
@@ -594,32 +601,34 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
 
                                     <div className='relative z-50 border'>
-                                        <input ref={paytypeRef} value={values?.pay_type} onKeyDown={(e) => {
-                                            if (e.key === "ArrowDown") {
-                                                if (selectedId === PayType?.length - 1) {
-                                                    setSelectedId(0)
-                                                } else {
-                                                    setSelectedId(selectedId + 1)
-                                                }
+                                        <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                        <input ref={paytypeRef} value={values?.pay_type} onClick={() => { setPayTypeShow(!payTypeShow); setDisValue(false) }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "ArrowDown") {
+                                                    if (selectedId === PayType?.length - 1) {
+                                                        setSelectedId(0)
+                                                    } else {
+                                                        setSelectedId(selectedId + 1)
+                                                    }
 
-                                            } else if (e.key === "ArrowUp") {
-                                                if (selectedId === 0) {
-                                                    setSelectedId(PayType?.length - 1)
-                                                } else {
-                                                    setSelectedId(selectedId - 1)
+                                                } else if (e.key === "ArrowUp") {
+                                                    if (selectedId === 0) {
+                                                        setSelectedId(PayType?.length - 1)
+                                                    } else {
+                                                        setSelectedId(selectedId - 1)
+                                                    }
+                                                } else if (e.key === "Enter" && PayType[selectedId]) {
+                                                    setPayTypeShow(false);
+                                                    setSelectedId(0);
+                                                    setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                    last_pay.current?.focus();
                                                 }
-                                            } else if (e.key === "Enter" && PayType[selectedId]) {
-                                                setPayTypeShow(false);
-                                                setSelectedId(0);
-                                                setValues({ ...values, pay_type: PayType[selectedId].name })
-                                                last_pay.current?.focus();
-                                            }
-                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
+                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
                                         {
                                             payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
                                                 {
                                                     PayType?.map((opt, i) => {
-                                                        return <div onMouseEnter={() => { }}
+                                                        return <div onMouseEnter={() => { setSelectedId(i) }}
                                                             ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
                                                             onKeyDown={(e) => {
                                                                 if (e.key === "ArrowDown") {
@@ -627,7 +636,12 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                                                 }
                                                             }}
 
-                                                            onClick={() => { }}
+                                                            onClick={() => {
+                                                                setPayTypeShow(false);
+                                                                setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                                setSelectedId(0);
+                                                                last_pay.current?.focus();
+                                                            }}
                                                             className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
                                                             {opt?.name}
                                                         </div>
@@ -671,6 +685,16 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                         placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>
+                            {/* <div className='flex justify-between items-center gap-4'>
+                                <InputComponent label={'Discount'} type={'number'} input_focus={pack} placeholder={paking}
+                                    handleEnter={() => { setPack(false); setDeli(true) }} value={paking}
+                                    onChange={(v) => { setPaking(parseFloat(v)); }} className={``}
+                                />
+                                <InputComponent label={'Special Discount'} type={'number'} input_focus={deli} placeholder={delivary}
+                                    handleEnter={() => { setDeli(false); dis_ref.current.focus() }} value={delivary}
+                                    onChange={(v) => { setDelivery(parseInt(v)); }} className={``}
+                                />
+                            </div> */}
                             <div className='border-t pt-2 border-black flex justify-start gap-2 '>
                                 <div><h1 className='pt-[5px] w-[100px]'>Total Amount</h1></div>
                                 <div className='w-full'>

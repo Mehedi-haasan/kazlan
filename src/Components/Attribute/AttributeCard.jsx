@@ -95,7 +95,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
     const { View } = useLottie(options);
 
     return (
-        <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b`}>
+        <tr className={`${i %2 === 1 ? 'bg-[#FAF9EE]': ''} border-b`}>
             {/* <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
                     <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>

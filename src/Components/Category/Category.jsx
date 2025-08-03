@@ -255,7 +255,7 @@ const Category = ({ entries, info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-xs text-gray-900 ">
+                            <thead class="text-xs text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

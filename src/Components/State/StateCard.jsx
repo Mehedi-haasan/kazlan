@@ -61,21 +61,21 @@ const StateCard = ({ item, callState }) => {
 
     return (
         <tr className='border-b'>
-            <th className="w-4 py-2 px-4 border-x">
+            {/* <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
 
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin">{item?.name}</th>
+            </th> */}
+            <th scope="col" className="px-2 py-2 border-x font-thin">{item?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin">KB-{item?.id}</th>
             <th scope="col" className="px-2 py-2 flex justify-end items-center border-r gap-2">
                 <Edit onClick={() => { setEdit(true) }} />
                 <Remove onClick={() => { setShow(true) }} />
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={values?.name} value={values?.name} label={`State name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <InputComponent placeholder={values?.name} value={values?.name} label={`State name`} handleEnter={HandleUpdate} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
 
                         <Button isDisable={false} name="Update" onClick={HandleUpdate} className="mt-3 border bg-blue-500 text-white" />
                     </div>

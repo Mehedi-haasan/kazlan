@@ -35,9 +35,9 @@ const Attribute = ({ entries, info = {} }) => {
     const [showlotti, setLottiShow] = useState(false);
     const [first, setFirst] = useState({
         first: true,
-        value: 'Bank'
+        value: 'Select a filter'
     })
-    const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
 
     const handleCreate = async () => {
         setIsLoading(true)
@@ -57,6 +57,7 @@ const Attribute = ({ entries, info = {} }) => {
             setLottiShow(true)
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
+            GetAttribute()
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -162,7 +163,7 @@ const Attribute = ({ entries, info = {} }) => {
                             <h1 className="pl-5 text-xl py-2">Attribute Details</h1>
                         </div>
                         <div className="px-6 py-4">
-                            <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' }]} default_select={first?.first} default_value={first?.value}
+                            <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank Transfar' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' }]} default_select={first?.first} default_value={first?.value}
                                 onSelect={(v) => {
                                     setValues({
                                         ...values,
@@ -194,7 +195,7 @@ const Attribute = ({ entries, info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-md text-gray-900">
+                            <thead class="text-md text-gray-900 bg-[#BCA88D]">
                                 <tr className='border text-black font-bold'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

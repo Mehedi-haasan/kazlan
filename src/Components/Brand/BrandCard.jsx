@@ -5,7 +5,7 @@ import Modal from "../Input/Modal";
 import InputComponent from "../Input/InputComponent";
 import BaseUrl from "../../Constant";
 import Button from "../Input/Button";
-import logo from '../Logo/userProfile.png'
+import logo from '../Logo/photo.png'
 import ImageSelect from "../Input/ImageSelect";
 import Notification from "../Input/Notification";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
@@ -127,7 +127,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
     const { View } = useLottie(options);
 
     return (
-        <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b`}>
+        <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''} border-b`}>
             {/* <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
                     <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
@@ -159,9 +159,9 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
                             <div className="pt-5">
                                 <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                             </div>
-                            <div className="px-6 py-4">
+                            <div className="px-6 py-4"> 
                                 <InputComponent placeholder={`Enter Brand name`} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                                <Button isDisable={isLoading} name="Update" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
+                                <Button isDisable={isLoading} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                             </div>
                         </div>
                     </Modal>

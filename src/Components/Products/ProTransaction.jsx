@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import Excel from '../Input/Excel';
 import Search from '../Input/Search';
 import { useToImage } from '@hcorta/react-to-image'
-import logo from '../Logo/userProfile.png'
+import logo from '../Logo/photo.png'
 import ProTranCard from './ProTranCard';
 
 
@@ -22,7 +22,8 @@ const ProTransaction = ({ entries = [] }) => {
     const [pageSize, setPageSize] = useState(20);
     const [isLoading, setIsLoading] = useState(false);
     const [isChecked, setIsChecked] = useState(false)
-    const options = {   width: 1000,
+    const options = {
+        width: 1000,
         backgroundColor: '#ffffff'
     };
     const { ref, getPng } = useToImage(options)
@@ -52,22 +53,51 @@ const ProTransaction = ({ entries = [] }) => {
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-4 py-2 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-start items-start gap-6 px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <div className='border-r p-3'>
                     <img
                         src={values?.image_url ? values?.image_url : logo}
                         alt="image"
-                        className="h-full w-full object-cover"
+                        className="object-cover h-60 w-64"
                     />
                 </div>
-                <div className='grid col-span-1 lg:col-span-2 p-3'>
-                    <div className='text-[#4C5258] font-thin text-sm'>
-                        <h1 className='text-xl py-3'>{values?.name}</h1>
-                        <h1 className='text-xs py-2 '>Stock Quantity {values?.qty}</h1>
-                        <h1 className='text-xs py-2'>Price <span className='text-2xl'>{values?.price}</span> / {values?.qty_type}</h1>
-                        <h1 className='text-sm'>Item Code - - - #{values?.id}</h1>
-                        <h1 className='py-2'>Category {values?.category?.name}</h1>
-                        <h1>Item Type {values?.category?.name}</h1>
+                <div className='p-3'>
+                    <div className='flex justify-start items-start gap-5 px-2 py-1.5'>
+                        <div className='grid col-span-1 lg:col-span-2 p-2 '>
+                            <div className='text-[#4C5258] font-thin text- '>
+                                <h1 className='text-2xl py-1.5 font-semibold text-black'>{values?.name}</h1>
+
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Stock Quantity</h1>
+                                    <h1 className='py-1.5 '>{values?.qty}</h1>
+
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Price</h1>
+                                    <h1 className='py-1.5 '>{values?.price}</h1>
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Item Code</h1>
+                                    <h1 className='py-1.5'>#{values?.id}</h1>
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Category</h1>
+                                    <h1 className='py-1.5 '>{values?.category?.name}</h1>
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Brand</h1>
+                                    <h1 className='py-1.5 '>{values?.brand?.name}</h1>
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Edition</h1>
+                                    <h1 className='py-1.5 '>{values?.edition}</h1>
+                                </div>
+                                <div className='flex justify-between items-center w-[400px]'>
+                                    <h1 className='py-1.5 font-semibold'>Supplier</h1>
+                                    <h1 className='py-1.5 '>{values?.supplier}</h1>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,14 +115,14 @@ const ProTransaction = ({ entries = [] }) => {
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                        <thead class="text-md text-gray-900 ">
+                        <thead class="text-md text-gray-900 bg-[#BCA88D]">
                             <tr className='border'>
-                                <th className="w-4 py-2 px-4 border-r">
+                                {/* <th className="w-4 py-2 px-4 border-r">
                                     <div className="flex items-center">
                                         <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 rounded text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
-                                </th>
+                                </th> */}
                                 <th scope="col" className="px-2 py-2 border-r ">
                                     <div className="flex justify-between items-center">
                                         Item Name
@@ -139,7 +169,7 @@ const ProTransaction = ({ entries = [] }) => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1)} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
                         <button disabled={page === 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
                             {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}

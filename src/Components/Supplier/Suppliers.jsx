@@ -82,7 +82,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3  w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-sm text-gray-900 dark:text-gray-400">
+                            <thead class="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
@@ -154,9 +154,9 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                { supplier?.map((item, i) => {
-                                        return <SupplierCard  item={item} key={i} state={state} info={info} select={select} OpenModal={OpenModal} />
-                                    })  }
+                                {supplier?.map((item, i) => {
+                                    return <SupplierCard item={item} key={i} i={i} state={state} GetSupplier={GetSupplier} info={info} select={select} OpenModal={OpenModal} />
+                                })}
                             </tbody>
                         </table>
                     </div>

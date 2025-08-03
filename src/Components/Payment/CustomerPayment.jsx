@@ -23,8 +23,10 @@ const CustomerPayment = ({ info, state }) => {
         email: '',
         phone: '',
         accountnumber: '',
-        balance_type: '',
-        note: ''
+        balance_type: 'You Receive',
+        note: '',
+        paymentmethod: 'Select a filter',
+        type: ''
     })
 
 
@@ -32,13 +34,11 @@ const CustomerPayment = ({ info, state }) => {
 
         setIsLoading(true)
         values.shop = info?.shopname;
-        values.date = ""
-        values.deliverydate = ""
         const token = localStorage.getItem('token')
-        let type = 1;
-        if (values?.balance_type === "To Receive") {
+        let type = 2;
+        if (values?.balance_type === "You Receive") {
             type = 2;
-        } else if (values?.balance_type === "To Pay") {
+        } else if (values?.balance_type === "You Pay") {
             type = 1;
         } else if (values?.balance_type === "Yearly Bonus") {
             type = 1;
@@ -132,28 +132,31 @@ const CustomerPayment = ({ info, state }) => {
                     <NavLink to={`/payment/history/${values?.id}`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Customer Transaction</NavLink>
                 </div>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <InputComponent label={"Customer"} placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
-                    <InputComponent label={"Date"} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
+                    <InputComponent className={`text-black`} label={"Customer"}
+                        placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }); }} readOnly={true} value={values?.name} />
+
+
+                    <InputComponent className={`text-black`} label={"Date"} readOnly={true} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
 
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
-                            options={paymentType}
-                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
+                            options={paymentType} default_value={values?.paymentmethod}
+                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name, type: v?.name }) }}
                         />
                         {
                             values?.paymentmethod === "Bank Transfar" && <SelectionComponent label={"Select Method"}
-                                options={paymentMethod}
+                                options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
                                 onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
                             />
                         }
                         {
                             values?.paymentmethod === "Mobile Banking" && <SelectionComponent label={"Select Method"}
-                                options={mobile}
+                                options={mobile} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
                                 onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
                             />
                         }
                     </div>
-                    <InputComponent label={"Balance"} placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
+                    <InputComponent className={`text-black`} label={"Balance"} placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1'>
@@ -161,7 +164,7 @@ const CustomerPayment = ({ info, state }) => {
                             <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value }) }}
                                 className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2`}
                             >
-                                {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }, { id: 3, name: "Yearly Bonus" }].map(({ id, name }) => (
+                                {[{ id: 1, name: "You Receive" }, { id: 2, name: "You Pay" }, { id: 3, name: "Yearly Bonus" }].map(({ id, name }) => (
                                     <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                 ))}
                             </select>

@@ -8,7 +8,7 @@ const Invoice = ({info={}}) => {
     const [invoices, setInvoices] = useState([]);
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${15}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${20}`, {
             method: 'GET',
             headers: {
                 'authorization': token,

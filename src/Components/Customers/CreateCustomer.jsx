@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Notification from "../Input/Notification";
 
-const CreateCustomer = () => {
+const CreateCustomer = ({ info = {} }) => {
 
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const goto = useNavigate()
@@ -20,10 +20,10 @@ const CreateCustomer = () => {
         "stateId": 1,
         "usertype": "Customer",
         "balance": 0,
-        "balance_type": 'To Receive',
+        "balance_type": 'You Receive',
         "address": "",
-        "customertype": 'Party'
-
+        "customertype": 'Party',
+        "shopname": info?.shopname
     })
     const [auto, setAuto] = useState({
         fame: true,
@@ -182,7 +182,7 @@ const CreateCustomer = () => {
                                         <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                             className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                         >
-                                            {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                            {[{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }].map(({ id, name }) => (
                                                 <option key={id} value={name} className=''> {name}</option>
                                             ))}
                                         </select>

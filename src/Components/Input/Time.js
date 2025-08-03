@@ -53,8 +53,8 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
         customername: name,
         userId: userId,
         date: getFormattedDate(),
-        paymentmethod: "",
-        methodname: "",
+        paymentmethod: values?.pay_type,
+        methodname: "Online",
         total: lastTotal,
         packing: paking,
         delivery: delivary,
@@ -144,8 +144,8 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
         customername: name,
         userId: userId,
         date: getFormattedDate(),
-        paymentmethod: "",
-        methodname: "",
+        paymentmethod: values?.pay_type,
+        methodname: "Online",
         total: lastTotal,
         packing: paking,
         delivery: delivary,
@@ -184,6 +184,43 @@ export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdis
 
 
 
+export function DiscountCal(itm) {
+
+    let sale = 0;
+    const price = parseInt(itm?.price) || 0;
+    const cost = parseInt(itm?.cost ? itm?.cost : itm?.price);
+    const discount = parseInt(itm?.discount) || 0;
+    if (price != cost) {
+        sale = price
+    } else {
+        if (itm?.discount_type === "Fixed") {
+            sale = (price - discount);
+        } else if (itm?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice;
+        }
+    }
+    return parseInt(sale)
+}
 
 
+export function DiscountCalculate(itm) {
 
+    let sale = 0;
+    const price = parseInt(itm?.price);
+    const cost = parseInt(itm?.cost ? itm?.cost : itm?.price);
+    const discount = parseInt(itm?.discount);
+    const qty = parseInt(itm?.qty);
+    if (price == cost) {
+        if (itm?.discount_type === "Fixed") {
+            sale = (price - discount) * qty;
+        } else if (itm?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice * qty;
+        }
+    } else {
+        sale = price
+    }
+
+    return parseInt(sale)
+}

@@ -7,7 +7,7 @@ import Add from "../../icons/Add";
 import { useNavigate } from "react-router-dom";
 import Notification from "../Input/Notification";
 
-const CreateSupplier = ({ state }) => {
+const CreateSupplier = ({ state, info = {} }) => {
     const open_bala = useRef(null)
     const goto = useNavigate()
     const [active, setActive] = useState("Address");
@@ -17,9 +17,10 @@ const CreateSupplier = ({ state }) => {
         "stateId": 1,
         "usertype": "Supplier",
         "balance": 0,
-        "balance_type": 'To Receive',
+        "balance_type": 'You Receive',
         "address": "",
-        "customertype": "Supplier"
+        "customertype": "Supplier",
+        "shopname": info?.shopname
     })
     const [auto, setAuto] = useState({
         fame: true,
@@ -93,8 +94,8 @@ const CreateSupplier = ({ state }) => {
 
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <InputComponent label={"Full Name"} placeholder={'Enter full name'} input_focus={auto?.fame} handleEnter={() => { setAuto({ ...auto, fame: false, phone: true }) }} onChange={(v) => { setValues({ ...values, name: v }) }} />
-                    <InputComponent label={"Phone"} placeholder={'Enter full phone'} input_focus={auto?.phone} handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }} onChange={(v) => { setValues({ ...values, phone: v }) }} />
-                    <InputComponent label={"Email"} placeholder={'Enter full email'} input_focus={auto?.email} handleEnter={() => { setAuto({ ...auto, phone: false, bname: true }) }} onChange={(v) => { setValues({ ...values, email: v }) }} />
+                    <InputComponent label={"Phone"} placeholder={'Enter phone number'} input_focus={auto?.phone} handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }} onChange={(v) => { setValues({ ...values, phone: v }) }} />
+                    <InputComponent label={"Email"} placeholder={'Enter email'} input_focus={auto?.email} handleEnter={() => { setAuto({ ...auto, phone: false, bname: true }) }} onChange={(v) => { setValues({ ...values, email: v }) }} />
                     <InputComponent label={"Bank Name"} placeholder={'Enter bank name'} input_focus={auto?.bname} handleEnter={() => { setAuto({ ...auto, bname: false, aname: true }) }} onChange={(v) => { setValues({ ...values, bankname: v }) }} />
                     <InputComponent label={"Account Name"} placeholder={'Enter account name'} input_focus={auto?.aname} handleEnter={() => { setAuto({ ...auto, aname: false, anum: true }) }} onChange={(v) => { setValues({ ...values, accountname: v }) }} />
                     <InputComponent label={"Account Number"} placeholder={'Enter account number'} input_focus={auto?.anum} handleEnter={() => { setAuto({ ...auto, anum: false, tname: true }) }} onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
@@ -121,7 +122,7 @@ const CreateSupplier = ({ state }) => {
                                     setValues({ ...values, stateId: v?.id });
                                     setAuto({ ...auto, t_value: v?.name, tname: false, addres: true });
                                 }} label={"Thana Name"} className='rounded-l' />
-                            <div className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <div className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] ' onClick={()=>{goto('/state')}}>
                                 <Add />
                             </div>
                         </div>
@@ -148,7 +149,7 @@ const CreateSupplier = ({ state }) => {
                                 <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                     className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                 >
-                                    {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                    {[{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }].map(({ id, name }) => (
                                         <option key={id} value={name} className=''>{name}</option>
                                     ))}
                                 </select>

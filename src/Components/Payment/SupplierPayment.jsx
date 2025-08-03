@@ -19,19 +19,22 @@ const SupplierPayment = ({ info, state }) => {
         email: '',
         phone: '',
         accountnumber: '',
-        balance_type: '',
-        note: ''
+        balance_type: 'You Receive',
+        note: '',
+        paymentmethod: 'Select a filter'
     })
 
     const handleSubmit = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
         values.shop = info?.shopname;
-        let type = 1;
-        if (values?.balance_type === "To Receive") {
-            type = 1;
-        } else if (values?.balance_type === "To Pay") {
+        let type = 2;
+        if (values?.balance_type === "You Receive") {
             type = 2;
+        } else if (values?.balance_type === "You Pay") {
+            type = 1;
+        } else if (values?.balance_type === "Yearly Bonus") {
+            type = 1;
         }
         const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
@@ -44,11 +47,7 @@ const SupplierPayment = ({ info, state }) => {
         const data = await response.json();
         setIsLoading(false);
         setMessage({ id: Date.now(), mgs: data?.message });
-        if (data?.customertype === "Supplier") {
-            goto(`/suppliers`)
-        } else {
-            goto(`/customers`)
-        }
+        goto(`/suppliers`)
     }
 
     const GetUser = async () => {
@@ -108,7 +107,7 @@ const SupplierPayment = ({ info, state }) => {
 
                             <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                 className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2`}>
-                                {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                {[{ id: 1, name: "You Receive" }, { id: 2, name: "You Pay" }].map(({ id, name }) => (
                                     <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                 ))}
                             </select>

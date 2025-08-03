@@ -35,8 +35,8 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
     return (
         <div className="pt-3">
             <div className="w-full overflow-hidden overflow-x-auto">
-                <table className="text-sm text-left rtl:text-right text-gray-500 w-full min-w-[700px] ">
-                    <thead className=" text-sm text-left rtl:text-right text-gray-500">
+                <table className="text-sm text-left text-gray-500 w-full min-w-[700px] rounded">
+                    <thead className=" text-sm text-left  text-black rounded bg-[#BCA88D]">
                         <tr className='border'>
                             {/* <th className="w-4 py-3 px-4 border-r ">
                                 <div className="flex items-center">
@@ -100,7 +100,13 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Type
+                                    Sale Type
+                                    <Updown />
+                                </div>
+                            </th>
+                            <th scope="col" className="px-3 py-3 text-center border-r ">
+                                <div className="flex justify-between items-center">
+                                    Order Type
                                     <Updown />
                                 </div>
                             </th>
@@ -114,7 +120,8 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                     </thead>
                     <tbody>
                         {invoices?.map((item, i) => (
-                            <tr key={i} className='border-b cursor-pointer' onClick={() => {
+                            <tr key={i} className={`border-b cursor-pointer ${i %2 === 1 ? 'bg-[#FAF9EE]': ''}`}
+                             onClick={() => {
                                 if (item?.type === "Sale" || item?.type === "Purchase items") {
                                     goto(`/invoice/${item?.id}`)
                                 } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
@@ -128,7 +135,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                     </div>
                                 </th> */}
                                 <th scope="col" className="px-3 py-3 border-x font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-000{item?.id}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.customername}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>
@@ -137,7 +144,8 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.status}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.type}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.deliverydate}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.methodname}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.deliverydate)}</th>
                             </tr>
                         ))
                         }

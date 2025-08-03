@@ -101,7 +101,7 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
 
     return (
 
-        <tr className={`border-b ${i % 2 === 0 ? 'bg-gray-50' : ''}`}>
+        <tr className={`border-b ${i %2 === 1 ? 'bg-[#FAF9EE]': ''}`}>
             {/* <th className="w-4 py-2 px-4 border-x">
 
                 <div className="flex items-center">

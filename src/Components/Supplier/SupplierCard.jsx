@@ -8,18 +8,42 @@ import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import Add from "../../icons/Add";
 import { NavLink } from "react-router-dom";
+import Notification from "../Input/Notification";
 
-const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside }) => {
+const SupplierCard = ({ item, i, state = [], info = {}, GetSupplier, select, OpenModal, outside }) => {
     const [values, setValues] = useState({})
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [active, setActive] = useState("Address")
     const [option, setOption] = useState(false)
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
-    const DeleteCustomer = async () => {
+    const DeleteCustomer = async (id) => {
+        try {
+            setIsLoading(true);
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/delete/customer/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': token,
+                }
+            });
 
-    }
+            const data = await response.json();
+            setMessage({ ...message, id: Date.now(), mgs: data?.message })
+            GetSupplier()
+            setIsLoading(false);
+            setShow(false)
+        } catch (error) {
+            console.error('Delete customer error:', error);
+            setMessage({ ...message, id: Date.now(), mgs: error?.message })
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
 
 
@@ -58,14 +82,16 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
 
 
     return (
-        <tr className='border-b'>
+        <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
             {/* <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th> */}
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
+                <Notification message={message} />
+            </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.phone}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.email}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.bankname}</th>
@@ -117,9 +143,19 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                         <InputComponent label={"Account Number"} placeholder={item?.accountnumber} onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
                     </div>
                     <div className="p-3">
-                        <div className="flex justify-start items-end">
+                        {/* <div className="flex justify-start items-end">
                             <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Address</button>
                             <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t border-green-500 text-green-500" : "border-b"} px-4 py-1.5 rounded-t`}>Balence</button>
+                            <div className="border-b w-full"></div>
+                        </div> */}
+
+                        <div className="flex justify-start items-end">
+                            <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t gap-1 border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center font-thin`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"><path d="M13 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" /><path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z" /></g></svg>
+                                Address</button>
+                            <button onClick={() => { setActive("Balence") }} className={`${active === "Balence" ? "border-x border-t border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center gap-1`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M16 12h2v4h-2z" /><path fill="currentColor" d="M20 7V5c0-1.103-.897-2-2-2H5C3.346 3 2 4.346 2 6v12c0 2.201 1.794 3 3 3h15c1.103 0 2-.897 2-2V9c0-1.103-.897-2-2-2M5 5h13v2H5a1.001 1.001 0 0 1 0-2m15 14H5.012C4.55 18.988 4 18.805 4 18V8.815c.314.113.647.185 1 .185h15z" /></svg>
+                                Balance</button>
                             <div className="border-b w-full"></div>
                         </div>
                     </div>
@@ -127,7 +163,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                         active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div className='flex justify-start items-end pb-1'>
                                 <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"Thana"} className='rounded-l' />
-                                <div className='border-y border-r font-thin text-[#212529] px-3 pt-[4px] pb-[4px] rounded-r cursor-pointer'>
+                                <div className='border-y border-r font-thin text-[#212529] px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer'>
                                     <Add />
                                 </div>
                             </div>
@@ -143,7 +179,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                                     <select value={item?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                     >
-                                        {[{ id: 1, name: "To Pay" }, { id: 2, name: "To Receive" }].map(({ id, name }) => (
+                                        {[{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
                                         ))}
                                     </select>
@@ -162,7 +198,7 @@ const SupplierCard = ({ item, state = [], info = {}, select, OpenModal, outside 
                 <Modal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
                     <h1 className="py-3 text-lg">Are you sure you want to delete this?</h1>
                     <div className="flex justify-between items-center p-4">
-                        <button onClick={DeleteCustomer} className="border px-4 py-1.5 rounded border-r font-thin text-[#212529]ed-500 text-red-500">Yes</button>
+                        <button onClick={() => { DeleteCustomer(item?.id) }} className="border px-4 py-1.5 rounded border-r font-thin text-[#212529]ed-500 text-red-500">Yes</button>
                         <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 text-blue-500">No</button>
                     </div>
                 </Modal>

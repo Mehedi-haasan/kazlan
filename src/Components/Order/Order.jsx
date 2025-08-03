@@ -73,15 +73,16 @@ const Order = ({ user = [], info = {} }) => {
 
 
     return (
-        <div className='bg-white relative pt-5 px-2 min-h-screen pb-12' >
+        <div className='px-3 pt-5 min-h-screen pb-12' >
 
-            <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center p-4 bg-[#FFFFFF] shadow-md rounded-lg">
                 <h1 className="font-semibold text-lg">Order List</h1>
             </div>
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+
+            <div className="rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Physical" }, { id: 2, name: "Digital" }]}
+                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
                             default_select={filter?.bran} default_value={filter?.bran_value}
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
                             label={'Customer'} />

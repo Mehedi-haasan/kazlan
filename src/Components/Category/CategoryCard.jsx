@@ -43,7 +43,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
             const data = await response.json();
             setEdit(false)
             getCategory()
-            setLottiShow(true)
+            setLottiShow(false)
             setMessage({ id: Date.now(), mgs: data?.message });
             setIsLoading(false)
         } catch (error) {
@@ -128,7 +128,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
 
     return (
 
-        <tr className={`${i % 2 === 0 ? " " : "bg-gray-100"} border-b border-x`}>
+        <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''} border-b border-x`}>
             {/* <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
                     <Notification message={message} />
@@ -141,9 +141,9 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
             </th> */}
             <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
                 <Notification message={message} />
-                    <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                        <>{View}</>
-                    </Modal>
+                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
+                    <>{View}</>
+                </Modal>
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">
                 <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
@@ -170,7 +170,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory }) => {
                             <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
                         </div>
                         <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <InputComponent placeholder={`Enter Category name`} value={values?.name} label={`Category Name`} onChange={(e) => { setValues({ ...values, name: e }) }} handleEnter={() => { handleUpdate(item.image_url, "", item?.id) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white" />
                         </div>
                     </div>

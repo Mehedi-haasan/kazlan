@@ -153,7 +153,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >
                         <table class="min-w-[700px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-md text-gray-900 z-10">
+                            <thead class="text-md text-gray-900 z-10 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

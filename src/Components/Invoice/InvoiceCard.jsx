@@ -25,7 +25,7 @@ const InvoiceCard = ({ item }) => {
                 {convertToBengaliNumber(item?.qty)}
             </th>
             <td className="p-2 border-l font-thin">
-                {item?.name}, {item?.product?.category?.name}, {item?.edition}
+                {item?.name}, {item?.product?.category?.name}, {item?.product?.edition}
             </td>
             <td className="p-2 border-l font-thin">
                 {item?.product?.brand?.name}

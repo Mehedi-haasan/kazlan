@@ -202,12 +202,12 @@ const Dashboard = ({ data, info = {} }) => {
             </div>
 
             <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5'>
-                <div className='rounded-lg'>
+                {/* <div className='rounded-lg'>
                     <DailySalse hourSales={hourSales} />
                 </div>
                 <div>
                     <MonthlySale month={month} />
-                </div>
+                </div> */}
                 <div className='grid col-span-1 lg:col-span-2'>
 
                     <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-4 shadow-lg'>
