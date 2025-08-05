@@ -23,28 +23,33 @@ const ReturnPurchaseItem = ({ user = [] }) => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
-      const today = new Date();
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(today.getDate() - 7);
-        const [raw, setRaw] = useState({
-            fromDate: sevenDaysAgo.toISOString(),
-            toDate: today.toISOString()
-        });
-        const [values, setValues] = useState({
-            pay: 0,
-            paking: 0,
-            delivary: 0,
-            pay_type: 'Cash',
-            lastdiscount: 0,
-            lastdiscounttype: "Fixed",
-            deliverydate: ''
-        })
-        const [filter, setFilter] = useState({
-            cate: false,
-            cate_value: "Select a filter",
-            bran: false,
-            bran_value: 'Select a filter',
-        })
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toISOString(),
+        toDate: today.toISOString()
+    });
+    const [values, setValues] = useState({
+        pay: 0,
+        paking: 0,
+        delivary: 0,
+        pay_type: 'Cash',
+        lastdiscount: 0,
+        lastdiscounttype: "Fixed",
+        deliverydate: ''
+    })
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+    })
+
+    const [search, setSearch] = useState({
+        type: "Return Purchase",
+        userId: null
+    })
 
     const RecentInvoice = async () => {
         setIsLoading(true)
@@ -55,7 +60,7 @@ const ReturnPurchaseItem = ({ user = [] }) => {
                 'authorization': token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: "Return Purchase" })
+            body: JSON.stringify(search)
         });
         const data = await response.json();
         setIsLoading(false)
@@ -72,22 +77,14 @@ const ReturnPurchaseItem = ({ user = [] }) => {
     return (
         <div className="px-3 pt-5 rounded-md min-h-screen">
             <div className='flex justify-between items-center p-4 bg-[#FFFFFF] shadow-md rounded-lg'>
-                    <h1 className=''>Purchase Return Items</h1>
-                    <NavLink to={`/purchase/return`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Purchase Return</NavLink>
-                </div>
+                <h1 className=''>Purchase Return Items</h1>
+                <NavLink to={`/purchase/return`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Purchase Return</NavLink>
+            </div>
 
 
 
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4'>
-                
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                    <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
-                            default_select={filter?.bran} default_value={filter?.bran_value}
-                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
-                            label={'Customer'} />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}

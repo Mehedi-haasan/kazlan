@@ -18,8 +18,9 @@ import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import SelectionComponent from "../Input/SelectionComponent";
 
 
-const Attribute = ({ entries, info = {} }) => {
+const Attribute = ({ entries = [], info = {} }) => {
 
+    const [selectAll, setSelectAll] = useState(false);
     const targetRef = useRef();
     const [inpo, setInpo] = useState(false)
     const option = { backgroundColor: '#ffffff' };
@@ -65,6 +66,9 @@ const Attribute = ({ entries, info = {} }) => {
     }
 
     const handleCreateLocally = async () => {
+        if (BaseUrl === "http://localhost:8050") {
+            return
+        }
         setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
@@ -150,6 +154,37 @@ const Attribute = ({ entries, info = {} }) => {
 
     EscapeRedirect()
 
+    const TikBox = (id) => {
+        setBran(prev => {
+            const newData = prev.map(item => {
+                if (item.id === id) {
+                    return { ...item, active: !item.active };
+                } else {
+                    return item;
+                }
+            });
+            const allActive = newData.every(item => item.active === false);
+            setSelectAll(allActive)
+            return newData;
+        });
+    };
+
+
+    const BulkDelete = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/bulk/update/attribute`, {
+            method: 'POST',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({ data: bran }),
+        });
+        const result = await response.json();
+        setMessage({ id: Date.now(), mgs: result?.message });
+        GetAttribute()
+    }
+
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <Notification message={message} />
@@ -188,7 +223,7 @@ const Attribute = ({ entries, info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
+                        <Excel handeldelete={() => { BulkDelete() }} onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={SearchBrand} />
                     </div>
                 </div>
@@ -197,12 +232,19 @@ const Attribute = ({ entries, info = {} }) => {
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead class="text-md text-gray-900 bg-[#BCA88D]">
                                 <tr className='border text-black font-bold'>
-                                    {/* <th className="w-4 py-2 px-4 border-r">
+                                    <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
-                                            <input id="checkbox-table-search-1" onChange={() => { setIsChecked(!isChecked) }} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                            <input id="checkbox-table-search-1"
+                                                checked={selectAll}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    setSelectAll(isChecked);
+                                                    setBran(prev => prev.map(item => ({ ...item, active: !isChecked })));
+                                                }}
+                                                type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th> */}
+                                    </th>
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center font-bold text-[16px]">
                                             Attribute
@@ -227,7 +269,7 @@ const Attribute = ({ entries, info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
-                                    {info?.role === "superadmin" && <th scope="col" className="pl-1 pr-1 py-2 text-center text-[16px]">Action</th>}
+                                    <th scope="col" className="pl-1 pr-1 py-2 text-center text-[16px]">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -235,7 +277,7 @@ const Attribute = ({ entries, info = {} }) => {
 
                                 {
                                     bran?.map((item, i) => (
-                                        <AttributeCard item={item} i={i} isChecked={isChecked} info={info} GetAttribute={GetAttribute} />
+                                        <AttributeCard item={item} i={i} isChecked={!item?.active} TikBox={TikBox} info={info} GetAttribute={GetAttribute} />
                                     ))
                                 }
 

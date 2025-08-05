@@ -28,75 +28,75 @@ const PaymentTotal = ({ user, total }) => {
 
     return (
         <>
-            <tr className="bg-white">
-                <th className="p-2 "></th>
+            <tr className="bg-white text-[13px]">
+                <td className="p-2 "></td>
                 <td className="p-2"></td>
-                <th className="p-2"></th>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2">মোট</td>
                 <td className="p-2 text-right">{convertToBengaliNumber(total)}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="p-2"></td>
                 <td className="p-2"> </td>
-                <th className="p-2"></th>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"> প্যাকিং </td>
                 <td className="p-2 text-right">{convertToBengaliNumber(parseInt(user?.packing))}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="p-2"></td>
                 <td className="p-2"> </td>
-                <th className="p-2"></th>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2 border-b">ডেলিভারী</td>
                 <td className="p-2 border-b text-right">{convertToBengaliNumber(parseInt(user?.delivery))}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="p-2"></th>
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="p-2"></td>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"> সর্বমোট</td>
                 <td className="p-2 text-right">{convertToBengaliNumber(total + user?.packing + user?.delivery)}.০</td>
             </tr>
 
-            <tr className="bg-white">
-                <th className="pr-6 py-3"></th>
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="pr-6 py-3"></td>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"> ডিসকাউন্ট </td>
                 <td className="p-2 text-right">{convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
             </tr>
-            <tr className="bg-white ">
-                <th className="pr-6 py-3"></th>
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px] ">
+                <td className="pr-6 py-3"></td>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2 border-b">পুর্বের বকেয়া</td>
                 <td className="p-2 text-right border-b">{convertToBengaliNumber(parseInt(user?.previousdue))}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="pr-6 py-3"></th>
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="pr-6 py-3"></td>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"> অবশিষ্ট</td>
                 <td className="p-2 text-right">{convertToBengaliNumber(Calculate())}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="pr-6 py-3"></th>
-                <th className="p-2"></th>
+            <tr className="bg-white text-[13px]">
+                <td className="pr-6 py-3"></td>
+                <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2 border-b"> জমা</td>
                 <td className="p-2 text-right border-b"> {convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
             </tr>
-            <tr className="bg-white">
-                <th className="p-2"><h1 className='font-thin text-black'>বিতরনকারী</h1></th>
-                <th className="p-2"> </th>
-                <td className="p-2"><h1 className='font-thin text-black'>ম্যানেজার</h1></td>
+            <tr className="bg-white text-[13px]">
+                <td className="p-2"><h1 className='font-tdin text-black'>বিতরনকারী</h1></td>
+                <td className="p-2"> </td>
+                <td className="p-2"><h1 className='font-tdin text-black'>ম্যানেজার</h1></td>
                 <td className="p-2"></td>
                 <td className="p-2"> মোট বাকি</td>
                 <td className="p-2 text-right">{convertToBengaliNumber(TotalDue())}.০</td>

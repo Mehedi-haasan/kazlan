@@ -170,6 +170,9 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     }
 
     const handleCreateOffline = async (image_url) => {
+        if (BaseUrl === "http://localhost:8050") {
+            return
+        }
 
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
             setMessage({ id: Date.now(), mgs: "Required field is missing" });

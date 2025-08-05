@@ -28,7 +28,8 @@ const Order = ({ user = [], info = {} }) => {
 
     const [raw, setRaw] = useState({
         fromDate: sevenDaysAgo.toISOString(),
-        toDate: today.toISOString()
+        toDate: today.toISOString(),
+        userId: null
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -80,13 +81,7 @@ const Order = ({ user = [], info = {} }) => {
             </div>
 
             <div className="rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
-                            default_select={filter?.bran} default_value={filter?.bran_value}
-                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
-                            label={'Customer'} />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}

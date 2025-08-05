@@ -105,7 +105,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
 
             <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
                 {
-                    select === item?.id && <div className="absolute -top-[58px] bg-white shadow-xl rounded-md right-14 w-[140px] p-1 z-50">
+                    select === item?.id && <div className="absolute -top-12 bg-white shadow-xl rounded-md right-14 w-[140px] p-1.5 z-50 border border-red-500">
                         <div onClick={() => { setEdit(!edit) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
                             <Edit size="15px" />Edit
                         </div>

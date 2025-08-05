@@ -45,6 +45,10 @@ const SaleItems = ({ user = [] }) => {
         bran: false,
         bran_value: 'Select a filter',
     })
+    const [search, setSearch] = useState({
+        type: "Sale",
+        userId: null
+    })
 
     const RecentInvoice = async () => {
         setIsLoading(true)
@@ -55,7 +59,7 @@ const SaleItems = ({ user = [] }) => {
                 'authorization': token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: "Sale" })
+            body: JSON.stringify(search)
         });
         const data = await response.json();
         setIsLoading(false)
@@ -81,18 +85,12 @@ const SaleItems = ({ user = [] }) => {
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4'>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4">
                     <div className='pt-1'>
                         <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
                             default_select={filter?.bran} default_value={filter?.bran_value}
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
                             label={'Customer'} />
-                    </div>
-                    <div className='pt-1'>
-                        <SelectionComponent options={user}
-                            default_select={filter?.cate} default_value={filter?.cate_value}
-                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); }}
-                            label={'User'} />
                     </div>
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
@@ -114,7 +112,7 @@ const SaleItems = ({ user = [] }) => {
                 <InvoiceTemp invoices={invoices} />
 
                 <div className="flex justify-between items-center pt-3">
-                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1)} to {pageSize * (page - 1) + invoices?.length} of {totalItem} entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1) + 1} to {pageSize * (page - 1) + invoices?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
                         <button disabled={page == 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
                             {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}

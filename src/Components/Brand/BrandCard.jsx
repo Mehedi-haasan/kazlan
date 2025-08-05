@@ -13,7 +13,7 @@ import { useLottie } from "lottie-react";
 import DownModal from "../Input/DownModal";
 
 
-const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) => {
+const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, TikBox }) => {
 
     const [edit, setEdit] = useState(false);
     const [show, setShow] = useState(false);
@@ -128,55 +128,49 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode }) 
 
     return (
         <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''} border-b`}>
-            {/* <th className="w-4 py-1.5 px-4 border-x">
+            <th className="w-4 py-1.5 px-4 border-x">
                 <div className="flex items-center">
-                    <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                        <>{View}</>
-                    </Modal>
-                    <Notification message={message} />
-                    <input id="checkbox-table-search-1" checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="checkbox-table-search-1" checked={isChecked} onChange={() => TikBox(item.id)} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </th> */}
+            </th>
             <th scope="col" className="px-2 py-1.5 border-x font-thin text-[#212529]">{item?.name}
                 <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
                     <>{View}</>
                 </Modal>
                 <Notification message={message} />
             </th>
-            <th scope="col" className="px-2 py-1.5 border-r">
-                <img src={item?.image_url} alt={item?.image_url} className="h-10 w-10 rounded" />
+            <th scope="col" className="px-2 py-1 border-r">
+                <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-8 w-8 rounded" />
             </th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{item?.creator}</th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-            {
-                info?.role === "superadmin" && <th scope="col" className="px-2 py-3 flex justify-center items-center border-r gap-2">
-                    <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
-                        <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
-                            <div className="border-b">
-                                <h1 className="pl-5 text-xl py-2 text-black">Update Brand Details</h1>
-                            </div>
-                            <div className="pt-5">
-                                <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
-                            </div>
-                            <div className="px-6 py-4"> 
-                                <InputComponent placeholder={`Enter Brand name`} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                                <Button isDisable={isLoading} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
-                            </div>
+            <th scope="col" className="px-2 py-3 flex justify-center items-center border-r gap-2">
+                <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
+                    <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
+                        <div className="border-b">
+                            <h1 className="pl-5 text-xl py-2 text-black">Update Brand Details</h1>
                         </div>
-                    </Modal>
-                    <Edit onClick={() => { setEdit(true) }} />
+                        <div className="pt-5">
+                            <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
+                        </div>
+                        <div className="px-6 py-4">
+                            <InputComponent placeholder={`Enter Brand name`} value={values?.name} label={`Brand Name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                            <Button isDisable={isLoading} name="Update" onClick={() => { image_url ? handleUpload() : handleUpdate(item.image_url, "", item?.id) }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
+                        </div>
+                    </div>
+                </Modal>
+                <Edit onClick={() => { setEdit(true) }} />
 
-                    <Remove onClick={() => { setShow(true) }} />
-                    <DownModal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
-                        <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
-                        <div className="flex justify-between items-center p-4">
-                            <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
-                            <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
-                        </div>
-                    </DownModal>
-                </th>
-            }
+                <Remove onClick={() => { setShow(true) }} className={`${info?.role === "superadmin" ? '' : "hidden"}`} />
+                <DownModal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
+                    <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
+                    <div className="flex justify-between items-center p-4">
+                        <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
+                        <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
+                    </div>
+                </DownModal>
+            </th>
         </tr>
     )
 }

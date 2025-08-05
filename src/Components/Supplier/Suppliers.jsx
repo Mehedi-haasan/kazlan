@@ -81,7 +81,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                 </div>
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3  w-full overflow-hidden overflow-x-auto">
-                        <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead class="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
@@ -150,7 +150,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
-                                    {info?.role === "superadmin" && <th scope="col" className="py-2 text-center">Action</th>}
+                                    <th scope="col" className="py-2 text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

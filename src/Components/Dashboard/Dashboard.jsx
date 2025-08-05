@@ -80,8 +80,8 @@ const Dashboard = ({ data, info = {} }) => {
     useEffect(() => {
         let token = localStorage.getItem('token')
         if (token && token !== 'undefined') {
-            HourlySalesData()
-            MonthlySalesData()
+            // HourlySalesData()
+            // MonthlySalesData()
             DailySaleReturn()
         }
     }, [])
@@ -105,7 +105,7 @@ const Dashboard = ({ data, info = {} }) => {
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
         } catch (error) {
-            setMessage({ id: Date.now(), mgs: error });
+            setMessage({ id: Date.now(), mgs: error?.message });
         }
     }
 
@@ -151,8 +151,6 @@ const Dashboard = ({ data, info = {} }) => {
             setMessage({ id: Date.now(), mgs: error });
         }
     }
-
-
 
 
 
@@ -210,12 +208,11 @@ const Dashboard = ({ data, info = {} }) => {
                 </div> */}
                 <div className='grid col-span-1 lg:col-span-2'>
 
-                    <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-4 shadow-lg'>
+                    <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-3 shadow-lg'>
                         <div className='flex justify-between items-center'>
-                            <h1 className='pb-2'>Recent Invoices</h1>
+                            <h1 className='text-[20px]'>Recent Invoices</h1>
                             <div>
                                 {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
-                                {/* {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={UploadToServer} name={'Upload to Server'} />} */}
                             </div>
                         </div>
                         <Invoice info={info} />

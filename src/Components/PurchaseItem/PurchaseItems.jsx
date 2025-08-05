@@ -47,6 +47,11 @@ const PurchaseItems = ({ user = [] }) => {
         bran_value: 'Select a filter',
     })
 
+    const [search, setSearch] = useState({
+        type: "Purchase items",
+        userId: null
+    })
+
     const RecentInvoice = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
@@ -56,7 +61,7 @@ const PurchaseItems = ({ user = [] }) => {
                 'authorization': token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ type: "Purchase items" })
+            body: JSON.stringify(search)
         });
         const data = await response.json();
         setIsLoading(false)
@@ -82,13 +87,7 @@ const PurchaseItems = ({ user = [] }) => {
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] shadow-lg mt-4'>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                    <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
-                            default_select={filter?.bran} default_value={filter?.bran_value}
-                            onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
-                            label={'Customer'} />
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}

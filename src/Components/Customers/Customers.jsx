@@ -160,7 +160,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
-                                    {info?.role === "superadmin" && <th scope="col" className="py-2 text-center">Action</th>}
+                                    <th scope="col" className="py-2 text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

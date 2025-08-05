@@ -117,10 +117,8 @@ const SupplierCard = ({ item, i, state = [], info = {}, GetSupplier, select, Ope
                                 <path fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
                             </svg>Make Payment
                         </NavLink>
-                        <NavLink to={`/payment/history/${item?.id}`} onClick={() => setOption(false)} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                                <path fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
-                            </svg>Payment History
+                        <NavLink to={`/payment/history/${item?.id}`} onClick={() => setOption(false)} className="flex justify-start items-center gap-1.5 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" className="ml-[2px]" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.45 0-6.012-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21m2.8-4.8L11 12.4V7h2v4.6l3.2 3.2z" /></svg>Payment History
                         </NavLink>
                         <div onClick={() => { setShow(true); setOption(false) }} className={`${info?.role === 'admin' ? 'hidden' : ''} flex justify-start items-center gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-1.5 py-1 rounded text-xs`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
