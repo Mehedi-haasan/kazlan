@@ -11,7 +11,7 @@ import Add from "../../icons/Add";
 import { NavLink } from "react-router-dom";
 import Notification from "../Input/Notification";
 
-const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, OpenModal, outside }) => {
+const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, OpenModal, outside, isChecked, TikBox }) => {
     const [values, setValues] = useState({})
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -78,12 +78,12 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
 
     return (
         <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
-            {/* <th className="w-4 py-2 px-4 border-x">
+            <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
-                    <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="checkbox-table-search-1" type="checkbox" onChange={() => TikBox(item.id)} checked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </th> */}
+            </th>
             <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
                 <Notification message={message} />
             </th>

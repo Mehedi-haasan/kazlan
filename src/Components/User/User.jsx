@@ -17,9 +17,10 @@ import EscapeRedirect from "../Wholesale/EscapeRedirect";
 
 const User = ({ entries, info = {} }) => {
 
+    const [selectAll, setSelectAll] = useState(false);
+    const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
     const targetRef = useRef();
     const [users, setUsers] = useState([]);
-    const [message, setMessage] = useState({ id: '', mgs: '' });
     const [open, setOpen] = useState(false);
     const [show, setShow] = useState(false)
     const [page, setPage] = useState(1);
@@ -90,6 +91,42 @@ const User = ({ entries, info = {} }) => {
 
     EscapeRedirect()
 
+
+    const TikBox = (id) => {
+        setUsers(prev => {
+            const newData = prev.map(item => {
+                if (item.id === id) {
+                    return { ...item, active: !item.active };
+                } else {
+                    return item;
+                }
+            });
+
+            // Check if all are active based on newData
+            const allActive = newData.every(item => item.active === false);
+            setSelectAll(allActive)
+
+            return newData;
+        });
+    };
+
+
+    const BulkDelete = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/bulk/update/users`, {
+            method: 'POST',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({ data: users }),
+        });
+        const result = await response.json();
+        setMessage({ id: Date.now(), mgs: result?.message });
+        GetUsers()
+    }
+
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
             <Notification message={message} />
@@ -103,7 +140,7 @@ const User = ({ entries, info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-5">
-                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
+                        <Excel handeldelete={() => { BulkDelete() }} onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={() => { }} />
                     </div>
                 </div>
@@ -177,12 +214,19 @@ const User = ({ entries, info = {} }) => {
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead class="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
-                                    {/* <th className="w-4 py-2 px-4 border-r">
+                                    <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                            <input id="checkbox-table-search-1" type="checkbox"
+                                                checked={selectAll}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    setSelectAll(isChecked);
+                                                    setUsers(prev => prev.map(item => ({ ...item, active: !isChecked })));
+                                                }}
+                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th> */}
+                                    </th>
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center">
                                             Name
@@ -241,14 +285,14 @@ const User = ({ entries, info = {} }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users?.map((item, i) => (
-                                    <tr className={`border-b font-thin ${i %2 === 1 ? 'bg-[#FAF9EE]': ''}`}>
-                                        {/* <th className="w-4 py-2 px-4 border-x">
+                                {users?.map((item, i,) => (
+                                    <tr className={`border-b font-thin ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
+                                        <th className="w-4 py-2 px-4 border-x">
                                             <div className="flex items-center">
-                                                <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                <input id="checkbox-table-search-1" onChange={() => TikBox(item.id)} checked={!item?.active} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                                 <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                             </div>
-                                        </th> */}
+                                        </th>
                                         <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
                                         <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.username}</th>
                                         <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.email}</th>

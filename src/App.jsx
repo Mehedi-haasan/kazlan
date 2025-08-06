@@ -46,6 +46,7 @@ import ReturnItems from "./Components/SaleReturn/ReturnItems.jsx";
 import ReturnInvoice from "./Components/ReturnInvoice/ReturnInvoice.jsx";
 import Attribute from './Components/Attribute/Attribute.jsx'
 import SaleOrderEdit from "./Components/SaleOrderEdit/SaleOrderEdit.jsx";
+import ExcelSheet from "./Components/ExcelSheet/ExcelSheet.jsx";
 
 
 
@@ -298,6 +299,8 @@ function App() {
           <Route path="/supplier/balance/:id" element={<SupplierPayment info={info} />} />
 
           <Route path="/company" element={<Company />} />
+
+          <Route path="/excel/sheet" element={<ExcelSheet />} />
 
           <Route path="/sale/items" element={<SaleItems />} />
 

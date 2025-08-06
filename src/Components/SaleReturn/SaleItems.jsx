@@ -13,9 +13,10 @@ import SelectionComponent from "../Input/SelectionComponent";
 import Calendar from '../Wholesale/Calender';
 
 
-const SaleItems = ({ user = [] }) => {
+const SaleItems = ({ }) => {
 
     const targetRef = useRef();
+    const [user, setUser] = useState([])
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [invoices, setInvoices] = useState([]);
@@ -28,7 +29,9 @@ const SaleItems = ({ user = [] }) => {
     sevenDaysAgo.setDate(today.getDate() - 7);
     const [raw, setRaw] = useState({
         fromDate: sevenDaysAgo.toISOString(),
-        toDate: today.toISOString()
+        toDate: today.toISOString(),
+        userId: null,
+        type: "Sale"
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -45,32 +48,48 @@ const SaleItems = ({ user = [] }) => {
         bran: false,
         bran_value: 'Select a filter',
     })
-    const [search, setSearch] = useState({
-        type: "Sale",
-        userId: null
-    })
+
+
+    const GetCustomer = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setUser(data?.items)
+        setIsLoading(false)
+    }
 
     const RecentInvoice = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/purchase/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/from/to/${page}/${pageSize}`, {
             method: 'POST',
             headers: {
                 'authorization': token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(search)
+            body: JSON.stringify(raw)
         });
         const data = await response.json();
         setIsLoading(false)
         setInvoices(data?.items);
-        setTotalItem(data?.totalItems)
+        setTotalItem(data?.count)
     }
 
     useEffect(() => {
         document.title = "Sale items"
-        RecentInvoice(invoices)
+        GetCustomer()
     }, [])
+
+    useEffect(() => {
+        RecentInvoice()
+    }, [pageSize, page, raw])
 
 
     return (
@@ -87,7 +106,7 @@ const SaleItems = ({ user = [] }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4">
                     <div className='pt-1'>
-                        <SelectionComponent options={[{ id: 1, name: "Party" }, { id: 2, name: "Normal" }]}
+                        <SelectionComponent options={user}
                             default_select={filter?.bran} default_value={filter?.bran_value}
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); }}
                             label={'Customer'} />

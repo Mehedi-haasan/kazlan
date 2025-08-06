@@ -11,7 +11,7 @@ import ImageSelect from "../Input/ImageSelect";
 import logo from '../Logo/logu (2).png'
 
 
-const WarehouseCard = ({ item, i, FetchShop }) => {
+const WarehouseCard = ({ item, i, FetchShop, info = {}, isChecked, TikBox }) => {
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false);
     const [image_url, setImage_Url] = useState(null);
@@ -101,26 +101,25 @@ const WarehouseCard = ({ item, i, FetchShop }) => {
 
     return (
 
-        <tr className={`border-b ${i %2 === 1 ? 'bg-[#FAF9EE]': ''}`}>
-            {/* <th className="w-4 py-2 px-4 border-x">
-
+        <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
+            <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
-                    <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="checkbox-table-search-1" type="checkbox" onChange={() => TikBox(item.id)} checked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </th> */}
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.count}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth - item?.TotalCost}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.employee}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
-            <th scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2">
+            </th>
+            <th className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]">{item?.count}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalCost}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]">{item?.TotalCost}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.TotalWorth - item?.TotalCost}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]"> {item?.employee}</th>
+            <th className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
+            <th className="px-2 py-2 flex justify-center items-center border-r gap-2">
                 <Notification message={message} />
                 <Edit size='22px' onClick={() => { setEdit(true) }} />
-                <Remove size='18px' onClick={() => { setShow(true) }} />
+                <Remove size='18px' onClick={() => { setShow(true) }} className={`${info?.role === "superadmin" ? '' : 'hidden'}`} />
                 <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
                     <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">

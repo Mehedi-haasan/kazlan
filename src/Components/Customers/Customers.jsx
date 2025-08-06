@@ -11,11 +11,14 @@ import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 import Selection from "../Input/Selection";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
+import Notification from "../Input/Notification";
 
 
 const Customers = ({ entries, state = [], info = {} }) => {
 
 
+    const [selectAll, setSelectAll] = useState(false);
+    const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
     const outside = useRef(null)
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
@@ -62,9 +65,44 @@ const Customers = ({ entries, state = [], info = {} }) => {
     EscapeRedirect()
 
 
+    const TikBox = (id) => {
+        setCustomer(prev => {
+            const newData = prev.map(item => {
+                if (item.id === id) {
+                    return { ...item, active: !item.active };
+                } else {
+                    return item;
+                }
+            });
+
+            // Check if all are active based on newData
+            const allActive = newData.every(item => item.active === false);
+            setSelectAll(allActive)
+
+            return newData;
+        });
+    };
+
+
+    const BulkDelete = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/bulk/update/customer`, {
+            method: 'POST',
+            headers: {
+                'authorization': token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({ data: customer }),
+        });
+        const result = await response.json();
+        setMessage({ id: Date.now(), mgs: result?.message });
+        GetCustomer()
+    }
+
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
-
+          <Notification message={message}/>
 
             <div className="flex justify-between items-center px-4 py-2 bg-[#FFFFFF] rounded shadow">
                 <h1 className="font-semibold text-lg">Customer List</h1>
@@ -79,7 +117,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
+                        <Excel handeldelete={() => { BulkDelete() }} onClick={() => generatePDF(targetRef, { filename: 'page.pdf' })} Jpg={getPng} />
                         <Search SearchProduct={() => { }} />
                     </div>
                 </div>
@@ -88,12 +126,19 @@ const Customers = ({ entries, state = [], info = {} }) => {
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <thead className="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
-                                    {/* <th className="w-4 py-2 px-4 border-r">
+                                    <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
-                                            <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                                            <input id="checkbox-table-search-1" type="checkbox"
+                                                checked={selectAll}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    setSelectAll(isChecked);
+                                                    setCustomer(prev => prev.map(item => ({ ...item, active: !isChecked })));
+                                                }}
+                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
                                             <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                         </div>
-                                    </th> */}
+                                    </th>
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center">
                                             Name
@@ -165,7 +210,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             </thead>
                             <tbody>
                                 {customer?.map((item, i) => {
-                                    return <CustomerCard outside={outside} item={item} state={state} i={i} GetCustomer={GetCustomer} info={info} select={select} OpenModal={OpenModal} />
+                                    return <CustomerCard outside={outside} item={item} isChecked={!item?.active} TikBox={TikBox} state={state} i={i} GetCustomer={GetCustomer} info={info} select={select} OpenModal={OpenModal} />
                                 })}
                             </tbody>
                         </table>

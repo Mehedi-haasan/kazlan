@@ -14,9 +14,10 @@ import SelectionComponent from "../Input/SelectionComponent";
 
 
 
-const PurchaseItems = ({ user = [] }) => {
+const PurchaseItems = ({ }) => {
 
     const targetRef = useRef();
+    const [user, setUser] = useState([])
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [invoices, setInvoices] = useState([]);
@@ -29,7 +30,9 @@ const PurchaseItems = ({ user = [] }) => {
     sevenDaysAgo.setDate(today.getDate() - 7);
     const [raw, setRaw] = useState({
         fromDate: sevenDaysAgo.toISOString(),
-        toDate: today.toISOString()
+        toDate: today.toISOString(),
+        userId: null,
+        type: "Purchase items"
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -47,32 +50,47 @@ const PurchaseItems = ({ user = [] }) => {
         bran_value: 'Select a filter',
     })
 
-    const [search, setSearch] = useState({
-        type: "Purchase items",
-        userId: null
-    })
+    const GetCustomer = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Supplier`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setUser(data?.items)
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        document.title = "Purchase items"
+        GetCustomer()
+    }, [])
+
 
     const RecentInvoice = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/purchase/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/from/to/${page}/${pageSize}`, {
             method: 'POST',
             headers: {
                 'authorization': token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(search)
+            body: JSON.stringify(raw)
         });
         const data = await response.json();
         setIsLoading(false)
         setInvoices(data?.items);
-        setTotalItem(data?.totalItems)
+        setTotalItem(data?.count)
     }
 
     useEffect(() => {
-        document.title = "Purchase items"
-        RecentInvoice(invoices)
-    }, [])
+        RecentInvoice()
+    }, [raw, page, pageSize])
 
 
     return (

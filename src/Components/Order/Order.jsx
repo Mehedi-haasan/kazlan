@@ -12,10 +12,11 @@ import { handleDateConvert } from '../Input/Time'
 import InvoiceTemp from '../RecentInvoice/InvoiceTemp'
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
 
-const Order = ({ user = [], info = {} }) => {
+const Order = ({ info = {} }) => {
 
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
+    const [user, setUser] = useState([])
     const { ref, getPng } = useToImage(option)
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
@@ -29,7 +30,8 @@ const Order = ({ user = [], info = {} }) => {
     const [raw, setRaw] = useState({
         fromDate: sevenDaysAgo.toISOString(),
         toDate: today.toISOString(),
-        userId: null
+        userId: null,
+        type: null
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -48,10 +50,31 @@ const Order = ({ user = [], info = {} }) => {
     })
     EscapeRedirect()
 
+
+    const GetCustomer = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setUser(data?.items)
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        document.title = "Orders"
+        GetCustomer()
+    }, [])
+
     const GetOrder = async () => {
         const token = localStorage.getItem('token')
         setIsLoading(true)
-        const res = await fetch(`${BaseUrl}/api/get/user/recent/order/from/to`, {
+        const res = await fetch(`${BaseUrl}/api/get/user/recent/order/from/to/${page}/${pageSize}`, {
             method: 'POST',
             headers: {
                 "authorization": token,
@@ -67,9 +90,8 @@ const Order = ({ user = [], info = {} }) => {
 
 
     useEffect(() => {
-        document.title = "Orders"
         GetOrder()
-    }, [raw])
+    }, [raw, page, pageSize])
 
 
 
@@ -85,7 +107,7 @@ const Order = ({ user = [], info = {} }) => {
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}
-                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); }}
+                            onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'User'} />
                     </div>
                     <div>
