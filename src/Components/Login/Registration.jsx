@@ -77,7 +77,7 @@ const Registration = ({ state }) => {
   return (
     <div className="min-h-screen pb-12 py-5 px-4">
       <Notification message={message} />
-      <div className='bg-[#FFFFFF] rounded-xl shadow-lg'>
+      <div className='bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-xl shadow-lg'>
         <div className='border-b'>
           <h1 className='py-4 pl-8'>User Details</h1>
         </div>
@@ -111,31 +111,31 @@ const Registration = ({ state }) => {
             </div>
             <div className=''>
               <label className="block  text-sm  mb-1 font-thin">Full Name</label>
-              <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your first name" />
+              <input type="text" onChange={(e) => { setValues({ ...values, name: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 dark:bg-[#040404] dark:text-white" placeholder="Enter your first name" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Phone</label>
-              <input type="text" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your last name" />
+              <input type="text" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your last name" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Bank Name</label>
-              <input type="text" onChange={(e) => { setValues({ ...values, bankname: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your mobile number" />
+              <input type="text" onChange={(e) => { setValues({ ...values, bankname: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your mobile number" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Account Name</label>
-              <input type="text" onChange={(e) => { setValues({ ...values, accountname: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your whatsapp number" />
+              <input type="text" onChange={(e) => { setValues({ ...values, accountname: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your whatsapp number" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Account Number</label>
-              <input type="number" onChange={(e) => { setValues({ ...values, accountnumber: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your address" />
+              <input type="number" onChange={(e) => { setValues({ ...values, accountnumber: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your address" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Address</label>
-              <input type="email" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
+              <input type="email" onChange={(e) => { setValues({ ...values, address: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
             </div>
             <div>
               <label className="block  text-sm  mb-1 font-thin">Email</label>
-              <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
+              <input type="email" onChange={(e) => { setValues({ ...values, email: e.target.value }) }} className="w-full p-3 dark:bg-[#040404] dark:text-white rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your email" />
             </div>
             <div>
               <SelectionComponent options={warehouses} onSelect={(v) => { setValues({ ...values, compId: v?.id }) }} label={`Select Warehouse`} className='' />
@@ -146,7 +146,7 @@ const Registration = ({ state }) => {
             <div className='relative'>
               <label className="block  text-sm  mb-1 font-thin">Password</label>
               {
-                showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+                showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(true); }} />
               }
               <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 bg-white/20  rounded-lg focus:outline-none border font-thin focus:ring-2 focus:ring-blue-400 " placeholder="Enter your password" />
             </div>

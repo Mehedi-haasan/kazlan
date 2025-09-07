@@ -7,7 +7,7 @@ export function getFormattedDate() {
 
 export function handleDateConvert(date) {
     const formatted = date.toLocaleDateString('en-GB', {
-        day: '2-digit',
+        day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
@@ -223,4 +223,90 @@ export function DiscountCalculate(itm) {
     }
 
     return parseInt(sale)
+}
+
+
+export function BanglaToEnglish(v) {
+    if (typeof v !== 'string') v = String(v);
+
+    const banglaDigits = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '০': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9'
+    };
+
+
+    let num = v.split('').map(char => banglaDigits[char] || char).join('');
+    return num - 0
+};
+
+export function numberToWords(num) {
+    if (num === 0) return "Zero Taka Only";
+
+    const ones = [
+        "", "One", "Two", "Three", "Four", "Five", "Six",
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+        "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+        "Eighteen", "Nineteen"
+    ];
+
+    const tens = [
+        "", "", "Twenty", "Thirty", "Forty", "Fifty",
+        "Sixty", "Seventy", "Eighty", "Ninety"
+    ];
+
+    const twoDigits = (n) => {
+        if (n === 0) return "";
+        if (n < 20) return ones[n];
+        return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+    };
+
+    const threeDigits = (n) => {
+        if (n === 0) return "";
+        const hundred = Math.floor(n / 100);
+        const rest = n % 100;
+        let s = "";
+        if (hundred) s += ones[hundred] + " Hundred";
+        if (rest) s += (s ? " " : "") + twoDigits(rest);
+        return s;
+    };
+
+    // Indian scales: after the rightmost 3 digits, take groups of 2
+    const scales = ["Thousand", "Lakh", "Crore", "Arab", "Kharab"];
+
+    const abs = Math.floor(Math.abs(num));
+    const units = abs % 1000;                 // rightmost 3 digits
+    let higher = Math.floor(abs / 1000);      // everything to the left of 3-digit group
+
+    const parts = [];
+
+    // process 2-digit groups for Thousand, Lakh, Crore, ...
+    let i = 0;
+    while (higher > 0 && i < scales.length) {
+        const group = higher % 100;             // take 2 digits
+        if (group) parts.unshift(`${twoDigits(group)} ${scales[i]}`);
+        higher = Math.floor(higher / 100);
+        i++;
+    }
+
+    if (units) parts.push(threeDigits(units));
+
+    return parts.join(" ").trim() + " Taka Only";
 }

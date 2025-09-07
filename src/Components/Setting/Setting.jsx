@@ -122,7 +122,7 @@ const Setting = ({ userinfo = {} }) => {
             <Notification message={message} />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
-                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
+                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded border shadow'>
                         <h1 className='py-2 text-lg'>Setting</h1>
                         <button onClick={() => setSelect('General')} className="flex justify-start items-center gap-2 p-2 hover:bg-blue-500 hover:text-white rounded w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
@@ -145,7 +145,7 @@ const Setting = ({ userinfo = {} }) => {
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "General" ? '' : 'hidden'}`}>
                     <div >
 
-                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow flex justify-between items-center pb-3'>
+                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-t border-b shadow flex justify-between items-center pb-3'>
                             <div>
                                 <h1 className='pt-1 pb-3'>Genarel</h1>
                             </div>
@@ -153,7 +153,7 @@ const Setting = ({ userinfo = {} }) => {
                                 <SelectionComponent options={allComp} onSelect={(v) => { setCompId(v?.id) }} />
                             </div>}
                         </div>
-                        <div className=' bg-[#FFFFFF] rounded-b shadow'>
+                        <div className=' bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-b shadow'>
                             {
                                 userinfo?.role === "superadmin" && <div className="py-4">
                                     <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={user?.image_url} />
@@ -183,10 +183,10 @@ const Setting = ({ userinfo = {} }) => {
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "App" ? '' : 'hidden'}`}>
                     <div >
 
-                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow'>
+                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-t border-b shadow'>
                             <h1 className='pt-1 pb-3'>Genarel</h1>
                         </div>
-                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] rounded-b shadow'>
+                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-b shadow'>
                             <h1 className="pt-3 pb-1">Favicon</h1>
                             <div className='border h-[120px] w-[120px] flex justify-center items-center rounded-md'>
                                 <img src={`https://cdn-icons-png.flaticon.com/128/149/149071.png`} alt='fjgkfd' className='h-[100px] w-[100px] rounded-s-none' />
@@ -209,10 +209,10 @@ const Setting = ({ userinfo = {} }) => {
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "Email" ? '' : 'hidden'}`}>
                     <div >
 
-                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow'>
+                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-t border-b shadow'>
                             <h1 className='pt-1 pb-3'>SMTP Settings</h1>
                         </div>
-                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] rounded-b shadow'>
+                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-b shadow'>
                             <InputComponent label={'Host'} placeholder={user?.first_name} />
                             <InputComponent label={'Port'} placeholder={user?.last_name} />
                             <InputComponent label={'Username'} placeholder={user?.email} />
@@ -229,10 +229,10 @@ const Setting = ({ userinfo = {} }) => {
                 <div className={`grid col-span-1 lg:col-span-2 xl:col-span-3 ${select === "SMS" ? '' : 'hidden'}`}>
                     <div >
 
-                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] rounded-t border-b shadow'>
+                        <div className='px-3 md:px-4 lg:px-5 pt-3 md:pt-4 lg:pt-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-t border-b shadow'>
                             <h1 className='pt-1 pb-3'>SMS Setting</h1>
                         </div>
-                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] rounded-b shadow pt-2'>
+                        <div className='px-3 md:px-4 lg:px-5 pv-3 md:pv-4 lg:pv-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-b shadow pt-2'>
                             <InputComponent label={'Application Name'} placeholder={user?.first_name} />
                             <InputComponent label={'Footer text'} placeholder={user?.last_name} />
                             <InputComponent label={'Email'} placeholder={user?.email} />

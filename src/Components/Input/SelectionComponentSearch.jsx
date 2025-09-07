@@ -58,16 +58,16 @@ const SelectionComponentSearch = ({ options, onSelect, label, className = 'round
 
 
   return (
-    <div className='w-full bg-white'>
-      <h1 className="mb-2 text-start text-sm font-semibold text-black">{label}</h1>
+    <div className='w-full bg-white dark:bg-[#040404] dark:text-white'>
+      <h1 className="mb-2 text-start text-sm font-semibold text-black dark:text-white">{label}</h1>
       <div ref={outside} className={`${hide ? 'border-t border-x pr-[1px]' : 'border '} rounded-l relative bg-white h-[39px] z-10`}>
         <RightArrow onClick={() => { setHide(!hide) }} className='rotate-90 absolute top-1.5 right-1 font-thin cursor-pointer' />
         {default_value !== "Select a filter" && default_value !== '' && <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { onSelect({ id: null, name: "Select a filter" }); setSelect('Select a filter') }} className='absolute z-10 top-2 right-6 font-thin cursor-pointer' width="17" height="17" viewBox="0 0 24 24">
           <path fill="currentColor" d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z" />
         </svg>}
 
-        <div className={`font-thin p-1.5 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280]' : 'text-black'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{default_value}</div>
-        <div className={` ${hide ? '' : 'hidden'} absolute left-[-1px] right-[-1px] border-x border-b rounded-b bg-white`}>
+        <div className={`font-thin p-1.5 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280] dark:bg-[#040404] dark:text-white' : 'text-black'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{default_value}</div>
+        <div className={` ${hide ? '' : 'hidden'} absolute left-[-1px] right-[-1px] border-x border-b rounded-b bg-white dark:bg-[#040404] dark:text-white`}>
           <div className='px-2'>
             <input type='text' ref={inputRef}
               onKeyDown={(e) => {
@@ -94,9 +94,9 @@ const SelectionComponentSearch = ({ options, onSelect, label, className = 'round
                   handleLeft()
                 }
               }}
-              className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm' onChange={handleFilter} />
+              className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm dark:bg-[#040404] dark:text-white' onChange={handleFilter} />
           </div>
-          <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white ${className} pt-1 `}>
+          <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white dark:bg-[#040404] dark:text-white ${className} pt-1 `}>
             {
               data?.map((opt, i) => {
                 return <div onMouseEnter={() => { setSelectedId(i) }}
@@ -108,7 +108,7 @@ const SelectionComponentSearch = ({ options, onSelect, label, className = 'round
                   }}
 
                   onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); }}
-                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
                   {opt?.name}
                 </div>
               })

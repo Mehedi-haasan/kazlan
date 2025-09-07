@@ -106,34 +106,33 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
   }
 
   return (
-    <tr className={`border-b z-10 font-thin ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
+    <tr className={`border-b z-10 font-thin ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
       <td className="w-4 py-2 px-4 border-x">
         <div className="flex items-center">
           <input id="checkbox-table-search-1" onChange={() => TikBox(item.id)} checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
       </td>
-      <td scope="col" className="px-2 py-2.5 border-x  text-[#212529]">{item?.name} {item?.edition}
+      <td scope="col" className="px-2 py-2.5 border-x  ">{item?.name} {item?.edition}
         <Notification message={message} />
       </td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.brand?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.category?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.company?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.cost}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.price}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.qty} {item?.qty_type}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{item?.creator}</td>
-      <td scope="col" className="px-2 py-2.5 border-r  text-[#212529]">{formatDate(item?.createdAt)}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.brand?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.category?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.company?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.cost}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.price}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.qty} {item?.qty_type}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.creator}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{formatDate(item?.createdAt)}</td>
       <td scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative">
         {
-          selected === item?.id && <div className="absolute -top-12 bg-white shadow-xl rounded-md right-14 w-[120px] p-1.5 z-50 border">
+          selected === item?.id && <div className="absolute -top-12 bg-white dark:bg-[#040404] dark:text-white shadow-xl rounded-md right-14 w-[120px] p-1.5 z-50 border">
             <NavLink to={`/update/product/${item?.id}`} className="flex justify-start items-center gap-[7px] cursor-pointer hover:bg-gray-200 px-1 py-[2px] rounded">
               <Edit size="17px" /><h1 className="mt-[3px] text-xs">Edit</h1>
             </NavLink>
             <NavLink to={`/tran/product/${item?.id}`} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded">
-              <svg xmlns="http://www.w3.org/2000/svg" widtd="15" height="15" viewBox="0 0 16 16">
-                <patd fill="currentColor" d="M6 9.5A2 2 0 0 1 7.937 11H13.5a.5.5 0 0 1 .09.992L13.5 12l-5.563.001a2 2 0 0 1-3.874 0L2.5 12a.5.5 0 0 1-.09-.992L2.5 11h1.563A2 2 0 0 1 6 9.5m4-7A2 2 0 0 1 11.937 4H13.5a.5.5 0 0 1 .09.992L13.5 5l-1.563.001a2 2 0 0 1-3.874 0L2.5 5a.5.5 0 0 1-.09-.992L2.5 4h5.563A2 2 0 0 1 10 2.5" />
-              </svg><h1 className="mt-[3px] text-xs">Transactions</h1>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M4.58 8.607L2 8.454C3.849 3.704 9.158 1 14.333 2.344c5.513 1.433 8.788 6.918 7.314 12.25c-1.219 4.411-5.304 7.337-9.8 7.406" /><path stroke-dasharray=".5 3" d="M12 22C6.5 22 2 17 2 11" /><path d="M13.604 9.722c-.352-.37-1.213-1.237-2.575-.62c-1.361.615-1.577 2.596.482 2.807c.93.095 1.537-.11 2.093.47c.556.582.659 2.198-.761 2.634s-2.341-.284-2.588-.509m1.653-6.484v.79m0 6.337v.873" /></g>
+              </svg><h1 className="text-xs">Transactions</h1>
             </NavLink>
             <div onClick={() => { setShow(true); modalOpen(item?.id) }} className={`${info?.role === "admin" ? 'hidden' : ''} flex justify-start items-center gap-2.5 cursor-pointer text-red-500 hover:bg-gray-200 px-[5px] py-[2px] rounded`}>
               <Remove size="15px" onClick={() => { setShow(true) }} className={`text-red-500`} /><h1 className="mt-[3px] text-xs">Delete</h1>

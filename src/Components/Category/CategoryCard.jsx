@@ -11,6 +11,7 @@ import ImageSelect from "../Input/ImageSelect";
 import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import { useLottie } from "lottie-react";
 import Notification from "../Input/Notification";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -23,6 +24,8 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
     const [isLoading, setIsLoading] = useState(false)
     const [showlotti, setLottiShow] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const goto = useNavigate()
+
     const handleUpdate = async (image_url, url, id) => {
 
         values.image_url = image_url;
@@ -128,29 +131,29 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
 
     return (
 
-        <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''} border-b border-x`}>
+        <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b border-x`}>
             <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" onChange={() => TikBox(item.id)} isChecked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
+            <th scope="col" className="px-2 py-2 border-x font-thin ">{item?.name}
                 <Notification message={message} />
                 <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
                     <>{View}</>
                 </Modal>
             </th>
-            <th scope="col" className="px-2 py-1 border-r font-thin text-[#212529]">
+            <th scope="col" className="px-2 py-1 border-r font-thin ">
                 <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-10 w-10 rounded" />
             </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.creator}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{formatDate(item?.createdAt)}</th>
             <th scope="col" className=" py-3 flex justify-center items-center gap-2">
-                <Edit size='20px' onClick={() => { setEdit(true) }} />
+                <Edit size='20px' onClick={() => { goto(`/update/category/${item?.id}`) }} />
                 <Remove size='18px' onClick={() => { setShow(true) }} className={`${info?.role === "superadmin" ? '' : "hidden"}`} />
                 <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
-                    <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
+                    <h1 className="font-semibold text-lg py-2 text-black dark:bg-[#040404] dark:text-white">Are you sure you want to delete?</h1>
                     <div className="flex justify-between items-center pb-6 pt-4">
                         <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
                         <button onClick={handleDelete} disabled={isLoading} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>

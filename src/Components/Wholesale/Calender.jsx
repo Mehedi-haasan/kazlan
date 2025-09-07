@@ -66,7 +66,7 @@ const Calendar = ({ label, readOnly = true, getDate, getTime, value }) => {
     }, []);
 
     return (
-        <div className='w-full' ref={cal}>
+        <div className='w-full dark:bg-[#040404] dark:text-white' ref={cal}>
             <h1 className='pb-[5px] pt-1 text-[15px]'>{label}</h1>
 
             <div className='flex justify-start items-center relative w-full'>
@@ -77,15 +77,15 @@ const Calendar = ({ label, readOnly = true, getDate, getTime, value }) => {
                 </div>
 
                 <div className='w-full'>
-                    <input readOnly={readOnly} onClick={() => setIsFocus(false)} className='focus:outline-none border pt-[7px] pb-[6px] px-1.5 rounded-r w-full font-thin text-[15px]' value={value} onChange={(e) => { }} placeholder={value} />
+                    <input readOnly={readOnly} onClick={() => setIsFocus(false)} className='focus:outline-none dark:bg-[#040404] dark:text-white border pt-[7px] pb-[6px] px-1.5 rounded-r w-full font-thin text-[15px]' value={value} onChange={(e) => { }} placeholder={value} />
 
-                    {isFocus && <div className={`max-w-md mx-auto top-10 bg-white rounded-xl shadow-md border overflow-hidden absolute z-40`}>
-                        <div className="flex justify-between items-center bg-gray-100 px-1 pt-2 pb-2">
+                    {isFocus && <div className={`max-w-md mx-auto top-10 bg-white dark:bg-[#040404] dark:text-white rounded-xl shadow-md border overflow-hidden absolute z-40`}>
+                        <div className="flex justify-between items-center bg-gray-100 dark:bg-[#040404] dark:text-white px-1 pt-2 pb-2">
                             <RightArrow className='rotate-180 cursor-pointer' onClick={handlePrevMonth} />
                             <h2 className="text-md font-semibold">{`${monthName} ${year}`}</h2>
                             <RightArrow className='cursor-pointer' onClick={handleNextMonth} />
                         </div>
-                        <div className="grid grid-cols-7 gap-1 text-center text-sm font-thin border-b pb-1 px-2 bg-gray-100">
+                        <div className="grid grid-cols-7 gap-1 text-center text-sm font-thin border-b pb-1 px-2 bg-gray-100 dark:bg-[#040404] dark:text-white">
                             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                                 <div key={day} className="text-black text-sm ">
                                     {day}

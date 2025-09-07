@@ -10,6 +10,8 @@ import ImageSelect from '../Input/ImageSelect'
 import Add from '../../icons/Add';
 import logo from '../Logo/photo.png'
 import SelectionComponent from '../Input/SelectionComponent'
+import { BanglaToEnglish } from '../Input/Time';
+import RightArrow from '../../icons/RightArrow';
 
 
 const ProductUpdate = ({ info = {}, shop = [], editio }) => {
@@ -23,7 +25,11 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [values, setValues] = useState({})
     const input_name = useRef(null);
-
+    const dis = useRef(null)
+    const [selectedId, setSelectedId] = useState(0)
+    const [disOnSale, setDisonSale] = useState([{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }])
+    const [disType, setDisType] = useState(false)
+    const dtype = useRef()
 
     const GetProduct = async () => {
         const res = await fetch(`${BaseUrl}/api/get/product/search/${params?.id}`);
@@ -148,20 +154,83 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
                             <div>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                        <InputComponent label={"M.R.P*"} placeholder={'Enter M.R.P'} type={'number'} isRequered={true} value={values?.cost} onChange={(v) => { setValues({ ...values, cost: v, price: v }) }} />
-                                        <InputComponent label={"Sale Price"} placeholder={'Enter sale price'} type={'number'} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v }) }} />
+                                        <InputComponent label={"M.R.P*"} placeholder={'Enter M.R.P'} type={'text'} isRequered={true} value={values?.cost} onChange={(v) => {
+                                            let num = BanglaToEnglish(v)
+                                            setValues({ ...values, cost: num, price: num })
+                                        }} />
+                                        {/* <InputComponent label={"Sale Price"} placeholder={'Enter sale price'}
+                                            type={'number'} isRequered={true} value={values?.price}
+                                            onChange={(v) => { setValues({ ...values, price: v }) }} /> */}
                                         <div>
-                                            <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
-                                            <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' value={values?.discount} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }} placeholder='' className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[50%]' />
-                                                <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, discount_type: v.target.value }) }}
-                                                    className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
-                                                >
-                                                    {[{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }].map(({ id, name }) => (
+                                            <p className='py-2 pt-1 font-semibold text-sm'>Discount on Sale</p>
+                                            <div className='flex justify-start items-end pb-1 pt-1'>
+                                                <input ref={dis}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") {
+                                                            setActive("Stock");
+                                                        } else if (e.key === "ArrowRight") {
+                                                            dtype.current.focus();
+                                                            setDisType(true)
+                                                        }
+                                                    }}
 
-                                                        <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
-                                                    ))}
-                                                </select>
+                                                    onChange={(e) => {
+                                                        let num = BanglaToEnglish(e.target.value);
+                                                        setValues({ ...values, discount: num })
+                                                    }}
+                                                    value={values?.discount}
+                                                    placeholder={values?.discount} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+
+                                                <div className='relative z-50 border'>
+                                                    <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                                    <input ref={dtype} value={values?.discount_type} onClick={() => { setDisType(!disType); }}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === "ArrowDown") {
+                                                                if (selectedId === disOnSale?.length - 1) {
+                                                                    setSelectedId(0)
+                                                                } else {
+                                                                    setSelectedId(selectedId + 1)
+                                                                }
+
+                                                            } else if (e.key === "ArrowUp") {
+                                                                if (selectedId === 0) {
+                                                                    setSelectedId(disOnSale?.length - 1)
+                                                                } else {
+                                                                    setSelectedId(selectedId - 1)
+                                                                }
+                                                            } else if (e.key === "Enter" && disOnSale[selectedId]) {
+                                                                setDisType(false);
+                                                                setSelectedId(0);
+                                                                setValues({ ...values, discount_type: disOnSale[selectedId].name })
+                                                                dis.current?.focus();
+                                                            }
+                                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                                    {
+                                                        disType && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                            {
+                                                                disOnSale?.map((opt, i) => {
+                                                                    return <div onMouseEnter={() => { setSelectedId(i) }}
+                                                                        ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === "ArrowDown") {
+                                                                                setSelectedId(i + 2)
+                                                                            }
+                                                                        }}
+
+                                                                        onClick={() => {
+                                                                            setDisType(false);
+                                                                            setValues({ ...values, discount_type: disOnSale[selectedId].name })
+                                                                            setSelectedId(0);
+                                                                            dis.current?.focus();
+                                                                        }}
+                                                                        className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
+                                                                        {opt?.name}
+                                                                    </div>
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
 
                                             </div>
                                         </div>
@@ -184,8 +253,13 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
                                         <div>
                                             <p className='pb-2 font-semibold text-sm'>Quantity</p>
                                             <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' placeholder='' value={values?.qty} onChange={(e) => { setValues({ ...values, qty: e.target.value }) }} className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
-                                                <select value={values?.qty_type} onChange={(e) => { setValues({ ...values, qty_type: e.target.value }) }}
+                                                <input type='text' placeholder='' value={values?.qty} onChange={(e) => {
+                                                    let num = BanglaToEnglish(e.target.value)
+                                                    setValues({ ...values, qty: num })
+                                                }} className='border-y border-l font-thin focus:outline-none rounded-l px-2 pt-[6px] pb-[5px] w-[200px]' />
+                                                <select value={values?.qty_type} onChange={(e) => {
+                                                    setValues({ ...values, qty_type: e.target.value })
+                                                }}
                                                     className={`border text-[#6B7280] w-full text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                                 >
                                                     {[{ id: 1, name: "None" }, { id: 2, name: "Pcs" }, { id: 3, name: "Kgs" }, { id: 4, name: "Bgs" }, { id: 5, name: "Bottol" }].map(({ id, name }) => (

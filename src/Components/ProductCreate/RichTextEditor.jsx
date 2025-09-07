@@ -31,7 +31,6 @@ const RichTextEditor = () => {
 
     const printText = (e) => {
         e.preventDefault()
-        console.log(value);
     }
 
     return (

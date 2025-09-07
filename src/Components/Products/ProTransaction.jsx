@@ -41,7 +41,6 @@ const ProTransaction = ({ entries = [] }) => {
         const data = await res.json()
         setData(data?.items);
         setValues(data?.product);
-        console.log(data)
     }
 
     useEffect(() => {

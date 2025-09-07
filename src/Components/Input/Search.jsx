@@ -33,7 +33,7 @@ const Search = ({ SearchProduct }) => {
             }}
             value={value}
             onChange={handleChange}
-            className="focus:outline-none border rounded p-1.5 font-thin text-sm" />
+            className="focus:outline-none border rounded p-1.5 font-thin text-sm dark:bg-[#040404]" />
     </div>
 }
 

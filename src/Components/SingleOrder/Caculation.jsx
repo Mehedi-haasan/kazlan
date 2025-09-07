@@ -22,7 +22,6 @@ const Caculation = ({ data, discount, discountType, due, pay }) => {
         return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
     }
 
-    console.log(data, discount, discountType, due, pay);
 
     return (
         <>

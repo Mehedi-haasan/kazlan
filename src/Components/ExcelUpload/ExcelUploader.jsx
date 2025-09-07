@@ -4,6 +4,7 @@ import BaseUrl from '../../Constant';
 
 const ExcelUploader = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [message, setMessage]=useState({})
   const [jsonData, setJsonData] = useState([]);
 
   const handleFileChange = (e) => {
@@ -26,13 +27,11 @@ const ExcelUploader = () => {
 
       if (result.success) {
         setJsonData(result.data);
-        console.log(result.data);
       } else {
-        alert(result.message);
+        setMessage({ id: Date.now(), mgs: result.message });
       }
     } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Error uploading file');
+      setMessage({ id: Date.now(), mgs: error.message });
     }
   };
 

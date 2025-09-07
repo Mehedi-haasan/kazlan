@@ -8,7 +8,7 @@ import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import SelectionComponent from "../Input/SelectionComponent";
 import Add from "../../icons/Add";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Notification from "../Input/Notification";
 
 const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, OpenModal, outside, isChecked, TikBox }) => {
@@ -19,6 +19,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
     const [active, setActive] = useState("Address");
     const [option, setOption] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const goto = useNavigate()
 
     const DeleteCustomer = async (id) => {
         try {
@@ -62,7 +63,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
         const data = await response.json();
         setShow(false)
         setIsLoading(false)
-        alert(data.message)
+        setMessage({ id: Date.now(), mgs: data.message });
     }
 
     function formatDate(isoString) {
@@ -77,36 +78,36 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
 
 
     return (
-        <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
+        <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
             <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" onChange={() => TikBox(item.id)} checked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}
+            <th scope="col" className="px-2 py-2 border-x font-thin ">{item?.name}
                 <Notification message={message} />
             </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.phone}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.email}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.bankname}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.accountname}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.accountnumber}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.state?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.address}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.phone}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.email}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.bankname}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.accountname}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.accountnumber}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.state?.name}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.address}</th>
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                     {Math.abs(item?.balance)}
                 </button>
                 {/* <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? 'text-red-600 bg-red-100 border-red-100' : 'text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]'} `}>{item?.balance}</button> */}
             </th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.creator}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{formatDate(item?.createdAt)}</th>
 
-            <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative">
+            <th scope="col" className="p-1 flex justify-center items-center border-r gap-2 relative dark:bg-[#040404] dark:text-white">
                 {
-                    select === item?.id && <div className="absolute -top-12 bg-white shadow-xl rounded-md right-14 w-[140px] p-1.5 z-50 border border-red-500">
-                        <div onClick={() => { setEdit(!edit) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
+                    select === item?.id && <div className="absolute -top-12 bg-white dark:bg-[#040404] dark:text-white shadow-xl rounded-md right-14 w-[140px] p-1.5 z-50 border border-red-500">
+                        <div onClick={() => { goto(`/update/customer/${item?.id}/${item?.state?.name}`) }} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
                             <Edit size="15px" />Edit
                         </div>
                         <NavLink to={`/customer/balance/${item?.id}`} onClick={() => setOption(false)} className="flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs">
@@ -128,7 +129,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
                 </svg>
 
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size={``} className='w-[1000px]'>
-                    <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4 dark:bg-[#040404] dark:text-white">
                         <InputComponent label={"Full Name"} placeholder={item?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
                         <InputComponent label={"Email"} placeholder={item?.email} onChange={(v) => { setValues({ ...values, email: v }) }} />
                         <InputComponent label={"Phone"} placeholder={item?.phone} onChange={(v) => { setValues({ ...values, phone: v }) }} />
@@ -151,7 +152,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
                         active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div className='flex justify-start items-end pb-1'>
                                 <SelectionComponent options={state} onSelect={(v) => { setValues({ ...values, stateId: v?.id }) }} label={"Thana"} className='rounded-l' />
-                                <div className='border-y border-r font-thin text-[#212529] px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer'>
+                                <div className='border-y border-r font-thin  px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer'>
                                     <Add />
                                 </div>
                             </div>
@@ -186,7 +187,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
                 <Modal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
                     <h1 className="py-3 text-lg">Are you sure you want to delete this?</h1>
                     <div className="flex justify-between items-center p-4">
-                        <button onClick={() => { DeleteCustomer(item?.id) }} className="border px-4 py-1.5 rounded border-r font-thin text-[#212529]ed-500 text-red-500">Yes</button>
+                        <button onClick={() => { DeleteCustomer(item?.id) }} className="border px-4 py-1.5 rounded border-r font-thin ed-500 text-red-500">Yes</button>
                         <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 text-blue-500">No</button>
                     </div>
                 </Modal>

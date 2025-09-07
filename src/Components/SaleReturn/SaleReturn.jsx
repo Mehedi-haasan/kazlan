@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { handleDateConvert, PrepareData, CalculateAmount, DiscountCal, DiscountCalculate } from '../Input/Time';
+import { handleDateConvert, PrepareData, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calender from '../Wholesale/Calender';
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -236,6 +236,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     }
 
     const ChangeQty = (id, qty) => {
+        setQuan(false)
         let updateId = parseInt(id)
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
@@ -272,7 +273,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
 
-            <div className='bg-[#FFFFFF]'>
+            <div className='bg-[#FFFFFF] dark:bg-[#040404] dark:text-white'>
                 <div className='border-b p-4 flex justify-between items-center'>
                     <h1 className='text-[20px]'>Sale Return Details</h1>
                     <Notification message={message} />
@@ -313,7 +314,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                 <input type='number' placeholder={'Enter Invoice number'}
                                     onKeyDown={(e) => { if (e.key === "Enter") { GetInvoiceData(e.target.value) } }}
                                     onChange={(e) => { setInvoId(e.target.value) }}
-                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin dark:bg-[#040404] dark:text-white' />
                             </div>
                             <div onClick={() => { GetInvoiceData(invoId) }}
                                 className='border px-3 pt-[7px] pb-[7px] rounded-r cursor-pointer text-white bg-blue-500'>
@@ -355,9 +356,12 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-3 p-4 '>
                     <div>
-                        <InputComponent label={'Quantity'} type={'number'} input_focus={quan} placeholder={0} value={itemQuan}
+                        <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
                             handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
-                            onChange={(v) => { setItemQuan(v); }} className={``} />
+                            onChange={(v) => {
+                                let num = BanglaToEnglish(v)
+                                setItemQuan(num);
+                            }} className={``} />
                     </div>
                     <div className='pt-1.5'>
                         <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
@@ -449,9 +453,9 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                             }
                                         }
                                     }}
-                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin' />
+                                    className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin dark:bg-[#040404] dark:text-white' />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
-                                {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
+                                {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow rounded-b'>
                                     <div className="w-full text-sm text-left rtl:text-right text-gray-500">
                                         <div className="text-xs text-gray-900">
                                             <SearchResultHeader />
@@ -517,7 +521,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                     <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
                                     <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
                                     <div className='flex justify-start items-center border-r'>
-                                        <input type='number' ref={discount_ref}
+                                        <input type='text' ref={discount_ref}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     setAllData([...allData, prepareData]);
@@ -533,8 +537,10 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                             }}
                                             placeholder={0}
                                             onChange={(e) => {
-                                                ChangeDis(e.target.value, prepareData?.discount_type)
+                                                let num = BanglaToEnglish(e.target.value)
+                                                ChangeDis(num, prepareData?.discount_type)
                                             }}
+                                            value={prepareData?.discount}
                                             className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
                                     </div>
                                     <div className='relative z-50 border-l'>
@@ -588,7 +594,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                 </div>
                             )}
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} />
+                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} handleEnter={() => { setQuan(true) }} />
                             })}
                         </div>
                     </div>
@@ -603,7 +609,10 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={last_pay} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }}
+                                    <input type='text' ref={last_pay} onChange={(e) => {
+                                        let num = BanglaToEnglish(e.target.value)
+                                        setValues({ ...values, pay: num })
+                                    }}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
                                                 Order()
@@ -613,7 +622,8 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                             }
                                         }}
                                         placeholder={total}
-                                        className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[55%]' />
+                                        value={values?.pay}
+                                        className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[55%] dark:bg-[#040404] dark:text-white' />
                                     {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[45%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 201, name: "Chalan/Due" }, { id: 202, name: "Cash Memo" }, { id: 203, name: "Paid" }].map(({ id, name }) => (
@@ -643,9 +653,9 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                                     setSelectedId(0);
                                                     last_pay.current?.focus();
                                                 }
-                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
+                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin dark:bg-[#040404] dark:text-white' />
                                         {
-                                            payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                            payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 dark:bg-[#040404] dark:text-white border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
                                                 {
                                                     PayType?.map((opt, i) => {
                                                         return <div onMouseEnter={() => { setSelectedId(i) }}
@@ -662,7 +672,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}
-                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
                                                             {opt?.name}
                                                         </div>
                                                     })
@@ -685,16 +695,22 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                     placeholder={user?.packing ? user?.packing : paking} value={user?.packing ? user?.packing : paking}
                                     // readOnly={loadInvo ? false : true}
                                     onChange={(v) => { setPaking(parseFloat(v)); }} className={``} /> */}
-                                <InputComponent label={'Packing Charge'} type={'number'} input_focus={pack} handleEnter={() => { setPack(false); setDeli(true) }}
-                                    placeholder={0} value={0}
+                                <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} handleEnter={() => { setPack(false); setDeli(true) }}
+                                    placeholder={0} value={paking}
                                     // readOnly={loadInvo ? false : true}
-                                    onChange={(v) => { setPaking(parseFloat(v)); }} className={``} />
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v)
+                                        setPaking(parseFloat(num));
+                                    }} className={``} />
 
 
-                                <InputComponent label={'Delivery Charge'} type={'number'} placeholder={user?.delivery ? user?.delivery : delivary}
+                                <InputComponent label={'Delivery Charge'} type={'text'} placeholder={user?.delivery ? user?.delivery : delivary}
                                     value={user?.delivery ? user?.delivery : delivary} input_focus={deli} handleEnter={() => { setDeli(false); dis_ref.current.focus() }}
                                     // readOnly={loadInvo ? false : true}
-                                    onChange={(v) => { setDelivery(parseInt(v)); }} className={``} />
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v)
+                                        setDelivery(parseInt(num));
+                                    }} className={``} />
                                 {/* <InputComponent label={'Delivery Charge'} type={'number'} placeholder={0}
                                     value={0} input_focus={deli} handleEnter={() => { setDeli(false); dis_ref.current.focus() }}
                                     // readOnly={loadInvo ? false : true}
@@ -703,11 +719,14 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                             <div className='pb-4'>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={dis_ref}
+                                    <input type='text' ref={dis_ref}
                                         value={values?.lastdiscount}
                                         onKeyDown={(e) => { if (e.key === "Enter") { last_pay.current.focus() } }}
-                                        onChange={(e) => { setValues({ ...values, lastdiscount: e.target.value }) }}
-                                        placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                        onChange={(e) => {
+                                            let num = BanglaToEnglish(e.target.value)
+                                            setValues({ ...values, lastdiscount: num })
+                                        }}
+                                        placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] dark:bg-[#040404] dark:text-white focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
 
                                 </div>
                             </div>
@@ -717,7 +736,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                     <input type='number' value={lastTotal} readOnly={true}
                                         onChange={(e) => { setValues({ ...values, pay: e.target.value }) }}
                                         placeholder={lastTotal}
-                                        className='border text-[#6B7280] px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                        className='border text-[#6B7280] dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>
 

@@ -18,7 +18,7 @@ const Dashboard = ({ data, info = {} }) => {
     const [dailyreturn, setDailyReturn] = useState(0);
     const [dailyPurchase, setDailyPurchase] = useState(0);
     const [allData, setAllData] = useState([])
-    const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
 
     const HourlySalesData = async () => {
         const token = localStorage.getItem('token')
@@ -155,42 +155,42 @@ const Dashboard = ({ data, info = {} }) => {
 
 
     return (
-        <div className='bg-[#F7F7FF] pt-6 pl-3 pr-2 min-h-screen pb-12 relative'>
+        <div className='bg-[#F7F7FF] dark:bg-[#040404] pt-6 pl-3 pr-2 min-h-screen pb-12 relative'>
             <NotiFi message={message} />
 
             <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5'>
-                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
                     <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-blue-500'>
                         <Cart className="text-[#FFFFFF] h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12" />
                     </div>
-                    <div className='flex justify-start items-end gap-1'>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
-                        <p className='font-semibold'>Total Sale</p>
+                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Total Sale</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12 ' alt='image' />
                     </div>
-                    <div className='flex justify-start items-end gap-1'>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
                         <p className='font-semibold'>Purchase Amount</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-blue-500'>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
                     <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12' alt='image' />
                     </div>
-                    <div className='flex justify-start items-end gap-1'>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
                         <p className='font-semibold'>Sale Return</p>
                     </div>
                 </div>
-                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white min-h-[170px] border border-l-4 border-red-500'>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
                     <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
                         <Notification height="35px" width="35px" className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`} />
                     </div>
-                    <div className='flex justify-start items-end gap-1'>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
                         <p className='font-semibold'>Notifications</p>
                     </div>
@@ -199,7 +199,7 @@ const Dashboard = ({ data, info = {} }) => {
 
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5 dark:bg-[#040404] dark:text-white rounded-md'>
                 {/* <div className='rounded-lg'>
                     <DailySalse hourSales={hourSales} />
                 </div>
@@ -208,7 +208,7 @@ const Dashboard = ({ data, info = {} }) => {
                 </div> */}
                 <div className='grid col-span-1 lg:col-span-2'>
 
-                    <div className='rounded-xl overflow-hidden bg-[#FFFFFF] p-3 shadow-lg'>
+                    <div className='rounded-xl overflow-hidden bg-[#FFFFFF] dark:bg-[#040404] p-3 shadow-lg dark:text-white'>
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[20px]'>Recent Invoices</h1>
                             <div>

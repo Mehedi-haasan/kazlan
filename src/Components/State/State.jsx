@@ -85,11 +85,11 @@ const State = ({ entries = [] }) => {
                 </Modal>
             </div>
 
-            <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center px-4 py-1 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow">
                 <h1 className="font-semibold text-lg">Thana List</h1>
                 <Button onClick={() => { setShow(true) }} name={'Create State'} />
             </div>
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
                 <div className="flex justify-between items-center ">
                     <div>
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
@@ -101,8 +101,8 @@ const State = ({ entries = [] }) => {
                 </div>
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3  w-full overflow-hidden overflow-x-auto">
-                        <table className="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-gray-900 ">
+                        <table className="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
+                            <thead class="text-gray-900 dark:bg-[#040404] dark:text-white">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

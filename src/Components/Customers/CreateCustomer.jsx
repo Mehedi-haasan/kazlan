@@ -8,14 +8,20 @@ import Selection from "../Input/Selection";
 import { useNavigate } from "react-router-dom";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Notification from "../Input/Notification";
+import { BanglaToEnglish } from "../Input/Time";
+import RightArrow from "../../icons/RightArrow";
 
-const CreateCustomer = ({ info = {} }) => {
+const CreateCustomer = ({ state = [], info = {} }) => {
 
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const goto = useNavigate()
     const open_bala = useRef(null)
-    const [state, setState] = useState([])
     const [active, setActive] = useState("Address")
+    const dis = useRef(null)
+    const [selectedId, setSelectedId] = useState(0)
+    const disOnSale = [{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }]
+    const [disType, setDisType] = useState(false)
+    const dtype = useRef()
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Customer",
@@ -73,32 +79,12 @@ const CreateCustomer = ({ info = {} }) => {
         goto('/customers')
     }
 
-    const getState = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/state`, {
-            method: 'GET',
-            headers: {
-                "authorization": token,
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        });
-        const data = await response.json()
-        setState(data?.items);
-        setValues({ ...values, stateId: data?.items[0]?.id })
-    }
-
-    useState(() => {
-        getState()
-    }, [])
-
-
-
 
     EscapeRedirect("/customers")
 
     useEffect(() => {
         if (auto?.open_b) {
-            open_bala.current.focus()
+            dis.current.focus()
         }
     }, [auto])
 
@@ -170,15 +156,18 @@ const CreateCustomer = ({ info = {} }) => {
                         }
                         {
                             active === "Balance" && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                <div>
+                                {/* <div>
                                     <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
                                     <div className='flex justify-start items-end pb-1'>
-                                        <input type='number' ref={open_bala} onKeyDown={(e) => {
+                                        <input type='text' ref={open_bala} onKeyDown={(e) => {
                                             if (e.key === "Enter") {
                                                 handleSubmit();
                                                 handleSubmitOffline()
                                             }
-                                        }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} placeholder={0} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                                        }} onChange={(e) => {
+                                            let num = BanglaToEnglish(e.target.value)
+                                            setValues({ ...values, balance: num })
+                                        }} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
                                         <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
                                             className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
                                         >
@@ -186,6 +175,79 @@ const CreateCustomer = ({ info = {} }) => {
                                                 <option key={id} value={name} className=''> {name}</option>
                                             ))}
                                         </select>
+
+                                    </div>
+                                </div> */}
+
+                                <div>
+                                    <p className='py-2 pt-1 font-semibold text-sm'>Opening Balance</p>
+                                    <div className='flex justify-start items-end pb-1 pt-1'>
+                                        <input ref={dis}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    handleSubmit();
+                                                } else if (e.key === "ArrowRight") {
+                                                    dtype.current.focus();
+                                                    setDisType(true)
+                                                }
+                                            }}
+
+                                            onChange={(e) => {
+                                                let num = BanglaToEnglish(e.target.value);
+                                                setValues({ ...values, balance: num })
+                                            }}
+                                            value={values?.balance}
+                                            placeholder={values?.balance} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+
+                                        <div className='relative z-50 border'>
+                                            <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                            <input ref={dtype} value={values?.balance_type} onClick={() => { setDisType(!disType); }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "ArrowDown") {
+                                                        if (selectedId === disOnSale?.length - 1) {
+                                                            setSelectedId(0)
+                                                        } else {
+                                                            setSelectedId(selectedId + 1)
+                                                        }
+                                                    } else if (e.key === "ArrowUp") {
+                                                        if (selectedId === 0) {
+                                                            setSelectedId(disOnSale?.length - 1)
+                                                        } else {
+                                                            setSelectedId(selectedId - 1)
+                                                        }
+                                                    } else if (e.key === "Enter" && disOnSale[selectedId]) {
+                                                        setDisType(false);
+                                                        setSelectedId(0);
+                                                        setValues({ ...values, balance_type: disOnSale[selectedId].name })
+                                                        dis.current?.focus();
+                                                    }
+                                                }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                            {
+                                                disType && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                    {
+                                                        disOnSale?.map((opt, i) => {
+                                                            return <div onMouseEnter={() => { setSelectedId(i) }}
+                                                                ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key === "ArrowDown") {
+                                                                        setSelectedId(i + 2)
+                                                                    }
+                                                                }}
+
+                                                                onClick={() => {
+                                                                    setDisType(false);
+                                                                    setValues({ ...values, balance_type: disOnSale[selectedId].name })
+                                                                    setSelectedId(0);
+                                                                    dis.current?.focus();
+                                                                }}
+                                                                className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
+                                                                {opt?.name}
+                                                            </div>
+                                                        })
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
 
                                     </div>
                                 </div>

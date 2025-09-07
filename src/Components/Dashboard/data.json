@@ -38,6 +38,18 @@
                 "parent": "2",
                 "name": "Attribute List",
                 "route": "attribute"
+            },
+            {
+                "id": 25,
+                "parent": "2",
+                "name": "Daily Expense",
+                "route": "expense"
+            },
+            {
+                "id": 26,
+                "parent": "2",
+                "name": "Add Expense",
+                "route": "create/expense"
             }
         ]
     },

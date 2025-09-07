@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -52,9 +52,11 @@ const data = [
 
 
 const ExcelSheet = ({ filename = 'data.xlsx', buttonLabel = 'Export to Excel' }) => {
+
+    const [message, setMessage]=useState({})
     const exportToExcel = () => {
         if (!data || data.length === 0) {
-            alert('No data to export!');
+            setMessage({ id: Date.now(), mgs: 'No data to export!' });
             return;
         }
 

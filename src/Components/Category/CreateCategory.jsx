@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import InputComponent from "../Input/InputComponent"
 import BaseUrl from '../../Constant';
 import Button from "../Input/Button";
 import Notification from '../Input/Notification'
-import logo from '../Logo/userProfile.png'
+import logo from '../Logo/photo.png'
+import { useNavigate } from "react-router-dom";
 
 
 const CreateCategory = ({ entries }) => {
@@ -13,14 +14,46 @@ const CreateCategory = ({ entries }) => {
     const [values, setValues] = useState({ name: "", });
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [focus, setFocus] = useState(true)
+    const goto = useNavigate()
+    const input_name = useRef(null);
+
+    useEffect(() => {
+        input_name.current?.focus();
+    }, []);
 
 
     useEffect(() => {
+        setFocus(true)
         document.title = `Categorys - Kazaland Brothers`;
-
     }, []);
 
+    const handleCreateLocally = async (image_url) => {
+        if (BaseUrl === "http://localhost:8050") {
+            return
+        }
+        values.image_url = image_url;
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`http://localhost:8050/api/create/category`, {
+                method: 'POST',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                body: JSON.stringify(values),
+            });
+
+            const data = await response.json();
+        } catch (error) {
+            setIsLoading(false)
+            setMessage({ id: Date.now(), mgs: error });
+        }
+        setIsLoading(false)
+    }
+
     const handleCreate = async (image_url) => {
+        handleCreateLocally(image_url)
         setIsLoading(true)
         values.image_url = image_url;
         const token = localStorage.getItem('token');
@@ -37,13 +70,13 @@ const CreateCategory = ({ entries }) => {
             const data = await response.json();
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
+            goto('/category')
         } catch (error) {
             setIsLoading(false)
             setMessage({ id: Date.now(), mgs: error });
         }
         setIsLoading(false)
     }
-
 
     const handleUpload = async () => {
         setIsLoading(true)
@@ -88,7 +121,7 @@ const CreateCategory = ({ entries }) => {
     return (
         <div className="px-2 pt-5 min-h-screen pb-12">
             <Notification message={message} />
-            <div className="pt-1 bg-[#FFFFFF] shadow-lg rounded-lg w-[50%]">
+            <div className="pt-1 bg-[#FFFFFF] shadow-lg rounded-lg w-full">
                 <div className="border-b">
                     <h1 className="pl-5 text-xl py-2">Category Details</h1>
                 </div>
@@ -119,8 +152,29 @@ const CreateCategory = ({ entries }) => {
                     </div>
                 </div>
                 <div className="px-6 py-4">
-                    <InputComponent placeholder={`Enter Category name`} handleEnter={imageFile ? handleUpload() : handleCreate('')} value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                    <Button isDisable={isLoading} name="Create" onClick={imageFile ? handleUpload() : handleCreate('')} className="mt-3 border bg-blue-500 text-white" />
+                    {/* <InputComponent input_focus={focus} placeholder={`Enter Category name`} handleEnter={() => { imageFile ? handleUpload() : handleCreate('') }}
+                        value={values?.name} label={`Category name`} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' /> */}
+
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Category name</h1>
+                        <input
+                            type="text"
+                            ref={input_name}
+                            value={values?.name}
+                            placeholder="Enter Category name"
+                            onChange={(e) => setValues({ ...values, name: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    imageFile ? handleUpload() : handleCreate('')
+                                }
+                            }}
+                        />
+
+                    </div>
+
+                    <Button isDisable={isLoading} name="Create" onClick={() => { imageFile ? handleUpload() : handleCreate('') }} className="mt-3 border bg-blue-500 text-white" />
                 </div>
             </div>
         </div>

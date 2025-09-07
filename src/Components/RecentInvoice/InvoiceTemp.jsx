@@ -27,6 +27,10 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
             saleType = "PR"
         } else if (type === "Purchase items") {
             saleType = "PO"
+        } else if (type === "Opening") {
+            saleType = "OP"
+        } else {
+            saleType = "MP"
         }
 
         return saleType
@@ -36,7 +40,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
         <div className="pt-3">
             <div className="w-full overflow-hidden overflow-x-auto">
                 <table className="text-sm text-left text-gray-500 w-full min-w-[700px] rounded">
-                    <thead className=" text-sm text-left  text-black rounded bg-[#BCA88D]">
+                    <thead className=" text-sm text-left  text-black rounded bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
                         <tr className='border'>
                             {/* <th className="w-4 py-3 px-4 border-r ">
                                 <div className="flex items-center">
@@ -120,32 +124,34 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                     </thead>
                     <tbody>
                         {invoices?.map((item, i) => (
-                            <tr key={i} className={`border-b cursor-pointer ${i %2 === 1 ? 'bg-[#FAF9EE]': ''}`}
-                             onClick={() => {
-                                if (item?.type === "Sale" || item?.type === "Purchase items") {
-                                    goto(`/invoice/${item?.id}`)
-                                } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
-                                    goto(`/return/invoice/${item?.id}`)
-                                }
-                            }}>
+                            <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}
+                                onClick={() => {
+                                    if (item?.type === "Sale" || item?.type === "Purchase items") {
+                                        goto(`/invoice/${item?.id}`)
+                                    } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
+                                        goto(`/return/invoice/${item?.id}`)
+                                    } else {
+                                        goto(`/opening/invoice/${item?.id}`)
+                                    }
+                                }}>
                                 {/* <th className="w-4 py-3 px-4 border-x">
                                     <div className="flex items-center">
                                         <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
                                 </th> */}
-                                <th scope="col" className="px-3 py-3 border-x font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.customername}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.paidamount}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.due}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.status}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.type}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.methodname}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.deliverydate)}</th>
+                                <th scope="col" className="px-3 py-3 border-x font-thin ">{formatDate(item?.createdAt)}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.customername}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.methodname}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.deliverydate)}</th>
                             </tr>
                         ))
                         }

@@ -16,7 +16,6 @@ const Notification = ({ data, info = {} }) => {
 
     const Announcement = async () => {
         if (mgs === '') {
-            alert('')
             return
         }
         const token = localStorage.getItem('token')

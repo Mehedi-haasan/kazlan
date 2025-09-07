@@ -22,7 +22,7 @@ const InputComponent = ({ onChange, label, placeholder, type, isRequered, value,
 
     return (
         <div className='py-1'>
-            <h1 for={label} className={`${className} mb-2 text-start text-[15px] font-bold text-gray-900`}>{label}</h1>
+            <h1 for={label} className={`${className} mb-2 text-start text-[15px] font-bold text-gray-900 dark:text-white`}>{label}</h1>
             <input ref={inputRef} type={type} value={inputValue} required={isRequered} readOnly={readOnly} onChange={(e)=>{onChange(e.target.value)}} onKeyDown={(e) => {
                 if (e.key === "Enter") {
                     handleEnter(e.target.value)
@@ -30,7 +30,7 @@ const InputComponent = ({ onChange, label, placeholder, type, isRequered, value,
                     e.preventDefault();
                     handleTab()
                 }
-            }} className={`${className} font-thin border text-[#6B7280] text-[15px] rounded  focus:outline-none block w-full px-1.5 pt-[6px] pb-[7px]`} placeholder={placeholder} />
+            }} className={`${className} font-thin border text-[#6B7280] dark:bg-[#040404] dark:text-white text-[15px] rounded  focus:outline-none block w-full px-1.5 pt-[6px] pb-[7px]`} placeholder={placeholder} />
         </div>
     )
 }

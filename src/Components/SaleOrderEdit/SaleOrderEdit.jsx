@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { CalculateAmount, EditPrepareOrderData } from '../Input/Time';
+import { BanglaToEnglish, CalculateAmount, EditPrepareOrderData } from '../Input/Time';
 import { useNavigate, useParams } from 'react-router-dom';
 import Calendar from './Calender'
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -117,6 +117,9 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     const Order = async () => {
         let orderData = await EditPrepareOrderData(allData, invoice?.userId, name, values, info)
         const token = localStorage.getItem('token');
+        if (invoice?.methodname && !invoice.methodname.startsWith("Edited ")) {
+            invoice.methodname = `Edited ${invoice.methodname}`;
+        }
         try {
             const response = await fetch(`${BaseUrl}/api/update/order`, {
                 method: 'POST',
@@ -319,9 +322,12 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-3 p-4 '>
                     <div>
-                        <InputComponent label={'Quantity'} type={'number'} input_focus={quan} placeholder={0} value={itemQuan}
+                        <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
                             handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
-                            onChange={(v) => { setItemQuan(v); }} className={``} />
+                            onChange={(v) => {
+                                let num = BanglaToEnglish(v)
+                                setItemQuan(num);
+                            }} className={``} />
                     </div>
                     <div className='pt-1.5'>
                         <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
@@ -480,7 +486,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                     <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
                                     <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
                                     <div className='flex justify-start items-center border-r'>
-                                        <input type='number' ref={discount_ref}
+                                        <input type='text' ref={discount_ref}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     setAllData([...allData, prepareData]);
@@ -495,8 +501,10 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                                 }
                                             }}
                                             placeholder={0}
+                                            value={prepareData?.discount}
                                             onChange={(e) => {
-                                                ChangeDis(e.target.value, prepareData?.discount_type)
+                                                let num = BanglaToEnglish(e.target.value)
+                                                ChangeDis(num, prepareData?.discount_type)
                                             }}
                                             className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
                                     </div>
@@ -563,14 +571,15 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={last_pay} value={values?.pay}
+                                    <input type='text' ref={last_pay} value={values?.pay}
                                         onKeyDown={(e) => { if (e.key === "Enter") { Order() } }}
                                         onChange={(e) => {
-                                            setValues({ ...values, pay: e.target.value });
+                                            let num = BanglaToEnglish(e.target.value)
+                                            setValues({ ...values, pay: num });
                                             setInvoice({
                                                 ...invoice,
-                                                paidamount: e.target.value,
-                                                due: lastTotal - e.target.value
+                                                paidamount: num,
+                                                due: lastTotal - num
                                             })
                                         }}
                                         placeholder={values?.pay} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
@@ -597,21 +606,30 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                             </div>
 
                             <div className='flex justify-between items-center gap-4'>
-                                <InputComponent label={'Packing Charge'} type={'number'} input_focus={pack} placeholder={paking}
+                                <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} placeholder={paking}
                                     handleEnter={() => { setPack(false); setDeli(true) }} value={paking}
-                                    onChange={(v) => { setPaking(parseFloat(v)); }} className={``}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v)
+                                        setPaking(parseFloat(num));
+                                    }} className={``}
                                 />
-                                <InputComponent label={'Delivery Charge'} type={'number'} input_focus={deli} placeholder={delivary}
+                                <InputComponent label={'Delivery Charge'} type={'text'} input_focus={deli} placeholder={delivary}
                                     handleEnter={() => { setDeli(false); dis_ref.current.focus() }} value={delivary}
-                                    onChange={(v) => { setDelivery(parseInt(v)); }} className={``}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v)
+                                        setDelivery(parseInt(num));
+                                    }} className={``}
                                 />
                             </div>
                             <div className='pb-4'>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={dis_ref}
+                                    <input type='text' ref={dis_ref}
                                         onKeyDown={(e) => { if (e.key === "Enter") { last_pay.current.focus() } }}
-                                        onChange={(e) => { setValues({ ...values, lastdiscount: e.target.value }) }}
+                                        onChange={(e) => {
+                                            let num = BanglaToEnglish(e.target.value)
+                                            setValues({ ...values, lastdiscount: num })
+                                        }}
                                         placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>

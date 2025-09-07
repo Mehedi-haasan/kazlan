@@ -4,7 +4,7 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import Notification from "../Input/Notification";
 import { useNavigate, useParams } from "react-router-dom";
-import { getFormattedDate } from "../Input/Time";
+import { BanglaToEnglish, getFormattedDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 import { NavLink } from "react-router-dom";
 
@@ -125,9 +125,9 @@ const CustomerPayment = ({ info, state }) => {
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
             <Notification message={message} />
-            <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
 
-                <div className="flex justify-between items-center  py-2 bg-[#FFFFFF] border-b pr-2">
+                <div className="flex justify-between items-center  py-2 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white border-b pr-2">
                     <h1 className="font-semibold text-lg">Customer Payment</h1>
                     <NavLink to={`/payment/history/${values?.id}`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Customer Transaction</NavLink>
                 </div>
@@ -159,16 +159,16 @@ const CustomerPayment = ({ info, state }) => {
                     <InputComponent className={`text-black`} label={"Balance"} placeholder={values?.balance} value={values?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
-                        <div className='flex justify-start items-end pb-1'>
+                        <div className='flex justify-start items-end pb-1 dark:bg-[#040404] dark:text-white'>
 
                             <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value }) }}
-                                className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2`}
+                                className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2 dark:bg-[#040404] dark:text-white`}
                             >
                                 {[{ id: 1, name: "You Receive" }, { id: 2, name: "You Pay" }, { id: 3, name: "Yearly Bonus" }].map(({ id, name }) => (
-                                    <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
+                                    <option key={id} value={name} className='text-[#6B7280] dark:text-white'>{name}</option>
                                 ))}
                             </select>
-                            <input type='number' value={values?.paid}
+                            <input type='text' value={values?.paid}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
                                         if (values?.paid !== 0) {
@@ -176,13 +176,16 @@ const CustomerPayment = ({ info, state }) => {
                                         }
                                     }
                                 }}
-                                onChange={(e) => { setValues({ ...values, paid: e.target.value }) }} placeholder={values?.paid} className='border-y border-r px-2 focus:outline-none rounded-r  pt-[6px] pb-[5px] w-[50%] font-thin' />
+                                onChange={(e) => {
+                                    let num = BanglaToEnglish(e.target.value)
+                                    setValues({ ...values, paid: num })
+                                }} placeholder={values?.paid} className='border-y border-r px-2 dark:bg-[#040404] dark:text-white focus:outline-none rounded-r  pt-[6px] pb-[5px] w-[50%] font-thin' />
                         </div>
                     </div>
 
                     <div>
                         <h1 className="py-1">Note</h1>
-                        <textarea placeholder="Enter your note" onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin focus:outline-none border p-1.5 w-full rounded" />
+                        <textarea placeholder="Enter your note" onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin dark:bg-[#040404] dark:text-white focus:outline-none border p-1.5 w-full rounded" />
                     </div>
                 </div>
 

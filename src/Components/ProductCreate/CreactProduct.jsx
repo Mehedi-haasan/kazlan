@@ -10,6 +10,8 @@ import Add from '../../icons/Add';
 import logo from '../Logo/photo.png'
 import ImageSelect from '../Input/ImageSelect'
 import EscapeRedirect from '../Wholesale/EscapeRedirect';
+import RightArrow from '../../icons/RightArrow';
+import { BanglaToEnglish } from '../Input/Time'
 
 
 const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
@@ -20,12 +22,14 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         edit_value: "Select a filter",
         bran_value: 'Select a filter',
         cate_value: 'Select a filter',
-        sup_value: 'Select a filter'
+        sup_value: 'Select a filter',
+        shop_name: 'Kazal and Brothers'
     })
     const edit = useRef(null)
     const desc = useRef(null)
     const dis = useRef(null)
     const qt = useRef(null)
+    const qt_type = useRef()
     useEffect(() => {
         input_name.current?.focus();
     }, []);
@@ -47,10 +51,15 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const [active, setActive] = useState("Pricing")
     const [years, setyears] = useState([]);
     const [quanType, setQuanType] = useState([])
+    const [quanTypeShow, setQuanTypeShow] = useState(false)
+    const [selectedId, setSelectedId] = useState(0)
+    const [disOnSale, setDisonSale] = useState([{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }])
+    const [disType, setDisType] = useState(false)
+    const dtype = useRef()
     const [values, setValues] = useState({
         categoryId: 1,
         editionId: 1,
-        compId: 1,
+        compId: null,
         brandId: 1,
         image_url: "",
         qty: 0,
@@ -61,7 +70,8 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         description: '',
         year: '2026',
         edition: '',
-        code: ''
+        code: '',
+        qty_type: 'none'
     })
 
     EscapeRedirect("/items")
@@ -162,7 +172,9 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         Attribute()
         GetQuantity()
         GetSupplier()
+
     }, []);
+
 
     const anotherFunction = () => {
         setIsLoading(false);
@@ -294,10 +306,11 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         handleCreateOffline("")
     }
 
+
     return (
         <div className='min-h-screen pb-12 py-5 px-3 relative'>
 
-            <div className='shadow-lg bg-[#FFFFFF] rounded-xl'>
+            <div className='shadow-lg bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-xl'>
                 <div className='border-b px-5 flex justify-between items-center'>
                     <h1 className='text-2xl font-semibold  py-5'>Item Details</h1>
                     <Notification message={message} />
@@ -318,7 +331,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                         value={values?.name}
                                         placeholder="Enter item name"
                                         onChange={(e) => setValues({ ...values, name: e.target.value })}
-                                        className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-l w-full"
+                                        className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded-l font-thin border-y border-l w-full dark:bg-[#040404] dark:text-white"
 
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
@@ -341,7 +354,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                                 })
                                                 setFilter({ ...filter, edit_value: v?.name })
                                             }} label={"Edition*"} className='rounded-r' />
-                                        <div onClick={() => { goto('/attribute') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                        <div onClick={() => { goto('/create/attribute') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                             <Add />
                                         </div>
                                     </div>
@@ -355,15 +368,18 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                         <div className='flex justify-start items-end pb-1 z-40'>
                             <SelectionComponent options={brand} default_select={first} default_value={filter?.bran_value}
                                 onSelect={(v) => { setFirst(false); setSecond(true); setValues({ ...values, brandId: v?.id }); setFilter({ ...filter, bran_value: v?.name }) }} label={"Brand / Publishers*"} className='rounded-l' />
-                            <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <div onClick={() => goto(`/create/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
 
                         <div className='flex justify-start items-end pb-1 '>
                             <SelectionComponent options={category} default_select={second} default_value={filter?.cate_value}
-                                onSelect={(v) => { setSecond(false); setThird(true); setValues({ ...values, categoryId: v?.id }); setFilter({ ...filter, cate_value: v?.name }) }} label={"Category*"} className='rounded-l' />
-                            <div onClick={() => goto(`/category`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                onSelect={(v) => {
+                                    setSecond(false); setThird(true); setValues({ ...values, categoryId: v?.id });
+                                    setFilter({ ...filter, cate_value: v?.name })
+                                }} label={"Category*"} className='rounded-l' />
+                            <div onClick={() => goto(`/create/category`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                 <Add />
                             </div>
                         </div>
@@ -385,7 +401,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                             setSale(true)
                                         }
                                     }}
-                                    className="font-thin focus:outline-none border p-1.5 w-full rounded" />
+                                    className="font-thin focus:outline-none border p-1.5 w-full rounded dark:bg-[#040404] dark:text-white" />
                             </div>
                         </div>
 
@@ -411,12 +427,21 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                             <div className='h-[120px]'>
                                 {
                                     active === "Pricing" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                        <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'number'} handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price} onChange={(v) => { setValues({ ...values, price: v, cost: v }) }} />
-                                        <div>
+                                        <InputComponent label={"Sale Price/M.R.P*"} input_focus={sale} placeholder={'Enter MRP/Sale price'} type={'text'}
+                                            handleEnter={(e) => { dis.current.focus() }} isRequered={true} value={values?.price}
+                                            onChange={(v) => {
+                                                let num = BanglaToEnglish(v);
+                                                setValues({ ...values, price: num, cost: num })
+                                            }} />
+                                        {/* <div>
                                             <p className='pb-2 pt-1 font-semibold text-[15px]'>Discount on Sale</p>
                                             <div className='flex justify-start items-end pb-1'>
-                                                <input type='number' ref={dis} onChange={(e) => { setValues({ ...values, discount: e.target.value }) }}
+                                                <input type='text' ref={dis} onChange={(e) => {
+                                                    let num = BanglaToEnglish(e.target.value);
+                                                    setValues({ ...values, discount: num })
+                                                }}
                                                     onKeyDown={(e) => { if (e.key === "Enter") { setActive("Stock"); qt.current.focus() } }}
+                                                    value={values?.discount}
                                                     placeholder={values?.discount} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[50%]' />
                                                 <select value={values?.discount_type} onChange={(v) => { setValues({ ...values, discount_type: v.target.value }) }}
                                                     className={`border text-[#6B7280] w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
@@ -427,19 +452,95 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                                 </select>
 
                                             </div>
+                                        </div> */}
+
+                                        <div>
+                                            <p className='py-2 pt-1 font-semibold text-sm'>Discount on Sale</p>
+                                            <div className='flex justify-start items-end pb-1 pt-1'>
+                                                <input ref={dis}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") {
+                                                            setActive("Stock");
+                                                        } else if (e.key === "ArrowRight") {
+                                                            dtype.current.focus();
+                                                            setDisType(true)
+                                                        }
+                                                    }}
+
+                                                    onChange={(e) => {
+                                                        let num = BanglaToEnglish(e.target.value);
+                                                        setValues({ ...values, discount: num })
+                                                    }}
+                                                    value={values?.discount}
+                                                    placeholder={values?.discount} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+
+                                                <div className='relative z-50 border'>
+                                                    <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                                    <input ref={dtype} value={values?.discount_type} onClick={() => { setDisType(!disType); }}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === "ArrowDown") {
+                                                                if (selectedId === disOnSale?.length - 1) {
+                                                                    setSelectedId(0)
+                                                                } else {
+                                                                    setSelectedId(selectedId + 1)
+                                                                }
+
+                                                            } else if (e.key === "ArrowUp") {
+                                                                if (selectedId === 0) {
+                                                                    setSelectedId(disOnSale?.length - 1)
+                                                                } else {
+                                                                    setSelectedId(selectedId - 1)
+                                                                }
+                                                            } else if (e.key === "Enter" && disOnSale[selectedId]) {
+                                                                setDisType(false);
+                                                                setSelectedId(0);
+                                                                setValues({ ...values, discount_type: disOnSale[selectedId].name })
+                                                                dis.current?.focus();
+                                                            }
+                                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                                    {
+                                                        disType && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                            {
+                                                                disOnSale?.map((opt, i) => {
+                                                                    return <div onMouseEnter={() => { setSelectedId(i) }}
+                                                                        ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                                        onKeyDown={(e) => {
+                                                                            if (e.key === "ArrowDown") {
+                                                                                setSelectedId(i + 2)
+                                                                            }
+                                                                        }}
+
+                                                                        onClick={() => {
+                                                                            setDisType(false);
+                                                                            setValues({ ...values, discount_type: disOnSale[selectedId].name })
+                                                                            setSelectedId(0);
+                                                                            dis.current?.focus();
+                                                                        }}
+                                                                        className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
+                                                                        {opt?.name}
+                                                                    </div>
+                                                                })
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 }
                                 <div className={`${active === "Stock" ? '' : 'hidden'} p-3 grid grid-cols-1 lg:grid-cols-2 gap-4`}>
                                     {
                                         info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
-                                            <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} default_value={info?.shopname} label={"Warehouse Stock*"} className='rounded-l' />
+                                            <SelectionComponent options={shop}
+                                                onSelect={(v) => { setValues({ ...values, supplier: v?.name, compId: v?.id }); setFilter({ ...filter, shop_name: v?.name }) }}
+                                                default_value={filter?.shop_name} label={"Warehouse Stock*"} className='rounded-l' />
                                             <div onClick={() => { goto(`/warehouses`) }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                                 <Add />
                                             </div>
                                         </div>
                                     }
-
+                                    {/* 
                                     <div>
                                         <p className='pb-2 font-semibold text-sm'>Quantity</p>
                                         <div className='flex justify-start items-end pb-1'>
@@ -453,6 +554,80 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                                                     <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                                 ))}
                                             </select>
+
+                                        </div>
+                                    </div> */}
+
+                                    <div>
+                                        <p className='py-2 pt-1 font-semibold text-sm'>Quantity</p>
+                                        <div className='flex justify-start items-end pb-1 pt-1'>
+                                            <input ref={qt}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        image_url == null ? handleUp() : handleUpload()
+                                                    } else if (e.key === "ArrowRight") {
+                                                        qt_type.current.focus();
+                                                        setQuanTypeShow(true)
+                                                    }
+                                                }}
+
+                                                onChange={(e) => {
+                                                    let num = BanglaToEnglish(e.target.value);
+                                                    setValues({ ...values, qty: num })
+                                                }}
+                                                value={values?.qty}
+                                                placeholder={values?.qty} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+
+                                            <div className='relative z-50 border'>
+                                                <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                                <input ref={qt_type} value={values?.qty_type} onClick={() => { setQuanTypeShow(!quanTypeShow); }}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "ArrowDown") {
+                                                            if (selectedId === quanType?.length - 1) {
+                                                                setSelectedId(0)
+                                                            } else {
+                                                                setSelectedId(selectedId + 1)
+                                                            }
+
+                                                        } else if (e.key === "ArrowUp") {
+                                                            if (selectedId === 0) {
+                                                                setSelectedId(quanType?.length - 1)
+                                                            } else {
+                                                                setSelectedId(selectedId - 1)
+                                                            }
+                                                        } else if (e.key === "Enter" && quanType[selectedId]) {
+                                                            setQuanTypeShow(false);
+                                                            setSelectedId(0);
+                                                            setValues({ ...values, qty_type: quanType[selectedId].name })
+                                                            qt.current?.focus();
+                                                        }
+                                                    }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                                {
+                                                    quanTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                        {
+                                                            quanType?.map((opt, i) => {
+                                                                return <div onMouseEnter={() => { setSelectedId(i) }}
+                                                                    ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === "ArrowDown") {
+                                                                            setSelectedId(i + 2)
+                                                                        }
+                                                                    }}
+
+                                                                    onClick={() => {
+                                                                        setQuanTypeShow(false);
+                                                                        setValues({ ...values, qty_type: quanType[selectedId].name })
+                                                                        setSelectedId(0);
+                                                                        qt.current?.focus();
+                                                                    }}
+                                                                    className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
+                                                                    {opt?.name}
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
 
                                         </div>
                                     </div>
@@ -471,7 +646,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-center gap-2'>
                         <Button onClick={() => { image_url == null ? handleUp() : handleUpload() }} isDisable={isLoading} name={isLoading ? 'Creating' : 'Create'} />
-                        <button onClick={() => { goto('/items') }} className='bg-gray-100 rounded-md px-5 py-2 font-thin hover:bg-gray-300'>Close</button>
+                        <button onClick={() => { goto('/items') }} className='bg-gray-100 dark:text-black rounded-md px-5 py-2 font-thin hover:bg-gray-300'>Close</button>
                     </div>
 
                 </div>

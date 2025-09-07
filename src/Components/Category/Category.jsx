@@ -19,6 +19,9 @@ import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Pdf from "../Pdf/Pdf";
 import CategoryCardPdf from "./CategoryCardPdf";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useNavigate } from "react-router-dom";
 
 
 const Category = ({ entries, info = {} }) => {
@@ -38,7 +41,7 @@ const Category = ({ entries, info = {} }) => {
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
-    const [isChecked, setIsChecked] = useState(false)
+    const goto = useNavigate()
     const [showlotti, setLottiShow] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const getCategory = async () => {
@@ -122,7 +125,30 @@ const Category = ({ entries, info = {} }) => {
     }
 
 
+    const exportToExcel = () => {
+        let filename = 'category.xlsx'
+        if (!category || category.length === 0) {
+            setMessage({ id: Date.now(), mgs: 'No category to export!' });
+            return;
+        }
+        let excel = [];
+        category.map((item) => {
+            excel.push({
+                name: item?.name,
+                active: item?.active,
+                createdby: item?.creator,
+                createdAt: item?.createdAt
+            })
+        })
 
+        const worksheet = XLSX.utils.json_to_sheet(excel);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        saveAs(blob, filename);
+    };
 
 
     const handleUpload = async () => {
@@ -253,51 +279,25 @@ const Category = ({ entries, info = {} }) => {
             <Modal show={showlotti} handleClose={() => { setLottiShow(false); setInpo(true) }} size={`250px`} crosshidden={true}>
                 <>{View}</>
             </Modal>
-            <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow">
                 <h1 className="font-semibold text-lg">Category List</h1>
-                <button onClick={() => { setShow(true) }} className={`bg-blue-500 rounded px-4 py-1.5 text-white font-thin`}>Create Category</button>
+                <button onClick={() => { goto('/create/category') }} className={`bg-blue-500 rounded px-4 py-1.5 text-white font-thin`}>Create Category</button>
             </div>
 
-            <div>
-                <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
-                    <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
-                        <div className="border-b">
-                            <h1 className="pl-5 text-xl py-2">Category Details</h1>
-                        </div>
-                        <div className="pt-5 flex justify-between items-start">
-                            <ImageSelect handleImageChange={handleImageChange} imageFile={imageFile} logo={logo} />
-                            {/* <div className="flex justify-end gap-1 items-center  w-[200px]">
-                                <input type="checkbox" checked={isLocal}
-                                    onChange={(e) => setIsLocal(e.target.checked)}
-                                    className="border rounded h-5 w-5" />
-                                <p>Also for local</p>
-                            </div> */}
-                        </div>
-                        <div className="px-6 py-4">
-                            <InputComponent placeholder={`Enter Category name`} input_focus={inpo} value={values?.name} label={`Category Name`} handleEnter={() => { handleCreate(''); handleCreateLocally('') }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
-                            <Button isDisable={isLoading} name="Create" onClick={handleUpload} className="mt-3 border bg-blue-500 text-white" />
-                        </div>
-                    </div>
-                </Modal>
-            </div>
-
-
-
-
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={SearchCategory} />
                     </div>
                 </div>
                 <div>
                     <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <thead class="text-xs text-gray-900 bg-[#BCA88D]">
+                            <thead class="text-xs text-gray-900 bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
                                 <tr className='border'>
                                     <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

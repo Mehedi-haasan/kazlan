@@ -2,7 +2,7 @@ import React from "react";
 
 const Tabeheader = () => {
     return (
-        <thead className="text-gray-900">
+        <thead className="text-gray-900 dark:bg-[#040404] dark:text-white">
             <tr className='border font-thin'>
                 <th scope="col" className="p-2 text-center">পরিমাণ</th>
                 <th scope="col" className="p-2 border-l">বইয়ের নাম এবং শ্রেণি</th>

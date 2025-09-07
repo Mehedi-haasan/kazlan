@@ -61,11 +61,11 @@ const Profile = () => {
     EscapeRedirect()
 
     return (
-        <div className='min-h-screen pb-12'>
+        <div className='min-h-screen pb-12 dark:bg-[#040404] dark:text-white'>
             <Notification message={message} />
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 px-3 py-5'>
                 <div className='grid col-span-1 '>
-                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
+                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded border shadow'>
                         <h1 className='py-2 text-lg'>Options</h1>
                         <button onClick={() => { setSelect("Profile") }} className={`flex justify-start items-center gap-2 p-2 ${select === "Profile" ? 'bg-blue-500 text-white' : ''} hover:bg-blue-500 hover:text-white rounded w-full`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></svg>
@@ -79,7 +79,7 @@ const Profile = () => {
                 </div>
 
                 {select === "Profile" && <div className='grid col-span-1 lg:col-span-2 xl:col-span-3 '>
-                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
+                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded border shadow'>
                         <h1 className='py-1'>Profile Picture</h1>
                         <div className='border h-[120px] w-[120px] flex justify-center items-center rounded-md'>
                             <img src={user?.image_url ? user?.image_url : `https://cdn-icons-png.flaticon.com/128/149/149071.png`} alt='fjgkfd' className='h-[100px] w-[100px] rounded-s-none' />
@@ -100,7 +100,7 @@ const Profile = () => {
                 </div>}
 
                 {select === "Password" && <div className='grid col-span-1 lg:col-span-2 xl:col-span-3 '>
-                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] rounded border shadow'>
+                    <div className='p-3 md:p-4 lg:p-5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded border shadow'>
                         <h1 className='pb-5 pt-1'>Change Password</h1>
 
                         <InputComponent label={'Old Password'} onChange={(v) => { setUser({ ...user, password: v }) }} placeholder={"Enter new password"} />

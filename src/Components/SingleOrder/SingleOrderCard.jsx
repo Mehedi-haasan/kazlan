@@ -32,8 +32,6 @@ const CategoryCard = ({ id, name, image }) => {
             },
         })
         const data = await response.json();
-        console.log(data);
-     
         setLoading(false)
     };
 
@@ -44,7 +42,6 @@ const CategoryCard = ({ id, name, image }) => {
     const handleUpdate = async (image_url) => {
         value.image_url = image_url;
         const token = localStorage.getItem('token');
-        console.log("data", value);
         try {
             const response = await fetch(`${BaseUrl}/api/update/category`, {
                 method: 'PATCH',
@@ -56,8 +53,6 @@ const CategoryCard = ({ id, name, image }) => {
             });
 
             const data = await response.json();
-            // setIsDisable(false)
-            console.log(data);
         } catch (error) {
             console.error('Error updating variant:', error);
         }

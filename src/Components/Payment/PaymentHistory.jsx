@@ -99,8 +99,8 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
         <div className="pl-3 pt-5 pr-2 min-h-screen pb-12">
 
 
-            <div className="bg-[#FFFFFF] rounded shadow flex justify-between">
-                <div className='flex justify-start items-start gap-5 px-2 py-1.5'>
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow flex justify-between">
+                <div className='flex justify-start items-start gap-5 px-2 py-1.5 dark:bg-[#040404] dark:text-white'>
                     {
                         values?.image_url && <div className='p-2 border-r h-full'>
                             <img
@@ -111,7 +111,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                         </div>
                     }
                     <div className='grid col-span-1 lg:col-span-2 p-2 '>
-                        <div className='text-[#4C5258] font-thin text- '>
+                        <div className='text-[#4C5258] font-thin text- dark:bg-[#040404] dark:text-white'>
                             <h1 className='text-xl py-1.5 font-semibold'>{values?.name}</h1>
                             <div className='flex justify-between items-center w-[400px]'>
                                 <div>
@@ -168,7 +168,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
             </div>
 
 
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center mb-3 mt-5'>
                     <div>
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
@@ -180,8 +180,8 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                 </div>
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
 
-                    <table className="text-sm text-left rtl:text-right text-gray-500 w-full min-w-[700px] ">
-                        <thead className=" text-sm text-left rtl:text-right text-black">
+                    <table className="text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white w-full min-w-[700px] ">
+                        <thead className=" text-sm text-left rtl:text-right text-black dark:bg-[#040404] dark:text-white">
                             <tr className='border'>
                                 <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
@@ -248,16 +248,16 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                         <tbody>
                             {data?.map((item) => (
                                 <tr className='border-b border-x cursor-pointer' onClick={() => { goto(`/invoice/${item?.id}`) }}>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.type}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.shopname}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.creator}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.total}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.paidamount}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.return}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">{item?.status}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin text-[#212529]">
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.createdAt)}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.return}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">
                                         <button className={`border rounded-full px-4 mx-auto  block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                             {Math.abs(item?.balance)}
                                         </button>

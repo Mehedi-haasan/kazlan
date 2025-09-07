@@ -1,7 +1,7 @@
 import React from "react";
 
 const ImageSelect = ({ handleImageChange, imageFile, logo, reset }) => {
-    return <div className="bg-[#FFFFFF] rounded-lg w-full">
+    return <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-lg w-full">
         <div className="flex justify-start items-center gap-5 px-6">
             <div>
                 <img src={imageFile ? imageFile : logo} alt="Preview" className="w-28 h-28 object-cover rounded-lg border p-1" />

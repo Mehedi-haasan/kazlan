@@ -15,13 +15,13 @@ const SelectionComp = ({ options, onSelect, label }) => {
     };
 
     return (
-        <div className='w-full'>
+        <div className='w-full dark:bg-[#040404] dark:text-white'>
             <label htmlFor={label} className="block text-sm font-thin mb-1"> {label} </label>
             <select id={label} value={selectedId} onChange={handleSelect}
-                className="w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300 border font-thin"
+                className="w-full p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-300 border font-thin dark:bg-[#040404] dark:text-white"
             >
                 {options.map(({ id, name }) => (
-                    <option key={id} value={id} className='text-black hover:text-white font-thin'> {name}</option>
+                    <option key={id} value={id} className='text-black hover:text-white font-thin dark:bg-[#040404] dark:text-white'> {name}</option>
                 ))}
             </select>
         </div>

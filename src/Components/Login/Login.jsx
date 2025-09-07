@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import BaseUrl from '../../Constant';
 import Hide from '../Input/Hide';
 import Show from '../Input/Show';
@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Notification from '../Input/Notification'
 import logo from '../Logo/logo_delta.png'
 import login_logo from '../Logo/login-cover.svg'
-import us from '../Logo/united.png'
-import bn from '../Logo/bangladesh.png'
 
 
 const Login = ({ auth }) => {
@@ -18,7 +16,7 @@ const Login = ({ auth }) => {
   });
   const [showPassword, setShowPassword] = useState(false)
   const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
-
+  const pass = useRef()
   const handleSubmit = async () => {
 
     try {
@@ -58,9 +56,9 @@ const Login = ({ auth }) => {
   return (
     <div>
       <Notification message={message} />
-      <div className='grid grid-cols-1 lg:grid-cols-3 min-h-[95vh] h-full bg-white'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 min-h-[95vh] h-full bg-white dark:bg-[#040404] dark:text-white'>
 
-        <div className='grid lg:col-span-2 lg:bg-[#F7F7FF]'>
+        <div className='grid lg:col-span-2 lg:bg-[#F7F7FF] dark:bg-[#040404] dark:text-white'>
           <div className='hidden lg:block'>
             <div className='flex justify-center items-center h-full min-h-[95vh]'>
               <img src={login_logo} alt='login_logu' className='w-[550px] h-full' />
@@ -77,14 +75,16 @@ const Login = ({ auth }) => {
 
               <div className='mb-2'>
                 <label className="block  text-sm font-semibold mb-1">Email / Phone Number</label>
-                <input type="email" onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 font-thin rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300" placeholder="Enter your email" />
+                <input type="email" onKeyDown={(e) => {
+                  if (e.key === "Enter") { pass.current.focus() }
+                }} onChange={(e) => { setValues({ ...values, username: e.target.value }) }} className="w-full p-3 font-thin rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border placeholder-gray-300 dark:bg-[#040404] dark:text-white" placeholder="Enter your email" />
               </div>
               <div className='relative mb-5'>
                 <label className="block text-sm font-semibold mb-1">Password</label>
                 {
-                  showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); console.log("Hide") }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer' onClick={() => { setShowPassword(true); console.log("Hide") }} />
+                  showPassword ? <Show className='absolute right-2 top-[35px] cursor-pointer ' onClick={() => { setShowPassword(false); }} /> : <Hide className='absolute right-2 top-[35px] cursor-pointer' onClick={() => { setShowPassword(true); }} />
                 }
-                <input type={showPassword ? "text" : "password"} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none font-thin border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
+                <input type={showPassword ? "text" : "password"} ref={pass} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none dark:bg-[#040404] dark:text-white font-thin border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
               </div>
               {/* <div className='flex justify-between items-center mb-3'>
                 <p className="text-center text-sm text-gray-300 flex justify-start items-center gap-1">

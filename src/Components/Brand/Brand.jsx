@@ -19,10 +19,14 @@ import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Pdf from '../Pdf/Pdf'
 import BrandCardPdf from "./BrandCardPdf";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { useNavigate } from "react-router-dom";
 
 
 const Brand = ({ entries, info = {} }) => {
 
+    const goto =  useNavigate()
     const [selectAll, setSelectAll] = useState(false);
     const [preview, setPreview] = useState(false)
     const targetRef = useRef();
@@ -168,14 +172,36 @@ const Brand = ({ entries, info = {} }) => {
             });
             const data = await response.json();
             setBran(data?.items);
-            console.log(data?.items)
         } else {
             getBrand()
         }
     }
 
 
+    const exportToExcel = () => {
+        let filename = 'bran.xlsx'
+        if (!bran || bran.length === 0) {
+            setMessage({ id: Date.now(), mgs: 'No brand to export!' });
+            return;
+        }
+        let excel = [];
+        bran.map((item) => {
+            excel.push({
+                name: item?.name,
+                active: item?.active,
+                createdby: item?.creator,
+                createdAt: item?.createdAt
+            })
+        })
 
+        const worksheet = XLSX.utils.json_to_sheet(excel);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        saveAs(blob, filename);
+    };
 
 
 
@@ -270,24 +296,24 @@ const Brand = ({ entries, info = {} }) => {
                     </div>
                 </Modal>
             </div>
-            <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] rounded shadow">
+            <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow">
                 <h1 className="font-semibold text-lg">Brand List</h1>
 
-                <button onClick={() => { setShow(true); setInpo(true) }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Brand</button>
+                <button onClick={() => { goto('/create/brand') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Brand</button>
             </div>
-            <div className="bg-[#FFFFFF] p-4 shadow rounded-lg mt-2">
+            <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
                 <div className='flex justify-between items-center my-3'>
                     <div className="flex justify-start items-center gap-1.5">
-                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
+                        <ShowEntries e options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={SearchBrand} />
                     </div>
                 </div>
                 <div>
                     <div className="pt-3 w-full overflow-hidden overflow-x-auto">
-                        <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 ">
+                        <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-white ">
                             <thead class="text-md text-gray-900 bg-[#BCA88D]">
                                 <tr className='border text-black font-bold'>
                                     <th className="w-4 py-2 px-4 border-r">

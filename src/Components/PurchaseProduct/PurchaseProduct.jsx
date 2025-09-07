@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { handleDateConvert, PrepareOrderData, CalculateAmount,DiscountCal, DiscountCalculate } from '../Input/Time';
+import { handleDateConvert, PrepareOrderData, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calendar from '../Wholesale/Calender';
 import DataHeader from '../Common/DataHeader';
@@ -25,7 +25,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     const [itemQuan, setItemQuan] = useState(null)
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [first, setFirst] = useState(true)
-    const [second, setSecond] = useState(false)
+    const [second, setSecond] = useState(true)
     const [edition, setEdition] = useState(false)
     const [bran, setBrand] = useState(false)
     const [catego, setCatego] = useState(false)
@@ -170,7 +170,9 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         const data = await response.json();
         setCustomer(data?.items);
     }
-
+    useEffect(() => {
+        GetCustomer(1)
+    }, [])
 
     const HandleDelete = (id) => {
         if (!id) return;
@@ -208,6 +210,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     }
 
     const ChangeQty = (id, qty) => {
+        setQuan(false)
         let updateId = parseInt(id)
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
@@ -225,29 +228,20 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
 
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
-            <div className='bg-[#FFFFFF] rounded-md'>
-                <div className='border-b p-4 flex justify-between items-center'>
+            <div className='bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-md'>
+                <div className='border-b p-4 flex justify-between items-center dark:bg-[#040404] dark:text-white'>
                     <h1 className='text-[20px]'>Purchase Details</h1>
                     <Notification message={message} />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1 z-40'>
+                    {/* <div className='flex justify-start items-end pb-1 z-40'>
                         <SelectionComponent default_select={first} options={state} default_value={filter?.state}
                             onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id); setFilter({ ...filter, state: v?.name }) }}
                             label={"Thana Name"} className='rounded-l z-50' />
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
-                    </div>
-                    <div></div>
-
-                    <div className='relative'>
-                        <Calendar label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))}
-                            getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
-                            getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
-                    </div>
-
-
+                    </div> */}
                     <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
                             onSelect={(v) => {
@@ -260,6 +254,26 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                         </div>
                     </div>
                     <div></div>
+
+                    <div className='relative'>
+                        <Calendar label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))}
+                            getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
+                            getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                    </div>
+
+                    <div></div>
+                    {/* <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
+                            onSelect={(v) => {
+                                setSecond(false); setFirst(false); setQuan(true);
+                                setFilter({ ...filter, customer: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
+                            }}
+                            label={"Supplier"} className='rounded-l' />
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <Add />
+                        </div>
+                    </div> */}
+                    <div></div>
                     <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
                         getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
 
@@ -270,9 +284,12 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-3 p-4 '>
                     <div>
-                        <InputComponent label={'Quantity'} type={'number'} input_focus={quan} placeholder={0} value={itemQuan}
+                        <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
                             handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
-                            onChange={(v) => { setItemQuan(v); }} className={``} />
+                            onChange={(v) => {
+                                let num = BanglaToEnglish(v);
+                                setItemQuan(num);
+                            }} className={``} />
                     </div>
                     <div className='pt-1.5'>
                         <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
@@ -318,7 +335,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                             </div>
                             <div className='relative border-y text-black w-full'>
                                 <input type='text' ref={inputRef} placeholder={'Scan Barcode/Search Items'} value={searchItem}
-                                    onChange={(e) => { SecondSearchProduct(filter?.edit, filter?.cate, filter?.bran, e.target.value) }} className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin'
+                                    onChange={(e) => { SecondSearchProduct(filter?.edit, filter?.cate, filter?.bran, e.target.value) }} className='p-1 mt-[2px] dark:bg-[#040404] dark:text-white rounded focus:outline-none w-full font-thin'
                                     onKeyDown={(e) => {
                                         if (e.key === "ArrowDown") {
                                             if (searchData?.length === 0 && allData?.length > 0) {
@@ -431,7 +448,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                     <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
                                     <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
                                     <div className='flex justify-start items-center border-r'>
-                                        <input type='number' ref={discount_ref}
+                                        <input type='text' ref={discount_ref}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     setAllData([...allData, prepareData]);
@@ -447,8 +464,10 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                             }}
                                             placeholder={0}
                                             onChange={(e) => {
-                                                ChangeDis(e.target.value, prepareData?.discount_type)
+                                                let num = BanglaToEnglish(e.target.value);
+                                                ChangeDis(num, prepareData?.discount_type)
                                             }}
+                                            value={prepareData?.discount}
                                             className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
                                     </div>
                                     <div className='relative z-50 border-l'>
@@ -501,12 +520,12 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                             </div>
                                         }
                                     </div>
-                                   <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
+                                    <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
                                     <div className="pl-2 py-2 text-right font-thin border-l">{DiscountCalculate(prepareData)}</div>
                                 </div>
                             )}
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} />
+                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} handleEnter={() => { setQuan(true) }}/>
                             })}
                         </div>
                     </div>
@@ -521,7 +540,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={last_pay}
+                                    <input type='text' ref={last_pay}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
                                                 Order()
@@ -530,8 +549,11 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                 setPayTypeShow(true)
                                             }
                                         }}
-                                        onChange={(e) => { setValues({ ...values, pay: e.target.value }) }}
-                                        placeholder={values?.pay} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                        onChange={(e) => {
+                                            let num = BanglaToEnglish(e.target.value);
+                                            setValues({ ...values, pay: num })
+                                        }}
+                                        placeholder={values?.pay} className='border-y border-l px-2 dark:bg-[#040404] dark:text-white focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
                                     {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 1, name: "Cash" }, { id: 2, name: "Due" }].map(({ id, name }) => (
@@ -562,9 +584,9 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                     last_pay.current?.focus();
                                                     setValues({ ...values, pay_type: PayType[selectedId].name })
                                                 }
-                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin' />
+                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
                                         {
-                                            payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                            payTypeShow && <div className={`px-0 max-h-[250px] dark:bg-[#040404] dark:text-white absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
                                                 {
                                                     PayType?.map((opt, i) => {
                                                         return <div onMouseEnter={() => { setSelectedId(i) }}
@@ -582,7 +604,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}
-                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
                                                             {opt?.name}
                                                         </div>
                                                     })
@@ -607,29 +629,39 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                             </div>
 
                             <div className='flex justify-between items-center gap-4'>
-                                <InputComponent label={'Packing Charge'} type={'number'} input_focus={pack} placeholder={paking}
+                                <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} placeholder={paking}
                                     handleEnter={() => { setPack(false); setDeli(true) }} value={paking}
-                                    onChange={(v) => { setPaking(parseFloat(v)); }} className={``}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v);
+                                        setPaking(parseFloat(num));
+                                    }} className={``}
                                 />
-                                <InputComponent label={'Delivery Charge'} type={'number'} input_focus={deli} placeholder={delivary}
+                                <InputComponent label={'Delivery Charge'} type={'text'} input_focus={deli} placeholder={delivary}
                                     handleEnter={() => { setDeli(false); dis_ref.current.focus() }} value={delivary}
-                                    onChange={(v) => { setDelivery(parseInt(v)); }} className={``}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v);
+                                        setDelivery(parseInt(num));
+                                    }} className={``}
                                 />
                             </div>
                             <div className='pb-4'>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Discount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='number' ref={dis_ref}
+                                    <input type='text' ref={dis_ref}
                                         onKeyDown={(e) => { if (e.key === "Enter") { last_pay.current.focus() } }}
-                                        onChange={(e) => { setValues({ ...values, lastdiscount: e.target.value }) }}
-                                        placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                        onChange={(e) => {
+                                            let num = BanglaToEnglish(e.target.value);
+                                            setValues({ ...values, lastdiscount: num })
+                                        }}
+                                        value={values?.lastdiscount}
+                                        placeholder={values?.lastdiscount} className='border px-2 text-[#6B7280] dark:bg-[#040404] dark:text-white focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>
                             <div className='border-t pt-2 border-black flex justify-start gap-2 '>
                                 <div><h1 className='pt-[5px] w-[100px]'>Total Amount</h1></div>
                                 <div className='w-full'>
                                     <input type='number' value={lastTotal} readOnly={true} onChange={(e) => { setValues({ ...values, pay: e.target.value }) }} placeholder={lastTotal}
-                                        className='border text-[#6B7280] px-2 focus:outline-none rounded-r rounded-l font-thin pt-[6px] pb-[5px] w-full' />
+                                        className='border text-[#6B7280] px-2 focus:outline-none rounded-r dark:bg-[#040404] dark:text-white rounded-l font-thin pt-[6px] pb-[5px] w-full' />
                                 </div>
                             </div>
 

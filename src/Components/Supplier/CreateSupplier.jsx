@@ -6,6 +6,8 @@ import BaseUrl from "../../Constant";
 import Add from "../../icons/Add";
 import { useNavigate } from "react-router-dom";
 import Notification from "../Input/Notification";
+import RightArrow from "../../icons/RightArrow";
+import { BanglaToEnglish } from "../Input/Time";
 
 const CreateSupplier = ({ state, info = {} }) => {
     const open_bala = useRef(null)
@@ -13,6 +15,11 @@ const CreateSupplier = ({ state, info = {} }) => {
     const [active, setActive] = useState("Address");
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const dis = useRef(null)
+    const [selectedId, setSelectedId] = useState(0)
+    const [disOnSale, setDisonSale] = useState([{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }])
+    const [disType, setDisType] = useState(false)
+    const dtype = useRef()
     const [values, setValues] = useState({
         "stateId": 1,
         "usertype": "Supplier",
@@ -77,7 +84,7 @@ const CreateSupplier = ({ state, info = {} }) => {
 
     useEffect(() => {
         if (auto?.open_b) {
-            open_bala.current.focus()
+            dis.current.focus()
         }
     }, [auto])
 
@@ -87,7 +94,6 @@ const CreateSupplier = ({ state, info = {} }) => {
             <Notification message={message} />
             <div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
                 <h1 className="py-2 px-3">Supplier Details</h1>
-
             </div>
 
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
@@ -116,7 +122,7 @@ const CreateSupplier = ({ state, info = {} }) => {
                 </div>
                 {
                     active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div className='flex justify-start items-end pb-1'>
+                        {/* <div className='flex justify-start items-end pb-1'>
                             <SelectionComponent options={state} default_select={auto?.tname} default_value={auto?.t_value}
                                 onSelect={(v) => {
                                     setValues({ ...values, stateId: v?.id });
@@ -125,7 +131,7 @@ const CreateSupplier = ({ state, info = {} }) => {
                             <div className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] ' onClick={()=>{goto('/state')}}>
                                 <Add />
                             </div>
-                        </div>
+                        </div> */}
                         <InputComponent label={"Address"} placeholder={'Enter address'}
                             input_focus={auto?.addres}
                             handleEnter={() => {
@@ -136,7 +142,7 @@ const CreateSupplier = ({ state, info = {} }) => {
                 }
                 {
                     active === "Balence" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div>
+                        {/* <div>
                             <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
                             <div className='flex justify-start items-end pb-1'>
                                 <input type='number' value={values?.balance}
@@ -153,6 +159,79 @@ const CreateSupplier = ({ state, info = {} }) => {
                                         <option key={id} value={name} className=''>{name}</option>
                                     ))}
                                 </select>
+
+                            </div>
+                        </div> */}
+
+                        <div>
+                            <p className='py-2 pt-1 font-semibold text-sm'>Opening Balance</p>
+                            <div className='flex justify-start items-end pb-1 pt-1'>
+                                <input ref={dis}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            handleSubmit();
+                                        } else if (e.key === "ArrowRight") {
+                                            dtype.current.focus();
+                                            setDisType(true)
+                                        }
+                                    }}
+
+                                    onChange={(e) => {
+                                        let num = BanglaToEnglish(e.target.value);
+                                        setValues({ ...values, balance: num })
+                                    }}
+                                    value={values?.balance}
+                                    placeholder={values?.balance} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+
+                                <div className='relative z-50 border'>
+                                    <RightArrow className='absolute rotate-90 top-2 right-2' />
+                                    <input ref={dtype} value={values?.balance_type} onClick={() => { setDisType(!disType); }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "ArrowDown") {
+                                                if (selectedId === disOnSale?.length - 1) {
+                                                    setSelectedId(0)
+                                                } else {
+                                                    setSelectedId(selectedId + 1)
+                                                }
+                                            } else if (e.key === "ArrowUp") {
+                                                if (selectedId === 0) {
+                                                    setSelectedId(disOnSale?.length - 1)
+                                                } else {
+                                                    setSelectedId(selectedId - 1)
+                                                }
+                                            } else if (e.key === "Enter" && disOnSale[selectedId]) {
+                                                setDisType(false);
+                                                setSelectedId(0);
+                                                setValues({ ...values, balance_type: disOnSale[selectedId].name })
+                                                dis.current?.focus();
+                                            }
+                                        }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                    {
+                                        disType && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                            {
+                                                disOnSale?.map((opt, i) => {
+                                                    return <div onMouseEnter={() => { setSelectedId(i) }}
+                                                        ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === "ArrowDown") {
+                                                                setSelectedId(i + 2)
+                                                            }
+                                                        }}
+
+                                                        onClick={() => {
+                                                            setDisType(false);
+                                                            setValues({ ...values, balance_type: disOnSale[selectedId].name })
+                                                            setSelectedId(0);
+                                                            dis.current?.focus();
+                                                        }}
+                                                        className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404] dark:text-white' : ''}`}>
+                                                        {opt?.name}
+                                                    </div>
+                                                })
+                                            }
+                                        </div>
+                                    }
+                                </div>
 
                             </div>
                         </div>
