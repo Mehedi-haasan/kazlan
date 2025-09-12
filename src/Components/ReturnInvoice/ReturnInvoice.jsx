@@ -30,9 +30,9 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     })
 
 
-    const GetReturnProduct = async (id) => {
+    const GetReturnProduct = async (id, type) => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}/${type}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -55,7 +55,7 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     useEffect(() => {
         document.title = "Invoice "
-        GetReturnProduct(params?.id)
+        GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
     function convertToBengaliNumber(num) {
@@ -296,15 +296,15 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     const Redirect = (value) => {
         if (value?.type === "Sale") {
-            goto(`/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Sale Return") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Return Purchase") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Purchase items") {
-            goto(`/invoice/${value?.id}`)
-        }else {
-            goto(`/opening/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
+        } else {
+            goto(`/opening/invoice/${value?.id}/${value?.type}`)
         }
     }
 

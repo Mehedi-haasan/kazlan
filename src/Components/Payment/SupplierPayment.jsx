@@ -13,6 +13,9 @@ const SupplierPayment = ({ info, state }) => {
     const params = useParams()
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [paymentType, setPaymentType] = useState([])
+    const [paymentMethod, setPaymentMethod] = useState([])
+    const [mobile, setMobile] = useState([])
     const [values, setValues] = useState({
         balance: 0,
         paid: 0,
@@ -31,11 +34,16 @@ const SupplierPayment = ({ info, state }) => {
         let type = 2;
         if (values?.balance_type === "You Receive") {
             type = 2;
+            values['type'] = 'Make Payment'
         } else if (values?.balance_type === "You Pay") {
             type = 1;
+            values['type'] = 'Make Payment'
         } else if (values?.balance_type === "Yearly Bonus") {
             type = 1;
+            values['type'] = 'Yearly Bonus'
         }
+        values['paymentmethod'] = `${values?.paymentmethod || ''} by ${values?.methodname || ''}`;
+        values['status'] = 'Online'
         const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
@@ -64,9 +72,53 @@ const SupplierPayment = ({ info, state }) => {
         setMessage({ id: Date.now(), mgs: data?.message });
     }
 
+    const PaymentType = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Payment Type`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setPaymentType(data.items);
+    }
+    const PaymentMethod = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Bank`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setPaymentMethod(data.items);
+    }
+    const MobileBanking = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Mobile Banking`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setMobile(data.items);
+    }
+
+
     useEffect(() => {
         GetUser()
+        PaymentType()
+        PaymentMethod()
+        MobileBanking()
     }, [params?.id])
+
+
+
 
 
     return (
@@ -84,18 +136,18 @@ const SupplierPayment = ({ info, state }) => {
 
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
-                            options={[{ id: 1, name: 'Cash' }, { id: 2, name: 'Check' }, { id: 3, name: 'Bank Transfar' }, { id: 4, name: 'Mobile Banking' }]}
+                            options={paymentType} default_value={values?.paymentmethod}
                             onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
                         />
                         {
                             values?.paymentmethod === "Bank Transfar" && <SelectionComponent label={"Select Method"}
-                                options={[{ id: 1, name: 'ISB' }, { id: 2, name: 'City Bank' }]}
+                                options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
                                 onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
                             />
                         }
                         {
                             values?.paymentmethod === "Mobile Banking" && <SelectionComponent label={"Select Method"}
-                                options={[{ id: 1, name: 'Nagad' }, { id: 2, name: 'Bkash' }]}
+                                options={mobile} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
                                 onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
                             />
                         }

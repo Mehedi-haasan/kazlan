@@ -12,6 +12,7 @@ import Edit from '../../icons/Edit'
 import Pdf from '../Pdf/Pdf';
 import PdfHeader from './PdfHeader';
 import PdfBottom from './PdfBottom'
+import { ReturnSaleCode } from '../Input/Time';
 
 
 
@@ -25,6 +26,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     const [isGen, setIsGen] = useState(false)
     const [user, setUser] = useState({});
     const [allData, setAllData] = useState([]);
+    const [invoice, setInvoice] = useState({})
     const [total, setTotal] = useState(0);
     const [pevNext, setPrevNext] = useState({
         prev: null,
@@ -32,10 +34,10 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     })
 
 
-    const GetReturnProduct = async (id) => {
+    const GetReturnProduct = async (id, type) => {
         const token = localStorage.getItem('token')
 
-        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}/${type}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -47,6 +49,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         }, 0);
         setTotal(amount || 0)
         setAllData(data?.items);
+        setInvoice(data?.invoice)
         setUser(data?.user);
         setPrevNext({
             ...pevNext,
@@ -58,7 +61,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     useEffect(() => {
         document.title = "Invoice"
-        GetReturnProduct(params?.id)
+        GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
     function convertToBengaliNumber(num) {
@@ -79,20 +82,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     }
 
 
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
 
-        return saleType
-    }
 
     const Calculate = () => {
 
@@ -100,9 +90,9 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         let due = parseInt(user?.previousdue);
 
         if (due < 0) {
-            sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - Math.abs(user?.previousdue)
+            sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount)- parseInt(invoice?.special_discount) - Math.abs(user?.previousdue)
         } else {
-            sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount)
+            sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount)- parseInt(invoice?.special_discount)
         }
         return sum
     }
@@ -111,6 +101,18 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         let amount = Calculate()
         return amount - parseInt(user?.paidamount)
     }
+
+    const GetType = (type) => {
+        let value = "বি. মূল্য";
+
+        if (type === "Sale" || type === "Sale Return") {
+            value = "বি. মূল্য";
+        } else if (type === "Purchase items" || type === "Purchase Return") {
+            value = "ক্রয় মূল্য";
+        }
+
+        return value;
+    };
 
     const PrintInvoice = () => {
         const rows = allData?.map(item => {
@@ -216,9 +218,15 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px;font-size: 13px;">ডিসকাউন্ট</td>
-                                        <td style="padding: 4px;"></td>
-                                        
+                                        <td style="padding: 4px;"></td>                                        
                                         <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
+                                    </tr>
+                                    <tr style="background: white;">
+                                        <th style="padding: 8px 24px 8px 8px;"></th>
+                                        <th style="padding: 4px;"></th>
+                                        <td style="padding: 4px;"></td>
+                                        <td colspan="2" style="padding: 4px;font-size: 13px;">বিশেষ ডিসকাউন্ট</td>                                      
+                                        <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(invoice?.special_discount || 0))}.০</td>
                                     </tr>
                                     <tr style="background: white;">
                                         <th style="padding: 8px 24px 8px 8px;"></th>
@@ -303,7 +311,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                             <th style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px;"">বইয়ের নাম এবং শ্রেণি</th>
                                             <th style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px;"">প্রকাশনি</th>
                                             <th style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px; width:40px;">মূল্য</th>
-                                            <th style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px; width:50px;">বি. মূল্য</th>
+                                            <th style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px; width:60px;">${GetType(params?.type)}</th>
                                             <th style="padding: 4px; text-align: right; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:right; font-size: 13px;"">মোট মূল্য</th>
                                         </tr>
                                         </thead>
@@ -332,15 +340,15 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     const Redirect = (value) => {
         if (value?.type === "Sale") {
-            goto(`/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Sale Return") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Return Purchase") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Purchase items") {
-            goto(`/invoice/${value?.id}`)
-        }else {
-            goto(`/opening/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
+        } else {
+            goto(`/opening/invoice/${value?.id}/${value?.type}`)
         }
     }
 
@@ -356,13 +364,13 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
                     <div className='relative overflow-x-auto my-5'>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <Tabeheader />
+                            <Tabeheader type={params?.type} />
                             <tbody>
 
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
-                                <PaymentTotal user={user} total={total} />
+                                <PaymentTotal user={user} total={total} invoice={invoice} />
 
                             </tbody>
                         </table>

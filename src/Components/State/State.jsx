@@ -15,6 +15,7 @@ import generatePDF from 'react-to-pdf';
 
 const State = ({ entries = [] }) => {
 
+    const input_name = useRef(null)
     const [values, setValues] = useState("");
     const [show, setShow] = useState(false);
     const [state, setState] = useState([])
@@ -26,7 +27,9 @@ const State = ({ entries = [] }) => {
     const targetRef = useRef();
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
-
+    useEffect(() => {
+        input_name.current.focus()
+    }, [])
     const getState = async () => {
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/state/${page}/${pageSize}`, {
@@ -78,7 +81,16 @@ const State = ({ entries = [] }) => {
             <div>
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`500px`} className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={`Enter State name`} input_focus={true} label={`State name`} value={values} handleEnter={handleCreate} onChange={(e) => { setValues(e) }} className='lg:text-lg' />
+                        <div className=''>
+                            <h1 className='text-[15px] pb-1.5'>State name</h1>
+                            <input type="text" ref={input_name} value={values} placeholder={`Enter State name`}
+                                onChange={(e) => setValues(e.target.value)}
+                                className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") { handleCreate() }
+                                }}
+                            />
+                        </div>
 
                         <Button isDisable={false} name="Create" onClick={handleCreate} className="mt-3 border bg-blue-500 text-white" />
                     </div>

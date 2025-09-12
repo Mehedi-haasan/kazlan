@@ -1,6 +1,6 @@
 
 
-const PaymentTotal = ({ user, total }) => {
+const PaymentTotal = ({ user, total, invoice }) => {
 
 
     const convertToBengaliNumber = (num) => {
@@ -14,9 +14,9 @@ const PaymentTotal = ({ user, total }) => {
         let due = parseInt(user?.previousdue);
 
         if (due < 0) {
-            sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - Math.abs(user?.previousdue)
+            sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - parseInt(invoice?.special_discount) - Math.abs(user?.previousdue)
         } else {
-            sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount)
+            sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - parseInt(invoice?.special_discount)
         }
         return sum
     }
@@ -69,6 +69,16 @@ const PaymentTotal = ({ user, total }) => {
                 <td className="p-2"> ডিসকাউন্ট </td>
                 <td className="p-2 text-right">{convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
             </tr>
+            {invoice?.special_discount > 0 &&
+                <tr className="bg-white text-[13px]">
+                    <td className="pr-6 py-3"></td>
+                    <td className="p-2"></td>
+                    <td className="p-2"></td>
+                    <td className="p-2"></td>
+                    <td className="p-2">বিশেষ ডিসকাউন্ট </td>
+                    <td className="p-2 text-right">{convertToBengaliNumber(parseInt(invoice?.special_discount || 0))}.০</td>
+                </tr>
+            }
             <tr className="bg-white text-[13px] ">
                 <td className="pr-6 py-3"></td>
                 <td className="p-2"></td>

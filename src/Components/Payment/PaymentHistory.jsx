@@ -9,7 +9,7 @@ import Search from '../Input/Search';
 import { useToImage } from '@hcorta/react-to-image'
 import logo from '../Logo/photo.png'
 import Calander from '../Wholesale/Calender'
-
+import { ReturnSaleCode } from '../Input/Time';
 
 
 const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
@@ -68,21 +68,6 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
         });
         return formatted
     };
-
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "RP"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
 
     function formatDate(isoString) {
         const date = new Date(isoString);
@@ -181,7 +166,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                 <div className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" ref={ref}>
 
                     <table className="text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white w-full min-w-[700px] ">
-                        <thead className=" text-sm text-left rtl:text-right text-black dark:bg-[#040404] dark:text-white">
+                        <thead className=" text-sm text-left rtl:text-right text-black bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
                             <tr className='border'>
                                 <th scope="col" className="px-3 py-3 border-r ">
                                     <div className="flex justify-between items-center">
@@ -246,8 +231,8 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((item) => (
-                                <tr className='border-b border-x cursor-pointer' onClick={() => { goto(`/invoice/${item?.id}`) }}>
+                            {data?.map((item, i) => (
+                                <tr className={`border cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`} onClick={() => { goto(`/invoice/${item?.id}`) }}>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.createdAt)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>

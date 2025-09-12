@@ -12,7 +12,7 @@ import Edit from '../../icons/Edit'
 import Pdf from '../Pdf/Pdf';
 import PdfHeader from '../Invoice/PdfHeader';
 import PdfBottom from '../Invoice/PdfBottom'
-import {numberToWords} from '../Input/Time'
+import { numberToWords } from '../Input/Time'
 
 
 const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
@@ -25,19 +25,19 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     const [isGen, setIsGen] = useState(false)
     const [user, setUser] = useState({});
     const [allData, setAllData] = useState([]);
-    const [invoice, setInvoice]=useState({})
+    const [invoice, setInvoice] = useState({})
     const [total, setTotal] = useState(0);
-    const [state, setState]=useState({})
+    const [state, setState] = useState({})
     const [pevNext, setPrevNext] = useState({
         prev: null,
         next: null
     })
 
 
-    const GetReturnProduct = async (id) => {
+    const GetReturnProduct = async (id, type) => {
         const token = localStorage.getItem('token')
 
-        const response = await fetch(`${BaseUrl}/api/get/invo/order/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/invo/order/${id}/${type}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -62,7 +62,7 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     useEffect(() => {
         document.title = "Invoice"
-        GetReturnProduct(params?.id)
+        GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
 
@@ -258,15 +258,15 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     const Redirect = (value) => {
         if (value?.type === "Sale") {
-            goto(`/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Sale Return") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Return Purchase") {
-            goto(`/return/invoice/${value?.id}`)
+            goto(`/return/invoice/${value?.id}/${value?.type}`)
         } else if (value?.type === "Purchase items") {
-            goto(`/invoice/${value?.id}`)
-        }else {
-            goto(`/opening/invoice/${value?.id}`)
+            goto(`/invoice/${value?.id}/${value?.type}`)
+        } else {
+            goto(`/opening/invoice/${value?.id}/${value?.type}`)
         }
     }
 
@@ -276,7 +276,7 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
             <div className='w-full mx-auto border rounded py-4 px-2'>
                 <div className="bg-[#FFFFFF] rounded p-4">
 
-                    <InvoHeader user={user} invoice={invoice} params={params} state={state}/>
+                    <InvoHeader user={user} invoice={invoice} params={params} state={state} />
 
 
 
@@ -288,7 +288,7 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                 {/* {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })} */}
-                                <PaymentTotal user={user} total={total} invoice={invoice}/>
+                                <PaymentTotal user={user} total={total} invoice={invoice} />
 
                             </tbody>
                         </table>

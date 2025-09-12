@@ -137,6 +137,22 @@ const Customers = ({ entries, state = [], info = {} }) => {
         saveAs(blob, filename);
     };
 
+    const SearchCustomer = async (v) => {
+        const token = localStorage.getItem('token')
+        if (v === '') {
+            GetCustomer()
+        } else {
+            const response = await fetch(`${BaseUrl}/api/search/customers/Customer/${v}`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            const data = await response.json();
+            setCustomer(data?.items)
+        }
+    }
 
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
@@ -156,7 +172,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
-                        <Search SearchProduct={() => { }} />
+                        <Search SearchProduct={(v) => SearchCustomer(v)} />
                     </div>
                 </div>
                 <div>

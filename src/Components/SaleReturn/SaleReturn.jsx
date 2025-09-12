@@ -130,7 +130,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/return/invoice/${data?.invoice}`)
+            goto(`/return/invoice/${data?.invoice}/Sale Return`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -138,7 +138,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
 
     useEffect(() => {
         const fetchAmount = async () => {
-            let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount);
+            let { amount, lastTotal } = await CalculateAmount(allData, 0, 0, 0, 0);
             setTotal(amount);
             setLastTotal(lastTotal);
             document.title = "Sale Return - KazalandBrothers";
@@ -194,7 +194,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     const GetInvoiceData = async (id) => {
 
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}/Sale Return`, {
             method: 'GET',
             headers: {
                 'authorization': token
@@ -311,9 +311,15 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
                             <div className='relative border-y  text-black w-full px-1'>
-                                <input type='number' placeholder={'Enter Invoice number'}
-                                    onKeyDown={(e) => { if (e.key === "Enter") { GetInvoiceData(e.target.value) } }}
-                                    onChange={(e) => { setInvoId(e.target.value) }}
+                                <input type='text' placeholder={'Enter Invoice number'}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") { GetInvoiceData(invoId) }
+                                    }}
+                                    onChange={(e) => {
+                                        let num = BanglaToEnglish(e.target.value)
+                                        setInvoId(num)
+                                    }}
+                                    value={invoId}
                                     className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin dark:bg-[#040404] dark:text-white' />
                             </div>
                             <div onClick={() => { GetInvoiceData(invoId) }}
@@ -624,12 +630,6 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                         placeholder={total}
                                         value={values?.pay}
                                         className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[55%] dark:bg-[#040404] dark:text-white' />
-                                    {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
-                                        className={`border text-[#6B7280] w-[45%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
-                                        {[{ id: 201, name: "Chalan/Due" }, { id: 202, name: "Cash Memo" }, { id: 203, name: "Paid" }].map(({ id, name }) => (
-                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
-                                        ))}
-                                    </select> */}
                                     <div className='relative z-50 border'>
                                         <RightArrow className='absolute rotate-90 top-2 right-2' />
                                         <input ref={paytypeRef} value={values?.pay_type} onClick={() => { setPayTypeShow(!payTypeShow); setDisValue(false) }}

@@ -143,6 +143,25 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
         saveAs(blob, filename);
     };
 
+
+
+    const SearchSupplier = async (v) => {
+        const token = localStorage.getItem('token')
+        if (v === '') {
+            GetSupplier()
+        } else {
+            const response = await fetch(`${BaseUrl}/api/search/customers/Supplier/${v}`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            const data = await response.json();
+            setSupplier(data?.items)
+        }
+    }
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
             <Notification message={message} />
@@ -157,7 +176,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
-                        <Search SearchProduct={() => { }} />
+                        <Search SearchProduct={(v) => SearchSupplier(v)} />
                     </div>
                 </div>
                 <div>

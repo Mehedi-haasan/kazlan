@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification'
-import { getFormattedDate, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
+import { PrepareWholeSaleData, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calendar from './Calender'
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -26,6 +26,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
     const [itemQuan, setItemQuan] = useState(null)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    const [spDis, setSpDis] = useState(0)
     const [first, setFirst] = useState(true)
     const [second, setSecond] = useState(false)
     const [edition, setEdition] = useState(false)
@@ -92,7 +93,8 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
         pay_type: 'Challan',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
-        deliverydate: ''
+        deliverydate: '',
+        sup_invo: ''
     })
 
     EscapeRedirect()
@@ -122,38 +124,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = [];
-        allData?.forEach((v) => {
-            let sale = 0;
-            const price = parseInt(v?.cost) || 0;
-            const discount = parseInt(v?.discount) || 0;
-            const qty = parseInt(v?.qty) || 0;
-            if (v?.discount_type === "Fixed") {
-                sale = (price - discount) * qty;
-            } else if (v?.discount_type === "Percentage") {
-                const discountedPrice = price - (price * discount / 100);
-                sale = discountedPrice * qty;
-            }
-
-            orderData.push({
-                active: true,
-                product_id: v?.id,
-                code: v?.code,
-                username: name,
-                userId: userId,
-                name: v?.name,
-                shop: info?.shopname,
-                price: price,
-                discount: discount,
-                discount_type: v?.discount_type,
-                sellprice: sale,
-                qty: qty,
-                contact: values?.phone,
-                date: getFormattedDate(),
-                deliverydate: values?.deliverydate
-            });
-        });
-
+        let orderData = PrepareWholeSaleData(allData, userId, name, values, info, lastTotal, paking, delivary, due, spDis);
         try {
             const response = await fetch(`${BaseUrl}/api/post/order`, {
                 method: 'POST',
@@ -161,36 +132,19 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify({
-                    shop: info?.shopname,
-                    customername: name,
-                    paymentmethod: "Online",
-                    userId: userId,
-                    date: getFormattedDate(),
-                    total: lastTotal,
-                    methodname: "Online",
-                    pay_type: values?.pay_type,
-                    packing: paking,
-                    delivery: delivary,
-                    lastdiscount: values?.lastdiscount,
-                    previousdue: due,
-                    paidamount: values?.pay,
-                    amount: parseInt(lastTotal) - parseInt(values?.pay),
-                    orders: orderData,
-                    deliverydate: values?.deliverydate
-                }),
+                body: JSON.stringify(orderData),
             });
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}`)
+            goto(`/invoice/${data?.invoice}/Sale`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
     }
 
     const fetchAmount = async () => {
-        let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount);
+        let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount, spDis);
         setTotal(amount);
         setLastTotal(lastTotal);
         document.title = "Sale Return - KazalandBrothers";
@@ -198,7 +152,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
     useEffect(() => {
         fetchAmount();
-    }, [allData, values, delivary, paking]);
+    }, [allData, values, delivary, paking, spDis]);
 
 
     const fetchUserDue = async (id) => {
@@ -582,8 +536,21 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                             <div className=''>
                                 <InputComponent placeholder={due} value={due} label={'Balance'} readOnly={true} className={``} />
                             </div>
-                            <div>
-                                <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
+                            <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
+                                <h1 className='text-[15px] pb-1'>Special Discount</h1>
+                                <input type="text" value={spDis} placeholder={spDis}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            last_pay.current.focus()
+                                        }
+                                    }}
+                                    onChange={(e) => setSpDis(e.target.value)}
+                                    className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                />
+                            </div>
+
+                            <div className='pt-1'>
+                                <p className='py-1.5 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
                                     <input type='text' ref={last_pay}
                                         onKeyDown={(e) => {
@@ -662,7 +629,10 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
                                 </div>
                             </div>
-                            <div className='flex justify-between pt-24'>
+
+
+
+                            <div className='flex justify-between pt-20'>
                                 <div className='border-t border-black'>
                                     <h1 className='text-center pt-[2px] text-[15px]'>{info?.name}</h1>
                                 </div>

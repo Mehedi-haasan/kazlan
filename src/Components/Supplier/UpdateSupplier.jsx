@@ -16,8 +16,13 @@ const UpdateSupplier = ({ info = {} }) => {
     const params = useParams()
     const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
     const goto = useNavigate()
-    const open_bala = useRef(null)
-    const [state, setState] = useState([])
+    const input_name = useRef(null)
+    const input_phone = useRef(null)
+    const input_email = useRef(null)
+    const input_bank = useRef(null)
+    const input_acc = useRef(null)
+    const input_acc_num = useRef(null)
+    const address = useRef(null)
     const [active, setActive] = useState("Address")
     const dis = useRef(null)
     const [selectedId, setSelectedId] = useState(0)
@@ -33,6 +38,9 @@ const UpdateSupplier = ({ info = {} }) => {
         "customertype": 'Party',
         "shopname": info?.shopname
     })
+    useEffect(() => {
+        input_name.current.focus()
+    }, [])
     const [auto, setAuto] = useState({
         fame: true,
         phone: false,
@@ -106,30 +114,68 @@ const UpdateSupplier = ({ info = {} }) => {
                             value={values?.customertype}
                             onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type*'} />
                     </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>{values?.customertype === "Party" ? "Full Name*" : "Full Name"}</h1>
+                        <input type="text" ref={input_name} value={values?.name} placeholder="Enter item name"
+                            onChange={(e) => setValues({ ...values, name: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_phone.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>{values?.customertype === "Party" ? "Phone*" : "Phone*"}</h1>
+                        <input type="text" ref={input_phone} value={values?.phone} placeholder={values?.phone}
+                            onChange={(e) => setValues({ ...values, phone: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_email.current.focus() }
+                            }}
+                        />
+                    </div>
 
-                    <InputComponent label={values?.customertype === "Party" ? "Full Name*" : "Full Name"} input_focus={auto?.fame}
-                        handleEnter={() => { setAuto({ ...auto, fame: false, phone: true }) }} value={values?.name}
-                        placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Email</h1>
+                        <input type="text" ref={input_email} value={values?.email} placeholder={values?.email}
+                            onChange={(e) => setValues({ ...values, email: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_bank.current.focus() }
+                            }}
+                        />
+                    </div>
 
-                    <InputComponent label={values?.customertype === "Party" ? "Phone*" : "Phone*"} input_focus={auto?.phone}
-                        handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }} value={values?.phone}
-                        placeholder={values?.phone} onChange={(v) => { setValues({ ...values, phone: v }) }} />
-
-                    <InputComponent label={"Email"} placeholder={values?.email} input_focus={auto?.email}
-                        handleEnter={() => { setAuto({ ...auto, phone: false, bname: true }) }} value={values?.email}
-                        onChange={(v) => { setValues({ ...values, email: v }) }} />
-
-                    <InputComponent label={"Bank Name"} placeholder={values?.bname} input_focus={auto?.bname}
-                        handleEnter={() => { setAuto({ ...auto, bname: false, bankname: true }) }} value={values?.bankname}
-                        onChange={(v) => { setValues({ ...values, bankname: v }) }} />
-
-                    <InputComponent label={"Account Name"} placeholder={values?.accountname} input_focus={auto?.aname}
-                        handleEnter={() => { setAuto({ ...auto, aname: false, anum: true }) }} value={values?.accountname}
-                        onChange={(v) => { setValues({ ...values, accountname: v }) }} />
-
-                    <InputComponent label={"Account Number"} placeholder={values?.accountnumber} input_focus={auto?.anum}
-                        handleEnter={() => { setAuto({ ...auto, anum: false, tname: true }) }} value={values?.accountnumber}
-                        onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Bank Name</h1>
+                        <input type="text" ref={input_bank} value={values?.bankname} placeholder={values?.bankname}
+                            onChange={(e) => setValues({ ...values, bankname: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_acc.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Account Name</h1>
+                        <input type="text" ref={input_acc} value={values?.accountname} placeholder={values?.accountname}
+                            onChange={(e) => setValues({ ...values, accountname: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_acc_num.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Account Number</h1>
+                        <input type="text" ref={input_acc_num} value={values?.accountnumber} placeholder={values?.accountnumber}
+                            onChange={(e) => setValues({ ...values, accountnumber: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { address.current.focus() }
+                            }}
+                        />
+                    </div>
                     <div>
                         <div className="py-3">
                             <div className="flex justify-start items-end">
@@ -144,47 +190,20 @@ const UpdateSupplier = ({ info = {} }) => {
                         </div>
                         {
                             active === "Address" && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {/* <div className='flex justify-start items-end pb-1'>
-                                    <SelectionComponent options={state} default_select={auto?.tname}
-                                        default_value={auto?.t_value}
-                                        onSelect={(v) => {
-                                            setValues({ ...values, stateId: v?.id });
-                                            setAuto({ ...auto, t_value: v?.name, tname: false, addres: true });
-
-                                        }} label={values?.usertype === "Party" ? "Thana Name*" : "Thana Name"} className='rounded-l' />
-                                    <div onClick={() => goto('/state')} className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] '>
-                                        <Add />
-                                    </div>
-                                </div> */}
-                                <InputComponent label={"Address"} placeholder={values?.address} input_focus={auto?.addres}
-                                    handleEnter={() => {
-                                        setActive("Balance")
-                                        setAuto({ ...auto, addres: false, open_b: true });
-                                    }}
-                                    value={values?.address} onChange={(v) => { setValues({ ...values, address: v }) }} />
+                                <div className=''>
+                                    <h1 className='text-[15px] pb-1.5'>Address</h1>
+                                    <input type="text" ref={address} value={values?.address} placeholder={values?.address}
+                                        onChange={(e) => setValues({ ...values, address: e.target.value })}
+                                        className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") { setActive("Balance"); setAuto({ ...auto, addres: false, open_b: true }); }
+                                        }}
+                                    />
+                                </div>
                             </div>
                         }
                         {
                             active === "Balance" && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {/* <div>
-                                    <p className='pb-2 font-semibold text-sm'>Opening Balance</p>
-                                    <div className='flex justify-start items-end pb-1'>
-                                        <input type='number' ref={open_bala} onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                handleSubmit();
-                                            }
-                                        }} onChange={(e) => { setValues({ ...values, balance: e.target.value }) }} value={values?.balance} placeholder={values?.balance} className='border-y border-l px-2 focus:outline-none rounded-l  pt-[6px] pb-[5px] w-[50%] font-thin' />
-                                        <select value={values?.balance_type} onChange={(v) => { setValues({ ...values, balance_type: v.target.value }) }}
-                                            className={`border w-[50%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}
-                                        >
-                                            {[{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }].map(({ id, name }) => (
-                                                <option key={id} value={name} className=''> {name}</option>
-                                            ))}
-                                        </select>
-
-                                    </div>
-                                </div> */}
-
                                 <div>
                                     <p className='py-2 pt-1 font-semibold text-sm'>Opening Balance</p>
                                     <div className='flex justify-start items-end pb-1 pt-1'>
@@ -203,7 +222,7 @@ const UpdateSupplier = ({ info = {} }) => {
                                                 setValues({ ...values, balance: num })
                                             }}
                                             value={values?.balance}
-                                            placeholder={values?.balance} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                            placeholder={values?.balance} className='border dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded font-thin pt-[6px] pb-[5px] w-[65%]' />
 
                                         <div className='relative z-50 border'>
                                             <RightArrow className='absolute rotate-90 top-2 right-2' />

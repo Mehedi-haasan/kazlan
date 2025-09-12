@@ -65,7 +65,8 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         pay_type: 'Challan',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
-        deliverydate: ''
+        deliverydate: '',
+        sup_invo: ''
     })
     const [filter, setFilter] = useState({
         cate: null,
@@ -111,7 +112,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due);
+        let orderData = await PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due, 0);
         try {
             const response = await fetch(`${BaseUrl}/api/purchase/product`, {
                 method: 'POST',
@@ -124,7 +125,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}`)
+            goto(`/invoice/${data?.invoice}/Purchase Items`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -132,7 +133,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
     useEffect(() => {
         const fetchAmount = async () => {
-            let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount);
+            let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount, 0);
             setTotal(amount);
             setLastTotal(lastTotal);
             document.title = "Purchase Items - KazalandBrothers";
@@ -256,12 +257,23 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                     <div></div>
 
                     <div className='relative'>
-                        <Calendar label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))}
+                        <Calendar label={"Receive Date"} value={handleDateConvert(new Date(raw?.fromDate))}
                             getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
                             getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
                     </div>
 
-                    <div></div>
+                    <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
+                        <h1 className='text-[15px] pb-1'>Supplier Invoice</h1>
+                        <input type="text" value={values?.sup_invo} placeholder={values?.sup_invo}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    last_pay.current.focus()
+                                }
+                            }}
+                            onChange={(e) => setValues({ ...values, sup_invo: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                        />
+                    </div>
                     {/* <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
                             onSelect={(v) => {
@@ -274,8 +286,8 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                         </div>
                     </div> */}
                     <div></div>
-                    <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
-                        getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                    {/* <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
+                        getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} /> */}
 
                 </div>
 
@@ -434,7 +446,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
                 <div className='p-4 w-full'>
                     <div className="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <DataHeader />
+                        <DataHeader pruchase={"Cost Price"} />
                         <div>
                             {Object.keys(prepareData || {}).length > 0 && (
                                 <div className={`border-b border-x text-[15px] text-black grid grid-cols-12`}>
@@ -525,7 +537,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                 </div>
                             )}
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} handleEnter={() => { setQuan(true) }}/>
+                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} handleEnter={() => { setQuan(true) }} />
                             })}
                         </div>
                     </div>

@@ -86,33 +86,10 @@ const Login = ({ auth }) => {
                 }
                 <input type={showPassword ? "text" : "password"} ref={pass} onKeyDown={(e) => { if (e.key === "Enter") { handleSubmit() } }} onChange={(e) => { setValues({ ...values, password: e.target.value }) }} className="w-full p-3 rounded-lg focus:outline-none dark:bg-[#040404] dark:text-white font-thin border focus:ring-2 focus:ring-blue-400 placeholder-gray-300" placeholder="Enter your password" />
               </div>
-              {/* <div className='flex justify-between items-center mb-3'>
-                <p className="text-center text-sm text-gray-300 flex justify-start items-center gap-1">
-                  Remenber me<input type='checkbox' />
-                </p>
-                <p className="text-center text-sm text-gray-300 ">
-                  <a href="/forget/password" className="text-blue-400 hover:underline">Forgot Password</a>
-                </p>
-              </div> */}
+
               <button onClick={handleSubmit} className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all">
                 Log In
               </button>
-
-              {/* <div>
-                <p className="text-center text-sm text-gray-300 mt-4">
-                  Don't have an account? <a href="/registration" className="text-blue-400 hover:underline">Sign Up</a>
-                </p>
-              </div>
-              <div className='flex justify-center items-center gap-3 mt-3 font-normal text-sm'>
-                <div className='flex justify-start items-center gap-1'>
-                  <img src={us} alt='flag' className='h-4 w-4' />
-                  <h1>English</h1>
-                </div>
-                <div className='flex justify-start items-center gap-1'>
-                  <img src={bn} alt='flag' className='h-5 w-5' />
-                  <h1>Bangla</h1>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

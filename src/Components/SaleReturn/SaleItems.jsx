@@ -134,6 +134,25 @@ const SaleItems = ({ }) => {
     };
 
 
+        const SearchOrder = async (v) => {
+        if (v === '') {
+            RecentInvoice()
+        } else {
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/search/data/${v}`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            const data = await response.json();
+            setInvoices(data?.items);
+        }
+
+    }
+
+
     return (
         <div className="px-3 pt-5 rounded-md min-h-screen">
 
@@ -166,8 +185,8 @@ const SaleItems = ({ }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
-                        <Search SearchProduct={() => { }} />
+                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true}/>
+                        <Search  SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>
                 <InvoiceTemp invoices={invoices} />

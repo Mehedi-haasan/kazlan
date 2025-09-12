@@ -38,15 +38,25 @@
                 "parent": "2",
                 "name": "Attribute List",
                 "route": "attribute"
-            },
+            }
+        ]
+    },
+    {
+        "id": "12",
+        "name": "Expense",
+        "route": "product",
+        "icon": "fluent-mdl2:work-item",
+        "class": "mt-4",
+        "option": true,
+        "items": [
             {
-                "id": 25,
+                "id": 225,
                 "parent": "2",
                 "name": "Daily Expense",
                 "route": "expense"
             },
             {
-                "id": 26,
+                "id": 226,
                 "parent": "2",
                 "name": "Add Expense",
                 "route": "create/expense"
@@ -178,6 +188,11 @@
                 "id": 62,
                 "name": "Stock Transfer",
                 "route": "update/product"
+            },
+            {
+                "id": 63,
+                "name": "Yearly Bonus",
+                "route": "yearly/bonus"
             }
         ]
     },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Button from "../Input/Button"
 import InputComponent from "../Input/InputComponent"
 import Modal from "../Input/Modal";
@@ -12,7 +12,7 @@ const StateCard = ({ item, callState }) => {
     const [values, setValues] = useState({});
     const [show, setShow] = useState(false);
     const [edit, setEdit] = useState(false)
-
+    const input_name = useRef(null)
     const HandleDelete = async () => {
         const token = localStorage.getItem('token');
         try {
@@ -32,7 +32,9 @@ const StateCard = ({ item, callState }) => {
             console.error('Error updating variant:', error);
         }
     }
-
+    useEffect(() => {
+        input_name.current.focus()
+    }, [])
     const HandleUpdate = async () => {
         const token = localStorage.getItem('token');
         try {
@@ -75,7 +77,16 @@ const StateCard = ({ item, callState }) => {
                 <Remove onClick={() => { setShow(true) }} />
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size="500px" className="">
                     <div className="pt-1">
-                        <InputComponent placeholder={values?.name} value={values?.name} label={`State name`} handleEnter={HandleUpdate} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg' />
+                        <div className=''>
+                            <h1 className='text-[15px] pb-1.5'>State name</h1>
+                            <input type="text" ref={input_name} value={values?.name} placeholder={values?.name}
+                                onChange={(e) => setValues({ ...values, name: e.target.value })}
+                                className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") { HandleUpdate() }
+                                }}
+                            />
+                        </div>
 
                         <Button isDisable={false} name="Update" onClick={HandleUpdate} className="mt-3 border bg-blue-500 text-white" />
                     </div>

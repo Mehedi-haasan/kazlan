@@ -134,6 +134,24 @@ const Order = ({ info = {} }) => {
         saveAs(blob, filename);
     };
 
+    const SearchOrder = async (v) => {
+        if (v === '') {
+            GetOrder()
+        } else {
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/search/data/${v}`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            const data = await response.json();
+            setData(data?.items);
+        }
+
+    }
+
 
     return (
         <div className='px-3 pt-5 min-h-screen pb-12' >
@@ -165,7 +183,7 @@ const Order = ({ info = {} }) => {
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
-                        <Search SearchProduct={() => { }} />
+                        <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>
                 <div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Updown from "../../icons/Updown";
+import { ReturnSaleCode } from "../Input/Time";
 
 import { useNavigate } from "react-router-dom";
 
@@ -17,24 +18,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
         return `${day} ${month} ${year}`;
     }
 
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        } else if (type === "Opening") {
-            saleType = "OP"
-        } else {
-            saleType = "MP"
-        }
 
-        return saleType
-    }
 
     return (
         <div className="pt-3">
@@ -96,12 +80,12 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                     <Updown />
                                 </div>
                             </th>
-                            <th scope="col" className="px-3 py-3 text-center border-r ">
+                            {/* <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Status
                                     <Updown />
                                 </div>
-                            </th>
+                            </th> */}
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Sale Type
@@ -127,11 +111,11 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                             <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}
                                 onClick={() => {
                                     if (item?.type === "Sale" || item?.type === "Purchase items") {
-                                        goto(`/invoice/${item?.id}`)
+                                        goto(`/invoice/${item?.id}/${item?.type}`)
                                     } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
-                                        goto(`/return/invoice/${item?.id}`)
+                                        goto(`/return/invoice/${item?.id}/${item?.type}`)
                                     } else {
-                                        goto(`/opening/invoice/${item?.id}`)
+                                        goto(`/opening/invoice/${item?.id}/${item?.type}`)
                                     }
                                 }}>
                                 {/* <th className="w-4 py-3 px-4 border-x">
@@ -148,9 +132,9 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
+                                {/* <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th> */}
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.methodname}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.deliverydate)}</th>
                             </tr>
                         ))

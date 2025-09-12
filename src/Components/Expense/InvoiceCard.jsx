@@ -17,6 +17,8 @@ const InvoiceCard = ({ item, prefix = "KB" }) => {
             saleType = "PR"
         } else if (type === "Purchase items") {
             saleType = "PO"
+        }else if (type === "Expense") {
+            saleType = "EX"
         }
 
         return saleType

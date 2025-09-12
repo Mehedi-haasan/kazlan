@@ -44,6 +44,7 @@ const Category = ({ entries, info = {} }) => {
     const goto = useNavigate()
     const [showlotti, setLottiShow] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
+    
     const getCategory = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')

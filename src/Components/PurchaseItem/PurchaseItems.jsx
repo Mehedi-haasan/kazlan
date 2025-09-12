@@ -134,12 +134,31 @@ const PurchaseItems = ({ }) => {
     };
 
 
+    const SearchOrder = async (v) => {
+        if (v === '') {
+            RecentInvoice()
+        } else {
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/search/data/${v}`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            const data = await response.json();
+            setInvoices(data?.items);
+        }
+
+    }
+
+
     return (
         <div className="px-3 pt-5 rounded-md min-h-screen">
 
             <div className='flex justify-between items-center p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-md rounded-lg'>
                 <h1 className=''>Recent Purchase</h1>
-                <NavLink to={`/purchase/product`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Purchase Items</NavLink>
+                <NavLink to={`/purchase/product`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Purchase</NavLink>
             </div>
 
 
@@ -166,10 +185,11 @@ const PurchaseItems = ({ }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
-                        <Search SearchProduct={() => { }} />
+                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
+                        <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>
+                <InvoiceTemp invoices={invoices} />
                 <Modal show={preview} handleClose={() => { setPreview(false) }} size={`1000px`} crosshidden={true}>
                     <div ref={ref}>
                         <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >

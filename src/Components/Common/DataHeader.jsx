@@ -1,7 +1,7 @@
 
 
 
-const DataHeader = () => {
+const DataHeader = ({pruchase = "Sale Price"}) => {
     return (
         <div className='text-[15px] grid grid-cols-12 text-black'>
             <div className="p-2 text-center font-semibold border-y border-l">Action</div>
@@ -13,7 +13,7 @@ const DataHeader = () => {
             <div className="p-2 border-y border-l">M.R.P</div>
             <div className="p-2 border-y border-l">Discount</div>
             <div className="p-2 border-y border-l">Discount Type</div>
-            <div className="p-2 border-y border-l">Sale Price</div>
+            <div className="p-2 border-y border-l">{pruchase}</div>
             <div className="p-2 border">Total price</div>
         </div>
     )

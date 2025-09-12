@@ -10,8 +10,15 @@ import RightArrow from "../../icons/RightArrow";
 import { BanglaToEnglish } from "../Input/Time";
 
 const CreateSupplier = ({ state, info = {} }) => {
-    const open_bala = useRef(null)
+
     const goto = useNavigate()
+    const input_name = useRef(null)
+    const input_phone = useRef(null)
+    const input_email = useRef(null)
+    const input_bank = useRef(null)
+    const input_acc = useRef(null)
+    const input_acc_num = useRef(null)
+    const address = useRef(null)
     const [active, setActive] = useState("Address");
     const [isLoading, setIsLoading] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
@@ -29,6 +36,9 @@ const CreateSupplier = ({ state, info = {} }) => {
         "customertype": "Supplier",
         "shopname": info?.shopname
     })
+    useEffect(()=>{
+        input_name.current.focus()
+    },[])
     const [auto, setAuto] = useState({
         fame: true,
         phone: false,
@@ -99,12 +109,68 @@ const CreateSupplier = ({ state, info = {} }) => {
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
 
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <InputComponent label={"Full Name"} placeholder={'Enter full name'} input_focus={auto?.fame} handleEnter={() => { setAuto({ ...auto, fame: false, phone: true }) }} onChange={(v) => { setValues({ ...values, name: v }) }} />
-                    <InputComponent label={"Phone"} placeholder={'Enter phone number'} input_focus={auto?.phone} handleEnter={() => { setAuto({ ...auto, phone: false, email: true }) }} onChange={(v) => { setValues({ ...values, phone: v }) }} />
-                    <InputComponent label={"Email"} placeholder={'Enter email'} input_focus={auto?.email} handleEnter={() => { setAuto({ ...auto, phone: false, bname: true }) }} onChange={(v) => { setValues({ ...values, email: v }) }} />
-                    <InputComponent label={"Bank Name"} placeholder={'Enter bank name'} input_focus={auto?.bname} handleEnter={() => { setAuto({ ...auto, bname: false, aname: true }) }} onChange={(v) => { setValues({ ...values, bankname: v }) }} />
-                    <InputComponent label={"Account Name"} placeholder={'Enter account name'} input_focus={auto?.aname} handleEnter={() => { setAuto({ ...auto, aname: false, anum: true }) }} onChange={(v) => { setValues({ ...values, accountname: v }) }} />
-                    <InputComponent label={"Account Number"} placeholder={'Enter account number'} input_focus={auto?.anum} handleEnter={() => { setAuto({ ...auto, anum: false, tname: true }) }} onChange={(v) => { setValues({ ...values, accountnumber: v }) }} />
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>{values?.customertype === "Party" ? "Full Name*" : "Full Name"}</h1>
+                        <input type="text" ref={input_name} value={values?.name} placeholder="Enter item name"
+                            onChange={(e) => setValues({ ...values, name: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_phone.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>{values?.customertype === "Party" ? "Phone*" : "Phone*"}</h1>
+                        <input type="text" ref={input_phone} value={values?.phone} placeholder={values?.phone}
+                            onChange={(e) => setValues({ ...values, phone: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_email.current.focus() }
+                            }}
+                        />
+                    </div>
+
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Email</h1>
+                        <input type="text" ref={input_email} value={values?.email} placeholder={values?.email}
+                            onChange={(e) => setValues({ ...values, email: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_bank.current.focus() }
+                            }}
+                        />
+                    </div>
+
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Bank Name</h1>
+                        <input type="text" ref={input_bank} value={values?.bankname} placeholder={values?.bankname}
+                            onChange={(e) => setValues({ ...values, bankname: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_acc.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Account Name</h1>
+                        <input type="text" ref={input_acc} value={values?.accountname} placeholder={values?.accountname}
+                            onChange={(e) => setValues({ ...values, accountname: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { input_acc_num.current.focus() }
+                            }}
+                        />
+                    </div>
+                    <div className=''>
+                        <h1 className='text-[15px] pb-1.5'>Account Number</h1>
+                        <input type="text" ref={input_acc_num} value={values?.accountnumber} placeholder={values?.accountnumber}
+                            onChange={(e) => setValues({ ...values, accountnumber: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") { address.current.focus() }
+                            }}
+                        />
+                    </div>
                 </div>
                 <div className="p-3">
 
@@ -122,22 +188,16 @@ const CreateSupplier = ({ state, info = {} }) => {
                 </div>
                 {
                     active === "Address" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        {/* <div className='flex justify-start items-end pb-1'>
-                            <SelectionComponent options={state} default_select={auto?.tname} default_value={auto?.t_value}
-                                onSelect={(v) => {
-                                    setValues({ ...values, stateId: v?.id });
-                                    setAuto({ ...auto, t_value: v?.name, tname: false, addres: true });
-                                }} label={"Thana Name"} className='rounded-l' />
-                            <div className='border-y border-r px-3 pt-[6px] pb-[7px] rounded-r cursor-pointer text-[#3C96EE] ' onClick={()=>{goto('/state')}}>
-                                <Add />
-                            </div>
-                        </div> */}
-                        <InputComponent label={"Address"} placeholder={'Enter address'}
-                            input_focus={auto?.addres}
-                            handleEnter={() => {
-                                setActive("Balence")
-                                setAuto({ ...auto, addres: false, open_b: true });
-                            }} value={values?.address} onChange={(v) => { setValues({ ...values, address: v }) }} />
+                        <div className=''>
+                            <h1 className='text-[15px] pb-1.5'>Address</h1>
+                            <input type="text" ref={address} value={values?.address} placeholder={values?.address}
+                                onChange={(e) => setValues({ ...values, address: e.target.value })}
+                                className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") { setActive("Balence"); setAuto({ ...auto, addres: false, open_b: true }); }
+                                }}
+                            />
+                        </div>
                     </div>
                 }
                 {

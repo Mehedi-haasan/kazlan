@@ -16,7 +16,7 @@ export function handleDateConvert(date) {
 
 
 
-export async function PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due) {
+export async function PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due, special_discount) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
@@ -65,7 +65,9 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
         amount: lastTotal - values?.pay,
         orders: orderData,
         updatedata: allData,
-        deliverydate: values?.deliverydate
+        deliverydate: values?.deliverydate,
+        special_discount: special_discount,
+        sup_invo: values?.sup_invo
     }
 }
 
@@ -106,7 +108,63 @@ export async function EditPrepareOrderData(allData, userId, name, values, info) 
 }
 
 
-export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due) {
+export function PrepareWholeSaleData(allData, userId, name, values, info, lastTotal, paking, delivary, due, special_discount) {
+    let orderData = [];
+    allData?.forEach((v) => {
+        let sale = 0;
+        const price = parseInt(v?.cost) || 0;
+        const discount = parseInt(v?.discount) || 0;
+        const qty = parseInt(v?.qty) || 0;
+        if (v?.discount_type === "Fixed") {
+            sale = (price - discount) * qty;
+        } else if (v?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice * qty;
+        }
+
+        orderData.push({
+            active: true,
+            product_id: v?.id,
+            code: v?.code,
+            username: name,
+            userId: userId,
+            name: v?.name,
+            shop: info?.shopname,
+            price: price,
+            discount: discount,
+            discount_type: v?.discount_type,
+            sellprice: sale,
+            qty: qty,
+            contact: values?.phone,
+            date: getFormattedDate(),
+            deliverydate: values?.deliverydate
+        });
+    });
+
+    return {
+        shop: info?.shopname,
+        customername: name,
+        userId: userId,
+        date: getFormattedDate(),
+        paymentmethod: values?.pay_type,
+        methodname: "Online",
+        total: lastTotal,
+        packing: paking,
+        delivery: delivary,
+        lastdiscount: values?.lastdiscount,
+        previousdue: due,
+        pay_type: "Online",
+        paidamount: values?.pay,
+        amount: lastTotal - values?.pay,
+        orders: orderData,
+        deliverydate: values?.deliverydate,
+        special_discount: special_discount,
+        sup_invo: values?.sup_invo
+    }
+}
+
+
+export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, sup_invo, special_discount) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
@@ -151,16 +209,18 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
         delivery: delivary,
         lastdiscount: values?.lastdiscount,
         previousdue: due,
-        pay_type: values?.pay_type,
+        pay_type: "Online",
         paidamount: values?.pay,
         amount: lastTotal - values?.pay,
         orders: orderData,
-        deliverydate: values?.deliverydate
+        deliverydate: values?.deliverydate,
+        special_discount: special_discount,
+        sup_invo: sup_invo
     }
 }
 
 
-export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdiscount = 0) {
+export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdiscount = 0, spDis = 0) {
 
     let amount = allData?.reduce((acc, item) => {
         let cost = item?.cost ? item?.cost : item?.price
@@ -177,7 +237,7 @@ export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdis
 
     return {
         amount: parseInt(amount),
-        lastTotal: parseInt(amount) + parseInt(delivary) + parseInt(paking) - parseInt(lastdiscount)
+        lastTotal: parseInt(amount) + parseInt(delivary) + parseInt(paking) - parseInt(lastdiscount) - parseInt(spDis)
     }
 }
 
@@ -309,4 +369,26 @@ export function numberToWords(num) {
     if (units) parts.push(threeDigits(units));
 
     return parts.join(" ").trim() + " Taka Only";
+}
+
+
+export function ReturnSaleCode(type) {
+    let saleType = "SL"
+    if (type === "Sale") {
+        saleType = "SL"
+    } else if (type === "Sale Return") {
+        saleType = "SR"
+    } else if (type === "Return Purchase") {
+        saleType = "PR"
+    } else if (type === "Purchase items") {
+        saleType = "PO"
+    } else if (type === "Opening") {
+        saleType = "OP"
+    } else if (type === "Make Payment") {
+        saleType = "MP"
+    } else if (type === "Yearly Bonus") {
+        saleType = "YB"
+    }
+
+    return saleType
 }

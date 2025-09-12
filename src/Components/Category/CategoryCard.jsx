@@ -94,9 +94,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
         });
         const data = await response.json();
         setIsLoading(false);
-        setShow(false)
         getCategory();
-        setLottiShow(true)
         setMessage({ id: Date.now(), mgs: data?.message });
     }
 
@@ -118,31 +116,19 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
         return `${day} ${month} ${year}`;
     }
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: {
-            width: 200,
-            height: 200,
-        },
-    };
-
-    const { View } = useLottie(options);
 
     return (
 
         <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b border-x`}>
             <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
-                    <input id="checkbox-table-search-1" type="checkbox" onChange={() => TikBox(item.id)} isChecked={isChecked} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input id="checkbox-table-search-1" type="checkbox" checked={isChecked} onChange={() => TikBox(item.id)}
+                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
             <th scope="col" className="px-2 py-2 border-x font-thin ">{item?.name}
                 <Notification message={message} />
-                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                    <>{View}</>
-                </Modal>
             </th>
             <th scope="col" className="px-2 py-1 border-r font-thin ">
                 <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-10 w-10 rounded" />

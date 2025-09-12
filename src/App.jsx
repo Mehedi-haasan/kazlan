@@ -60,6 +60,7 @@ import UpdateUser from "./Components/User/UpdateUser.jsx";
 import OpeningInvoice from "./Components/OpeningInvoice/OpeningInvoice.jsx";
 import Expense from "./Components/Expense/Expense.jsx";
 import ExpenseCreate from "./Components/Expense/ExpenseCreate.jsx";
+import YearlyBonus from "./Components/User/YearlyBonus.jsx";
 
 
 
@@ -413,15 +414,17 @@ function App() {
 
           <Route path="/update/user/:id" element={auth ? <UpdateUser entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/invoice/:id" element={auth ? <Invoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/invoice/:id/:type" element={auth ? <Invoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/opening/invoice/:id" element={auth ? <OpeningInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/opening/invoice/:id/:type" element={auth ? <OpeningInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/return/invoice/:id" element={auth ? <ReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/return/invoice/:id/:type" element={auth ? <ReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/expense" element={auth ? <ExpenseCreate info={info}/> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/expense" element={auth ? <ExpenseCreate info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/yearly/bonus/:id" element={auth ? <YearlyBonus info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/expense" element={auth ? <Expense /> : <Login auth={(v) => { setAuth(v) }} />} />
 
