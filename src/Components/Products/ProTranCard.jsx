@@ -22,7 +22,7 @@ const ProTranCard = ({ item, i, isChecked }) => {
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th> */}
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.price}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.sellprice}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.qty} {item?.qty_type}</th>

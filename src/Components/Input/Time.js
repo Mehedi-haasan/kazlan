@@ -67,7 +67,8 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
         updatedata: allData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
-        sup_invo: values?.sup_invo
+        sup_invo: values?.sup_invo,
+        status:values?.status
     }
 }
 
@@ -101,7 +102,7 @@ export async function EditPrepareOrderData(allData, userId, name, values, info) 
             qty: qty,
             contact: values?.phone,
             date: getFormattedDate(),
-            deliverydate: values?.deliverydate
+            deliverydate: values?.deliverydate,
         });
     });
     return orderData
@@ -153,13 +154,14 @@ export function PrepareWholeSaleData(allData, userId, name, values, info, lastTo
         delivery: delivary,
         lastdiscount: values?.lastdiscount,
         previousdue: due,
-        pay_type: "Online",
+        pay_type: values?.pay_type,
         paidamount: values?.pay,
         amount: lastTotal - values?.pay,
         orders: orderData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
-        sup_invo: values?.sup_invo
+        sup_invo: values?.sup_invo,
+        status:values?.status
     }
 }
 
@@ -209,13 +211,14 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
         delivery: delivary,
         lastdiscount: values?.lastdiscount,
         previousdue: due,
-        pay_type: "Online",
+        pay_type: values?.pay_type,
         paidamount: values?.pay,
         amount: lastTotal - values?.pay,
         orders: orderData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
-        sup_invo: sup_invo
+        sup_invo: sup_invo,
+        status:values?.status
     }
 }
 

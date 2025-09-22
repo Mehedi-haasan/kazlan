@@ -94,7 +94,8 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: '',
-        sup_invo: ''
+        sup_invo: '',
+        status: "Due"
     })
 
     EscapeRedirect()
@@ -147,7 +148,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
         let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount, spDis);
         setTotal(amount);
         setLastTotal(lastTotal);
-        document.title = "Sale Return - KazalandBrothers";
+        document.title = "Sale - KazalandBrothers";
     };
 
     useEffect(() => {
@@ -596,10 +597,13 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                                 } else if (e.key === "Enter" && PayType[selectedId]) {
                                                     setPayTypeShow(false);
                                                     setSelectedId(0);
-                                                    setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                    setValues({
+                                                        ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name
+                                                    })
                                                     last_pay.current?.focus();
                                                 }
-                                            }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
+                                            }
+                                            } className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
                                         {
                                             payTypeShow && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] dark:bg-[#040404] dark:text-white right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
                                                 {
@@ -614,7 +618,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
                                                             onClick={() => {
                                                                 setPayTypeShow(false);
-                                                                setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}

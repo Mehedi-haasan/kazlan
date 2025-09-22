@@ -7,12 +7,13 @@ const Tabeheader = ({ type }) => {
 
         if (type === "Sale" || type === "Sale Return") {
             value = "বিক্রয় মূল্য";
-        } else if (type === "Purchase items" || type === "Purchase Return") {
+        } else if (type === "Purchase Items" || type === "Purchase Return") {
             value = "ক্রয় মূল্য";
         }
 
         return value;
     };
+
     return (
         <thead className="text-gray-900 dark:bg-[#040404] dark:text-white">
             <tr className='border font-thin'>

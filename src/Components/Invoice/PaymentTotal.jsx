@@ -54,7 +54,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
             </tr>
             <tr className="bg-white text-[13px]">
                 <td className="p-2"></td>
-                <td className="p-2"></td>
+                <td className="p-2 text-xl text-center">{invoice?.status}</td>
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2"> সর্বমোট</td>

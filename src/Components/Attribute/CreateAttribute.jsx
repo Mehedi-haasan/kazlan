@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import InputComponent from "../Input/InputComponent"
 import BaseUrl from '../../Constant';
 import Button from "../Input/Button";
 import Notification from "../Input/Notification";
-import logo from '../Logo/userProfile.png'
+
 import SelectionComponent from "../Input/SelectionComponent";
 import { useNavigate } from "react-router-dom";
 
 
 const CreateAttribute = ({ entries }) => {
 
-    const [image_url, setImage_Url] = useState();
-    const [imageFile, setImageFile] = useState(null);
+
     const [values, setValues] = useState({ name: "", });
     const [isLoading, setIsLoading] = useState(false)
+    const [allAttr, setAllAttr]=useState([])
     const [message, setMessage] = useState({ id: '', mgs: '' });
-     const [showlotti, setLottiShow] = useState(false);
-     const [show, setShow] = useState(false);
+    const [showlotti, setLottiShow] = useState(false);
+    const input_name = useRef()
+    const [show, setShow] = useState(false);
     const [first, setFirst] = useState({
         first: true,
         value: 'Select a filter'
@@ -25,7 +26,7 @@ const CreateAttribute = ({ entries }) => {
 
 
     useEffect(() => {
-        document.title = `Brand - Kazaland Brothers`;
+        document.title = `Attribute - Kazaland Brothers`;
 
     }, []);
 
@@ -82,6 +83,27 @@ const CreateAttribute = ({ entries }) => {
     }
 
 
+        const GetAttribute = async () => {
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${BaseUrl}/api/get/attribute/1/300`, {
+                method: 'GET',
+                headers: {
+                    "authorization": token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+            const data = await response.json()
+            setAllAttr(data.items)
+        }
+    
+        useEffect(() => {
+            document.title = `Attributes - Kazaland Brothers`;
+            GetAttribute()
+        }, []);
+    
+    
+
+
     return (
         <div className="px-2 pt-5 min-h-screen pb-12">
             <Notification message={message} />
@@ -90,15 +112,31 @@ const CreateAttribute = ({ entries }) => {
                     <h1 className="pl-5 text-xl py-2">Attribute Details</h1>
                 </div>
                 <div className="px-6 py-4">
-                    <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank Transfar' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' },, { id: 5, name: 'Expense' }]} default_select={first?.first} default_value={first?.value}
+                    <SelectionComponent options={allAttr} default_select={first?.first} default_value={first?.value}
                         onSelect={(v) => {
                             setValues({
                                 ...values,
                                 type: v?.name,
                             })
+                            input_name.current.focus()
                             setFirst({ ...first, value: v?.name })
                         }} label={"Type*"} className='rounded-r' />
-                    <InputComponent placeholder={`Enter name`} input_focus={true} value={values?.name} label={`Name`} handleEnter={() => { handleCreate(); handleCreateLocally() }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                    <div className='w-full pt-1'>
+                        <h1 className='text-[15px] pb-1.5'>Name</h1>
+                        <input
+                            type="text"
+                            ref={input_name}
+                            value={values?.name}
+                            placeholder="Enter name"
+                            onChange={(e) => setValues({ ...values, name: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleCreate(); handleCreateLocally()
+                                }
+                            }}
+                        />
+                    </div>
                     <Button isDisable={isLoading} name="Create" onClick={() => { handleCreate(); handleCreateLocally() }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                 </div>
             </div>

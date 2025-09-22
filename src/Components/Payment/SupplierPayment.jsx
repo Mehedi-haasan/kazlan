@@ -4,9 +4,10 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import Notification from "../Input/Notification";
 import { useNavigate, useParams } from "react-router-dom";
-import { BanglaToEnglish, getFormattedDate } from "../Input/Time";
+import { BanglaToEnglish, handleDateConvert } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 import { NavLink } from "react-router-dom";
+import Calendar from "../Wholesale/Calender";
 
 const SupplierPayment = ({ info, state }) => {
     const goto = useNavigate()
@@ -15,7 +16,23 @@ const SupplierPayment = ({ info, state }) => {
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [paymentType, setPaymentType] = useState([])
     const [paymentMethod, setPaymentMethod] = useState([])
-    const [mobile, setMobile] = useState([])
+    const [date, setDate] = useState(null)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 0);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toLocaleDateString("en-US", options),
+        toDate: today.toLocaleDateString("en-US", options),
+        userId: null,
+        type: null
+    });
+    function getFormattedDate(date) {
+        if (!date) return ""; // handle null/undefined safely
+        const d = new Date(date); // convert string -> Date
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return d.toLocaleDateString('en-US', options);
+    }
     const [values, setValues] = useState({
         balance: 0,
         paid: 0,
@@ -42,8 +59,14 @@ const SupplierPayment = ({ info, state }) => {
             type = 1;
             values['type'] = 'Yearly Bonus'
         }
-        values['paymentmethod'] = `${values?.paymentmethod || ''} by ${values?.methodname || ''}`;
+        // values['paymentmethod'] = `${values?.paymentmethod || ''} by ${values?.methodname || ''}`;
         values['status'] = 'Online'
+        values['date'] = date
+        
+        if (["Mobile Banking", "Bank Transfer", "Cash", "Online Transfer"].includes(values?.paymentmethod)) {
+            values['type'] = 'Online Collection'
+        }
+
         const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
@@ -84,9 +107,9 @@ const SupplierPayment = ({ info, state }) => {
         const data = await response.json()
         setPaymentType(data.items);
     }
-    const PaymentMethod = async () => {
+    const PaymentMethod = async (type) => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Bank`, {
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/${type}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -96,25 +119,11 @@ const SupplierPayment = ({ info, state }) => {
         const data = await response.json()
         setPaymentMethod(data.items);
     }
-    const MobileBanking = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Mobile Banking`, {
-            method: 'GET',
-            headers: {
-                "authorization": token,
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        });
-        const data = await response.json()
-        setMobile(data.items);
-    }
 
 
     useEffect(() => {
         GetUser()
         PaymentType()
-        PaymentMethod()
-        MobileBanking()
     }, [params?.id])
 
 
@@ -131,26 +140,20 @@ const SupplierPayment = ({ info, state }) => {
                     <NavLink to={`/payment/history/${values?.id}`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Supplier Transaction</NavLink>
                 </div>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <InputComponent label={"Supplier"} placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
-                    <InputComponent label={"Date"} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
+                    <InputComponent label={"Supplier"} placeholder={values?.name} value={values?.name} onChange={(v) => { setValues({ ...values, name: v }) }} />
+                    <div>
+                        <Calendar label={"Date"} value={date} getDate={(date) => { setDate(getFormattedDate(date)); setValues({ ...values, date: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                    </div>
 
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
                             options={paymentType} default_value={values?.paymentmethod}
-                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }) }}
+                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }); PaymentMethod(v?.name) }}
                         />
-                        {
-                            values?.paymentmethod === "Bank Transfar" && <SelectionComponent label={"Select Method"}
-                                options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
-                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
-                            />
-                        }
-                        {
-                            values?.paymentmethod === "Mobile Banking" && <SelectionComponent label={"Select Method"}
-                                options={mobile} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
-                                onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
-                            />
-                        }
+                        <SelectionComponent label={"Select Method"}
+                            options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
+                            onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                        />
                     </div>
                     <InputComponent label={"Balance"} placeholder={values?.balance} value={values?.balance} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>

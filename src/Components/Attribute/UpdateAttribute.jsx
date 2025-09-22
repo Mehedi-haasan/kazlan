@@ -84,7 +84,23 @@ const UpdateAttribute = () => {
                             })
                             setFirst({ ...first, value: v?.name })
                         }} label={"Type*"} className='rounded-r' />
-                    <InputComponent placeholder={values?.name} input_focus={true} value={values?.name} label={`Name`} handleEnter={handleUpdate} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                    <div className='w-full'>
+                        <h1 className='text-[15px] pb-1.5'>Name</h1>
+                        <input
+                            type="text"
+                            value={values?.name}
+                            placeholder="Enter item name"
+                            onChange={(e) => setValues({ ...values, name: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    handleUpdate()
+                                }
+                            }}
+                        />
+
+                    </div>
+                    {/* <InputComponent placeholder={values?.name} input_focus={true} value={values?.name} label={`Name`} handleEnter={handleUpdate} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' /> */}
                     <Button isDisable={isLoading} name="Create" onClick={handleUpdate} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                 </div>
             </div>

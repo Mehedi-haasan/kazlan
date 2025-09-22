@@ -7,7 +7,7 @@ import Edit from "../../icons/Edit";
 import Remove from "../../icons/Remove";
 
 
-const StateCard = ({ item, callState }) => {
+const StateCard = ({ item,i, callState }) => {
 
     const [values, setValues] = useState({});
     const [show, setShow] = useState(false);
@@ -62,7 +62,7 @@ const StateCard = ({ item, callState }) => {
 
 
     return (
-        <tr className='border-b'>
+        <tr className={`border-b z-10 font-thin ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
             {/* <th className="w-4 py-2 px-4 border-x">
                 <div className="flex items-center">
 

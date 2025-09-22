@@ -354,7 +354,7 @@ function App() {
 
           <Route path="/sale/order" element={auth ? <WholeSell changeLan={lang} editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/sale/order/edit/:id" element={auth ? <SaleOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/sale/order/edit/:id/:type" element={auth ? <SaleOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/notification" element={<Notification data={data} info={info} />} />
 

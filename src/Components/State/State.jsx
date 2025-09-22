@@ -114,7 +114,7 @@ const State = ({ entries = [] }) => {
                 <div ref={ref}>
                     <div ref={targetRef} className="pt-3  w-full overflow-hidden overflow-x-auto">
                         <table className="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
-                            <thead class="text-gray-900 dark:bg-[#040404] dark:text-white">
+                            <thead class="text-gray-900 dark:bg-[#040404] dark:text-white bg-[#BCA88D]">
                                 <tr className='border'>
                                     {/* <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">
@@ -139,7 +139,7 @@ const State = ({ entries = [] }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {state?.map((item) => (<StateCard item={item} callState={getState} />))}
+                                {state?.map((item, i) => (<StateCard item={item} i={i} callState={getState} />))}
                             </tbody>
                         </table>
                     </div>

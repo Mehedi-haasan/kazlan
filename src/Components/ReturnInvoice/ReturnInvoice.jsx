@@ -9,6 +9,7 @@ import generatePDF from 'react-to-pdf';
 import { useNavigate, useParams } from 'react-router-dom';
 import InvoHeader from '../Invoice/InvoHeader';
 import Edit from '../../icons/Edit'
+import { ReturnSaleCode } from '../Input/Time';
 
 
 
@@ -76,20 +77,6 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     }
 
 
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
 
     const Calculate = () => {
 
@@ -136,36 +123,36 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                     `;
         }).join("");
 
-        const UserInfo = `
-                        <div style="padding-bottom: 15px; font-size: 13px; color:black">
+               const UserInfo = `
+                        <div style="padding-bottom: 15px; font-size: 15px; color:black">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; justify-content: flex-start; padding-bottom:0px">
-                                    <p style="color: black; width: 80px; margin: 0px;">নাম</p>
+                                    <p style="color: black; width: 80px; margin: 0px; font-family: 'SutonnyMJ'">bvg</p>
                                     <p style="color: black; margin: 0px;"> : ${user?.name}</p>
                                 </div>
 
-                                <div style="display: flex; justify-content: space-between; width: 170px;">
-                                    <p style="color: black; font-size: 13px; padding:0px; margin:0px;">মেমো নং&nbsp;&nbsp;:</p>
-                                    <p style="color: black; padding:0px; margin:0px; text-align: right;">${prefix}/${ReturnSaleCode(user?.type)}-${String(params?.id).padStart(5, '0')}</p>
+                                <div style="display: flex; justify-content: space-between; width: 210px;">
+                                    <p style="color: black; font-size: 15px; padding:4px; margin:4px; font-family: 'SutonnyMJ'; text-align:left">‡g‡gv bs&nbsp;&nbsp;:</p>
+                                    <p style="color: black; padding:4px; margin:4px; text-align: right; width: 120px; font-size: 11px">${prefix}/${ReturnSaleCode(user?.type)}-${String(params?.id).padStart(5, '0')}</p>
                                 </div>
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; justify-content: flex-start;">
-                                    <p style="width: 80px; color: black; margin-bottom: 0px; margin-top: 2px; font-size: 13px;">ঠিকানা</p>
+                                    <p style="width: 80px; color: black; margin-bottom: 0px; margin-top: 2px; font-size: 15px; font-family: 'SutonnyMJ'">wVKvbv</p>
                                     <p style="color: black; margin-bottom: 0px; margin-top: 2px;"> : ${user?.address}, ${user?.state}</p>
                                 </div>
 
-                                <div style="display: flex; justify-content: space-between; width: 170px; padding-top: 2px;">
-                                    <p style="color: black; padding:0px; margin:0px;">তারিখ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-                                    <p style="color: black; padding:0px; margin:0px; text-align: right;">${user?.date}</p>
+                                <div style="display: flex; justify-content: space-between; width: 210px; padding-top: 2px;">
+                                    <p style="color: black; padding:0px; margin:0px; font-family: 'SutonnyMJ'">ZvwiL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+                                    <p style="color: black; padding:0px; margin:0px; text-align: right; width: 140px; font-size: 11px">${user?.date}</p>
                                 </div>
                             </div>
 
                             <div style="display: flex; justify-content: space-between;">
                                 <div style="display: flex; justify-content: flex-start;">
-                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 2px;">মোবাইল</p>
-                                    <p style="color: black; margin-bottom: 0px; margin-top: 2px;"> : ${user?.phone}</p>
+                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 4px; font-family: 'SutonnyMJ'">‡gvevBj</p>
+                                    <p style="color: black; margin-bottom: 0px; margin-top: 4px;"> : ${user?.phone}</p>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +216,7 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                     <style>
                                     @font-face {
                                         font-family: 'SutonnyMJ';
-                                        src: url('./SutonnyMJ/SutonnyMJ.ttf') format('truetype');
+                                        src: url('/font/SutonnyMJ.ttf') format('truetype');
                                     }
                                     body {
                                         font-family: Arial, sans-serif;
@@ -258,17 +245,17 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                     </style>
                                 </head>
                                 <body>
-                                    <div class="invoice" style="padding-top: 50px; font-family: 'SutonnyMJ', sans-serif;">
+                                    <div class="invoice" style="padding-top: 50px;">
                                     ${UserInfo}
                                     <table style="border-collapse: collapse; width: 100%;">
                                         <thead>
                                         <tr>
-                                            <th style="padding: 4px; border-left: 1px solid black; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; font-size: 13px; width:40px;">পরিমাণ</th>
-                                            <th style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px"">বইয়ের নাম এবং শ্রেণি</th>
-                                            <th style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px"">প্রকাশনি</th>
-                                            <th style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px"">মূল্য</th>
-                                            <th style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px"">বি. মূল্য</th>
-                                            <th style="padding: 4px; text-align: right; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:right; font-size: 13px"">মোট মূল্য</th>
+                                            <td style="padding: 4px; border-left: 1px solid black; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; font-size: 13px; width:40px;">পরিমাণ</td>
+                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px"">বইয়ের নাম এবং শ্রেণি</th>
+                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px"">প্রকাশনি</td>
+                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px"">মূল্য</td>
+                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px"">বি. মূল্য</td>
+                                            <td style="padding: 4px; text-align: right; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:right; font-size: 13px"">মোট মূল্য</td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -387,7 +374,7 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
                     <div className="flex justify-end my-3 mr-2">
                         <button
-                            onClick={() => goto(`/sale/order/edit/${params?.id}`)}
+                            onClick={() => goto(`/sale/order/edit/${params?.id}/${params?.type}`)}
                             className="group border bg-[#FFFFFF] border-green-500 flex shadow-md justify-start items-center gap-1 text-green-500 rounded-lg px-4 py-1.5 ml-3 font-thin hover:bg-green-500 hover:text-white transition duration-200"
                         >
                             <Edit className="group-hover:text-white transition duration-200" />

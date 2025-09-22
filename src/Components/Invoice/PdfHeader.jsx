@@ -1,22 +1,8 @@
 import React from "react";
+import { ReturnSaleCode } from "../Input/Time";
 
 const PdfHeader = ({ user, params, prefix = 'KB' }) => {
 
-
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
 
     return (
         <div className="text-[14px] font-thin">

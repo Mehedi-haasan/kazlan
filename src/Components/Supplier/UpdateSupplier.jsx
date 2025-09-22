@@ -109,11 +109,11 @@ const UpdateSupplier = ({ info = {} }) => {
             </div>
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div className="pt-1.5">
+                    {/* <div className="pt-1.5">
                         <Selection options={[{ id: 1, name: values?.customertype }]}
                             value={values?.customertype}
                             onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type*'} />
-                    </div>
+                    </div> */}
                     <div className=''>
                         <h1 className='text-[15px] pb-1.5'>{values?.customertype === "Party" ? "Full Name*" : "Full Name"}</h1>
                         <input type="text" ref={input_name} value={values?.name} placeholder="Enter item name"

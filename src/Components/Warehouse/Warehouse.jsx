@@ -110,7 +110,7 @@ const Warehouse = ({ entries, info = {} }) => {
                 <div >
                     <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500">
-                            <thead class="text-sm bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
+                            <thead class="text-sm bg-[#BCA88D] text-black dark:bg-[#040404] dark:text-white">
                                 <tr className='border'>
                                     <th className="w-4 py-2 px-4 border-r">
                                         <div className="flex items-center">

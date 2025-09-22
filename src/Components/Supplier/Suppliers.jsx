@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 import CustomerCardPdf from "../Customers/CustomerCardPdf";
 import Modal from "../Input/Modal";
 import Pdf from "../Pdf/Pdf";
+import Selection from "../Input/Selection";
 
 const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
@@ -143,6 +144,21 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
         saveAs(blob, filename);
     };
 
+    const DuesSupplier = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/search/due/customers/0/Supplier`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setSupplier(data?.items)
+        setTotalItem(data?.count)
+        setIsLoading(false)
+    }
 
 
     const SearchSupplier = async (v) => {
@@ -170,9 +186,24 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                 <NavLink to={`/create/supplier`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Supplier</NavLink>
             </div>
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
-                <div className="flex justify-between items-center ">
-                    <div>
-                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
+
+                <div className="flex justify-between items-center pb-1">
+                    <div className="flex justify-start gap-6">
+                        <div className="w-[200px]">
+                            <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Due" }]}
+                                onSelect={(v) => {
+                                    if (v.name === "Due") {
+                                        DuesSupplier()
+                                    }else{
+                                        GetSupplier()
+                                    }
+                                }}
+                                label={'Filter'} />
+                        </div>
+                        <div className="pt-[29px]">
+                            <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
+                        </div>
+                        
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
@@ -181,7 +212,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                 </div>
                 <div>
                     <div className="pt-3  w-full overflow-hidden overflow-x-auto">
-                        <table class="min-w-[1000px] w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
+                        <table class="min-w-[1000px] w-full text-sm text-left  mb-[25px] rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
                             <thead class="text-sm text-gray-900 bg-[#BCA88D]">
                                 <tr className='border'>
                                     <th className="w-4 py-2 px-4 border-r">

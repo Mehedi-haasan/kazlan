@@ -1,22 +1,8 @@
 import React from "react";
+import { ReturnSaleCode } from "../Input/Time";
+const InvoHeader = ({ user, params, prefix = 'KB', invoice }) => {
 
-const InvoHeader = ({ user, params, prefix = 'KB' }) => {
- 
-
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
+    console.log(invoice);
 
     return (
         <div>
@@ -58,8 +44,20 @@ const InvoHeader = ({ user, params, prefix = 'KB' }) => {
                     <h1 className='text-gray-900 w-[80px]'>মোবাইল</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-thin'>:</h1>
-                        <input placeholder={user?.phone} value={user?.phone} readOnly={true} className='border focus:outline-none rounded p-1 font-thin  w-[220px]' />
+                        <input placeholder={user?.phone} value={user?.phone} readOnly={true} className='border focus:outline-none rounded p-1 font-thin w-[220px]' />
                     </div>
+                </div>
+
+                <div>
+                    {
+                        invoice?.sup_invo && <div className='flex justify-start gap-3 items-center py-1'>
+                            <h1 className='text-gray-900 w-[80px]'>চালান নং</h1>
+                            <div className='flex justify-start items-center gap-3'>
+                                <h1 className='font-thin'>:</h1>
+                                <input placeholder={invoice?.sup_invo} value={invoice?.sup_invo} readOnly={true} className='border focus:outline-none rounded p-1 font-thin' />
+                            </div>
+                        </div>
+                    }
                 </div>
 
             </div>

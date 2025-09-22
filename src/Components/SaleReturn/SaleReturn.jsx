@@ -63,7 +63,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     const [prepareData, setPrepareData] = useState({})
     const [prep_value, setPrep_Value] = useState(false)
     const [payTypeShow, setPayTypeShow] = useState(false);
-    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Due" }, { id: 3, name: "Cash" }]
+    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Cash" }]
     const [values, setValues] = useState({
         pay: 0,
         paking: 0,
@@ -71,7 +71,8 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         pay_type: 'Challan',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
-        deliverydate: ''
+        deliverydate: '',
+        status: "Due"
     })
     const [filter, setFilter] = useState({
         cate: null,
@@ -649,7 +650,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                                     }
                                                 } else if (e.key === "Enter" && PayType[selectedId]) {
                                                     setPayTypeShow(false);
-                                                    setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                     setSelectedId(0);
                                                     last_pay.current?.focus();
                                                 }
@@ -668,7 +669,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
 
                                                             onClick={() => {
                                                                 setPayTypeShow(false);
-                                                                setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}

@@ -96,7 +96,8 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
             <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.state?.name}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.address}</th>
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
-                <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
+                <button className={`border rounded-full px-4 mx-auto block
+                     ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]` : `text-red-600 bg-red-100 border-red-100`}`} `}>
                     {Math.abs(item?.balance)}
                 </button>
                 {/* <button className={`border rounded-full px-4 mx-auto block ${item?.balance < 1 ? 'text-red-600 bg-red-100 border-red-100' : 'text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]'} `}>{item?.balance}</button> */}
@@ -120,10 +121,10 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
                         <div onClick={() => { setShow(true) }} className={`${info?.role === "admin" ? 'hidden' : ''} flex justify-start items-center text-xs gap-2 cursor-pointer text-red-500 hover:bg-gray-200 pl-[5px] py-[3px] rounded`}>
                             <Remove onClick={() => { setShow(true) }} className={`text-red-500`} size="14px" />Delete
                         </div>
-                        <NavLink to={`/yearly/bonus/${item?.id}`} onClick={() => setOption(false)} className={`${info?.role === "superadmin" ? "" : "hidden"} flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs`}>
+                        {/* <NavLink to={`/yearly/bonus/${item?.id}`} onClick={() => setOption(false)} className={`${info?.role === "superadmin" ? "" : "hidden"} flex justify-start items-center gap-2 cursor-pointer hover:bg-gray-200 p-1 rounded text-xs`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7M10.5 16a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0" /><path fill="currentColor" d="M17.526 5.116L14.347.659L2.658 9.997L2.01 9.99V10H1.5v12h21V10h-.962l-1.914-5.599zM19.425 10H9.397l7.469-2.546l1.522-.487zM15.55 5.79L7.84 8.418l6.106-4.878zM3.5 18.169v-4.34A3 3 0 0 0 5.33 12h13.34a3 3 0 0 0 1.83 1.83v4.34A3 3 0 0 0 18.67 20H5.332A3.01 3.01 0 0 0 3.5 18.169" />
                             </svg>Yearly Bonas
-                        </NavLink>
+                        </NavLink> */}
                     </div>
                 }
                 <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { OpenModal(item?.id) }} className="cursor-pointer" width="25" height="22" viewBox="0 0 40 40">

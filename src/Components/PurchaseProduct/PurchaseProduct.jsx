@@ -56,17 +56,18 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     const [prepareData, setPrepareData] = useState({})
     const [prep_value, setPrep_Value] = useState(false)
     const [payTypeShow, setPayTypeShow] = useState(false);
-    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Due" }, { id: 3, name: "Cash" }]
+    let PayType = [{ id: 1, name: "Challan" }, { id: 2, name: "Cash" }]
     const today = new Date();
     const [values, setValues] = useState({
         pay: 0,
         paking: 0,
         delivary: 0,
-        pay_type: 'Challan',
+        pay_type: 'Due',
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: '',
-        sup_invo: ''
+        sup_invo: '',
+        status:"Due"
     })
     const [filter, setFilter] = useState({
         cate: null,
@@ -263,7 +264,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                     </div>
 
                     <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
-                        <h1 className='text-[15px] pb-1'>Supplier Invoice</h1>
+                        <h1 className='text-[15px] pb-1'>Challan No</h1>
                         <input type="text" value={values?.sup_invo} placeholder={values?.sup_invo}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
@@ -594,7 +595,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                     setPayTypeShow(false);
                                                     setSelectedId(0);
                                                     last_pay.current?.focus();
-                                                    setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
                                                 }
                                             }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
                                         {
@@ -612,7 +613,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
                                                             onClick={() => {
                                                                 setPayTypeShow(false);
-                                                                setValues({ ...values, pay_type: PayType[selectedId].name })
+                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}

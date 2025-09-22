@@ -24,14 +24,8 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
         <div className="pt-3">
             <div className="w-full overflow-hidden overflow-x-auto">
                 <table className="text-sm text-left text-gray-500 w-full min-w-[700px] rounded">
-                    <thead className=" text-sm text-left  text-black rounded bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
+                    <thead className="text-sm text-left  text-black rounded bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
                         <tr className='border'>
-                            {/* <th className="w-4 py-3 px-4 border-r ">
-                                <div className="flex items-center">
-                                    <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 " />
-                                    <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                </div>
-                            </th> */}
                             <th scope="col" className="px-3 py-3 border-r ">
                                 <div className="flex justify-between items-center">
                                     Date
@@ -80,12 +74,12 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                     <Updown />
                                 </div>
                             </th>
-                            {/* <th scope="col" className="px-3 py-3 text-center border-r ">
+                            <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Status
+                                    Edited
                                     <Updown />
                                 </div>
-                            </th> */}
+                            </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Sale Type
@@ -118,12 +112,6 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                         goto(`/opening/invoice/${item?.id}/${item?.type}`)
                                     }
                                 }}>
-                                {/* <th className="w-4 py-3 px-4 border-x">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </th> */}
                                 <th scope="col" className="px-3 py-3 border-x font-thin ">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.customername}</th>
@@ -132,9 +120,13 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
-                                {/* <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th> */}
+                                <th scope="col" className="px-3 py-3 border-r font-thin flex justify-center items-center">
+                                    {item?.is_edit && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
+                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m4 24l5-5l10 10L39 9l5 5l-25 25z" clip-rule="evenodd" />
+                                    </svg>}
+                                </th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
-                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.order_type}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.deliverydate)}</th>
                             </tr>
                         ))

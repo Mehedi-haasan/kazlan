@@ -14,7 +14,7 @@ import { BanglaToEnglish } from '../Input/Time';
 import RightArrow from '../../icons/RightArrow';
 
 
-const ProductUpdate = ({ info = {}, shop = [], editio }) => {
+const ProductUpdate = ({ info = {}, editio }) => {
     const goto = useNavigate()
     const params = useParams()
     const [edition, setEdition] = useState(false)
@@ -24,12 +24,20 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
     const [active, setActive] = useState("Pricing")
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [values, setValues] = useState({})
+    const [shop, setShop] = useState([])
     const input_name = useRef(null);
     const dis = useRef(null)
     const [selectedId, setSelectedId] = useState(0)
     const [disOnSale, setDisonSale] = useState([{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }])
     const [disType, setDisType] = useState(false)
     const dtype = useRef()
+    const [filter, setFilter] = useState({
+        edit_value: "Select a filter",
+        bran_value: 'Select a filter',
+        cate_value: 'Select a filter',
+        sup_value: 'Select a filter',
+        shop_name: 'Kazal and Brothers'
+    })
 
     const GetProduct = async () => {
         const res = await fetch(`${BaseUrl}/api/get/product/search/${params?.id}`);
@@ -77,6 +85,29 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
     };
 
 
+    const FetchShop = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/shop/list/with/info/${1}/${20}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+            }
+        });
+        const data = await response.json();
+        setShop(data?.items)
+    }
+
+
+    useEffect(() => {
+        document.title = "Items - KazalandBrothers";
+        if (info?.role === "superadmin") {
+            FetchShop()
+        } else {
+            setShop([{ id: 1, name: info?.shopname }])
+        }
+    }, []);
+
+
     return (
         <div className='min-h-screen pb-12 p-6'>
             <Notification message={message} />
@@ -110,7 +141,7 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
 
                             <div className='w-[40%] z-50'>
                                 <div className='flex justify-start items-end z-40'>
-                                    <SelectionComponent options={editio} default_select={edition} onSelect={(v) => { setEdition(false); setValues({ ...values, brandId: v?.id }) }} label={"Edition*"} className='rounded-r' />
+                                    <SelectionComponent options={editio} default_select={edition} default_value={values?.edition} onSelect={(v) => { setEdition(false); setValues({ ...values, brandId: v?.id, edition: v?.name }) }} label={"Edition*"} className='rounded-r' />
                                     <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                         <Add />
                                     </div>
@@ -123,7 +154,7 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
 
                         <InputComponent onChange={(e) => { }} label={"Category*"} value={values?.category?.name} placeholder={values?.category?.name} readOnly={true} />
 
-                        <InputComponent onChange={(e) => { }} label={"Supplier*"} isRequered={true} placeholder={values?.compId} readOnly={true} />
+                        <InputComponent onChange={(e) => { }} label={"Supplier*"} isRequered={true} placeholder={values?.supplier} readOnly={true} />
 
                         <div className='my-2 grid col-span-1 pb-2'>
                             <div>
@@ -240,7 +271,8 @@ const ProductUpdate = ({ info = {}, shop = [], editio }) => {
                                     active === "Stock" && <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
                                         {
                                             info?.role === "superadmin" && <div className='flex justify-start items-end pb-1'>
-                                                <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, supplier: v?.name }) }} label={"Warehouse Stock*"} className='rounded-l' />
+                                                <SelectionComponent options={shop} onSelect={(v) => { setValues({ ...values, compId: v?.id }); setFilter({ ...filter, shop_name: v?.name }) }}
+                                                    default_value={filter?.shop_name} label={"Warehouse Stock*"} className='rounded-l' />
                                                 <div className='border-y border-r px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                                     <Add />
                                                 </div>

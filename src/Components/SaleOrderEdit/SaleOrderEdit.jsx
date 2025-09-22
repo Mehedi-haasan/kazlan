@@ -88,6 +88,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         paking: 0,
         delivary: 0,
         pay_type: 'Cash',
+        status: "Cash",
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: ''
@@ -117,9 +118,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     const Order = async () => {
         let orderData = await EditPrepareOrderData(allData, invoice?.userId, name, values, info)
         const token = localStorage.getItem('token');
-        if (invoice?.methodname && !invoice.methodname.startsWith("Edited ")) {
-            invoice.methodname = `Edited ${invoice.methodname}`;
-        }
+        invoice['is_edit'] = true
         try {
             const response = await fetch(`${BaseUrl}/api/update/order`, {
                 method: 'POST',
@@ -135,7 +134,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}`)
+            goto(`/invoice/${data?.invoice}/${params?.type}`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -151,7 +150,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                 ...invoice,
                 total: lastTotal
             })
-            document.title = "Sale Return Edit - KazalandBrothers";
+            document.title = "Edit - KazalandBrothers";
         };
 
         fetchAmount();
@@ -199,7 +198,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     const GetInvoiceData = async (id) => {
 
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}/Sale`, {
             method: 'GET',
             headers: {
                 'authorization': token
@@ -583,7 +582,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                             })
                                         }}
                                         placeholder={values?.pay} className='border-y border-l px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
-                                    <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
+                                    <select value={values?.status} onChange={(v) => { setValues({ ...values, status: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 1, name: "Cash" }, { id: 2, name: "Due" }].map(({ id, name }) => (
                                             <option key={id} value={name} className='text-[#6B7280]'> {name}</option>

@@ -231,7 +231,8 @@ const Attribute = ({ entries = [], info = {} }) => {
                             <h1 className="pl-5 text-xl py-2">Attribute Details</h1>
                         </div>
                         <div className="px-6 py-4">
-                            <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank Transfar' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' }]} default_select={first?.first} default_value={first?.value}
+                            <SelectionComponent options={[{ id: 0, name: 'Payment Type' }, { id: 1, name: 'Bank Transfar' }, { id: 2, name: "Mobile Banking" }, { id: 3, name: 'Edition' }, { id: 4, name: 'Quantity' }]} 
+                            default_select={first?.first} default_value={first?.value}
                                 onSelect={(v) => {
                                     setValues({
                                         ...values,
@@ -239,7 +240,10 @@ const Attribute = ({ entries = [], info = {} }) => {
                                     })
                                     setFirst({ ...first, value: v?.name })
                                 }} label={"Type*"} className='rounded-r' />
-                            <InputComponent placeholder={`Enter name`} input_focus={inpo} value={values?.name} label={`Name`} handleEnter={() => { handleCreate(); handleCreateLocally() }} onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
+                 
+                            <InputComponent placeholder={`Enter name`} input_focus={inpo} value={values?.name} label={`Name`}
+                                handleEnter={() => { handleCreate(); handleCreateLocally() }}
+                                onChange={(e) => { setValues({ ...values, name: e }) }} className='lg:text-lg font-thin' />
                             <Button isDisable={isLoading} name="Create" onClick={() => { handleCreate(); handleCreateLocally() }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                         </div>
                     </div>

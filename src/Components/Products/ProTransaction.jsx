@@ -122,7 +122,7 @@ const ProTransaction = ({ entries = [] }) => {
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
                                 </th> */}
-                                <th scope="col" className="px-2 py-2 border-r ">
+                                <th scope="col" className="px-2 py-2 border-x ">
                                     <div className="flex justify-between items-center">
                                         Item Name
                                         <Updown />

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import InputComponent from "../Input/InputComponent";
 import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import Notification from "../Input/Notification";
 import { useNavigate } from "react-router-dom";
-import { BanglaToEnglish, getFormattedDate } from "../Input/Time";
+import { BanglaToEnglish, handleDateConvert } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
+import Calendar from "../Wholesale/Calender";
 
 const ExpenseCreate = ({ info }) => {
 
@@ -13,6 +13,7 @@ const ExpenseCreate = ({ info }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [expenseType, setExpensetype] = useState([])
+    const [paymentMethod, setPaymentMethod] = useState([])
     const [defa, setDefa] = useState(true)
     const amt = useRef()
     const [values, setValues] = useState({
@@ -23,12 +24,29 @@ const ExpenseCreate = ({ info }) => {
         type: 'Expense',
         note: ''
     })
+    const [date, setDate] = useState(null)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 0);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const [raw, setRaw] = useState({
+        fromDate: sevenDaysAgo.toLocaleDateString("en-US", options),
+        toDate: today.toLocaleDateString("en-US", options),
+        userId: null,
+        type: null
+    });
+    function getFormattedDate(date) {
+        if (!date) return ""; // handle null/undefined safely
+        const d = new Date(date); // convert string -> Date
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return d.toLocaleDateString('en-US', options);
+    }
 
 
     const handleSubmit = async (shopname) => {
         const token = localStorage.getItem('token')
         setIsLoading(true)
-        const payload = { ...values, shopname: shopname };
+        const payload = { ...values, shopname: shopname, date: date };
         const response = await fetch(`${BaseUrl}/api/post/expense`, {
             method: 'POST',
             headers: {
@@ -43,6 +61,18 @@ const ExpenseCreate = ({ info }) => {
         goto(`/dashboard`)
     }
 
+    const PaymentMethod = async (type) => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/${type}`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        });
+        const data = await response.json()
+        setPaymentMethod(data.items);
+    }
 
 
     const Expensetype = async () => {
@@ -73,18 +103,25 @@ const ExpenseCreate = ({ info }) => {
                     <h1 className="font-semibold text-lg">Expense Payment</h1>
 
                 </div>
-                <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="p-3 grid grid-cols-1 lg:grid-cols-3 gap-4">
 
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Expense Type"}
                             default_select={defa}
                             options={expenseType} default_value={values?.expensename}
                             value={values?.expensename}
-                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); amt.current.focus() }}
+                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); amt.current.focus(); PaymentMethod(v?.name) }}
                         />
                     </div>
-
-                    <InputComponent className={`text-black`} label={"Date"} readOnly={true} placeholder={getFormattedDate()} value={getFormattedDate()} onChange={(v) => { setValues({ ...values, email: v }) }} />
+                    <div className="pt-2 flex justify-start items-center gap-4">
+                        <SelectionComponent label={"Select Sub-Category"}
+                            options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
+                            onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                        />
+                    </div>
+                    <div>
+                        <Calendar label={"Date"} value={date} getDate={(date) => { setDate(getFormattedDate(date)); setValues({ ...values, date: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                    </div>
                     <div>
                         <p className='pt-[2px] pb-1.5 font-semibold'>Amount</p>
                         <div className='flex justify-start items-end pb-1 dark:bg-[#040404] dark:text-white'>
@@ -103,7 +140,7 @@ const ExpenseCreate = ({ info }) => {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="grid col-span-2">
                         <h1 className="py-1">Note</h1>
                         <textarea placeholder="Enter your note" onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin dark:bg-[#040404] dark:text-white focus:outline-none border p-1.5 w-full rounded" />
                     </div>

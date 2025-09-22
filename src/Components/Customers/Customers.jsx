@@ -55,6 +55,22 @@ const Customers = ({ entries, state = [], info = {} }) => {
         setIsLoading(false)
     }
 
+    const DueCustomer = async () => {
+        setIsLoading(true)
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/search/due/customers/0/Customer`, {
+            method: 'GET',
+            headers: {
+                "authorization": token,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+        const data = await response.json();
+        setCustomer(data?.items)
+        setTotalItem(data?.count)
+        setIsLoading(false)
+    }
+
     useEffect(() => {
         document.title = "Customers - KazalandBrothers";
         GetCustomer()
@@ -163,8 +179,21 @@ const Customers = ({ entries, state = [], info = {} }) => {
                 <NavLink to={`/create/customer`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Customer</NavLink>
             </div>
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
-                <div className="w-[200px] pb-3">
-                    <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Party" }, { id: 3, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type'} />
+                <div className="flex gap-6">
+                    <div className="w-[200px] pb-3">
+                        <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Party" }, { id: 3, name: "Normal" }]} onSelect={(v) => { setValues({ ...values, customertype: v?.name }) }} label={'Customer Type'} />
+                    </div>
+                    <div className="w-[200px] pb-3">
+                        <Selection options={[{ id: 1, name: "All" }, { id: 2, name: "Due" }]}
+                            onSelect={(v) => {
+                                if (v.name === "Due") {
+                                    DueCustomer()
+                                } else {
+                                    GetCustomer()
+                                }
+                            }}
+                            label={'Filter'} />
+                    </div>
                 </div>
                 <div className="flex justify-between items-center ">
                     <div>
@@ -176,8 +205,8 @@ const Customers = ({ entries, state = [], info = {} }) => {
                     </div>
                 </div>
                 <div>
-                    <div className="pt-3  w-full overflow-hidden overflow-x-auto">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
+                    <div className="pt-3 w-full overflow-hidden overflow-x-auto">
+                        <table className="w-full text-sm text-left mb-[25px] rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
                             <thead className="text-sm text-gray-900 bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
                                 <tr className='border'>
                                     <th className="w-4 py-2 px-4 border-r">

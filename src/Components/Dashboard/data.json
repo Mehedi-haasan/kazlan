@@ -52,7 +52,7 @@
             {
                 "id": 225,
                 "parent": "2",
-                "name": "Daily Expense",
+                "name": "Daily Report",
                 "route": "expense"
             },
             {

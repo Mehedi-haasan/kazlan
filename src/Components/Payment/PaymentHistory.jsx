@@ -232,7 +232,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                         </thead>
                         <tbody>
                             {data?.map((item, i) => (
-                                <tr className={`border cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`} onClick={() => { goto(`/invoice/${item?.id}`) }}>
+                                <tr className={`border cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`} onClick={() => { goto(`/invoice/${item?.id}/${item?.type}`) }}>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.createdAt)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
