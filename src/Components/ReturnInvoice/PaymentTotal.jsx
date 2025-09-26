@@ -1,6 +1,6 @@
 
 
-const PaymentTotal = ({ user, total }) => {
+const PaymentTotal = ({ user, total,invoice }) => {
 
 
     const convertToBengaliNumber = (num) => {
@@ -91,7 +91,7 @@ const PaymentTotal = ({ user, total }) => {
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2 border-b"> জমা</td>
-                <td className="p-2 text-right border-b">০.০</td>
+                <td className="p-2 text-right border-b">{convertToBengaliNumber(parseInt(invoice?.paidamount))}.০</td>
             </tr>
             <tr className="bg-white">
                 <th className="p-2"><h1 className='font-thin text-black'>বিতরনকারী</h1></th>

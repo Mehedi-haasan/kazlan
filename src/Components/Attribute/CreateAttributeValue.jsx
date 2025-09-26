@@ -8,7 +8,7 @@ import SelectionComponent from "../Input/SelectionComponent";
 import { useNavigate } from "react-router-dom";
 
 
-const CreateAttribute = ({ entries }) => {
+const CreateAttributeValue = ({ entries }) => {
 
 
     const [values, setValues] = useState({ name: "", });
@@ -35,7 +35,7 @@ const CreateAttribute = ({ entries }) => {
         setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`${BaseUrl}/api/create/attribute`, {
+            const response = await fetch(`${BaseUrl}/api/create/attribute/value`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
@@ -45,8 +45,6 @@ const CreateAttribute = ({ entries }) => {
             });
 
             const data = await response.json();
-            setShow(false);
-            setLottiShow(true)
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
             goto('/attribute')
@@ -73,8 +71,6 @@ const CreateAttribute = ({ entries }) => {
             });
 
             const data = await response.json();
-            setShow(false);
-            setLottiShow(true)
             setValues({ ...values, name: '' })
         } catch (error) {
             console.error('Error updating variant:', error);
@@ -85,7 +81,7 @@ const CreateAttribute = ({ entries }) => {
 
     const GetAttributeType = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/attribute/type`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -109,14 +105,14 @@ const CreateAttribute = ({ entries }) => {
             <Notification message={message} />
             <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                 <div className="border-b">
-                    <h1 className="pl-5 text-xl py-2">Attribute Details</h1>
+                    <h1 className="pl-5 text-xl py-2">Attribute Value Details</h1>
                 </div>
                 <div className="px-6 py-4">
                     <SelectionComponent options={allAttr} default_select={first?.first} default_value={first?.value}
                         onSelect={(v) => {
                             setValues({
                                 ...values,
-                                attr_type_id: v?.id,
+                                attr_id: v?.id,
                                 type: v?.name,
                             })
                             input_name.current.focus()
@@ -145,4 +141,4 @@ const CreateAttribute = ({ entries }) => {
     )
 }
 
-export default CreateAttribute
+export default CreateAttributeValue

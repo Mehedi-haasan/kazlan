@@ -122,7 +122,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin flex justify-center items-center">
                                     {item?.is_edit && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
-                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m4 24l5-5l10 10L39 9l5 5l-25 25z" clip-rule="evenodd" />
+                                        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="m4 24l5-5l10 10L39 9l5 5l-25 25z" clipRule="evenodd" />
                                     </svg>}
                                 </th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>

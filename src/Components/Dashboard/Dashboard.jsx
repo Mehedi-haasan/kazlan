@@ -22,7 +22,7 @@ const Dashboard = ({ data, info = {} }) => {
 
     const HourlySalesData = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse/test`, {
             method: "GET",
             headers: {
                 'authorization': token
@@ -80,7 +80,7 @@ const Dashboard = ({ data, info = {} }) => {
     useEffect(() => {
         let token = localStorage.getItem('token')
         if (token && token !== 'undefined') {
-            // HourlySalesData()
+            HourlySalesData()
             // MonthlySalesData()
             DailySaleReturn()
         }

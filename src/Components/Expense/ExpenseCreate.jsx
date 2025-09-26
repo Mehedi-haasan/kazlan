@@ -61,9 +61,9 @@ const ExpenseCreate = ({ info }) => {
         goto(`/dashboard`)
     }
 
-    const PaymentMethod = async (type) => {
+    const PaymentMethod = async (id) => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/${type}`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute/value/by/${id}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -77,7 +77,7 @@ const ExpenseCreate = ({ info }) => {
 
     const Expensetype = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Expense`, {
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/4`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -110,7 +110,7 @@ const ExpenseCreate = ({ info }) => {
                             default_select={defa}
                             options={expenseType} default_value={values?.expensename}
                             value={values?.expensename}
-                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); amt.current.focus(); PaymentMethod(v?.name) }}
+                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); amt.current.focus(); PaymentMethod(v?.id) }}
                         />
                     </div>
                     <div className="pt-2 flex justify-start items-center gap-4">

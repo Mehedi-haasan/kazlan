@@ -61,6 +61,8 @@ import OpeningInvoice from "./Components/OpeningInvoice/OpeningInvoice.jsx";
 import Expense from "./Components/Expense/Expense.jsx";
 import ExpenseCreate from "./Components/Expense/ExpenseCreate.jsx";
 import YearlyBonus from "./Components/User/YearlyBonus.jsx";
+import AttributeTypeCreate from "./Components/Attribute/AttributeTypeCreate.jsx";
+import CreateAttributeValue from "./Components/Attribute/CreateAttributeValue.jsx";
 
 
 
@@ -170,7 +172,7 @@ function App() {
 
   const Edition = async () => {
     const token = localStorage.getItem('token')
-    const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Edition`, {
+    const response = await fetch(`${BaseUrl}/api/get/attribute/value/by/${1}`, {
       method: 'GET',
       headers: {
         "authorization": token,
@@ -397,6 +399,10 @@ function App() {
           <Route path="/attribute" element={auth ? <Attribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/create/attribute" element={auth ? <CreateAttribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/create/attribute/value" element={auth ? <CreateAttributeValue brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/create/attribute/type" element={auth ? <AttributeTypeCreate brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/update/attribute/:id" element={auth ? <UpdateAttribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 

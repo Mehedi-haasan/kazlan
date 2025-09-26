@@ -53,7 +53,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     const [quanType, setQuanType] = useState([])
     const [quanTypeShow, setQuanTypeShow] = useState(false)
     const [selectedId, setSelectedId] = useState(0)
-    const [disOnSale, setDisonSale] = useState([{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }])
+    const disOnSale = [{ id: 1, name: "Percentage" }, { id: 2, name: "Fixed" }]
     const [disType, setDisType] = useState(false)
     const dtype = useRef()
     const [values, setValues] = useState({
@@ -71,7 +71,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         year: '2026',
         edition: '',
         code: '',
-        qty_type: 'none'
+        qty_type: 'None'
     })
 
     EscapeRedirect("/items")
@@ -109,7 +109,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
     const Attribute = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Edition`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute/value/by/${1}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -122,7 +122,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
     const GetQuantity = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Quantity`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute/value/by/${2}`, {
             method: 'GET',
             headers: {
                 "authorization": token,

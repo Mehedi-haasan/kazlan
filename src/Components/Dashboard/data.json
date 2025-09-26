@@ -188,11 +188,6 @@
                 "id": 62,
                 "name": "Stock Transfer",
                 "route": "update/product"
-            },
-            {
-                "id": 63,
-                "name": "Yearly Bonus",
-                "route": "yearly/bonus"
             }
         ]
     },

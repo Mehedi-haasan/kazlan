@@ -69,12 +69,16 @@ const CustomerPayment = ({ info, state }) => {
             type = 1;
             values['type'] = 'Yearly Bonus'
         }
-        // values['paymentmethod'] = `${values?.paymentmethod || ''} by ${values?.methodname || ''}`;
         values['status'] = 'Online'
         values['date'] = date
 
-        if (["Mobile Banking", "Bank Transfer", "Cash", "Online Transfer"].includes(values?.paymentmethod)) {
+         let pay = paymentType.map(item => item.name);
+        if (pay.includes(values?.paymentmethod)) {
             values['type'] = 'Online Collection'
+        }
+
+        if (values?.paymentmethod === "Cash") {
+            values['type'] = 'Make Payment'
         }
 
         const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
@@ -111,7 +115,7 @@ const CustomerPayment = ({ info, state }) => {
 
     const PaymentType = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/Payment Type`, {
+        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/3`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -121,9 +125,9 @@ const CustomerPayment = ({ info, state }) => {
         const data = await response.json()
         setPaymentType(data.items);
     }
-    const PaymentMethod = async (type) => {
+    const PaymentMethod = async (id) => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/all/attribute/by/${type}`, {
+        const response = await fetch(`${BaseUrl}/api/get/attribute/value/by/${id}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -160,7 +164,7 @@ const CustomerPayment = ({ info, state }) => {
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
                             options={paymentType} default_value={values?.paymentmethod}
-                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }); PaymentMethod(v?.name) }}
+                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }); PaymentMethod(v?.id) }}
                         />
                         <SelectionComponent label={"Select Method"}
                             options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
