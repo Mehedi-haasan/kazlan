@@ -98,20 +98,17 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                     <Updown />
                                 </div>
                             </th>
+                            <th scope="col" className="px-3 py-3 text-right border-r ">
+                                <div className="flex justify-between items-center">
+                                    Preview
+                                    <Updown />
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         {invoices?.map((item, i) => (
-                            <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}
-                                onClick={() => {
-                                    if (item?.type === "Sale" || item?.type === "Purchase items") {
-                                        goto(`/invoice/${item?.id}/${item?.type}`)
-                                    } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
-                                        goto(`/return/invoice/${item?.id}/${item?.type}`)
-                                    } else {
-                                        goto(`/opening/invoice/${item?.id}/${item?.type}`)
-                                    }
-                                }}>
+                            <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
                                 <th scope="col" className="px-3 py-3 border-x font-thin ">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.customername}</th>
@@ -128,6 +125,19 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB" }) => {
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.order_type}</th>
                                 <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.deliverydate)}</th>
+                                <th scope="col" className="px-3 py-3 border-r font-thin flex justify-center items-center">
+                                    <button onClick={() => {
+                                        if (item?.type === "Sale" || item?.type === "Purchase items") {
+                                            goto(`/invoice/${item?.id}/${item?.type}`)
+                                        } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
+                                            goto(`/return/invoice/${item?.id}/${item?.type}`)
+                                        } else {
+                                            goto(`/opening/invoice/${item?.id}/${item?.type}`)
+                                        }
+                                    }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19s-7.764-4.013-9.257-5.962a1.69 1.69 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5s7.764 4.013 9.257 5.962" /><circle cx="12" cy="12" r="3" /></g></svg>
+                                    </button>
+                                </th>
                             </tr>
                         ))
                         }

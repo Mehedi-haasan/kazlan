@@ -95,41 +95,38 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
     const { View } = useLottie(options);
 
     return (
-        <div className={`${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b grid grid-cols-12`}>
-            <div className="py-1.5 px-4 border-l grid col-span-1">
+        <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b`}>
+            <td className="py-1.5 px-4 w-4 border-l">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" onChange={() => TikBox(item.id)} checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
-            </div>
-            <div className="px-2 py-1.5 border-x font-thin flex justify-start items-center">{item?.name}
-                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                    <>{View}</>
-                </Modal>
-                <Notification message={message} />
-            </div>
-            <div className="border-r font-thin grid col-span-5">
-                {item?.attributes?.map((attr, i) => {
-                    return <div className={`flex gap-1 ${i > 0 ? 'border-t' : ''}`}>
-                        <div className="border-r w-[120px]">
-                            <h1 className="p-2">{attr?.name}</h1>
+            </td>
+            <td className="px-2 py-1.5 border-x font-thin">{item?.name}</td>
+            <td className="border-r font-thin">
+                <div className="">
+                    {item?.attributes?.map((attr, i) => {
+                        return <div className={`flex gap-1 ${i > 0 ? 'border-t' : ''}`}>
+                            <div className="border-r w-[120px]">
+                                <h1 className="p-2">{attr?.name}</h1>
+                            </div>
+                            <div className="flex justify-start items-start flex-wrap gap-2 px-1 py-1.5 mt-[3px]">
+                                {attr?.attributevalues?.map((att_val) => {
+                                    return <button className="border rounded-full px-1.5 text-[10px] border-blue-600">{att_val?.name}</button>
+                                })}
+                            </div>
                         </div>
-                        <div className="flex justify-start items-start flex-wrap gap-2 px-1 py-1.5 mt-[3px]">
-                            {attr?.attributevalues?.map((att_val) => {
-                                return <button className="border rounded-full px-1.5 text-[10px] border-blue-600">{att_val?.name}</button>
-                            })}
-                        </div>
-                    </div>
-                })}
-            </div>
-            <div className="px-2 py-1.5 border-r font-thin grid col-span-2">
+                    })}
+                </div>
+            </td>
+            <td className="px-2 py-1.5 border-r font-thin">
                 <div className="flex justify-start items-center">{item?.creator}</div>
-            </div>
-            <div className="px-2 py-1.5 border-r font-thin grid col-span-2">
+            </td>
+            <td className="px-2 py-1.5 border-r font-thin">
                 <div className="flex justify-start items-center">{formatDate(item?.createdAt)}</div>
-            </div>
-            <div className="grid col-span-1">
-                <div className="px-2 py-3 flex justify-center items-center border-r gap-2 ">
+            </td>
+            <td className="border-r">
+                <div className="px-2 py-1.5 flex justify-center items-center gap-2 ">
                     <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
                         <div className="pt-1 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded-lg w-full">
                             <div className="border-b">
@@ -159,9 +156,9 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
                         </div>
                     </DownModal>
                 </div>
-            </div>
+            </td>
 
-        </div>
+        </tr>
     )
 }
 

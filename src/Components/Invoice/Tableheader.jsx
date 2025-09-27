@@ -2,17 +2,19 @@ import React from "react";
 
 const Tabeheader = ({ type }) => {
 
+
     const GetType = (type) => {
         let value = "বিক্রয় মূল্য";
 
         if (type === "Sale" || type === "Sale Return") {
             value = "বিক্রয় মূল্য";
-        } else if (type === "Purchase Items" || type === "Purchase Return") {
+        } else if (type === "Purchase items" || type === "Purchase Items" || type === "Purchase Return") {
             value = "ক্রয় মূল্য";
         }
 
-        return value;
+        return value
     };
+
 
     return (
         <thead className="text-gray-900 dark:bg-[#040404] dark:text-white">

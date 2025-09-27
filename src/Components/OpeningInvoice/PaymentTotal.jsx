@@ -1,6 +1,6 @@
 
 
-const PaymentTotal = ({ user, total ,invoice}) => {
+const PaymentTotal = ({ user, total, invoice }) => {
 
 
     const convertToBengaliNumber = (num) => {
@@ -19,14 +19,6 @@ const PaymentTotal = ({ user, total ,invoice}) => {
                 <td className="p-2 border-b"></td>
                 <td className="p-2 text-right border-b">{convertToBengaliNumber(parseInt(invoice?.previousdue))}.০</td>
             </tr>
-            <tr className="bg-white text-[13px]">
-                <td className="p-2"> অবশিষ্ট</td>
-                <td className="pr-6 py-3"></td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2 text-right">{convertToBengaliNumber(parseInt(invoice?.previousdue))}.০</td>
-            </tr> 
             <tr className="bg-white text-[13px] border-black">
                 <td className="p-2 border-b"> জমা</td>
                 <td className="pr-6 py-3 border-b"></td>
@@ -41,7 +33,7 @@ const PaymentTotal = ({ user, total ,invoice}) => {
                 <td className="p-2"><h1 className='font-tdin text-black'>ম্যানেজার</h1></td>
                 <td className="p-2"></td>
                 <td className="p-2"> মোট বাকি</td>
-                <td className="p-2 text-right">{convertToBengaliNumber(parseInt(invoice?.previousdue) - parseInt(invoice?.balance))}.০</td>
+                <td className="p-2 text-right">{convertToBengaliNumber(parseInt(invoice?.previousdue) - parseInt(invoice?.paidamount))}.০</td>
             </tr>
         </>
     )

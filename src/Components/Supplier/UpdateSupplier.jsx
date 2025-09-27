@@ -54,6 +54,11 @@ const UpdateSupplier = ({ info = {} }) => {
         open_b: false
     })
     const handleSubmit = async () => {
+        if (values?.balance_type === "You Receive") {
+            values['balance'] = values?.balance * 1
+        } else if (values?.balance_type === "You Pay") {
+            values['balance'] = values?.balance * -1
+        }
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/update/supplier/${params?.id}`, {
             method: 'POST',
@@ -78,7 +83,13 @@ const UpdateSupplier = ({ info = {} }) => {
             },
         });
         const data = await response.json()
-        setValues(data?.items)
+        let pre = data?.items
+        if (pre?.balance > 0) {
+            pre['balance_type'] = "You Receive"
+        } else if (pre?.balance < 0) {
+            pre['balance_type'] = "You Pay"
+        }
+        setValues(pre)
         setAuto({ ...auto, t_value: data?.items?.stateId })
     }
 

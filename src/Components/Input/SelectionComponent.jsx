@@ -104,7 +104,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
                   }}
 
                   onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); }}
-                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-gray-100 dark:bg-[#040404]' : ''}`}>
+                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-blue-500 text-white dark:bg-[#040404]' : ''}`}>
                   {opt?.name}
                 </div>
               })

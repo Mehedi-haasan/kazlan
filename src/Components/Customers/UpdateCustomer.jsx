@@ -26,7 +26,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
     const [active, setActive] = useState("Address")
     const dis = useRef(null)
     const [selectedId, setSelectedId] = useState(0)
-    const [disOnSale, setDisonSale] = useState([{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }])
+    const disOnSale = [{ id: 1, name: "You Pay" }, { id: 2, name: "You Receive" }]
     const [disType, setDisType] = useState(false)
     const dtype = useRef()
     const [values, setValues] = useState({
@@ -54,6 +54,11 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
         open_b: false
     })
     const handleSubmit = async () => {
+        if (values?.balance_type === "You Receive") {
+            values['balance'] = values?.balance * 1
+        } else if (values?.balance_type === "You Pay") {
+            values['balance'] = values?.balance * -1
+        }
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/update/customer/${params?.id}`, {
             method: 'POST',
@@ -78,7 +83,13 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
             },
         });
         const data = await response.json()
-        setValues(data?.items)
+        let pre = data?.items
+        if (pre?.balance > 0) {
+            pre['balance_type'] = "You Receive"
+        } else if (pre?.balance < 0) {
+            pre['balance_type'] = "You Pay"
+        }
+        setValues(pre)
         setAuto({ ...auto, t_value: params?.thana })
     }
 
@@ -97,7 +108,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
         }
     }, [auto])
 
-
+    console.log(values);
 
 
     return (

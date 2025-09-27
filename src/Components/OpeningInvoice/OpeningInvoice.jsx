@@ -13,6 +13,7 @@ import Pdf from '../Pdf/Pdf';
 import PdfHeader from '../Invoice/PdfHeader';
 import PdfBottom from '../Invoice/PdfBottom'
 import { numberToWords } from '../Input/Time'
+import { ReturnSaleCode } from '../Input/Time';
 
 
 const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
@@ -65,22 +66,6 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
-
-
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
 
     const Calculate = () => {
 
@@ -194,7 +179,7 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                      <div style="display: flex; justify-content: center; align-items: center; width:30px">:</div> 
 
                                     <div style="border: 1px solid black; padding:5px; width: 250px">
-                                      <p style="color: black; margin: 0px;">${prefix}/${ReturnSaleCode(user?.type)}-${String(params?.id).padStart(5, '0')}</p>
+                                      <p style="color: black; margin: 0px;">${prefix}/${ReturnSaleCode(invoice?.type)}-${String(params?.id).padStart(5, '0')}</p>
                                     </div>
                                 </div>
 
@@ -338,19 +323,19 @@ const OpeningInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
                 <div className='flex justify-between'>
                     <div className="flex justify-end my-3 mr-2">
-                        <button
+                        <button disabled={pevNext?.prev ? false : true}
                             onClick={() => { Redirect(pevNext?.prev) }}
-                            className={`group border bg-[#FFFFFF] border-green-500 flex shadow-md ${pevNext?.prev ? '' : 'hidden'} justify-start items-center gap-1 text-green-500 rounded-lg px-4 py-1.5 ml-3 font-thin hover:bg-green-500 hover:text-white transition duration-200`}
+                            className={`group border bg-[#FFFFFF] border-green-500 flex shadow-md justify-start items-center gap-1 text-green-500 rounded-lg px-4 py-1.5 ml-3 font-thin hover:bg-green-500 hover:text-white transition duration-200`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="currentColor" d="M17.772 11.996c0-2.168-.122-3.899-.228-4.992a53 53 0 0 0-4.437 2.3a53 53 0 0 0-4.21 2.693c.889.633 2.32 1.598 4.211 2.69a53 53 0 0 0 4.436 2.302c.106-1.093.228-2.825.228-4.993M17.585 4.8a1.332 1.332 0 0 1 1.846 1.065c.114.912.341 3.12.341 6.13c0 3.014-.228 5.222-.34 6.133a1.332 1.332 0 0 1-1.845 1.065c-.84-.356-2.847-1.255-5.479-2.775c-2.63-1.518-4.413-2.806-5.141-3.357a1.332 1.332 0 0 1 0-2.13c.736-.554 2.542-1.859 5.14-3.36s4.63-2.41 5.478-2.77ZM4 6a1 1 0 0 1 2 0v12a1 1 0 1 1-2 0z" /></g></svg>
                             <span className="group-hover:text-white transition duration-200">Prev</span>
                         </button>
-                        <button onClick={() => { Redirect(pevNext?.next) }} className={`border group border-red-500 text-red-500 ${pevNext?.next ? '' : 'hidden'} bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1`}>
+                        <button disabled={pevNext?.next ? false : true} onClick={() => { Redirect(pevNext?.next) }} className={`border group border-red-500 text-red-500 bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 7.766c0-1.554 1.696-2.515 3.029-1.715l7.056 4.234c1.295.777 1.295 2.653 0 3.43L8.03 17.949c-1.333.8-3.029-.16-3.029-1.715zM14.056 12L7 7.766v8.468zM18 6a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1" /></svg>
                             <span className="group-hover:text-white transition duration-200">Next</span>
                         </button>
 
-                        <button onClick={() => { Redirect(pevNext?.last) }} className={`border group border-red-500 text-red-500 ${parseInt(pevNext?.last?.id) === parseInt(params?.id) ? 'hidden' : ''} bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1`}>
+                        <button disabled={parseInt(pevNext?.last?.id) === parseInt(params?.id) ? true : false} onClick={() => { Redirect(pevNext?.last) }} className={`border group border-red-500 text-red-500 ${parseInt(pevNext?.last?.id) === parseInt(params?.id) ? 'disable' : ''} bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 7.766c0-1.554 1.696-2.515 3.029-1.715l7.056 4.234c1.295.777 1.295 2.653 0 3.43L8.03 17.949c-1.333.8-3.029-.16-3.029-1.715zM14.056 12L7 7.766v8.468zM18 6a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1" /></svg>
                             <span className="group-hover:text-white transition duration-200">Last</span>
                         </button>

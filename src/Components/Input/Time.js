@@ -391,6 +391,8 @@ export function ReturnSaleCode(type) {
         saleType = "MP"
     } else if (type === "Yearly Bonus") {
         saleType = "YB"
+    }else if (type === "Online Collection"){
+        saleType = "MP"
     }
 
     return saleType

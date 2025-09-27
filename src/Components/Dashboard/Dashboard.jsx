@@ -215,11 +215,12 @@ const Dashboard = ({ data, info = {} }) => {
                                 {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
                             </div>
                         </div>
-                        <Invoice info={info} />
+                        <Invoice info={info} sale={true}/>
 
                     </div>
                 </div>
             </div>
+
 
         </div>
     );

@@ -1,22 +1,9 @@
 import React from "react";
+import { ReturnSaleCode } from "../Input/Time";
 
 const InvoHeader = ({ user,invoice, params, prefix = 'KB',state }) => {
  
 
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        }
-
-        return saleType
-    }
 
     return (
         <div>
@@ -32,7 +19,7 @@ const InvoHeader = ({ user,invoice, params, prefix = 'KB',state }) => {
                     <h1 className='text-gray-900'>মেমো নং</h1>
                     <div className='flex justify-start items-center gap-3'>
                         <h1 className='font-thin'>:</h1>
-                        <input placeholder={`${prefix}/${ReturnSaleCode(user?.type)}-00${params?.id}`} value={`${prefix}/${ReturnSaleCode(user?.type)}-000${params?.id}`} readOnly={true} className='border focus:outline-none rounded p-1 font-thin' />
+                        <input placeholder={`${prefix}/${ReturnSaleCode(invoice?.type)}-00${params?.id}`} value={`${prefix}/${ReturnSaleCode(invoice?.type)}-000${params?.id}`} readOnly={true} className='border focus:outline-none rounded p-1 font-thin' />
                     </div>
                 </div>
             </div>

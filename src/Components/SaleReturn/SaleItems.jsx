@@ -191,9 +191,9 @@ const SaleItems = ({ }) => {
                 </div>
                 <InvoiceTemp invoices={invoices} />
 
-                <Modal show={preview} handleClose={() => { setPreview(false) }} size={`1000px`} crosshidden={true}>
+                <Modal show={preview} handleClose={() => { setPreview(false) }} size={`1100px`} crosshidden={true}>
                     <div ref={ref}>
-                        <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >
+                        <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt max-h-[80vh] overflow-y-auto" >
                             <Pdf>
                                 <InvoiceTemp invoices={invoices} />
                             </Pdf>

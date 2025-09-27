@@ -253,9 +253,10 @@ const Attribute = ({ entries = [], info = {} }) => {
                 <h1 className="font-semibold text-lg">Attribute List</h1>
 
                 <div className="flex justify-end items-center gap-6">
-                    <button onClick={() => { goto('/create/attribute') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute</button>
-                    <button onClick={() => { goto('/create/attribute/value') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute Value</button>
                     <button onClick={() => { goto('/create/attribute/type') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute Type</button>
+                    <button onClick={() => { goto('/create/attribute') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute Name</button>
+                    <button onClick={() => { goto('/create/attribute/value') }} className={`bg-blue-500 rounded px-4 py-1.5 font-thin text-white`}>Create Attribute Value</button>
+
                 </div>
             </div>
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white p-4 shadow rounded-lg mt-2">
@@ -271,57 +272,53 @@ const Attribute = ({ entries = [], info = {} }) => {
                 <div>
                     <div className="pt-3 w-full overflow-hidden overflow-x-auto">
                         <table class="min-w-[600px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-white">
-                            <div class="text-md text-gray-900 bg-[#BCA88D] dark:bg-[#040404] dark:text-white grid grid-cols-12">
-                                <div className="py-2 px-4 border-r grid col-span-1">
-                                    <div className="flex items-center">
-                                        <input id="checkbox-table-search-1"
-                                            checked={selectAll}
-                                            onChange={(e) => {
-                                                const isChecked = e.target.checked;
-                                                setSelectAll(isChecked);
-                                                setBran(prev => prev.map(item => ({ ...item, active: !isChecked })));
-                                            }}
-                                            type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                        <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
-                                    </div>
-                                </div>
-                                <div className="px-2 py-2 border-r grid col-span-1">
-                                    <div className="flex justify-between items-center font-bold text-[16px] ">
-                                        Attribute Type
-                                        <Updown />
-                                    </div>
-                                </div>
-                                <div className="px-2 py-2 border-r grid col-span-5">
-                                    <div className="flex justify-between items-center font-bold text-[16px]">
-                                        Attribute Name
-                                        <Updown />
-                                    </div>
-                                </div>
-                                {/* <div className="px-2 py-2 border-r grid col-span-4">
-                                    <div className="flex justify-between items-center font-bold text-[16px]">
-                                        Attribute Value
-                                        <Updown />
-                                    </div>
-                                </div> */}
-                                <div className="px-2 py-2 text-center border-r text-[16px] grid col-span-2">
-                                    <div className="flex justify-between items-center">
-                                        Created by
-                                        <Updown />
-                                    </div>
-                                </div>
-                                <div className="px-2 py-2 text-right border-r text-[16px] grid col-span-2">
-                                    <div className="flex justify-between items-center">
-                                        Created at
-                                        <Updown />
-                                    </div>
-                                </div>
-                                <div className="pl-1 pr-1 py-2 text-center text-[16px] grid col-span-1">Action</div>
-                            </div>
-                            <div>
+                            <thead class="text-md text-gray-900 bg-[#BCA88D] dark:bg-[#040404] dark:text-white ">
+                                <tr>
+                                    <th className="py-2 px-4 border-r w-4">
+                                        <div className="flex items-center">
+                                            <input id="checkbox-table-search-1"
+                                                checked={selectAll}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    setSelectAll(isChecked);
+                                                    setBran(prev => prev.map(item => ({ ...item, active: !isChecked })));
+                                                }}
+                                                type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                            <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
+                                        </div>
+                                    </th>
+                                    <th className="px-2 py-2 border-r">
+                                        <div className="flex justify-between items-center font-bold text-[16px] ">
+                                            Attribute Type
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th className="px-2 py-2 border-r">
+                                        <div className="flex justify-between items-center font-bold text-[16px]">
+                                            Attribute Name
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th className="px-2 py-2 text-center border-r text-[16px]">
+                                        <div className="flex justify-between items-center">
+                                            Created by
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th className="px-2 py-2 text-right border-r text-[16px]">
+                                        <div className="flex justify-between items-center">
+                                            Created at
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th className="pl-1 pr-1 py-2 text-center text-[16px]">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 {bran?.map((item, i) => (
                                     <AttributeCard item={item} i={i} isChecked={!item?.active} TikBox={TikBox} info={info} GetAttribute={GetAttribute} />
                                 ))}
-                            </div>
+                            </tbody>
                         </table>
                     </div>
                 </div>

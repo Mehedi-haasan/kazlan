@@ -3,7 +3,7 @@ import InvoiceTemp from "./InvoiceTemp";
 import BaseUrl from "../../Constant";
 
 
-const Invoice = ({info={}}) => {
+const Invoice = ({info={},sale}) => {
 
     const [pageSize, setPageSize]=useState(15)
     const [invoices, setInvoices] = useState([]);
@@ -29,7 +29,7 @@ const Invoice = ({info={}}) => {
     return (
         <div className="pt-3">
             <div className="w-full overflow-hidden overflow-x-auto">
-                <InvoiceTemp invoices={invoices}  prefix={info?.shopcode}/>
+                <InvoiceTemp invoices={invoices}  prefix={info?.shopcode} sale={sale}/>
             </div>
         </div>
     )

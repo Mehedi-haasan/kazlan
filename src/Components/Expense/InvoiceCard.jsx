@@ -1,23 +1,8 @@
 import React from 'react'
+import { ReturnSaleCode } from '../Input/Time'
 
 const InvoiceCard = ({ item, prefix = "KB", name }) => {
 
-    const ReturnSaleCode = (type) => {
-        let saleType = "SL"
-        if (type === "Sale") {
-            saleType = "SL"
-        } else if (type === "Sale Return") {
-            saleType = "SR"
-        } else if (type === "Return Purchase") {
-            saleType = "PR"
-        } else if (type === "Purchase items") {
-            saleType = "PO"
-        } else if (type === "Expense") {
-            saleType = "EX"
-        }
-
-        return saleType
-    }
 
 
     return (

@@ -21,10 +21,7 @@ const PaymentTotal = ({ user, total,invoice }) => {
         return sum
     }
 
-    const TotalDue = () => {
-        let amount = Calculate()
-        return amount - parseInt(user?.paidamount)
-    }
+
 
     return (
         <>

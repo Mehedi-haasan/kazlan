@@ -141,7 +141,7 @@ const ProductUpdate = ({ info = {}, editio }) => {
 
                             <div className='w-[40%] z-50'>
                                 <div className='flex justify-start items-end z-40'>
-                                    <SelectionComponent options={editio} default_select={edition} default_value={values?.edition} onSelect={(v) => { setEdition(false); setValues({ ...values, brandId: v?.id, edition: v?.name }) }} label={"Edition*"} className='rounded-r' />
+                                    <SelectionComponent options={editio} default_select={edition} default_value={values?.edition} onSelect={(v) => { setEdition(false); setValues({ ...values, editionId: v?.id, edition: v?.name }) }} label={"Edition*"} className='rounded-r' />
                                     <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                         <Add />
                                     </div>

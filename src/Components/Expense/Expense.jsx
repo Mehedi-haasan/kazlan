@@ -193,7 +193,7 @@ const Expense = ({ prefix = 'KB' }) => {
     });
     useEffect(() => {
         setOpening({ ...opening, date: getFormattedDate(nextDay) })
-    }, [nextDay])
+    }, [])
     const [openModal, setOpenModal] = useState(false)
 
     const handleSubmit = async () => {
@@ -228,34 +228,36 @@ const Expense = ({ prefix = 'KB' }) => {
                     </div>
                 </div>
                 <div>
-                    <Modal show={openModal} handleClose={() => { setOpenModal(false) }} size={`500px`} crosshidden={false}>
-                        <h1 className='pt-2'>Post Opening Balance</h1>
-                        <div className='flex justify-end items-center gap-3'>
-                            <div className='w-[280px]'>
-                                <Calendar label={"Date"} value={opening?.date}
-                                    getDate={(date) => {
-                                        setOpening({ ...opening, date: getFormattedDate(date) })
-                                    }}
-                                    getTime={(ti) => { }} />
+                    <Modal show={openModal} handleClose={() => { setOpenModal(false) }} size={`700px`} crosshidden={false}>
+                        <div>
+                            <h1 className='pt-2'>Post Opening Balance</h1>
+                            <div className='flex justify-end items-center gap-3'>
+                                <div className='w-[280px]'>
+                                    <Calendar label={"Date"} value={opening?.date}
+                                        getDate={(date) => {
+                                            setOpening({ ...opening, date: getFormattedDate(date) })
+                                        }}
+                                        getTime={(ti) => { }} />
+                                </div>
                             </div>
-                        </div>
-                        <div className='w-full pt-1'>
-                            <h1 className='text-[15px] pb-1.5'>Amount</h1>
-                            <input
-                                type="text"
-                                value={opening?.amount}
-                                placeholder="Amount"
-                                onChange={(e) => setOpening({ ...opening, amount: e.target.value })}
-                                className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        handleSubmit()
-                                    }
-                                }}
-                            />
+                            <div className='w-full pt-1'>
+                                <h1 className='text-[15px] pb-1.5'>Amount</h1>
+                                <input
+                                    type="text"
+                                    value={opening?.amount}
+                                    placeholder="Amount"
+                                    onChange={(e) => setOpening({ ...opening, amount: e.target.value })}
+                                    className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            handleSubmit()
+                                        }
+                                    }}
+                                />
 
+                            </div>
+                            <Button onClick={handleSubmit} name={'Submit'} />
                         </div>
-                        <Button onClick={handleSubmit} name={'Submit'} />
                     </Modal>
                 </div>
                 <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded p-4 shadow mt-3">
