@@ -108,7 +108,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
         }
     }, [auto])
 
-    console.log(values);
+
 
 
     return (

@@ -3,13 +3,13 @@ import InvoiceTemp from "./InvoiceTemp";
 import BaseUrl from "../../Constant";
 
 
-const Invoice = ({info={},sale}) => {
+const Invoice = ({info={}}) => {
 
     const [pageSize, setPageSize]=useState(15)
     const [invoices, setInvoices] = useState([]);
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/20`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${pageSize}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -19,17 +19,17 @@ const Invoice = ({info={},sale}) => {
         setInvoices(data?.items)
     }
 
-    useEffect(() => {
-        RecentInvoice(invoices)
-    }, [])
+    // useEffect(() => {
+    //     RecentInvoice(invoices)
+    // }, [])
 
 
 
 
     return (
-        <div className="pt-3">
+        <div className="pt-1">
             <div className="w-full overflow-hidden overflow-x-auto">
-                <InvoiceTemp invoices={invoices}  prefix={info?.shopcode} sale={sale}/>
+                <InvoiceTemp invoices={invoices}  prefix={info?.shopcode} />
             </div>
         </div>
     )

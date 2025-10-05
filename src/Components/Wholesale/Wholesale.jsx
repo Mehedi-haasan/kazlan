@@ -536,7 +536,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                         <div>
                             <div className='flex justify-between'>
                                 <InputComponent placeholder={due} value={due} label={'Balance'} readOnly={true} className={``} />
-                                 <InputComponent placeholder={values?.pay-lastTotal} value={values?.pay-lastTotal} label={'Return Balance'} readOnly={true} className={``} />
+                                <InputComponent placeholder={values?.pay - lastTotal} value={values?.pay - lastTotal} label={'Return Balance'} readOnly={true} className={``} />
                             </div>
                             <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
                                 <h1 className='text-[15px] pb-1'>Special Discount</h1>

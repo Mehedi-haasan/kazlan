@@ -4,7 +4,7 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import Notification from "../Input/Notification";
 import { useNavigate, useParams } from "react-router-dom";
-import { BanglaToEnglish, handleDateConvert } from "../Input/Time";
+import { BanglaToEnglish } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 import { NavLink } from "react-router-dom";
 import Calendar from "../Wholesale/Calender";
@@ -41,6 +41,7 @@ const CustomerPayment = ({ info, state }) => {
         phone: '',
         accountnumber: '',
         balance_type: 'You Receive',
+        payment_type: 'You Receive',
         note: '',
         paymentmethod: 'Select a filter',
         type: 'Make Payment',
@@ -66,14 +67,15 @@ const CustomerPayment = ({ info, state }) => {
             type = 1;
             values['type'] = 'Make Payment'
         } else if (values?.balance_type === "Yearly Bonus") {
-            type = 1;
-            values['type'] = 'Yearly Bonus'
+            type = 2;
+            values['type'] = 'Yearly Bonus';
+            values['payment_type'] = "You Pay"
         }
         values['status'] = 'Online'
         values['date'] = date
 
-         let pay = paymentType.map(item => item.name);
-        if (pay.includes(values?.paymentmethod)) {
+        let pay = paymentType?.map(item => item.name);
+        if (pay?.includes(values?.paymentmethod)) {
             values['type'] = 'Online Collection'
         }
 
@@ -139,6 +141,7 @@ const CustomerPayment = ({ info, state }) => {
     }
 
     useEffect(() => {
+        document.title = "Customer Payment"
         GetUser()
         PaymentType()
     }, [params?.id])
@@ -176,7 +179,7 @@ const CustomerPayment = ({ info, state }) => {
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1 dark:bg-[#040404] dark:text-white'>
 
-                            <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value }) }}
+                            <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value, payment_type: e.target.value }) }}
                                 className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2 dark:bg-[#040404] dark:text-white`}
                             >
                                 {[{ id: 1, name: "You Receive" }, { id: 2, name: "You Pay" }, { id: 3, name: "Yearly Bonus" }].map(({ id, name }) => (

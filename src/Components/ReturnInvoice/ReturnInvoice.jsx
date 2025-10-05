@@ -206,7 +206,6 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px; font-size:13px;"></td>
                                         <td style="padding: 4px;"></td>
-                                        
                                         <td style="padding: 4px; text-align: right;"></td>
                                     </tr>
                                 `;

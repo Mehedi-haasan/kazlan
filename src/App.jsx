@@ -63,6 +63,7 @@ import ExpenseCreate from "./Components/Expense/ExpenseCreate.jsx";
 import YearlyBonus from "./Components/User/YearlyBonus.jsx";
 import AttributeTypeCreate from "./Components/Attribute/AttributeTypeCreate.jsx";
 import CreateAttributeValue from "./Components/Attribute/CreateAttributeValue.jsx";
+import EditUserBalance from "./Components/Payment/EditUserBalance.jsx";
 
 
 
@@ -338,7 +339,7 @@ function App() {
 
           <Route path="/dashboard" element={auth ? <Dashboard data={data} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/registration" element={auth && info?.role === "superadmin" ? <Registration state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/registration" element={auth && info?.role === "superadmin" ? <Registration state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/forget/password" element={auth ? <ForgetPassword /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -360,9 +361,11 @@ function App() {
 
           <Route path="/notification" element={<Notification data={data} info={info} />} />
 
-          <Route path="/customer/balance/:id" element={<CustomerPayment info={info} />} />
+          <Route path="/customer/balance/:id" element={auth ? <CustomerPayment info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/supplier/balance/:id" element={<SupplierPayment info={info} />} />
+          <Route path="/supplier/balance/:id" element={auth ? <SupplierPayment info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/edit/user/balance/:id/:invo/:type" element={auth ? <EditUserBalance info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/company" element={<Company />} />
 
@@ -386,7 +389,7 @@ function App() {
 
           <Route path="/order" element={auth ? <Order user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/state" element={auth ? <State entries={entries} state={state} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/state" element={auth ? <State entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/warehouses" element={auth ? <House entries={entries} shop={shop} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 

@@ -1,11 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class', 
+  darkMode: 'class',
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
+        sutonny: ["SutonnyMJ", "sans-serif"],
+      },
+      fontSize: {
+        'sutonny-11': '11px',
+        'sutonny-13': '16px',
+        'sutonny-16': '24px',
       },
     },
   },

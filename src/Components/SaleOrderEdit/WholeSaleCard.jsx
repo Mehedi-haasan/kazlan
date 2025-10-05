@@ -1,7 +1,7 @@
 import React from 'react';
 import Remove from '../../icons/Remove';
 
-const SellCard = ({ i, item, onClick, ChangeQty }) => {
+const SellCard = ({ i, item, onClick, ChangeQty,handleEnter }) => {
 
     const DiscountCalculate = (itm) => {
 
@@ -28,7 +28,7 @@ const SellCard = ({ i, item, onClick, ChangeQty }) => {
 
         let sale = 0;
         const price = parseInt(itm?.price) || 0;
-        const cost = parseInt(itm?.cost ? itm?.cost : itm?.price);
+        const cost = parseInt(itm?.product?.cost ? itm?.product?.cost : itm?.price);
         const discount = parseInt(itm?.discount) || 0;
         if (price != cost) {
             sale = price
@@ -52,6 +52,9 @@ const SellCard = ({ i, item, onClick, ChangeQty }) => {
             </div>
             <div scope="col" className="p-2 font-thin border-l ">
                 <input onChange={(e) => { ChangeQty(item?.id, e.target.value) }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") { handleEnter() }
+                    }}
                     placeholder={item?.qty} value={item?.qty}
                     className='focus:outline-none w-full h-full'
                 />

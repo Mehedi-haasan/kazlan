@@ -182,7 +182,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
                             <div style="display: flex; justify-content: space-between;">
                                 <div style="display: flex; justify-content: flex-start;">
-                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">‡gvevBj</p>
+                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvevBj</p>
                                     <p style="color: black; margin-bottom: 0px; margin-top: 4px; font-size: 13px;;"> : ${user?.phone}</p>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
                                         <th style="padding: 4px;"></th>
-                                         <td style="padding: 4px; font-family: 'SutonnyMJ';font-size: 13px; transform: scale(1.5); transform-origin: left top;">‡gvU</td>
+                                         <td style="padding: 4px; font-family: 'SutonnyMJ';font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvU</td>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(total)}.০</td>
                                     </tr>
@@ -257,7 +257,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 8px 24px 8px 8px;"></th>
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; border-bottom: 1px solid black;  font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">Rgv</td>
+                                        <td style="padding: 4px; border-bottom: 1px solid black;  font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvU</td>
                                         <td style="padding: 4px;border-bottom: 1px solid black;"></td>
                                         <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
                                     </tr>

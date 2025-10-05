@@ -13,10 +13,10 @@ const InvoiceCard = ({ item }) => {
         if (item?.discount_type === "Fixed") {
             sale = parseInt(item?.discount)
         } else if (item?.discount_type === "Percentage") {
-            let discount = parseInt(parseInt(item?.price) * parseInt(item?.discount) / 100);
+            let discount = parseInt(parseInt(item?.product?.price) * parseInt(item?.discount) / 100);
             sale = discount
         }
-        return parseInt(item?.price) - parseInt(sale)
+        return parseInt(item?.product?.price) - parseInt(sale)
     }
 
     return (
@@ -31,7 +31,7 @@ const InvoiceCard = ({ item }) => {
                 {item?.product?.brand?.name}
             </td>
             <td className="p-2 border-l font-thin text-center">
-                {convertToBengaliNumber(parseInt(item?.price))}.০
+                {convertToBengaliNumber(parseInt(item?.product?.price))}.০
             </td>
             <td className="p-2 border-l font-thin text-center">
                 {convertToBengaliNumber(CalculateSale(item))}.০

@@ -116,11 +116,11 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
       <td scope="col" className="px-2 py-2.5 border-x  ">{item?.name} {item?.edition}
         <Notification message={message} />
       </td>
-      <td scope="col" className="px-2 py-2.5 border-r">{item?.brand?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r">{item?.category?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.brand?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.category?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.company?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r">{item?.cost}</td>
-      <td scope="col" className="px-2 py-2.5 border-r">{item?.price}</td>
+      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.cost}</td>
+      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.price}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.qty} {item?.qty_type}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.creator}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{formatDate(item?.createdAt)}</td>
@@ -171,10 +171,10 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
         </Modal>
 
         <DownModal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
-          <h1 className="py-3 text-lg">Are you sure you want to delete tdis?</h1>
+          <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
           <div className="flex justify-between items-center p-4">
-            <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 text-white bg-blue-600">No</button>
-            <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:text-white hover:bg-red-600 hover:border-red-600">Yes</button>
+            <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
+            <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
           </div>
         </DownModal>
       </td>

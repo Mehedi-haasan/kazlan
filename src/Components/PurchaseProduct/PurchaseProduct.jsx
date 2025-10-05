@@ -67,7 +67,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         lastdiscounttype: "Fixed",
         deliverydate: '',
         sup_invo: '',
-        status:"Due"
+        status: "Due"
     })
     const [filter, setFilter] = useState({
         cate: null,
@@ -224,7 +224,6 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
         });
         setAllData(updatedData);
     };
-
 
     return (
 
@@ -595,7 +594,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                     setPayTypeShow(false);
                                                     setSelectedId(0);
                                                     last_pay.current?.focus();
-                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
+                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                 }
                                             }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] dark:bg-[#040404] dark:text-white font-thin' />
                                         {
@@ -613,7 +612,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
                                                             onClick={() => {
                                                                 setPayTypeShow(false);
-                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
+                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}

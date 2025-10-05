@@ -2,7 +2,7 @@ import React from "react";
 import { ReturnSaleCode } from "../Input/Time";
 const InvoHeader = ({ user, params, prefix = 'KB', invoice }) => {
 
-    console.log(invoice);
+
 
     return (
         <div>

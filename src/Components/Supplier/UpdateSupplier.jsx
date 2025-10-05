@@ -115,7 +115,7 @@ const UpdateSupplier = ({ info = {} }) => {
         <div className="px-3 py-5 min-h-screen pb-12">
 
             <div className="p-3 shadow bg-white rounded mb-2 flex justify-between items-center">
-                <h1 className="py-2 px-3" >Customer Update Details</h1>
+                <h1 className="py-2 px-3" >Supplier Update Details</h1>
                 <Notification message={message} />
             </div>
             <div className="bg-[#FFFFFF] rounded shadow-lg min-h-screen pb-12 pt-4">
@@ -190,7 +190,7 @@ const UpdateSupplier = ({ info = {} }) => {
                     <div>
                         <div className="py-3">
                             <div className="flex justify-start items-end">
-                                <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t gap-1 border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center font-thin`}>
+                                <button onClick={() => { setActive("Address") }} className={`${active === "Address" ? "border-x border-t border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5 rounded-t flex justify-start items-center font-thin`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"><path d="M13 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z" /><path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z" /></g></svg>
                                     Address</button>
                                 <button onClick={() => { setActive("Balance") }} className={`${active === "Balance" ? "border-x border-t  border-green-500 text-green-500" : "border-b text-blue-600"} px-4 py-1.5  gap-1 rounded-t flex justify-start items-center font-thin`}>

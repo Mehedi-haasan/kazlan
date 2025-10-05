@@ -14,13 +14,21 @@ export function handleDateConvert(date) {
     return formatted
 };
 
+export function formatDate(isoString) {
+    const date = new Date(isoString);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+}
 
 
 export async function PrepareOrderData(allData, userId, name, values, info, lastTotal, paking, delivary, due, special_discount) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
-        const price = parseInt(v?.price) || 0;
+        const price = parseInt(v?.cost) || 0;
         const discount = parseInt(v?.discount) || 0;
         const qty = parseInt(v?.qty) || 0;
         if (v?.discount_type === "Fixed") {
@@ -38,6 +46,7 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
             userId: userId,
             name: v?.name,
             shop: info?.shopname,
+            cost: price,
             price: price,
             discount: discount,
             discount_type: v?.discount_type,
@@ -48,6 +57,8 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
             deliverydate: values?.deliverydate
         });
     });
+    let return_amount = values?.pay - lastTotal;
+    let final_amount = due + return_amount
     return {
         shop: info?.shopname,
         customername: name,
@@ -62,13 +73,13 @@ export async function PrepareOrderData(allData, userId, name, values, info, last
         previousdue: due,
         pay_type: values?.pay_type,
         paidamount: values?.pay,
-        amount: lastTotal - values?.pay,
+        amount: final_amount,
         orders: orderData,
         updatedata: allData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
         sup_invo: values?.sup_invo,
-        status:values?.status
+        status: values?.status
     }
 }
 
@@ -95,14 +106,16 @@ export async function EditPrepareOrderData(allData, userId, name, values, info) 
             userId: userId,
             name: v?.name,
             shop: info?.shopname,
+            cost: price,
             price: price,
             discount: discount,
             discount_type: v?.discount_type,
             sellprice: sale,
             qty: qty,
+            type: v?.type,
             contact: values?.phone,
-            date: getFormattedDate(),
-            deliverydate: values?.deliverydate,
+            date: v?.date,
+            deliverydate: v?.deliverydate,
         });
     });
     return orderData
@@ -131,6 +144,7 @@ export function PrepareWholeSaleData(allData, userId, name, values, info, lastTo
             userId: userId,
             name: v?.name,
             shop: info?.shopname,
+            cost: price,
             price: price,
             discount: discount,
             discount_type: v?.discount_type,
@@ -141,6 +155,8 @@ export function PrepareWholeSaleData(allData, userId, name, values, info, lastTo
             deliverydate: values?.deliverydate
         });
     });
+    let return_amount = values?.pay - lastTotal;
+    let final_amount = due + return_amount
 
     return {
         shop: info?.shopname,
@@ -156,12 +172,12 @@ export function PrepareWholeSaleData(allData, userId, name, values, info, lastTo
         previousdue: due,
         pay_type: values?.pay_type,
         paidamount: values?.pay,
-        amount: lastTotal - values?.pay,
+        amount: final_amount,
         orders: orderData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
         sup_invo: values?.sup_invo,
-        status:values?.status
+        status: values?.status
     }
 }
 
@@ -188,6 +204,7 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
             userId: userId,
             name: v?.name,
             shop: info?.shopname,
+            cost: price,
             price: price,
             discount: discount,
             discount_type: v?.discount_type,
@@ -198,7 +215,8 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
             deliverydate: values?.deliverydate
         });
     });
-
+    let return_amount = lastTotal - values?.pay
+    let final_amount = due + return_amount
     return {
         shop: info?.shopname,
         customername: name,
@@ -213,12 +231,12 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
         previousdue: due,
         pay_type: values?.pay_type,
         paidamount: values?.pay,
-        amount: lastTotal - values?.pay,
+        amount: final_amount,
         orders: orderData,
         deliverydate: values?.deliverydate,
         special_discount: special_discount,
         sup_invo: sup_invo,
-        status:values?.status
+        status: values?.status
     }
 }
 
@@ -233,7 +251,29 @@ export async function CalculateAmount(allData, delivary = 0, paking = 0, lastdis
             return acc + (parseInt(item?.qty) * price)
         } else {
             let dis = cost * discount / 100;
-            return acc + (parseInt(item?.qty) * cost - dis)
+            return acc + (item?.qty * (cost - dis))
+        }
+
+    }, 0);
+
+    return {
+        amount: parseInt(amount),
+        lastTotal: parseInt(amount) + parseInt(delivary) + parseInt(paking) - parseInt(lastdiscount) - parseInt(spDis)
+    }
+}
+
+
+export async function CalculateEditAmount(allData, delivary = 0, paking = 0, lastdiscount = 0, spDis = 0) {
+
+    let amount = allData?.reduce((acc, item) => {
+        let cost = item?.cost ? item?.cost : item?.price
+        let discount = item?.discount;
+        if (item?.discount_type === "Fixed") {
+            let price = cost - discount
+            return acc + (parseInt(item?.qty) * price)
+        } else {
+            let dis = cost * discount / 100;
+            return acc + (item?.qty * (cost - dis))
         }
 
     }, 0);
@@ -391,8 +431,10 @@ export function ReturnSaleCode(type) {
         saleType = "MP"
     } else if (type === "Yearly Bonus") {
         saleType = "YB"
-    }else if (type === "Online Collection"){
+    } else if (type === "Online Collection") {
         saleType = "MP"
+    } else if (type === "Expense") {
+        saleType = "EX"
     }
 
     return saleType

@@ -4,9 +4,10 @@ import BaseUrl from '../../Constant';
 import DailySalse from './DailySalse';
 import Cart from '../../icons/Cart';
 import Notification from '../../icons/Notification';
-import Invoice from '../RecentInvoice/Invoice';
 import Button from '../Input/Button';
 import NotiFi from '../Input/Notification';
+import InvoiceTemp from '../RecentInvoice/InvoiceTemp';
+import RecentReceipt from '../RecentInvoice/RecentReceipt';
 
 
 
@@ -17,7 +18,6 @@ const Dashboard = ({ data, info = {} }) => {
     const [total, setTotal] = useState(0);
     const [dailyreturn, setDailyReturn] = useState(0);
     const [dailyPurchase, setDailyPurchase] = useState(0);
-    const [allData, setAllData] = useState([])
     const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
 
     const HourlySalesData = async () => {
@@ -42,6 +42,19 @@ const Dashboard = ({ data, info = {} }) => {
             setHourSales(salesData);
         }
     };
+
+    const GetTodaySale = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/order/daily/sale/today`, {
+            method: "GET",
+            headers: {
+                'authorization': token
+            }
+        });
+        const data = await response.json();
+        setTotal(data?.amount)
+
+    }
 
     const DailySaleReturn = async () => {
         const token = localStorage.getItem('token')
@@ -80,8 +93,8 @@ const Dashboard = ({ data, info = {} }) => {
     useEffect(() => {
         let token = localStorage.getItem('token')
         if (token && token !== 'undefined') {
-            HourlySalesData()
-            // MonthlySalesData()
+            GetTodaySale()
+            MonthlySalesData()
             DailySaleReturn()
         }
     }, [])
@@ -146,11 +159,36 @@ const Dashboard = ({ data, info = {} }) => {
             if (data && data?.success === true) {
                 UploadToServer(data?.items)
             }
-            setAllData(data?.items)
         } catch (error) {
             setMessage({ id: Date.now(), mgs: error });
         }
     }
+
+    const [pageSize, setPageSize] = useState(15)
+    const [invoices, setInvoices] = useState([]);
+    const [reciept, setReciept]=useState([])
+    const RecentInvoice = async () => {
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${pageSize}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token,
+            },
+        });
+        const data = await response.json();
+        let recent_invoice = data?.items?.filter(
+            (item) => ["Sale", "Sale Return","Purchase items","Purchase Return"].includes(item?.type)
+        );
+        let recent_receipt = data?.items?.filter(
+            (item) => ["Expense", "Make Payment","Opening","Online Collection"].includes(item?.type)
+        );
+        setInvoices(recent_invoice);
+        setReciept(recent_receipt)
+    }
+
+    useEffect(() => {
+        RecentInvoice()
+    }, [])
 
 
 
@@ -215,7 +253,18 @@ const Dashboard = ({ data, info = {} }) => {
                                 {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
                             </div>
                         </div>
-                        <Invoice info={info} sale={true}/>
+                        <InvoiceTemp info={info} invoices={invoices} />
+
+                    </div>
+                </div>
+
+                <div className='grid col-span-1 lg:col-span-2'>
+
+                    <div className='rounded-xl overflow-hidden bg-[#FFFFFF] dark:bg-[#040404] p-3 shadow-lg dark:text-white'>
+                        <div className='flex justify-between items-center'>
+                            <h1 className='text-[20px]'>Recent Receipt</h1>
+                        </div>
+                        <RecentReceipt info={info} invoices={reciept} />
 
                     </div>
                 </div>

@@ -136,7 +136,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-1.5 border-x font-thin ">{item?.name}
+            <th scope="col" className="px-2 py-1.5 border-x font-thin font-sutonny text-sutonny-13">{item?.name}
                 <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
                     <>{View}</>
                 </Modal>

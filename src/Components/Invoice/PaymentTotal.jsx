@@ -12,8 +12,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
 
         let sum = 0
         let due = parseInt(user?.previousdue);
-
-        if (due < 0) {
+        if (due > 0) {
             sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - parseInt(invoice?.special_discount) - Math.abs(user?.previousdue)
         } else {
             sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - parseInt(invoice?.special_discount)

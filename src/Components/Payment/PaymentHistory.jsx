@@ -9,7 +9,7 @@ import Search from '../Input/Search';
 import { useToImage } from '@hcorta/react-to-image'
 import logo from '../Logo/photo.png'
 import Calander from '../Wholesale/Calender'
-import { ReturnSaleCode } from '../Input/Time';
+import { ReturnSaleCode,handleDateConvert,formatDate } from '../Input/Time';
 
 
 const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
@@ -57,33 +57,14 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
     }
 
     useEffect(() => {
+        document.title = `Payment History - Kazaland Brothers`;
         GetProduct()
     }, [raw])
 
-    const handleDateConvert = (date) => {
-        const formatted = date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        return formatted
-    };
-
-    function formatDate(isoString) {
-        const date = new Date(isoString);
-
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'long' });
-        const year = date.getFullYear();
-
-        return `${day} ${month} ${year}`;
-    }
 
 
     return (
         <div className="pl-3 pt-5 pr-2 min-h-screen pb-12">
-
-
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow flex justify-between">
                 <div className='flex justify-start items-start gap-5 px-2 py-1.5 dark:bg-[#040404] dark:text-white'>
                     {
@@ -240,13 +221,9 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.return}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">
-                                        <button className={`border rounded-full px-4 mx-auto  block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                                            {Math.abs(item?.balance)}
-                                        </button>
-                                    </th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.balance}</th>
                                 </tr>
                             ))
                             }

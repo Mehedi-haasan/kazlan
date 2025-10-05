@@ -27,3 +27,14 @@ body {
   border: 0;
   width: 100% !important;
 }
+
+@font-face {
+  font-family: "SutonnyMJ";
+  src: url("../public/font/SutonnyMJ.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.text-sutonny-16 {
+  font-size: 24px;
+}

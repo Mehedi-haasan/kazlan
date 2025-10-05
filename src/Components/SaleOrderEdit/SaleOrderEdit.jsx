@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from './WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { BanglaToEnglish, CalculateAmount, EditPrepareOrderData } from '../Input/Time';
+import { BanglaToEnglish, CalculateEditAmount, EditPrepareOrderData, handleDateConvert } from '../Input/Time';
 import { useNavigate, useParams } from 'react-router-dom';
 import Calendar from './Calender'
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -16,6 +16,7 @@ import DataHeader from '../Common/DataHeader';
 import EscapeRedirect from './EscapeRedirect'
 import Remove from '../../icons/Remove';
 import SelectionComponentSearch from '../Input/SelectionComponentSearch';
+
 
 
 
@@ -74,15 +75,6 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         customer: 'Select a filter',
     })
 
-    const handleDateConvert = (date) => {
-        const formatted = date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        return formatted
-    };
-
     const [values, setValues] = useState({
         pay: 0,
         paking: 0,
@@ -118,7 +110,8 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     const Order = async () => {
         let orderData = await EditPrepareOrderData(allData, invoice?.userId, name, values, info)
         const token = localStorage.getItem('token');
-        invoice['is_edit'] = true
+        invoice['is_edit'] = true;
+        invoice['paidamount'] = values?.pay
         try {
             const response = await fetch(`${BaseUrl}/api/update/order`, {
                 method: 'POST',
@@ -143,12 +136,13 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
     useEffect(() => {
         const fetchAmount = async () => {
-            let { amount, lastTotal } = await CalculateAmount(allData, delivary, paking, values?.lastdiscount);
+            let { amount, lastTotal } = await CalculateEditAmount(allData, delivary, paking, values?.lastdiscount);
             setTotal(amount);
             setLastTotal(lastTotal);
             setInvoice({
                 ...invoice,
-                total: lastTotal
+                total: lastTotal,
+                paidamount: values?.paidamount
             })
             document.title = "Edit - KazalandBrothers";
         };
@@ -171,9 +165,9 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         setValues({ ...values, phone: data?.phone })
     }
 
-    const GetCustomer = async (id) => {
+    const GetCustomer = async (id, user_type) => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/customers/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/${user_type}/${id}`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -198,7 +192,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     const GetInvoiceData = async (id) => {
 
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/${id}/Sale`, {
+        const response = await fetch(`${BaseUrl}/api/get/order/${id}/${params?.type}`, {
             method: 'GET',
             headers: {
                 'authorization': token
@@ -207,12 +201,10 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         const data = await response.json();
         setAllData(data?.items);
         setUser(data?.user);
-        setInvoice(data?.invoice);
-        setValues({
-            ...values,
-            pay: data?.user?.paidamount,
-            lastdiscount: data?.user?.lastdiscount
-        })
+        let invo = data?.invoice;
+        invo['paidamount'] = 0
+        setInvoice(invo);
+        setValues(invo)
         setPaking(data?.user?.packing);
         setDelivery(data?.user?.delivery);
         setFilter({
@@ -282,7 +274,12 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                 setSecond(true);
                                 setFirst(false);
                                 setCustomer([]);
-                                GetCustomer(v?.id);
+                                if (params?.type === "Purchase items") {
+                                    GetCustomer(v?.id, "suppliers");
+                                } else if (params?.type === "Sale") {
+                                    GetCustomer(v?.id, "customers");
+                                }
+
                                 setFilter({ ...filter, state: v?.name });
                             }}
                             label={"Thana Name"} className='rounded-l z-50' />
@@ -303,7 +300,8 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.name}
                             onSelect={(v) => {
                                 setSecond(false); setFirst(false); setQuan(true);
-                                setFilter({ ...filter, customer: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
+                                setInvoice({ ...invoice, userId: v?.id, customername: v?.name })
+                                setFilter({ ...filter, customer: v?.name, name: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
                             }}
                             label={"Customer"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
@@ -555,7 +553,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                 </div>
                             )}
                             {allData?.map((item, i) => {
-                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} />
+                                return <WholeSaleCard key={i} item={item} onClick={HandleDelete} ChangeQty={ChangeQty} handleEnter={() => { setQuan(true) }} />
                             })}
                         </div>
                     </div>

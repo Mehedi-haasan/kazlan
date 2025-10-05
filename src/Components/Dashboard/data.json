@@ -42,33 +42,11 @@
         ]
     },
     {
-        "id": "12",
-        "name": "Expense",
-        "route": "product",
-        "icon": "fluent-mdl2:work-item",
-        "class": "mt-4",
-        "option": true,
-        "items": [
-            {
-                "id": 225,
-                "parent": "2",
-                "name": "Daily Report",
-                "route": "expense"
-            },
-            {
-                "id": 226,
-                "parent": "2",
-                "name": "Add Expense",
-                "route": "create/expense"
-            }
-        ]
-    },
-    {
         "id": "3",
         "name": "Sales",
         "route": "",
         "icon": "mdi:cart-outline",
-        "className": "mt-4",
+        "className": "mt-2",
         "option": true,
         "items": [
             {
@@ -203,6 +181,18 @@
                 "id": 81,
                 "name": "Profile",
                 "route": "profile"
+            },
+            {
+                "id": 225,
+                "parent": "2",
+                "name": "Daily Report",
+                "route": "expense"
+            },
+            {
+                "id": 226,
+                "parent": "2",
+                "name": "Add Expense",
+                "route": "create/expense"
             },
             {
                 "id": 81,

@@ -52,10 +52,10 @@ const WarehouseCard = ({ item, i, FetchShop, info = {}, isChecked, TikBox }) => 
                 <Edit size='22px' onClick={() => { goto(`/update/warehouse/${item?.id}`) }} />
                 <Remove size='18px' onClick={() => { setShow(true) }} className={`${info?.role === "superadmin" ? '' : 'hidden'}`} />
                 <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
-                    <h1 className="font-semibold text-lg py-2 text-black">Are you sure you want to delete?</h1>
-                    <div className="flex justify-between items-center pb-6 pt-4">
-                        <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
-                        <button onClick={handleDelete} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
+                    <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
+                    <div className="flex justify-between items-center p-4">
+                        <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
+                        <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
                     </div>
                 </DownModal>
             </th>

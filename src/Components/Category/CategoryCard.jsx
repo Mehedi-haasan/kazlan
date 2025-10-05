@@ -93,6 +93,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
             body: JSON.stringify(item),
         });
         const data = await response.json();
+        setShow(false)
         setIsLoading(false);
         getCategory();
         setMessage({ id: Date.now(), mgs: data?.message });
@@ -123,11 +124,11 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
             <th className="w-4 py-2 px-4 border-r">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox" checked={isChecked} onChange={() => TikBox(item.id)}
-                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-x font-thin ">{item?.name}
+            <th scope="col" className="px-2 py-2 border-x font-thin font-sutonny text-sutonny-13">{item?.name}
                 <Notification message={message} />
             </th>
             <th scope="col" className="px-2 py-1 border-r font-thin ">
@@ -139,10 +140,10 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
                 <Edit size='20px' onClick={() => { goto(`/update/category/${item?.id}`) }} />
                 <Remove size='18px' onClick={() => { setShow(true) }} className={`${info?.role === "superadmin" ? '' : "hidden"}`} />
                 <DownModal show={show} handleClose={() => { setShow(false) }} size="320px" className="">
-                    <h1 className="font-semibold text-lg py-2 text-black dark:bg-[#040404] dark:text-white">Are you sure you want to delete?</h1>
-                    <div className="flex justify-between items-center pb-6 pt-4">
-                        <button onClick={() => { setShow(false) }} className="border px-3 py-1 rounded border-blue-500 text-blue-500">No</button>
-                        <button onClick={handleDelete} disabled={isLoading} className="border px-3 py-1 rounded border-red-500 text-red-500">Yes</button>
+                    <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
+                    <div className="flex justify-between items-center p-4">
+                        <button onClick={() => setShow(false)} className="border px-4 py-1.5 rounded border-blue-500 bg-blue-500 text-white">No</button>
+                        <button onClick={handleDelete} className="border px-4 py-1.5 rounded border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Yes</button>
                     </div>
                 </DownModal>
 

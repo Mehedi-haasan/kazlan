@@ -69,7 +69,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
         lastdiscount: 0,
         lastdiscounttype: "Fixed",
         deliverydate: '',
-        status:"Due"
+        status: "Due"
     })
     const [filter, setFilter] = useState({
         cate: null,
@@ -117,7 +117,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due)
+        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0)
         try {
             const response = await fetch(`${BaseUrl}/api/return/purchase`, {
                 method: 'POST',
@@ -203,6 +203,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
         const data = await response.json();
         setAllData(data?.items);
         setUser(data?.user);
+        setDue(data?.user?.balance)
         setName(data?.user?.name);
         setUserId(data?.user?.id)
         setLoadInvo(false)
@@ -628,7 +629,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
                                 <div className='flex justify-start items-end pb-1 pt-1'>
-                                    <input type='text' ref={last_pay} value={parseInt(total)} onChange={(e) => {
+                                    <input type='text' ref={last_pay} value={values?.pay} onChange={(e) => {
                                         let num = BanglaToEnglish(e.target.value);
                                         setValues({ ...values, pay: num })
                                     }}
@@ -663,7 +664,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                                 } else if (e.key === "Enter" && PayType[selectedId]) {
                                                     setPayTypeShow(false);
                                                     setSelectedId(0);
-                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
+                                                    setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                     last_pay.current?.focus();
                                                 }
                                             }} className='px-2 pt-[5px] pb-[6px] rounded-r focus:outline-none w-full text-[#212529] font-thin dark:bg-[#040404] dark:text-white' />
@@ -681,7 +682,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
                                                             onClick={() => {
                                                                 setPayTypeShow(false);
-                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid": "Due", pay_type: PayType[selectedId].name })
+                                                                setValues({ ...values, status: PayType[selectedId].name === "Cash" ? "Paid" : "Due", pay_type: PayType[selectedId].name })
                                                                 setSelectedId(0);
                                                                 last_pay.current?.focus();
                                                             }}

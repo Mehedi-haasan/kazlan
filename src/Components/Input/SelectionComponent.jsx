@@ -47,11 +47,14 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
   }, []);
 
   const handleFilter = (e) => {
-    setSelectedId(0)
+    setSelectedId(0);
     const searchValue = e.target.value.toLowerCase();
+
     const filterData = options.filter(item =>
-      item?.name?.toLowerCase().includes(searchValue)
+      item?.name?.toLowerCase().includes(searchValue) ||
+      String(item?.id)?.toLowerCase().includes(searchValue)
     );
+
     setData(filterData);
   };
 
@@ -88,6 +91,10 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
                   onSelect({ id: data[selectedId]?.id, name: data[selectedId]?.name });
                   setSelect(data[selectedId]?.name);
                   setHide(false);
+                } else if (e.key === "Home") {
+                  setSelectedId(0)
+                } else if (e.key === "End") {
+                  setSelectedId(data?.length - 1)
                 }
               }}
               className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm dark:bg-[#040404] dark:text-white' onChange={handleFilter} />

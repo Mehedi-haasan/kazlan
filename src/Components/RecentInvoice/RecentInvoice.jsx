@@ -1,9 +1,6 @@
 import React from "react";
-import Remove from "../../icons/Remove";
 import { NavLink } from "react-router-dom";
-import Updown from "../../icons/Updown";
 import ShowEntries from "../Input/ShowEntries";
-import Edit from "../../icons/Edit";
 import Invoice from "./Invoice";
 
 

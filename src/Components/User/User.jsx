@@ -90,6 +90,7 @@ const User = ({ entries, info = {} }) => {
             body: JSON.stringify(values),
         });
         const data = await response.json();
+        GetUsers()
         setShow(false)
         setMessage({ id: Date.now(), mgs: data?.message });
     }
