@@ -63,7 +63,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {}, lang
 
 
     return (
-        <div className={`w-full top-0 z-50 shadow fixed ${auth ? '' : 'hidden'}`}>
+        <div className={`w-full top-0 z-50 shadow fixed ${auth ? '' : 'hidden'}`} >
             <Noti message={message} />
             <div className="flex justify-between items-center z-50 w-[100%] px-2 mx-auto bg-[#FFFFFF] dark:bg-[#040404] dark:border-b py-2">
                 <div></div>

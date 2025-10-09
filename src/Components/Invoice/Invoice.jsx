@@ -131,22 +131,22 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         const rows = allData?.map(item => {
             return `
                     <tr style="border: 1px solid black">
-                        <td style="padding: 4px; border-left: 1px solid black; border-right: 1px solid black; border-bottom:1px solid black; font-size: 13px; width:40px;text-align:center;">
+                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px; border-left: 1px solid black; border-right: 1px solid black; border-bottom:1px solid black; font-size: 13px; width:40px;text-align:center;">
                         ${convertToBengaliNumber(item?.qty)}
                         </td>
-                        <td style="padding: 4px; border-right: 1px solid black; border-bottom:1px solid black; font-size: 13px;;">
+                        <td style="padding: 4px; border-right: 1px solid black; border-bottom:1px solid black; font-family: 'kalpurush'; font-size: 17px;">
                         ${item?.name}, ${item?.product?.category?.name}, ${item?.product?.edition}
                         </td>
-                        <td style="padding: 4px; border-right: 1px solid black;  border-bottom:1px solid black; font-size: 13px;; ">
+                        <td style="padding: 4px; border-right: 1px solid black;  border-bottom:1px solid black; font-family: 'kalpurush'; font-size: 17px;">
                         ${item?.product?.brand?.name}
                         </td>
-                        <td style="padding: 4px; border-right: 1px solid black;  border-bottom:1px solid black; text-align:right; font-size: 13px;; width:40px;text-align:center; ">
+                        <td style="padding: 4px; border-right: 1px solid black;  border-bottom:1px solid black; text-align:right; font-family: 'kalpurush'; font-size: 17px; width:40px;text-align:center; ">
                         ${convertToBengaliNumber(parseInt(item?.price))}.০
                         </td>
-                        <td style="padding: 4px; border-right: 1px solid black; border-bottom:1px solid black; text-align:right; font-size: 13px;; width:50px;text-align:center;">
+                        <td style="padding: 4px; border-right: 1px solid black; border-bottom:1px solid black; text-align:right; font-family: 'kalpurush'; font-size: 17px; width:50px;text-align:center;">
                         ${convertToBengaliNumber(CalculateSale(item))}.০
                         </td>
-                        <td style="padding: 4px;  border-right: 1px solid black; border-bottom:1px solid ; text-align:right; font-size: 13px;;font-size: 13px;;">
+                        <td style="padding: 4px;  border-right: 1px solid black; border-bottom:1px solid ; text-align:right; font-family: 'kalpurush'; font-size: 17px;">
                         ${convertToBengaliNumber(item?.sellprice)}.০
                         </td>
                     </tr>
@@ -156,34 +156,34 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
         const UserInfo = `
                         <div style="padding-bottom: 15px; font-size: 13px; color:black">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding:0px; margin:0px;">
                                 <div style="display: flex; justify-content: flex-start; padding-bottom:0px">
-                                    <p style="color: black; width: 80px; margin: 0px; font-family: 'SutonnyMJ';  font-size: 13px; transform: scale(1.5); transform-origin: left top;">bvg</p>
-                                    <p style="color: black; margin: 0px; font-size: 13px;;"> : ${user?.name}</p>
+                                    <p style="color: black; width: 80px; margin: 0px; font-family: 'kalpurush'; font-size: 17px;">নাম</p>
+                                    <p style="color: black; margin: 0px; font-family: 'kalpurush'; font-size: 17px;"> : ${user?.name}</p>
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between; width: 210px;">
-                                    <p style="color: black; font-size: 13px; padding:4px; margin:4px; font-family: 'SutonnyMJ'; text-align:left; font-size: 13px; transform: scale(1.5); transform-origin: left top;">‡g‡gv bs&nbsp;&nbsp;:</p>
-                                    <p style="color: black; padding:4px; margin:4px; text-align: right; width: 120px; font-size: 13px;">${prefix}/${ReturnSaleCode(user?.type)}-${String(params?.id).padStart(5, '0')}</p>
+                                    <p style="color: black; padding:0px; margin:0px; font-family: 'kalpurush'; font-size: 17px; width: 90px;">মেমো নং&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+                                    <p style="color: black; padding:0px; margin-top:4px; text-align: right; width: 120px; font-size: 13px;">${prefix}/${ReturnSaleCode(user?.type)}-${String(params?.id).padStart(5, '0')}</p>
                                 </div>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding:0px; margin:0px;">
                                 <div style="display: flex; justify-content: flex-start;">
-                                    <p style="width: 80px; color: black; margin-bottom: 0px; margin-top: 2px; font-size: 13px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">wVKvbv</p>
-                                    <p style="color: black; margin-bottom: 0px; margin-top: 2px; font-size: 13px;;"> : ${user?.address}, ${user?.state}</p>
+                                    <p style="width: 80px; color: black; margin-bottom: 0px; margin-top: 2px; font-family: 'kalpurush'; font-size: 17px;">ঠিকানা</p>
+                                    <p style="color: black; margin-bottom: 0px; margin-top: 2px; font-family: 'kalpurush'; font-size: 17px;"> :&nbsp;${user?.address}, ${user?.state}</p>
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between; width: 210px; padding-top: 2px;">
-                                    <p style="color: black; padding:0px; margin:0px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">ZvwiL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
-                                    <p style="color: black; padding:0px; margin:0px; text-align: right; width: 140px; font-size: 13px;">${user?.date}</p>
+                                    <p style="color: black; padding:0px; margin:0px; font-family: 'kalpurush'; font-size: 17px; width: 90px;">তারিখ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</p>
+                                    <p style="color: black; padding:0px; margin-top:5px; text-align: right; width: 120px; font-size: 13px;">${user?.date}</p>
                                 </div>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between;">
+                            <div style="display: flex; justify-content: space-between; padding:0px; margin:0px;">
                                 <div style="display: flex; justify-content: flex-start;">
-                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvevBj</p>
-                                    <p style="color: black; margin-bottom: 0px; margin-top: 4px; font-size: 13px;;"> : ${user?.phone}</p>
+                                    <p style="color: black; width: 80px; margin-bottom: 0px; margin-top: 4px; font-family: 'kalpurush'; font-size: 17px;">মোবাইল</p>
+                                    <p style="color: black; padding:0px; margin-bottom: 0px; margin-top: 5px; font-size: 13px;"> :&nbsp; ${user?.phone}</p>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +195,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
                                         <th style="padding: 4px;"></th>
-                                         <td style="padding: 4px; font-family: 'SutonnyMJ';font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvU</td>
+                                         <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">মোট</td>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(total)}.০</td>
                                     </tr>
@@ -203,7 +203,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
                                         <th style="padding: 4px;"></th>
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ';font-size: 13px; transform: scale(1.5); transform-origin: left top;">c¨vwKs</td>
+                                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">প্যাকিং</td>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.packing) || 0)}.০</td>
                                     </tr>
@@ -211,7 +211,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
                                         <th style="padding: 4px;"></th>
-                                        <td style="padding: 4px; border-bottom: 1px solid black; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">‡Wwjfvix</td>
+                                        <td style="padding: 4px; border-bottom: 1px solid black; font-family: 'kalpurush'; font-size: 17px;">ডেলিভারি</td>
                                         <td style="padding: 4px;border-bottom: 1px solid black;"></td>
                                         <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.delivery) || 0)}.০</td>
                                     </tr>
@@ -219,7 +219,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 4px;"></th>
                                         <th style="padding: 4px; font-size: 18px; text-align: center">${invoice?.status}</th>
                                         <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">me©‡gvU</td>
+                                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">সর্বমোট</td>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px; text-align: right; font-size: 13px;">${convertToBengaliNumber(total + (parseInt(user?.packing) || 0) + (parseInt(user?.delivery) || 0))}.০</td>
                                     </tr>
@@ -227,7 +227,7 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 8px 24px 8px 8px;"></th>
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">wWmKvD›U</td>
+                                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">ডিসকাউন্ট</td>
                                         <td style="padding: 4px;"></td>                                        
                                         <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
                                     </tr>
@@ -235,37 +235,29 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                         <th style="padding: 8px 24px 8px 8px;"></th>
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
-                                        <td colspan="2" style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">we‡kl wWmKvD›U</td>                                      
-                                        <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(invoice?.special_discount || 0))}.০</td>
+                                        <td colspan="2" style="padding: 4px; border-bottom: 1px solid black; font-family: 'kalpurush'; font-size: 17px;">পূর্বের বকেয়া</td>                                      
+                                        <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(invoice?.special_discount || 0))}.০</td>
                                     </tr>
                                     <tr style="background: white;">
                                         <th style="padding: 8px 24px 8px 8px;"></th>
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
-                                        <td colspan="2" style="padding: 4px; border-bottom: 1px solid black;  font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">Av‡Mi e‡Kqv</td>
-                                        <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.previousdue) || 0)}.০</td>
+                                        <td colspan="2" style="padding: 4px;  font-family: 'kalpurush'; font-size: 17px;">অবশিষ্ট</td>
+                                        <td style="padding: 4px;  text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.previousdue) || 0)}.০</td>
                                     </tr>
-                                    <tr style="background: white;">
+                                    <tr style="background: white; ">
                                         <th style="padding: 8px 24px 8px 8px;"></th>
                                         <th style="padding: 4px;"></th>
                                         <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">Aewkó</td>
-                                        <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; text-align: right;font-size: 13px;">${convertToBengaliNumber(Calculate())}.০</td>
+                                        <td style="padding: 4px; border-bottom: 1px solid black; font-family: 'kalpurush'; font-size: 17px;">জমা</td>
+                                        <td style="padding: 4px; border-bottom: 1px solid black;"></td>
+                                        <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(Calculate())}.০</td>
                                     </tr>
                                     <tr style="background: white;">
-                                        <th style="padding: 8px 24px 8px 8px;"></th>
-                                        <th style="padding: 4px;"></th>
+                                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">বিতরনকারী</td>
+                                        <td style="padding: 4px; text-align:center; font-family: 'kalpurush'; font-size: 17px;">ম্যানেজার</td>
                                         <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; border-bottom: 1px solid black;  font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">†gvU</td>
-                                        <td style="padding: 4px;border-bottom: 1px solid black;"></td>
-                                        <td style="padding: 4px; border-bottom: 1px solid black; text-align: right;font-size: 13px;">${convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
-                                    </tr>
-                                    <tr style="background: white;">
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">weZibKvix</td>
-                                        <td style="padding: 4px; text-align:center; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">g¨v‡bRvi</td>
-                                        <td style="padding: 4px;"></td>
-                                        <td style="padding: 4px; font-family: 'SutonnyMJ'; font-size: 13px; transform: scale(1.5); transform-origin: left top;">‡gvU evwK</td>
+                                        <td style="padding: 4px; font-family: 'kalpurush'; font-size: 17px;">মোট বাকি</td>
                                         <td style="padding: 4px;"></td>
                                         <td style="padding: 4px; text-align: right; font-size: 13px;">${convertToBengaliNumber(TotalDue())}.০</td>
                                     </tr>
@@ -277,8 +269,8 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                     <title style="">Invoice</title>
                                     <style>
                                     @font-face {
-                                        font-family: 'SutonnyMJ';
-                                        src: url('/font/SutonnyMJ.ttf') format('truetype');
+                                        font-family: 'kalpurush';
+                                        src: url('/font/kalpurush.ttf') format('truetype');
                                         font-size: 1.25em;
                                     }
                                     body {
@@ -312,13 +304,13 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                     ${UserInfo}
                                     <table style="border-collapse: collapse; width: 100%;">
                                         <thead>
-                                        <tr>
-                                            <td style="padding: 4px; border-left: 1px solid black; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; font-size: 13px; width:40px; text-align:center">পরিমাণ</td>
-                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px;"">বইয়ের নাম এবং শ্রেণি</th>
-                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; font-size: 13px;"">প্রকাশনি</td>
-                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px; width:40px;">মূল্য</td>
-                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center; font-size: 13px; width:60px;">${GetType(params?.type)}</td>
-                                            <td style="padding: 4px; text-align: right; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:right; font-size: 13px;"">মোট মূল্য</td>
+                                        <tr style="font-family: 'kalpurush'; font-size: 17px;">
+                                            <td style="padding: 4px; border-left: 1px solid black; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; width:40px; text-align:center">পরিমাণ</td>
+                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; ">বইয়ের নাম এবং শ্রেণি</th>
+                                            <td style="padding: 4px; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:left; ">প্রকাশনি</td>
+                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center;  width:40px;">মূল্য</td>
+                                            <td style="padding: 4px; text-align: center; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:center;  width:60px;">${GetType(params?.type)}</td>
+                                            <td style="padding: 4px; text-align: right; border-right: 1px solid black; border-top:1px solid black; border-bottom:1px solid black; text-align:right;"">মোট মূল্য</td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -365,8 +357,6 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                 <div className="bg-[#FFFFFF] rounded p-4">
 
                     <InvoHeader user={user} params={params} invoice={invoice} />
-
-
 
                     <div className='relative overflow-x-auto my-5'>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">

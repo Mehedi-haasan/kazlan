@@ -175,6 +175,12 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                 </th>
                                 <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
+                                        Category
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                    <div className="flex justify-between items-center">
                                         Created by
                                         <Updown />
                                     </div>
@@ -218,12 +224,13 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.type}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.balance}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.balance*-1}</th>
                                 </tr>
                             ))
                             }

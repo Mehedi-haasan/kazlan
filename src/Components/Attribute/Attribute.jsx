@@ -138,7 +138,7 @@ const Attribute = ({ entries = [], info = {} }) => {
         });
         const data = await response.json()
         setBran(data.items)
-        // setTotalItem(data?.count)
+        setTotalItem(data.items?.length)
         // setIsLoading(false)
     }
 

@@ -106,21 +106,21 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
   }
 
   return (
-    <tr className={`border-b z-10 font-thin ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
+    <tr  className={`border-b z-10 font-thin  ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
       <td className="w-4 py-2 px-4 border-x">
         <div className="flex items-center">
           <input id="checkbox-table-search-1" onChange={() => TikBox(item.id)} checked={isChecked} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
       </td>
-      <td scope="col" className="px-2 py-2.5 border-x  ">{item?.name} {item?.edition}
+      <td scope="col" className="px-2 py-2.5 border-x" id="bnc-unicode-textarea">{item?.name} {item?.edition}
         <Notification message={message} />
       </td>
-      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.brand?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.category?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.brand?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.category?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.company?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.cost}</td>
-      <td scope="col" className="px-2 py-2.5 border-r font-sutonny text-sutonny-13">{item?.price}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.cost}</td>
+      <td scope="col" className="px-2 py-2.5 border-r">{item?.price}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.qty} {item?.qty_type}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.creator}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{formatDate(item?.createdAt)}</td>

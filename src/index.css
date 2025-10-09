@@ -17,8 +17,10 @@ body {
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .react-datepicker-wrapper {
@@ -37,4 +39,8 @@ body {
 
 .text-sutonny-16 {
   font-size: 24px;
+}
+
+#bnc-unicode-textarea {
+  font-family: Kalpurush, "Siyam Rupali", serif;
 }

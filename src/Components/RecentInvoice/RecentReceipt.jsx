@@ -94,7 +94,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {} }) => {
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Collection Type
+                                    Receipt Type
                                     <Updown />
                                 </div>
                             </th>
@@ -140,7 +140,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {} }) => {
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.type}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{formatDateTime(item?.createdAt)}</th>
+                                <th scope="col" className="px-3 py-2 border-r font-thin ">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin">
                                     <div className="flex justify-center items-center">
                                         {item?.is_edit && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">

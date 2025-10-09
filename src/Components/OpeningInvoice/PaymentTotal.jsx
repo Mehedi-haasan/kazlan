@@ -11,7 +11,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
 
     return (
         <>
-            <tr className="bg-white text-[13px] border-black">
+            <tr className="bg-white text-[13px] border-black text-black">
                 <td className="p-2 border-b">পুর্বের বকেয়া</td>
                 <td className="pr-6 py-3 border-b"></td>
                 <td className="p-2 border-b"></td>
@@ -19,7 +19,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
                 <td className="p-2 border-b"></td>
                 <td className="p-2 text-right border-b">{convertToBengaliNumber(parseInt(invoice?.previousdue))}.০</td>
             </tr>
-            <tr className="bg-white text-[13px] border-black">
+            <tr className="bg-white text-[13px] border-black text-black">
                 <td className="p-2 border-b"> জমা</td>
                 <td className="pr-6 py-3 border-b"></td>
                 <td className="p-2 border-b"></td>
@@ -27,7 +27,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
                 <td className="p-2 border-b"></td>
                 <td className="p-2 text-right border-b"> {convertToBengaliNumber(parseInt(invoice?.paidamount))}.০</td>
             </tr>
-            <tr className="bg-white text-[13px]">
+            <tr className="bg-white text-[13px] text-black">
                 <td className="p-2"><h1 className='font-tdin text-black'>বিতরনকারী</h1></td>
                 <td className="p-2"> </td>
                 <td className="p-2"><h1 className='font-tdin text-black'>ম্যানেজার</h1></td>

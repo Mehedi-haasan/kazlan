@@ -111,7 +111,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale }) => {
                             <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
                                 <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.customername}</th>
+                                <th scope="col" className="px-3 py-2 border-r font-thin" >{item?.customername}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.total}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>

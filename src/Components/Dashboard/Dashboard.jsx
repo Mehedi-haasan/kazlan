@@ -166,7 +166,7 @@ const Dashboard = ({ data, info = {} }) => {
 
     const [pageSize, setPageSize] = useState(15)
     const [invoices, setInvoices] = useState([]);
-    const [reciept, setReciept]=useState([])
+    const [reciept, setReciept] = useState([])
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${pageSize}`, {
@@ -177,10 +177,10 @@ const Dashboard = ({ data, info = {} }) => {
         });
         const data = await response.json();
         let recent_invoice = data?.items?.filter(
-            (item) => ["Sale", "Sale Return","Purchase items","Purchase Return"].includes(item?.type)
+            (item) => ["Sale", "Sale Return", "Purchase items", "Purchase Return"].includes(item?.type)
         );
         let recent_receipt = data?.items?.filter(
-            (item) => ["Expense", "Make Payment","Opening","Online Collection"].includes(item?.type)
+            (item) => ["Expense", "Make Payment", "Opening", "Online Collection"].includes(item?.type)
         );
         setInvoices(recent_invoice);
         setReciept(recent_receipt)
@@ -233,8 +233,46 @@ const Dashboard = ({ data, info = {} }) => {
                         <p className='font-semibold'>Notifications</p>
                     </div>
                 </div>
+            </div>
 
 
+            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 pt-4'>
+                <div className='shadow-md flex justify-around items-center p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
+                    <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-blue-500'>
+                        <Cart className="text-[#FFFFFF] h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12" />
+                    </div>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
+                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Total Sale</p>
+                    </div>
+                </div>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
+                    <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
+                        <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12 ' alt='image' />
+                    </div>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
+                        <p className='font-semibold'>Purchase Amount</p>
+                    </div>
+                </div>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
+                    <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
+                        <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12' alt='image' />
+                    </div>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
+                        <p className='font-semibold'>Sale Return</p>
+                    </div>
+                </div>
+                <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
+                    <div className='p-2 lg:p-3 2xl:p-5 border rounded-full bg-[#FFF2E8]'>
+                        <Notification height="35px" width="35px" className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`} />
+                    </div>
+                    <div className='flex justify-start items-end gap-1 dark:text-white'>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
+                        <p className='font-semibold'>Notifications</p>
+                    </div>
+                </div>
             </div>
 
             <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5 dark:bg-[#040404] dark:text-white rounded-md'>

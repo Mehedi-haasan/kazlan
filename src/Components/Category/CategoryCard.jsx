@@ -128,7 +128,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-x font-thin font-sutonny text-sutonny-13">{item?.name}
+            <th scope="col" id="bnc-unicode-textarea" className="px-2 py-2 border-x font-thin">{item?.name}
                 <Notification message={message} />
             </th>
             <th scope="col" className="px-2 py-1 border-r font-thin ">
