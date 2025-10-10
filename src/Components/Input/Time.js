@@ -182,7 +182,7 @@ export function PrepareWholeSaleData(allData, userId, name, values, info, lastTo
 }
 
 
-export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, sup_invo, special_discount) {
+export async function PreparePurchaseReData(allData, userId, name, values, info, lastTotal, paking, delivary, due, sup_invo, special_discount) {
     let orderData = [];
     allData?.forEach((v) => {
         let sale = 0;
@@ -217,6 +217,64 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
     });
     let return_amount = lastTotal - values?.pay
     let final_amount = due + return_amount
+    return {
+        shop: info?.shopname,
+        customername: name,
+        userId: userId,
+        date: getFormattedDate(),
+        paymentmethod: values?.pay_type,
+        methodname: "Online",
+        total: lastTotal,
+        packing: paking,
+        delivery: delivary,
+        lastdiscount: values?.lastdiscount,
+        previousdue: due,
+        pay_type: values?.pay_type,
+        paidamount: values?.pay,
+        amount: final_amount,
+        orders: orderData,
+        deliverydate: values?.deliverydate,
+        special_discount: special_discount,
+        sup_invo: sup_invo,
+        status: values?.status
+    }
+}
+
+export async function PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, sup_invo, special_discount) {
+    let orderData = [];
+    allData?.forEach((v) => {
+        let sale = 0;
+        const price = parseInt(v?.price) || 0;
+        const discount = parseInt(v?.discount) || 0;
+        const qty = parseInt(v?.qty) || 0;
+        if (v?.discount_type === "Fixed") {
+            sale = (price - discount) * qty;
+        } else if (v?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice * qty;
+        }
+
+        orderData.push({
+            active: true,
+            product_id: v?.product ? v?.product?.id : v?.id,
+            code: v?.product ? v?.product?.code : v?.code,
+            username: name,
+            userId: userId,
+            name: v?.name,
+            shop: info?.shopname,
+            cost: price,
+            price: price,
+            discount: discount,
+            discount_type: v?.discount_type,
+            sellprice: sale,
+            qty: qty,
+            contact: values?.phone,
+            date: getFormattedDate(),
+            deliverydate: values?.deliverydate
+        });
+    });
+    let return_amount = lastTotal - values?.pay
+    let final_amount = due - return_amount
     return {
         shop: info?.shopname,
         customername: name,

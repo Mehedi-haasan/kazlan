@@ -118,7 +118,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0)
+        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0);
         try {
             const response = await fetch(`${BaseUrl}/api/return/sale`, {
                 method: 'POST',
@@ -206,6 +206,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         setUser(data?.user);
         setName(data?.user?.name);
         setUserId(data?.user?.id)
+        setDue(data?.user?.balance)
         setLoadInvo(false);
         setValues({ ...values, lastdiscount: data?.user?.lastdiscount })
     }

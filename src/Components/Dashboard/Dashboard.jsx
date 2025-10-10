@@ -177,7 +177,7 @@ const Dashboard = ({ data, info = {} }) => {
         });
         const data = await response.json();
         let recent_invoice = data?.items?.filter(
-            (item) => ["Sale", "Sale Return", "Purchase items", "Purchase Return"].includes(item?.type)
+            (item) => ["Sale", "Sale Return", "Purchase items", "Return Purchase"].includes(item?.type)
         );
         let recent_receipt = data?.items?.filter(
             (item) => ["Expense", "Make Payment", "Opening", "Online Collection"].includes(item?.type)

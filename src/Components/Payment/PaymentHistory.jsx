@@ -53,7 +53,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
         setValues(data?.items);
         setData(data?.history);
         setIsLoading(false)
-        setTotalItem(0)
+        setTotalItem(data?.count)
     }
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                     <h1 className='py-1.5 font-semibold'>Balance</h1>
                                 </div>
                                 <div>
-                                    <button className={`border rounded-full px-4 mx-auto float-right block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
+                                    <button className={`border rounded-full px-4 mx-auto float-right block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                         {Math.abs(values?.balance)}
                                     </button>
                                 </div>
@@ -228,7 +228,7 @@ const PaymentHistory = ({ entries = [], prefix = "KB" }) => {
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.due}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.return}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.status}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.balance*-1}</th>
                                 </tr>

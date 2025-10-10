@@ -8,7 +8,7 @@ import Search from '../../icons/Search';
 import WholeSaleCard from '../Wholesale/WholeSaleCard';
 import Button from '../Input/Button';
 import Notification from '../Input/Notification';
-import { handleDateConvert, PrepareData, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
+import { handleDateConvert, PreparePurchaseReData, CalculateAmount, DiscountCal, DiscountCalculate, BanglaToEnglish } from '../Input/Time';
 import { useNavigate } from 'react-router-dom';
 import Calender from '../Wholesale/Calender';
 import SearchResultHeader from '../Common/SearchResultHeader';
@@ -117,7 +117,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0)
+        let orderData = await PreparePurchaseReData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0)
         try {
             const response = await fetch(`${BaseUrl}/api/return/purchase`, {
                 method: 'POST',
@@ -286,7 +286,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
                     {loadInvo ? <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent options={customer} default_select={second} default_value={filter?.customer}
-                            onSelect={(v) => { setSecond(false); setQuan(true); setFirst(false); setUserId(v.id); setName(v?.name); fetchUserDue(v.id); setFilter({ ...filter, customer: v?.name }) }}
+                            onSelect={(v) => { setSecond(false); setQuan(true); setUserId(v.id); setName(v?.name); fetchUserDue(v.id); setFilter({ ...filter, customer: v?.name }) }}
                             label={"Customer"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />

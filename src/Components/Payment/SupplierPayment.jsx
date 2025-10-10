@@ -49,21 +49,21 @@ const SupplierPayment = ({ info, state }) => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
         values.shop = info?.shopname;
-        let type = 2;
+        let type = 1;
         if (values?.balance_type === "You Receive") {
-            type = 2;
-            values['type'] = 'Make Payment'
-        } else if (values?.balance_type === "You Pay") {
             type = 1;
             values['type'] = 'Make Payment'
-        } else if (values?.balance_type === "Yearly Bonus") {
+        } else if (values?.balance_type === "You Pay") {
             type = 2;
+            values['type'] = 'Make Payment'
+        } else if (values?.balance_type === "Yearly Bonus") {
+            type = 1;
             values['type'] = 'Yearly Bonus';
             values['payment_type'] = "You Pay"
         }
         values['status'] = 'Online'
         values['date'] = date
-        let pay = paymentType?.map(item => item.name);
+        let pay = paymentType?.map(item => item?.name);
         if (pay?.includes(values?.paymentmethod)) {
             values['type'] = 'Online Collection'
         }

@@ -331,7 +331,7 @@ const Brand = ({ entries, info = {} }) => {
                                     </th>
                                     <th scope="col" className="px-2 py-2 border-r ">
                                         <div className="flex justify-between items-center font-bold text-[16px]">
-                                            Brand
+                                            Brand Name
                                             <Updown />
                                         </div>
                                     </th>
@@ -382,7 +382,7 @@ const Brand = ({ entries, info = {} }) => {
                                             </th>
                                             <th scope="col" className="px-2 py-2 text-center border-r">
                                                 <div className="flex justify-between items-center text-[16px]">
-                                                    Logo
+                                                    Logo mehedi
                                                     <Updown />
                                                 </div>
                                             </th>

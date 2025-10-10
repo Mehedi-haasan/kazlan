@@ -72,20 +72,20 @@ const CreateCustomer = ({ state = [], info = {} }) => {
     }
 
     const handleSubmitOffline = async (e) => {
-        if (!values?.phone) {
-            return
-        }
-        const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:8050/api/create/customers`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': token,
-            },
-            body: JSON.stringify(values)
-        });
-        const data = await response.json();
-        goto('/customers')
+        // if (!values?.phone) {
+        //     return
+        // }
+        // const token = localStorage.getItem('token')
+        // const response = await fetch(`http://localhost:8050/api/create/customers`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'authorization': token,
+        //     },
+        //     body: JSON.stringify(values)
+        // });
+        // const data = await response.json();
+        // goto('/customers')
     }
 
 
