@@ -8,7 +8,7 @@ import { BanglaToEnglish, formatDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 import Calendar from "../Wholesale/Calender";
 
-const EditUserBalance = ({ info, state }) => {
+const EditCustomerBalance = ({ info, state }) => {
 
     const params = useParams()
     const goto = useNavigate()
@@ -215,4 +215,4 @@ const EditUserBalance = ({ info, state }) => {
     )
 }
 
-export default EditUserBalance
+export default EditCustomerBalance

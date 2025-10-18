@@ -17,6 +17,7 @@ const CustomerCardPdf = ({ item, i }) => {
     return (
         <tr className={`border-b text-xs ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
             <th scope="col" className="p-1 border-x font-thin ">{item?.name}</th>
+             <th scope="col" className="p-1 border-x font-thin ">{item?.id}</th>
             <th scope="col" className="p-1 border-r font-thin ">{item?.phone}</th>
             <th scope="col" className="p-1 border-r font-thin ">{item?.email}</th>
             <th scope="col" className="p-1 border-r font-thin ">{item?.bankname}</th>

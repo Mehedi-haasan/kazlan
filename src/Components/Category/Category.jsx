@@ -319,6 +319,12 @@ const Category = ({ entries, info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center text-[16px]">
+                                            Category Code
+                                            <Updown />
+                                        </div>
+                                    </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r text-[16px]">
                                         <div className="flex justify-between items-center">
                                             Picture

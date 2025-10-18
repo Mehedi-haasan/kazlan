@@ -107,12 +107,12 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
                 <div className="">
                     {item?.attributes?.map((attr, i) => {
                         return <div className={`flex gap-1 ${i > 0 ? 'border-t' : ''}`}>
-                            <div className="border-r w-[120px]">
+                            <div className="border-r w-[124px]">
                                 <h1 className="p-2">{attr?.name}</h1>
                             </div>
                             <div className="flex justify-start items-start flex-wrap gap-2 px-1 py-1.5 mt-[3px]">
                                 {attr?.attributevalues?.map((att_val) => {
-                                    return <button className="border rounded-full px-1.5 text-[10px] border-blue-600">{att_val?.name}</button>
+                                    return <button className="px-1 text-[13px] border-blue-600">{att_val?.name}</button>
                                 })}
                             </div>
                         </div>

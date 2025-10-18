@@ -39,6 +39,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     const paytypeRef = useRef(null);
     const discount_ref = useRef(null)
     const last_pay = useRef()
+    const sup_invo = useRef()
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
@@ -246,7 +247,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                     <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
                             onSelect={(v) => {
-                                setSecond(false); setFirst(false); setQuan(true);
+                                setSecond(false); setFirst(false); sup_invo.current.focus()
                                 setFilter({ ...filter, customer: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
                             }}
                             label={"Supplier"} className='rounded-l' />
@@ -264,10 +265,11 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
                     <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
                         <h1 className='text-[15px] pb-1'>Challan No</h1>
-                        <input type="text" value={values?.sup_invo} placeholder={values?.sup_invo}
+                        <input ref={sup_invo} type="text" value={values?.sup_invo} placeholder={values?.sup_invo}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    last_pay.current.focus()
+                                    setQuan(true);
+                                    
                                 }
                             }}
                             onChange={(e) => setValues({ ...values, sup_invo: e.target.value })}

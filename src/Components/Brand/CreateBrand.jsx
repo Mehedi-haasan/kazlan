@@ -28,7 +28,9 @@ const CreateBrand = ({ entries }) => {
     }, []);
 
     const handleCreateLocally = async (image_url) => {
+        setIsLoading(true)
         if (BaseUrl === "http://localhost:8050") {
+            setIsLoading(false)
             return
         }
         values.image_url = image_url;
@@ -44,6 +46,7 @@ const CreateBrand = ({ entries }) => {
             });
 
             const data = await response.json();
+            setIsLoading(false)
         } catch (error) {
             console.error('Error updating variant:', error);
         }

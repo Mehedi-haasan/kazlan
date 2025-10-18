@@ -21,7 +21,7 @@ import SelectionComponentSearch from '../Input/SelectionComponentSearch';
 
 
 
-const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
+const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {} }) => {
 
     const params = useParams();
     const [itemQuan, setItemQuan] = useState(null)
@@ -112,8 +112,9 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         const token = localStorage.getItem('token');
         invoice['is_edit'] = true;
         invoice['due'] = invoice?.paidamount - lastTotal
+        console.log(invoice);
         try {
-            const response = await fetch(`${BaseUrl}/api/edit/sale/order`, {
+            const response = await fetch(`${BaseUrl}/api/edit/purchase/order`, {
                 method: 'POST',
                 headers: {
                     'authorization': token,
@@ -139,7 +140,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
             let { amount, lastTotal } = await CalculateEditAmount(allData, 0, 0, 0);
             setTotal(amount);
             setLastTotal(lastTotal);
-            let balance = user?.balance + (lastTotal - invoice?.paidamount)
+            let balance = invoice?.paidamount - lastTotal
             setInvoice({
                 ...invoice,
                 total: lastTotal,
@@ -174,9 +175,9 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
     }
 
-    const GetCustomer = async (id, user_type) => {
+    const GetCustomer = async () => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/${user_type}/${id}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/1000/Supplier`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -225,6 +226,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
     useEffect(() => {
         GetInvoiceData(params?.id)
+        GetCustomer()
     }, [params?.id])
 
 
@@ -267,7 +269,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         setAllData(updatedData);
     };
 
-    console.log(invoice);
+
 
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
@@ -277,7 +279,19 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                     <h1>Sale Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    <div className='flex justify-start items-end pb-1 z-40'>
+                    <div className='flex justify-start items-end pb-1 z-30'>
+                        <SelectionComponent default_select={second} options={customer} default_value={filter?.name}
+                            onSelect={(v) => {
+                                setSecond(false); setFirst(false); setQuan(true);
+                                setInvoice({ ...invoice, userId: v?.id, customername: v?.name })
+                                setFilter({ ...filter, customer: v?.name, name: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
+                            }}
+                            label={"Customer"} className='rounded-l' />
+                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                            <Add />
+                        </div>
+                    </div>
+                    {/* <div className='flex justify-start items-end pb-1 z-40'>
                         <SelectionComponent default_select={first} options={state} default_value={filter?.state}
                             onSelect={(v) => {
                                 setSecond(true);
@@ -295,7 +309,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                         <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
-                    </div>
+                    </div> */}
                     <div></div>
 
                     <div className='relative'>
@@ -305,18 +319,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                     </div>
 
 
-                    <div className='flex justify-start items-end pb-1 z-30'>
-                        <SelectionComponent default_select={second} options={customer} default_value={filter?.name}
-                            onSelect={(v) => {
-                                setSecond(false); setFirst(false); setQuan(true);
-                                setInvoice({ ...invoice, userId: v?.id, customername: v?.name })
-                                setFilter({ ...filter, customer: v?.name, name: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
-                            }}
-                            label={"Customer"} className='rounded-l' />
-                        <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
-                            <Add />
-                        </div>
-                    </div>
+                    <div></div>
                     <div></div>
                     <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
                         getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
@@ -661,4 +664,4 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
     );
 }
 
-export default SaleOrderEdit;
+export default PurchaseOrderEdit;

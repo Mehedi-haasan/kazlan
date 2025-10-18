@@ -182,6 +182,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
     }
 
     const handleCreateOffline = async (image_url) => {
+        setIsLoading(true)
         if (BaseUrl === "http://localhost:8050") {
             return
         }
@@ -211,6 +212,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             callAgain()
             goto('/items')
         } catch (error) {
+            setIsLoading(false)
             setMessage({ id: Date.now(), mgs: error });
         }
     }
@@ -218,14 +220,14 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
 
     const handleCreate = async (image_url) => {
-
+        setIsLoading(true)
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price) {
             setMessage({ id: Date.now(), mgs: "Required field is missing" });
             return;
         }
 
         values.image_url = image_url;
-        setIsLoading(true)
+
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/create/product`, {
@@ -245,13 +247,15 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             callAgain()
             goto('/items')
         } catch (error) {
+            setIsLoading(false)
             console.error('Error updating variant:', error);
         }
+        setIsLoading(false)
     }
 
 
     const handleUpload = async () => {
-
+        setIsLoading(true)
         if (!values?.name || !values?.supplier || !values?.cost || !values?.price || !values?.qty) {
             setMessage({ id: Date.now(), mgs: "Required field is missing" });
             return;
@@ -264,7 +268,6 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
             setIsLoading(false)
             return;
         }
-        setIsLoading(true)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/upload/image`, {
@@ -280,8 +283,10 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
                 handleCreate(data.image_url);
                 handleCreateOffline("")
             }
+            setIsLoading(false)
         } catch (error) {
             console.error('Error uploading image:', error);
+            setIsLoading(false)
         }
         setIsLoading(false)
     }

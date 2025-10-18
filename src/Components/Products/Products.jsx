@@ -258,6 +258,12 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center">
+                                            Item Code
+                                            <Updown />
+                                        </div>
+                                    </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r">
                                         <div className="flex justify-between items-center">
                                             Brand

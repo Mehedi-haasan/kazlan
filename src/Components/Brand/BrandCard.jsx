@@ -142,6 +142,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
                 </Modal>
                 <Notification message={message} />
             </th>
+            <th scope="col" className="px-2 py-1.5 border-r font-thin ">{item?.id}</th>
             <th scope="col" className="px-2 py-1 border-r">
                 <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-8 w-8 rounded" />
             </th>

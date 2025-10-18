@@ -7,6 +7,7 @@ module.exports = {
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],
         sutonny: ["SutonnyMJ", "sans-serif"],
+         times: ['"Times New Roman"', 'Times', 'serif'],
       },
       fontSize: {
         'sutonny-11': '11px',

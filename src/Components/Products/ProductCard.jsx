@@ -116,6 +116,9 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
       <td scope="col" className="px-2 py-2.5 border-x" id="bnc-unicode-textarea">{item?.name} {item?.edition}
         <Notification message={message} />
       </td>
+      <td scope="col" className="px-2 py-2.5 border-x" >{item?.id}
+        <Notification message={message} />
+      </td>
       <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.brand?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.category?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.company?.name}</td>

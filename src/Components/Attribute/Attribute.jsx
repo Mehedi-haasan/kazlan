@@ -295,7 +295,7 @@ const Attribute = ({ entries = [], info = {} }) => {
                                     </th>
                                     <th className="px-2 py-2 border-r">
                                         <div className="flex justify-between items-center font-bold text-[16px]">
-                                            Attribute Name
+                                            Attribute Name  |  Attribute Value
                                             <Updown />
                                         </div>
                                     </th>

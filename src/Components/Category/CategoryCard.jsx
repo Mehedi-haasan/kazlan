@@ -131,6 +131,7 @@ const CategoryCard = ({ item, i, isChecked, info = {}, getCategory, TikBox }) =>
             <th scope="col" id="bnc-unicode-textarea" className="px-2 py-2 border-x font-thin">{item?.name}
                 <Notification message={message} />
             </th>
+            <th scope="col" className="px-2 py-2 border-r font-thin ">{item?.id}</th>
             <th scope="col" className="px-2 py-1 border-r font-thin ">
                 <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-10 w-10 rounded" />
             </th>

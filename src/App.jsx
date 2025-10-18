@@ -63,7 +63,9 @@ import ExpenseCreate from "./Components/Expense/ExpenseCreate.jsx";
 import YearlyBonus from "./Components/User/YearlyBonus.jsx";
 import AttributeTypeCreate from "./Components/Attribute/AttributeTypeCreate.jsx";
 import CreateAttributeValue from "./Components/Attribute/CreateAttributeValue.jsx";
-import EditUserBalance from "./Components/Payment/EditUserBalance.jsx";
+import EditCustomerBalance from "./Components/Payment/EditCustomerBalance.jsx";
+import EditSupplierBalance from "./Components/Payment/EditSupplierBalance.jsx";
+import PurchaseOrderEdit from "./Components/SaleOrderEdit/PurchaseOrderEdit.jsx";
 
 
 
@@ -359,13 +361,17 @@ function App() {
 
           <Route path="/sale/order/edit/:id/:type" element={auth ? <SaleOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
+          <Route path="/purchase/order/edit/:id/:type" element={auth ? <PurchaseOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
           <Route path="/notification" element={<Notification data={data} info={info} />} />
 
           <Route path="/customer/balance/:id" element={auth ? <CustomerPayment info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/supplier/balance/:id" element={auth ? <SupplierPayment info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/edit/user/balance/:id/:invo/:type" element={auth ? <EditUserBalance info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/edit/customer/balance/:id/:invo/:type" element={auth ? <EditCustomerBalance info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/edit/supplier/balance/:id/:invo/:type" element={auth ? <EditSupplierBalance info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/company" element={<Company />} />
 

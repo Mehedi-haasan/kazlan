@@ -6,13 +6,14 @@ import Notification from "../Input/Notification";
 import { useNavigate, useParams } from "react-router-dom";
 import { BanglaToEnglish, formatDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
-import { NavLink } from "react-router-dom";
 import Calendar from "../Wholesale/Calender";
 
-const CustomerPayment = ({ info, state }) => {
+const EditSupplierBalance = ({ info, state }) => {
 
     const params = useParams()
     const goto = useNavigate()
+    const [user, setuser] = useState([])
+    const [invo, setinvo] = useState({})
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [paymentType, setPaymentType] = useState([])
@@ -36,18 +37,34 @@ const CustomerPayment = ({ info, state }) => {
         phone: '',
         accountnumber: '',
         balance_type: 'You Receive',
-        payment_type: 'You Receive',
         note: '',
         paymentmethod: 'Select a filter',
         type: 'Make Payment',
         methodname: "Online",
-        status: "Online Payment",
+        status: "Online",
         date: ''
     })
 
+    const GetInvoiceData = async (id) => {
 
-
-
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/get/invoice/${id}`, {
+            method: 'GET',
+            headers: {
+                'authorization': token
+            }
+        });
+        const data = await response.json();
+        setinvo(data?.items);
+        setuser(data?.user)
+        setValues({
+            ...values,
+            paid: data?.items?.paidamount,
+            paymentmethod: data?.items?.paymentmethod,
+            methodname: data?.items?.methodname,
+            note: data?.items?.note
+        })
+    }
 
     const handleSubmit = async () => {
 
@@ -60,11 +77,10 @@ const CustomerPayment = ({ info, state }) => {
             values['type'] = 'Make Payment'
         } else if (values?.balance_type === "You Pay") {
             type = 1;
-            values['type'] = 'Make Payment'
+            values['type'] = 'Make Payment';
         } else if (values?.balance_type === "Yearly Bonus") {
             type = 2;
-            values['type'] = 'Yearly Bonus';
-            values['payment_type'] = "Yearly Bonus"
+            values['type'] = 'Yearly Bonus'
         }
         values['status'] = 'Online'
         values['date'] = date
@@ -78,38 +94,19 @@ const CustomerPayment = ({ info, state }) => {
             values['type'] = 'Make Payment'
         }
 
-        const response = await fetch(`${BaseUrl}/api/update/customer/balance/${params?.id}/${type}`, {
+        const response = await fetch(`${BaseUrl}/api/edit/user/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': token,
             },
-            body: JSON.stringify(values)
+            body: JSON.stringify({invo:invo})
         });
         const data = await response.json();
         setIsLoading(false);
         setMessage({ id: Date.now(), mgs: data?.message });
-        if (data?.customertype === "Supplier") {
-            goto(`/suppliers`)
-        } else {
-            goto(`/customers`)
-        }
+        goto(`/`)
 
-    }
-
-    const GetUser = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customer/${params?.id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': token,
-            }
-        });
-        const data = await response.json();
-        let newValues = { ...data?.items };
-        newValues.payment_type = "You Receive";
-        setValues(newValues)
     }
 
     const PaymentType = async () => {
@@ -137,11 +134,11 @@ const CustomerPayment = ({ info, state }) => {
         setPaymentMethod(data.items);
     }
 
+
     useEffect(() => {
-        document.title = "Customer Payment"
-        GetUser()
         PaymentType()
-    }, [params?.id])
+        GetInvoiceData(params.invo);
+    }, [params?.invo, params?.type]);
 
 
     return (
@@ -150,13 +147,16 @@ const CustomerPayment = ({ info, state }) => {
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow-lg min-h-screen pb-12 pl-2 pt-2">
 
                 <div className="flex justify-between items-center  py-2 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white border-b pr-2">
-                    <h1 className="font-semibold text-lg">Customer Payment</h1>
-                    <NavLink to={`/payment/history/${values?.id}`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Customer Transaction</NavLink>
+                    <h1 className="font-semibold text-lg">Update User Payment</h1>
+
                 </div>
                 <div className="p-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <InputComponent className={`text-black`} label={"Customer"}
-                        placeholder={values?.name} onChange={(v) => { setValues({ ...values, name: v }); }} readOnly={true} value={values?.name} />
-
+                    <div className="z-40">
+                        <SelectionComponent label={"User"}
+                            options={user} default_value={invo?.customername}
+                            onSelect={(v) => { setinvo({ ...invo, customername: v?.name, userId: v?.id }); PaymentMethod(v?.id) }}
+                        />
+                    </div>
 
                     <div>
                         <Calendar label={"Date"} value={date} getDate={(date) => { setDate(formatDate(date)); setValues({ ...values, date: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
@@ -164,24 +164,19 @@ const CustomerPayment = ({ info, state }) => {
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Payment Type"}
                             options={paymentType} default_value={values?.paymentmethod}
-                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }); PaymentMethod(v?.id) }}
+                            onSelect={(v) => { setValues({ ...values, paymentmethod: v?.name }); setinvo({ ...invo, paymentmethod: v?.name }); PaymentMethod(v?.id) }}
                         />
-                        <SelectionComponent label={"Select Bank"}
+                        <SelectionComponent label={"Select Method"}
                             options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
-                            onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            onSelect={(v) => { setinvo({ ...invo, methodname: v?.name }); setValues({ ...values, methodname: v?.name }); }}
                         />
                     </div>
-                    <div>
-                        <p className='pt-1.5 pb-1.5 font-semibold'>Balance</p>
-                        <input className={`text-black border w-full rounded focus:outline-none p-1.5 ${values?.balance === 0 ? `text-gray-900` : `${values?.balance > 0 ? `text-red-600` : `text-[#15CA20]`}`} `}
-                            label={"Balance"} placeholder={Math.abs(values?.balance)} value={Math.abs(values?.balance)} readOnly={true} />
-                    </div>
-
+                    <InputComponent className={`text-black`} label={"Balance"} placeholder={invo?.balance} value={invo?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1 dark:bg-[#040404] dark:text-white'>
 
-                            <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value, payment_type: e.target.value }) }}
+                            <select value={values?.balance_type} onChange={(e) => { setValues({ ...values, balance_type: e.target.value }) }}
                                 className={`border text-[#6B7280] w-[30%] text-sm focus:outline-none font-thin rounded-l block p-2 dark:bg-[#040404] dark:text-white`}
                             >
                                 {[{ id: 1, name: "You Receive" }, { id: 2, name: "You Pay" }, { id: 3, name: "Yearly Bonus" }].map(({ id, name }) => (
@@ -198,14 +193,15 @@ const CustomerPayment = ({ info, state }) => {
                                 }}
                                 onChange={(e) => {
                                     let num = BanglaToEnglish(e.target.value)
-                                    setValues({ ...values, paid: num })
+                                    setValues({ ...values, paid: num });
+                                    setinvo({ ...invo, paidamount: num })
                                 }} placeholder={values?.paid} className='border-y border-r px-2 dark:bg-[#040404] dark:text-white focus:outline-none rounded-r  pt-[6px] pb-[5px] w-[50%] font-thin' />
                         </div>
                     </div>
 
                     <div>
                         <h1 className="py-1">Note</h1>
-                        <textarea placeholder="Enter your note" onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin dark:bg-[#040404] dark:text-white focus:outline-none border p-1.5 w-full rounded" />
+                        <textarea placeholder="Enter your note" value={values?.note} onChange={(e) => { setValues({ ...values, note: e.target.value }) }} className="font-thin dark:bg-[#040404] dark:text-white focus:outline-none border p-1.5 w-full rounded" />
                     </div>
                 </div>
 
@@ -219,4 +215,4 @@ const CustomerPayment = ({ info, state }) => {
     )
 }
 
-export default CustomerPayment
+export default EditSupplierBalance

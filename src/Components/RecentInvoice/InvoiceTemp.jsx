@@ -1,23 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Updown from "../../icons/Updown";
-import { ReturnSaleCode } from "../Input/Time";
-
+import { ReturnSaleCode, formatDate } from "../Input/Time";
 import { useNavigate } from "react-router-dom";
+import BaseUrl from "../../Constant";
 
 
-const InvoiceTemp = ({ invoices = [], prefix = "KB", sale }) => {
+const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
+
     const goto = useNavigate()
+    const [message, setMessage] = useState({ id: '', mgs: '' });
 
-    function formatDate(isoString) {
-        const date = new Date(isoString);
 
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'long' });
-        const year = date.getFullYear();
+    const DeleteInvoice = async (id) => {
+        const token = localStorage.getItem('token');
 
-        return `${day} ${month} ${year}`;
+        try {
+            const response = await fetch(`${BaseUrl}/api/delete/invoice/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            });
+
+            const data = await response.json();
+            setMessage({ id: Date.now(), mgs: data?.message });
+            RecentInvoice()
+        } catch (error) {
+            console.error('Error updating variant:', error);
+        }
     }
-
 
 
     return (

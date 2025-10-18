@@ -160,7 +160,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {}, lang
                     </div>
 
 
-                    <div className='max-h-[100vh] overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 pb-14 '>
+                    <div className='max-h-[100vh] font-roboto overflow-y-auto hide-scrollbar pr-1.5 pt-1.5 pb-14 '>
                         {data?.map((item, index) => (
                             <div className="">
                                 {
@@ -190,7 +190,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {}, lang
 
 
                                 {/* Child Route */}
-                                <div className={`pl-2 overflow-hidden transition-all dark:text[#040404] duration-200 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
+                                <div className={`pl-2 overflow-hidden transition-all dark:text[#040404] font-roboto duration-200 ease-in-out ${selected?.id === item?.id ? "max-h-[500px]" : "max-h-0"}`}>
                                     {item?.items?.map((it) => {
                                         return <div>
                                             {

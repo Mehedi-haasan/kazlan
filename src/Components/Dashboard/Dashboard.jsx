@@ -203,7 +203,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
-                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Total Sale</p>
+                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Sale Orders</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
@@ -212,7 +212,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
-                        <p className='font-semibold'>Purchase Amount</p>
+                        <p className='font-semibold'>Purchase Orders</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
@@ -221,7 +221,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
-                        <p className='font-semibold'>Sale Return</p>
+                        <p className='font-semibold'>Cash Collections</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
@@ -230,7 +230,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
-                        <p className='font-semibold'>Notifications</p>
+                        <p className='font-semibold'>Online Collections</p>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
-                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Total Sale</p>
+                        <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Sale Returns</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
@@ -252,7 +252,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
-                        <p className='font-semibold'>Purchase Amount</p>
+                        <p className='font-semibold'>Return To Suppliers</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-blue-500'>
@@ -261,7 +261,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
-                        <p className='font-semibold'>Sale Return</p>
+                        <p className='font-semibold'>Nagad Sale</p>
                     </div>
                 </div>
                 <div className='shadow-md flex justify-around items-center p-2 lg:p-3 2xl:p-5 rounded-lg bg-white dark:bg-[#040404] min-h-[170px] border border-l-4 border-red-500'>
@@ -270,7 +270,7 @@ const Dashboard = ({ data, info = {} }) => {
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
                         <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
-                        <p className='font-semibold'>Notifications</p>
+                        <p className='font-semibold'>Total Expense</p>
                     </div>
                 </div>
             </div>
@@ -291,7 +291,7 @@ const Dashboard = ({ data, info = {} }) => {
                                 {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
                             </div>
                         </div>
-                        <InvoiceTemp info={info} invoices={invoices} />
+                        <InvoiceTemp info={info} invoices={invoices} RecentInvoice={RecentInvoice}/>
 
                     </div>
                 </div>
@@ -302,7 +302,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[20px]'>Recent Receipt</h1>
                         </div>
-                        <RecentReceipt info={info} invoices={reciept} />
+                        <RecentReceipt info={info} invoices={reciept} RecentInvoice={RecentInvoice}/>
 
                     </div>
                 </div>

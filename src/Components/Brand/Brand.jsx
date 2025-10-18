@@ -335,6 +335,12 @@ const Brand = ({ entries, info = {} }) => {
                                             <Updown />
                                         </div>
                                     </th>
+                                    <th scope="col" className="px-2 py-2 border-r ">
+                                        <div className="flex justify-between items-center font-bold text-[16px]">
+                                            Brand Code
+                                            <Updown />
+                                        </div>
+                                    </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r">
                                         <div className="flex justify-between items-center text-[16px]">
                                             Logo

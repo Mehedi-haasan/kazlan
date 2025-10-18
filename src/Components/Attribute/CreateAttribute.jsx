@@ -133,12 +133,16 @@ const CreateAttribute = ({ entries }) => {
                             className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
-                                    handleCreate(); handleCreateLocally()
+                                    handleCreate();
+                                    //  handleCreateLocally()
                                 }
                             }}
                         />
                     </div>
-                    <Button isDisable={isLoading} name="Create" onClick={() => { handleCreate(); handleCreateLocally() }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
+                    <Button isDisable={isLoading} name="Create" onClick={() => {
+                        handleCreate();
+                        // handleCreateLocally()
+                    }} className="mt-3 border bg-blue-500 text-white font-thin text-lg" />
                 </div>
             </div>
         </div>

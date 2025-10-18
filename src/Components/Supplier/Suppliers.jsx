@@ -410,6 +410,12 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                                                     <Updown />
                                                 </div>
                                             </th>
+                                            <th scope="col" className="p-1 border-r ">
+                                                <div className="flex justify-between items-center">
+                                                    Code
+                                                    <Updown />
+                                                </div>
+                                            </th>
                                             <th scope="col" className="p-1 text-center border-r">
                                                 <div className="flex justify-between items-center">
                                                     Mobile
