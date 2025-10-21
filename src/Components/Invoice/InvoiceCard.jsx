@@ -20,8 +20,8 @@ const InvoiceCard = ({ item }) => {
     }
 
     return (
-        <tr key={item?.id} className="border-b border-x text-[13px]">
-            <th className="p-2 font-thin text-center">
+        <tr key={item?.id} className="border-b border-x text-[15px] text-black" id="kalpurush">
+            <th className="p-2 font-thin text-center" >
                 {convertToBengaliNumber(item?.qty)}
             </th>
             <td className="p-2 border-l font-thin">

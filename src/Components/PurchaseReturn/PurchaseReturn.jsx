@@ -117,7 +117,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PreparePurchaseReData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0)
+        let orderData = await PreparePurchaseReData(allData, userId, name, values, info, lastTotal, 0, 0, due, '', 0)
         try {
             const response = await fetch(`${BaseUrl}/api/return/purchase`, {
                 method: 'POST',
@@ -130,7 +130,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/return/invoice/${data?.invoice}/Purchase Return`)
+            goto(`/purchase/return/invoice/${data?.invoice}/Purchase Return`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -141,7 +141,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
             let { amount, lastTotal } = await CalculateAmount(allData, 0, 0, 0, 0);
             setTotal(amount);
             setLastTotal(lastTotal);
-            document.title = "Sale Return - KazalandBrothers";
+            document.title = "Purchase Return - KazalandBrothers";
         };
 
         fetchAmount();
@@ -182,9 +182,9 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
+        // if (!id) return;
+        // const confirmDelete = window.confirm("Are you sure you want to delete this item?");
+        // if (!confirmDelete) return;
 
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
@@ -258,7 +258,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
             <div className='bg-[#FFFFFF] dark:bg-[#040404] dark:text-white'>
                 <div className='border-b p-4 flex justify-between items-center'>
-                    <h1 className='text-[20px]'>Sale Return Details</h1>
+                    <h1 className='text-[20px]'>Purchase Return Details</h1>
                     <Notification message={message} />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
@@ -287,12 +287,12 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                     {loadInvo ? <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent options={customer} default_select={second} default_value={filter?.customer}
                             onSelect={(v) => { setSecond(false); setQuan(true); setUserId(v.id); setName(v?.name); fetchUserDue(v.id); setFilter({ ...filter, customer: v?.name }) }}
-                            label={"Customer"} className='rounded-l' />
+                            label={"Supplier"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div> : <div>
-                        <h1 className='py-1 text-[15px]'>Customer Name</h1>
+                        <h1 className='py-1 text-[15px]'>Supplier</h1>
                         <div className='flex justify-start items-end pb-1 z-30'>
                             <div className='relative border  text-black w-full h-[38px] rounded-l'>
                                 <h1 className='font-thin p-1.5 '>{user?.name}</h1>
@@ -521,7 +521,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
                 <div className='p-4 w-full'>
                     <div className="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <DataHeader />
+                        <DataHeader pruchase={"Purchase Price"}/>
                         <div>
                             {Object.keys(prepareData || {}).length > 0 && (
                                 <div className={`border-b border-x text-[15px] text-black grid grid-cols-12`}>
@@ -624,7 +624,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                     <div className='flex justify-between gap-5'>
                         <div>
                             <div className=''>
-                                <InputComponent placeholder={user?.balance ? user?.balance : due} value={user?.balance ? user?.balance : due} label={'Balance'} readOnly={true} className={``} />
+                                <InputComponent placeholder={user?.balance ? user?.balance*-1 : due} value={user?.balance ? user?.balance*-1 : due} label={'Balance'} readOnly={true} className={``} />
                             </div>
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>
@@ -700,7 +700,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                         </div>
 
                         <div>
-                            <div className=''>
+                            <div className='pb-2'>
                                 <InputComponent placeholder={total} value={total} type={'number'} label={'Total'} readOnly={true} className={``} />
                             </div>
 

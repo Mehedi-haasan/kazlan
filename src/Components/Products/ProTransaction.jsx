@@ -39,8 +39,10 @@ const ProTransaction = ({ entries = [] }) => {
             },
         });
         const data = await res.json()
-        setData(data?.items);
+        // setData(data?.items);
+        setData([...data?.items]?.reverse());
         setValues(data?.product);
+        setTotalItem(data?.items?.length)
     }
 
     useEffect(() => {
@@ -122,9 +124,21 @@ const ProTransaction = ({ entries = [] }) => {
                                         <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                                     </div>
                                 </th> */}
+                                 <th scope="col" className="px-2 py-2 border-x ">
+                                    <div className="flex justify-between items-center">
+                                        Date
+                                        <Updown />
+                                    </div>
+                                </th>
                                 <th scope="col" className="px-2 py-2 border-x ">
                                     <div className="flex justify-between items-center">
-                                        Item Name
+                                        Invoice
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                    <div className="flex justify-between items-center">
+                                        Type
                                         <Updown />
                                     </div>
                                 </th>
@@ -146,6 +160,7 @@ const ProTransaction = ({ entries = [] }) => {
                                         <Updown />
                                     </div>
                                 </th>
+                                
                                 <th scope="col" className="px-2 py-2 text-right border-r">
                                     <div className="flex justify-between items-center">
                                         Created by
@@ -154,7 +169,13 @@ const ProTransaction = ({ entries = [] }) => {
                                 </th>
                                 <th scope="col" className="px-2 py-2 text-right border-r">
                                     <div className="flex justify-between items-center">
-                                        Created at
+                                        Stock
+                                        <Updown />
+                                    </div>
+                                </th>
+                                <th scope="col" className="px-2 py-2 text-right border-r">
+                                    <div className="flex justify-between items-center">
+                                        MRP. Value
                                         <Updown />
                                     </div>
                                 </th>
@@ -168,7 +189,7 @@ const ProTransaction = ({ entries = [] }) => {
                     </table>
                 </div>
                 <div className="flex justify-between items-center pt-3">
-                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page - 1)} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>
+                    <h1 className='font-thin text-sm'>Showing {pageSize * parseInt(page-1) + 1} to {pageSize * (page - 1) + data?.length} of {totalItem} entries</h1>
                     <div className='flex justify-start'>
                         <button disabled={page === 1 ? true : false} onClick={() => { page > 2 ? setPage(page - 1) : setPage(1) }} className={`border-y  border-l text-sm ${page === 1 ? 'text-gray-400' : 'text-blue-500'} rounded-l py-1.5 px-3 bg-blue-50`}>
                             {isLoading ? <Loading className='h-6 w-7' /> : <p className='font-thin'>Prev</p>}

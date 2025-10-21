@@ -190,10 +190,6 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };

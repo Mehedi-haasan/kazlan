@@ -118,7 +118,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
             return
         }
         const token = localStorage.getItem('token');
-        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, paking, delivary, due, '', 0);
+        let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, 0, 0, due, '', 0);
         try {
             const response = await fetch(`${BaseUrl}/api/return/sale`, {
                 method: 'POST',
@@ -131,7 +131,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/return/invoice/${data?.invoice}/Sale Return`)
+            goto(`/sale/return/invoice/${data?.invoice}/Sale Return`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -183,10 +183,6 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     EscapeRedirect()
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };
@@ -204,11 +200,12 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         const data = await response.json();
         setAllData(data?.items);
         setUser(data?.user);
+        setPaking(data?.invoice?.packing)
         setName(data?.user?.name);
         setUserId(data?.user?.id)
         setDue(data?.user?.balance)
         setLoadInvo(false);
-        setValues({ ...values, lastdiscount: data?.user?.lastdiscount })
+        setValues({ ...values, lastdiscount: 0 })
     }
 
     useEffect(() => {

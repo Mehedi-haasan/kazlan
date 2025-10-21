@@ -18,6 +18,8 @@ import generatePDF from 'react-to-pdf';
 import PreviewInvoice from '../Invoice/PreviewInvoice';
 import PreviewOpeningInvoice from '../Invoice/PreviewOpeningInvoice';
 import PreviewReturnInvoice from '../Invoice/PreviewReturnInvoice';
+import PreviewPurchaseInvoice from '../Invoice/PreviewPurchaseInvoice';
+import PreviewPurchaseReturnInvoice from '../Invoice/PreviewPurchaseReturnInvoice';
 
 
 const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
@@ -184,7 +186,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
 
     }
 
-    console.log(sear);
+
 
     const PrintInvoice = () => {
         const rows = reverse?.map(item => {
@@ -523,7 +525,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                         <tbody>
                             {data?.map((item, i) => (
                                 <tr onClick={() => { setId(item?.id); setType(item?.type); setInvoPreview(true) }} className={`border cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.createdAt)}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.created_date)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{ }{item?.type}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>
@@ -546,10 +548,24 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                         </tbody>
                     </table>
                 </div>
-                <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`990px`} crosshidden={true}>
+
+                {/* <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
                     {(type === "Sale" || type === "Purchase items") && <PreviewInvoice id={id} type={type} usertype={values?.usertype} />}
                     {(type === "Sale Return" || type === "Return Purchase") && <PreviewReturnInvoice id={id} type={type} usertype={values?.usertype} />}
                     {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice usertype={values?.usertype} info={info} id={id} type={type} />}
+                </Modal> */}
+
+                <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
+                    {/* Sale */}
+                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Purchase */}
+                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                     {/* Sale Return */}
+                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                     {/* Purchase Return */}
+                    { type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                     {/* Opening */}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
                 </Modal>
 
                 <Modal show={preview} handleClose={() => { setPreview(false) }} size={`1000px`} crosshidden={true}>

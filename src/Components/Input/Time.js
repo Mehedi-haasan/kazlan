@@ -21,14 +21,19 @@ export function handleDateConvert(date) {
     return formatted
 };
 
-export function formatDate(isoString) {
-    const date = new Date(isoString);
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
+export function formatDate(dateString) {
+    const date = new Date(dateString);
 
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
     return `${day} ${month} ${year}`;
-}
+};
 
 export function formatShortDate(isoString) {
     const date = new Date(isoString);
@@ -456,7 +461,7 @@ export function numberToWords(num) {
         const hundred = Math.floor(n / 100);
         const rest = n % 100;
         let s = "";
-        if (hundred) s += words[hundred] + " শত";
+        if (hundred) s += words[hundred] + "শ";
         if (rest) s += (s ? " " : "") + words[rest];
         return s;
     };

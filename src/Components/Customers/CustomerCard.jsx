@@ -184,7 +184,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th>
-            <th scope="col" className="px-2 py-2 border-x font-thin" id="bnc-unicode-textarea">{item?.name}
+            <th scope="col" className="px-2 py-2 border-x font-thin" id="kalpurush">{item?.name}
                 <Notification message={message} />
             </th>
             <th scope="col" className="px-2 py-2 border-r font-thin">{item?.id}</th>
@@ -194,7 +194,7 @@ const CustomerCard = ({ item, state = [], i, info = {}, GetCustomer, select, Ope
             <th scope="col" className="px-2 py-2 border-r font-thin">{item?.accountname}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin">{item?.accountnumber}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin">{item?.state?.name}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin" id="bnc-unicode-textarea">{item?.address}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin" id="kalpurush">{item?.address}</th>
             <th scope="col" className={`px-2 py-2 border-r font-bold  `}>
                 <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${item?.balance < 0 ? `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]` : ` text-red-600 bg-red-100 border-red-100`}`} `}>
                     {Math.abs(item?.balance) }

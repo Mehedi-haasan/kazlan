@@ -127,7 +127,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}/Purchase Items`)
+            goto(`/purchase/invoice/${data?.invoice}/Purchase Items`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -178,10 +178,6 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
     }, [])
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };
@@ -236,14 +232,6 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                     <Notification message={message} />
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
-                    {/* <div className='flex justify-start items-end pb-1 z-40'>
-                        <SelectionComponent default_select={first} options={state} default_value={filter?.state}
-                            onSelect={(v) => { setSecond(true); setFirst(false); setCustomer([]); GetCustomer(v?.id); setFilter({ ...filter, state: v?.name }) }}
-                            label={"Thana Name"} className='rounded-l z-50' />
-                        <div onClick={() => { goto('/state') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
-                            <Add />
-                        </div>
-                    </div> */}
                     <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.customer}
                             onSelect={(v) => {
@@ -269,7 +257,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
                                     setQuan(true);
-                                    
+
                                 }
                             }}
                             onChange={(e) => setValues({ ...values, sup_invo: e.target.value })}
@@ -448,7 +436,7 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
                 <div className='p-4 w-full'>
                     <div className="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <DataHeader pruchase={"Cost Price"} />
+                        <DataHeader pruchase={"Purchase Price"} />
                         <div>
                             {Object.keys(prepareData || {}).length > 0 && (
                                 <div className={`border-b border-x text-[15px] text-black grid grid-cols-12`}>
@@ -503,6 +491,10 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                     }
                                                 } else if (e.key === "Enter" && data[selectedId]) {
                                                     ChangeDis(prepareData?.discount, data[selectedId]?.name)
+                                                    setDisValue(false);
+                                                    setSelectedId(0);
+                                                    discount_ref.current?.focus();
+                                                } else if (e.key === "ArrowLeft") {
                                                     setDisValue(false);
                                                     setSelectedId(0);
                                                     discount_ref.current?.focus();

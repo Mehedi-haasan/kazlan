@@ -1,17 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import InvoiceCard from './InvoiceCard';
-import DownModal from '../Input/DownModal';
 import PaymentTotal from './PaymentTotal';
 import BaseUrl from '../../Constant';
 import Tabeheader from './Tableheader';
-import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import { useNavigate, useParams } from 'react-router-dom';
 import InvoHeader from './InvoHeader';
 import Edit from '../../icons/Edit'
-import Pdf from '../Pdf/Pdf';
-import PdfHeader from './PdfHeader';
-import PdfBottom from './PdfBottom'
 import { ReturnSaleCode, convertToBengaliNumber } from '../Input/Time';
 
 
@@ -22,9 +17,6 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
     const goto = useNavigate()
     const params = useParams();
     const targetRef = useRef();
-    const option = { backgroundColor: '#ffffff' };
-    const { ref, getPng } = useToImage(option)
-    const [isGen, setIsGen] = useState(false)
     const [user, setUser] = useState({});
     const [allData, setAllData] = useState([]);
     const [invoice, setInvoice] = useState({})
@@ -45,7 +37,6 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
             },
         });
         const data = await response.json();
-        console.log(data);
         let amount = data?.items?.reduce((acc, item) => {
             return acc + parseInt(item?.sellprice)
         }, 0);
@@ -339,9 +330,9 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
     return (
         <div className="">
 
-            <div className='w-full mx-auto border rounded py-4 px-2'>
-                <div ref={targetRef} className="bg-[#FFFFFF] rounded p-4">
-
+            <div className='w-full mx-auto rounded px-10'>
+                <div ref={targetRef} className="bg-[#FFFFFF] rounded px-10">
+                    <div className='pt-24'></div>
                     <InvoHeader user={user} params={params} invoice={invoice} />
 
                     <div className='relative overflow-x-auto my-5'>
@@ -352,7 +343,7 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
-                                <PaymentTotal user={user} total={total} invoice={invoice} />
+                                <PaymentTotal user={user} info={info} total={total} invoice={invoice} />
 
                             </tbody>
                         </table>
@@ -361,7 +352,7 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
 
 
 
-                <div className='flex justify-between'>
+                <div className='flex justify-between px-7'>
                     <div className="flex justify-end my-3 mr-2">
                         <button disabled={pevNext?.prev ? false : true}
                             onClick={() => { GetReturnProduct(pevNext?.prev?.id, pevNext?.prev?.type) }}
@@ -370,7 +361,7 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fillRule="evenodd"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="currentColor" d="M17.772 11.996c0-2.168-.122-3.899-.228-4.992a53 53 0 0 0-4.437 2.3a53 53 0 0 0-4.21 2.693c.889.633 2.32 1.598 4.211 2.69a53 53 0 0 0 4.436 2.302c.106-1.093.228-2.825.228-4.993M17.585 4.8a1.332 1.332 0 0 1 1.846 1.065c.114.912.341 3.12.341 6.13c0 3.014-.228 5.222-.34 6.133a1.332 1.332 0 0 1-1.845 1.065c-.84-.356-2.847-1.255-5.479-2.775c-2.63-1.518-4.413-2.806-5.141-3.357a1.332 1.332 0 0 1 0-2.13c.736-.554 2.542-1.859 5.14-3.36s4.63-2.41 5.478-2.77ZM4 6a1 1 0 0 1 2 0v12a1 1 0 1 1-2 0z" /></g></svg>
                             <span className="group-hover:text-white transition duration-200">Prev</span>
                         </button>
-                        <button disabled={pevNext?.next ? false : true} onClick={() => { GetReturnProduct(pevNext?.next?.id, pevNext?.next?.type) }} className={`border group border-red-500 text-red-500 bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1`}>
+                        <button disabled={pevNext?.next ? false : true} onClick={() => { GetReturnProduct(pevNext?.next?.id, pevNext?.next?.type) }} className={`border group border-red-500 text-red-500 bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 ml-3 font-thin flex justify-start items-center gap-1`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 7.766c0-1.554 1.696-2.515 3.029-1.715l7.056 4.234c1.295.777 1.295 2.653 0 3.43L8.03 17.949c-1.333.8-3.029-.16-3.029-1.715zM14.056 12L7 7.766v8.468zM18 6a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1" /></svg>
                             <span className="group-hover:text-white transition duration-200">Next</span>
                         </button>
@@ -382,13 +373,13 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
                     </div>
 
                     <div className="flex justify-end my-3 mr-2">
-                        {/* <button
-                            onClick={() => goto(`/sale/order/edit/${invoice?.id}/${invoice?.type}`)}
+                        <button
+                            onClick={() => goto(`/${invoice?.type === "Sale" ? 'sale' : 'purchase'}/order/edit/${invoice?.id}/${invoice?.type}`)}
                             className="group border bg-[#FFFFFF] border-green-500 flex shadow-md justify-start items-center gap-1 text-green-500 rounded-lg px-4 py-1.5 ml-3 font-thin hover:bg-green-500 hover:text-white transition duration-200"
                         >
                             <Edit className="group-hover:text-white transition duration-200" />
                             <span className="group-hover:text-white transition duration-200">Edit</span>
-                        </button> */}
+                        </button>
                         <button onClick={() => generatePDF(targetRef, { filename: `${user?.name}.pdf` })} className='border group border-red-500 text-red-500 bg-[#FFFFFF] shadow-md hover:bg-red-500 hover:text-white group rounded-lg px-4 py-1.5 mx-3 font-thin flex justify-start items-center gap-1'>
                             <svg xmlns="http://www.w3.org/2000/svg" className="group-hover:text-white transition duration-200" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7.792 21.25h8.416a3.5 3.5 0 0 0 3.5-3.5v-5.53a3.5 3.5 0 0 0-1.024-2.475l-5.969-5.97A3.5 3.5 0 0 0 10.24 2.75H7.792a3.5 3.5 0 0 0-3.5 3.5v11.5a3.5 3.5 0 0 0 3.5 3.5" /><path fill="currentColor" fillRule="evenodd" d="M10.437 7.141c-.239.078-.392.236-.436.411c-.09.352 0 .73.253 1.203c.126.234.28.471.45.725l.092.137l.145.215l.019-.068l.086-.306q.148-.503.23-1.02c.089-.642-.011-1.018-.309-1.26c-.08-.065-.278-.119-.53-.037m.055 4.152l-.27-.362l-.032-.048c-.115-.19-.243-.38-.382-.585l-.1-.149a10 10 0 0 1-.512-.828c-.31-.578-.558-1.286-.358-2.067c.17-.664.698-1.081 1.227-1.254c.517-.168 1.174-.147 1.66.247c.792.644.848 1.573.739 2.357a9 9 0 0 1-.261 1.174l-.096.34q-.112.382-.208.769l-.067.194l1.392 1.864c.65-.078 1.364-.125 2.03-.077c.769.054 1.595.242 2.158.776a1.56 1.56 0 0 1 .395 1.441c-.117.48-.454.88-.919 1.123c-.985.515-1.902.105-2.583-.416c-.533-.407-1.045-.975-1.476-1.453l-.104-.114c-.37.057-.72.121-1.004.175c-.305.057-.684.128-1.096.22l-.151.443q-.125.288-.238.58l-.122.303a8 8 0 0 1-.427.91c-.33.578-.857 1.192-1.741 1.241c-1.184.066-1.986-.985-1.756-2.108l.006-.027c.2-.791.894-1.31 1.565-1.653c.597-.306 1.294-.532 1.941-.701zm.87 1.165l-.287.843l.421-.08l.004-.001l.38-.07zm2.84 1.604c.274.29.547.56.831.777c.55.42.94.493 1.299.305c.2-.105.284-.241.309-.342a.35.35 0 0 0-.08-.309c-.257-.228-.722-.38-1.392-.428a8 8 0 0 0-.967-.003m-5.005.947c-.318.109-.62.23-.89.368c-.587.3-.87.604-.944.867c-.078.415.192.673.516.655c.27-.015.506-.184.766-.639q.204-.372.358-.767l.107-.266z" clipRule="evenodd" /></g></svg>
                             <span className="group-hover:text-white transition duration-200">PDF</span>

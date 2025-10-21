@@ -138,7 +138,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}/Sale`)
+            goto(`/sale/invoice/${data?.invoice}/Sale`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -186,9 +186,9 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
+        // if (!id) return;
+        // const confirmDelete = window.confirm("Are you sure you want to delete this item?");
+        // if (!confirmDelete) return;
 
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);

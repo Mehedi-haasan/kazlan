@@ -42,6 +42,7 @@ const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], 
     const typeRef = useRef(null);
     const discount_ref = useRef(null)
     const last_pay = useRef()
+    const sup_invo = useRef()
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
     const [total, setTotal] = useState(0);
@@ -191,10 +192,6 @@ const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], 
 
 
     const HandleDelete = (id) => {
-        if (!id) return;
-        const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };
@@ -276,21 +273,22 @@ const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], 
             <Notification message={message} />
             <div className='bg-[#FFFFFF] rounded-md'>
                 <div className='border-b p-4 flex justify-between items-center'>
-                    <h1>Sale Details</h1>
+                    <h1>Purchase Details</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4'>
                     <div className='flex justify-start items-end pb-1 z-30'>
                         <SelectionComponent default_select={second} options={customer} default_value={filter?.name}
                             onSelect={(v) => {
-                                setSecond(false); setFirst(false); setQuan(true);
+                                setSecond(false); setFirst(false); sup_invo.current.focus()
                                 setInvoice({ ...invoice, userId: v?.id, customername: v?.name })
                                 setFilter({ ...filter, customer: v?.name, name: v?.name }); setUserId(v.id); setName(v?.name); fetchUserDue(v.id)
                             }}
-                            label={"Customer"} className='rounded-l' />
+                            label={"Supplier"} className='rounded-l' />
                         <div onClick={() => { goto('/create/customer') }} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                             <Add />
                         </div>
                     </div>
+
                     {/* <div className='flex justify-start items-end pb-1 z-40'>
                         <SelectionComponent default_select={first} options={state} default_value={filter?.state}
                             onSelect={(v) => {
@@ -313,16 +311,28 @@ const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], 
                     <div></div>
 
                     <div className='relative'>
-                        <Calendar label={"Date"} value={handleDateConvert(new Date(raw?.fromDate))}
+                        <Calendar label={"Receive Date"} value={handleDateConvert(new Date(raw?.fromDate))}
                             getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
                             getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
                     </div>
 
 
+                    <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
+                        <h1 className='text-[15px] pb-1'>Challan No</h1>
+                        <input ref={sup_invo} type="text" value={values?.sup_invo} placeholder={values?.sup_invo}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    setQuan(true);
+
+                                }
+                            }}
+                            onChange={(e) => setValues({ ...values, sup_invo: e.target.value })}
+                            className="px-2 pt-[7px] pb-[6px] text-[#6B7280] focus:outline-none rounded font-thin border w-full dark:bg-[#040404] dark:text-white"
+                        />
+                    </div>
                     <div></div>
-                    <div></div>
-                    <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
-                        getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                    {/* <Calendar label={"Delivery Date"} value={handleDateConvert(new Date(raw?.toDate))}
+                        getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} /> */}
 
                 </div>
 

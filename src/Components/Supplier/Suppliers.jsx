@@ -17,7 +17,7 @@ import Modal from "../Input/Modal";
 import Pdf from "../Pdf/Pdf";
 import Selection from "../Input/Selection";
 import DueCustomerCard from "../Customers/DueCustomerCard";
-import { getFormattedDate } from "../Input/Time";
+import { formatDate, getFormattedDate } from "../Input/Time";
 
 const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
@@ -33,7 +33,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     const [supplier, setSupplier] = useState([])
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [duesup, setDueSup]=useState([])
+    const [duesup, setDueSup] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
     const [select, setSelect] = useState(null)
@@ -492,8 +492,10 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                     <div ref={ref}>
                         <div ref={custargetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt max-h-[80vh] overflow-y-auto" >
                             <Pdf>
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white mt-4">
-                                    <thead className="text-sm text-gray-900 bg-[#BCA88D] dark:bg-[#040404] dark:text-white">
+                                <h1 className="text-center font-thin">Supplier Due Report</h1>
+                                <h1 className="text-center font-thin">Date : {formatDate(getFormattedDate())}</h1>
+                                <table className="w-full text-sm text-left rtl:text-right text-black dark:bg-[#040404] dark:text-white mt-4">
+                                    <thead className="">
                                         <tr className='border'>
                                             <th scope="col" className="p-1 border-r ">
                                                 <div className="flex justify-center items-center">

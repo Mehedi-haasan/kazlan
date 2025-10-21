@@ -9,12 +9,12 @@ import generatePDF from 'react-to-pdf';
 import { useNavigate, useParams } from 'react-router-dom';
 import InvoHeader from '../Invoice/InvoHeader';
 import Edit from '../../icons/Edit'
-import { ReturnSaleCode } from '../Input/Time';
-import ReturnInvoicePaymentTotal from './ReturnInvoicePaymentTotal';
+import { ReturnSaleCode, convertToBengaliNumber } from '../Input/Time';
+import PurchaseReturnPaymentTotal from './PurchaseReturnPaymentTotal';
 
 
 
-const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
+const PurchaseReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
 
     const goto = useNavigate()
     const params = useParams();
@@ -62,11 +62,6 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
-    function convertToBengaliNumber(num) {
-        const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-        return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
-    }
-
     const CalculateSale = (item) => {
         let sale = 0;
 
@@ -77,26 +72,6 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
             sale = discount
         }
         return parseInt(item?.price) - parseInt(sale)
-    }
-
-
-
-    const Calculate = () => {
-
-        let sum = 0
-        let due = parseInt(user?.previousdue);
-
-        if (due < 0) {
-            sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) - Math.abs(user?.previousdue)
-        } else {
-            sum = Math.abs(user?.previousdue) + total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount)
-        }
-        return sum
-    }
-
-    const TotalDue = () => {
-        let amount = Calculate()
-        return amount - parseInt(user?.paidamount)
     }
 
 
@@ -298,16 +273,15 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                     <InvoHeader user={user} params={params} invoice={invoice} />
 
 
-
                     <div className='relative overflow-x-auto my-5'>
                         <table class="w-full text-sm text-left rtl:text-right text-black font-thin">
-                            <Tabeheader/>
+                            <Tabeheader type={"Purchase Items"} />
                             <tbody>
 
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
-                                <ReturnInvoicePaymentTotal user={user} total={total} invoice={invoice} />
+                                <PurchaseReturnPaymentTotal user={user} total={total} invoice={invoice} />
 
                             </tbody>
                         </table>
@@ -319,7 +293,7 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                         <div ref={ref} className=''>
                             <div ref={targetRef} className='bg-white w-[750px]'>
                                 <div className="p-8 font-thin text-black">
-                                    <InvoHeader user={user} params={params} invoice={invoice}/>
+                                    <InvoHeader user={user} params={params} invoice={invoice} />
 
                                     <div className='relative overflow-x-auto py-5'>
                                         <table className="w-full text-sm text-left rtl:text-right text-vlack">
@@ -328,7 +302,7 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                                                 {allData?.map((item) => {
                                                     return <InvoiceCard key={item?.id} item={item} />
                                                 })}
-                                                <ReturnInvoicePaymentTotal user={user} total={total} invoice={invoice}/>
+                                                <PaymentTotal user={user} total={total} invoice={invoice} />
 
                                             </tbody>
                                         </table>
@@ -391,4 +365,4 @@ const ReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
     );
 }
 
-export default ReturnInvoice;
+export default PurchaseReturnInvoice;

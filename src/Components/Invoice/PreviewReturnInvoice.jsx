@@ -1,15 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import InvoiceCard from '../Invoice/InvoiceCard';
-import DownModal from '../Input/DownModal';
-import PaymentTotal from './PaymentTotal';
 import BaseUrl from '../../Constant';
 import Tabeheader from '../Invoice/Tableheader';
-import { useToImage } from '@hcorta/react-to-image'
 import generatePDF from 'react-to-pdf';
 import { useNavigate, useParams } from 'react-router-dom';
 import InvoHeader from '../Invoice/InvoHeader';
-import Edit from '../../icons/Edit'
 import { ReturnSaleCode } from '../Input/Time';
+import ReturnInvoicePaymentTotal from '../ReturnInvoice/ReturnInvoicePaymentTotal';
 
 
 
@@ -18,9 +15,6 @@ const PreviewReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, ty
     const goto = useNavigate()
     const params = useParams();
     const targetRef = useRef();
-    const option = { backgroundColor: '#ffffff' };
-    const { ref, getPng } = useToImage(option)
-    const [isGen, setIsGen] = useState(false)
     const [user, setUser] = useState({});
     const [invoice, setInvoice] = useState({})
     const [state, setState] = useState({})
@@ -293,8 +287,8 @@ const PreviewReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, ty
     return (
         <div className="">
 
-            <div className='w-full mx-auto border rounded py-4 px-2'>
-                <div ref={targetRef} className="bg-[#FFFFFF] rounded p-4">
+            <div className='w-full mx-auto px-10'>
+                <div ref={targetRef} className="bg-[#FFFFFF] rounded px-10 pt-24">
 
                     <InvoHeader user={user} invoice={invoice} params={params} state={state} />
 
@@ -302,13 +296,13 @@ const PreviewReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, ty
 
                     <div className='relative overflow-x-auto my-5'>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
-                            <Tabeheader />
+                            <Tabeheader type={invoice?.type} />
                             <tbody>
 
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
-                                <PaymentTotal user={user} total={total} invoice={invoice} />
+                                <ReturnInvoicePaymentTotal user={user} total={total} invoice={invoice} info={info}/>
 
                             </tbody>
                         </table>
@@ -345,7 +339,7 @@ const PreviewReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, ty
                     </div>
                 </DownModal> */}
 
-                <div className='flex justify-between'>
+                <div className='flex justify-between px-7'>
                     <div className="flex justify-end my-3 mr-2">
                         <button disabled={pevNext?.prev ? false : true}
                             onClick={() => { GetReturnProduct(pevNext?.prev?.id, pevNext?.prev?.type) }}

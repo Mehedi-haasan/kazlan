@@ -66,6 +66,8 @@ import CreateAttributeValue from "./Components/Attribute/CreateAttributeValue.js
 import EditCustomerBalance from "./Components/Payment/EditCustomerBalance.jsx";
 import EditSupplierBalance from "./Components/Payment/EditSupplierBalance.jsx";
 import PurchaseOrderEdit from "./Components/SaleOrderEdit/PurchaseOrderEdit.jsx";
+import PurchaseInvoice from "./Components/Invoice/PurchaseInvoice.jsx";
+import PurchaseReturnInvoice from "./Components/ReturnInvoice/PurchaseReturnInvoice.jsx";
 
 
 
@@ -391,7 +393,7 @@ function App() {
 
           <Route path="/update/supplier/:id" element={<UpdateSupplier state={state} info={info} />} />
 
-          <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} />} />
+          <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} info={info} />} />
 
           <Route path="/order" element={auth ? <Order user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -429,11 +431,23 @@ function App() {
 
           <Route path="/update/user/:id" element={auth ? <UpdateUser entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/invoice/:id/:type" element={auth ? <Invoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+
+          <Route path="/sale/invoice/:id/:type" element={auth ? <Invoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/purchase/invoice/:id/:type" element={auth ? <PurchaseInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+
 
           <Route path="/opening/invoice/:id/:type" element={auth ? <OpeningInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/return/invoice/:id/:type" element={auth ? <ReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+
+          <Route path="/sale/return/invoice/:id/:type" element={auth ? <ReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/purchase/return/invoice/:id/:type" element={auth ? <PurchaseReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+
 
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
 

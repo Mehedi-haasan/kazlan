@@ -1,13 +1,7 @@
-import { numberToWords } from "../Input/Time";
+import { numberToWords, convertToBengaliNumber } from "../Input/Time";
 
 
-const PaymentTotal = ({ user, total, invoice }) => {
-
-
-    const convertToBengaliNumber = (num) => {
-        const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-        return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
-    }
+const ReturnInvoicePaymentTotal = ({ user, total, invoice }) => {
 
     const Calculate = () => {
 
@@ -36,8 +30,6 @@ const PaymentTotal = ({ user, total, invoice }) => {
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="p-1 font-thin" colSpan={3} id="kalpurush">(কথায় : {numberToWords(total + user?.packing + user?.delivery - user?.lastdiscount)})</th>
-                {/* <td className="p-1"></td>
-                <th className="p-1"></th> */}
                 <td className="p-1">প্যাকিং</td>
                 <td className="p-1">  </td>
                 <td className="p-1 text-right">{convertToBengaliNumber(parseInt(user?.packing))}.০</td>
@@ -83,7 +75,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
                 <td className="p-1"></td>
                 <td className="p-1 border-b">আগের বকেয়া</td>
                 <td className="p-1 border-b"></td>
-                <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.previousdue))}.০</td>
+                <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.previousdue*-1))}.০</td>
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <td className="pr-6 py-1"></td>
@@ -91,7 +83,7 @@ const PaymentTotal = ({ user, total, invoice }) => {
                 <td className="p-1"></td>
                 <td className="p-1">অবশিষ্ট</td>
                 <td className="p-1"> </td>
-                <td className="p-1 text-right">{convertToBengaliNumber(Calculate())}.০</td>
+                <td className="p-1 text-right">{convertToBengaliNumber(Calculate()*-1)}.০</td>
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <td className="pr-6 py-1"></td>
@@ -107,10 +99,10 @@ const PaymentTotal = ({ user, total, invoice }) => {
                 <td className="px-1 overline border-black"></td>
                 <td className="px-1">মোট বাকি</td>
                 <td className="px-1"></td>
-                <td className="px-1 text-right">{convertToBengaliNumber(Calculate() + invoice?.paidamount)}.০</td>
+                <td className="px-1 text-right">{convertToBengaliNumber((Calculate() + invoice?.paidamount))}.০</td>
             </tr>
         </>
     )
 }
 
-export default PaymentTotal
+export default ReturnInvoicePaymentTotal

@@ -1,13 +1,8 @@
-import { numberToWords } from "../Input/Time";
+import { numberToWords, convertToBengaliNumber } from "../Input/Time";
 
 
-const PaymentTotal = ({ user, total, invoice, info }) => {
+const PreviewPurchasePaymentTotal = ({ user, total, invoice, info }) => {
 
-
-    const convertToBengaliNumber = (num) => {
-        const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-        return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
-    }
 
     const Calculate = () => {
 
@@ -38,8 +33,6 @@ const PaymentTotal = ({ user, total, invoice, info }) => {
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
                 <td className="py-1" colSpan={3}>(কথায় : {numberToWords(total + user?.packing + user?.delivery - user?.lastdiscount - invoice?.special_discount)})</td>
-                {/* <td className="p-1"> </td> */}
-                {/* <td className="p-1"></td> */}
                 <td className="p-1">প্যাকিং</td>
                 <td className="p-1">  </td>
                 <td className="p-1 text-right">{convertToBengaliNumber(parseInt(user?.packing))}.০</td>
@@ -124,4 +117,4 @@ const PaymentTotal = ({ user, total, invoice, info }) => {
     )
 }
 
-export default PaymentTotal
+export default PreviewPurchasePaymentTotal

@@ -1,35 +1,21 @@
 import React, { useState } from "react";
 import Updown from "../../icons/Updown";
 import { ReturnSaleCode, formatDate } from "../Input/Time";
-import { useNavigate } from "react-router-dom";
-import BaseUrl from "../../Constant";
+import Modal from "../Input/Modal";
+import PreviewInvoice from "../Invoice/PreviewInvoice";
+import PreviewReturnInvoice from "../Invoice/PreviewReturnInvoice";
+import PreviewOpeningInvoice from "../Invoice/PreviewOpeningInvoice";
+import PreviewPurchaseInvoice from "../Invoice/PreviewPurchaseInvoice";
+import PreviewPurchaseReturnInvoice from "../Invoice/PreviewPurchaseReturnInvoice";
+
+const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, info = {}, RecentInvoice, usertype="Customer",date_type ="Delivery Date",is_due=true }) => {
 
 
-const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
+    const [invopreview, setInvoPreview] = useState(false);
+    const [id, setId] = useState(1)
+    const [type, setType] = useState('')
+    const [values, setValues] = useState({})
 
-    const goto = useNavigate()
-    const [message, setMessage] = useState({ id: '', mgs: '' });
-
-
-    const DeleteInvoice = async (id) => {
-        const token = localStorage.getItem('token');
-
-        try {
-            const response = await fetch(`${BaseUrl}/api/delete/invoice/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'authorization': token,
-                    'Content-type': 'application/json; charset=UTF-8',
-                }
-            });
-
-            const data = await response.json();
-            setMessage({ id: Date.now(), mgs: data?.message });
-            RecentInvoice()
-        } catch (error) {
-            console.error('Error updating variant:', error);
-        }
-    }
 
 
     return (
@@ -52,7 +38,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Customer
+                                    {usertype}
                                     <Updown />
                                 </div>
                             </th>
@@ -74,12 +60,12 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                                     <Updown />
                                 </div>
                             </th>
-                            <th scope="col" className="px-3 py-3 text-center border-r ">
+                            {is_due && <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Due
                                     <Updown />
                                 </div>
-                            </th>
+                            </th>}
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Created by
@@ -106,7 +92,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                             </th>
                             <th scope="col" className="px-3 py-3 text-right border-r ">
                                 <div className="flex justify-between items-center">
-                                    Delivery Date
+                                    {date_type}
                                     <Updown />
                                 </div>
                             </th>
@@ -120,14 +106,14 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                     </thead>
                     <tbody>
                         {invoices?.map((item, i) => (
-                            <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
+                            <tr key={i} onClick={() => { setId(item?.id); setType(item?.type); setInvoPreview(true) }} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
                                 <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.createdAt)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin" >{item?.customername}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.total}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>
+                                {is_due &&<th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>}
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin">
                                     <div className="flex justify-center items-center">
@@ -140,15 +126,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.order_type}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{formatDate(item?.deliverydate)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin flex justify-center items-center">
-                                    <button onClick={() => {
-                                        if (item?.type === "Sale" || item?.type === "Purchase items") {
-                                            goto(`/invoice/${item?.id}/${item?.type}`)
-                                        } else if (item?.type === "Sale Return" || item?.type === "Return Purchase") {
-                                            goto(`/return/invoice/${item?.id}/${item?.type}`)
-                                        } else {
-                                            goto(`/opening/invoice/${item?.id}/${item?.type}`)
-                                        }
-                                    }}>
+                                    <button onClick={() => { setId(item?.id); setType(item?.type); setInvoPreview(true) }} >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
                                                 <path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19s-7.764-4.013-9.257-5.962a1.69 1.69 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5s7.764 4.013 9.257 5.962" />
@@ -162,6 +140,19 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, RecentInvoice }) => {
                         }
                     </tbody>
                 </table>
+
+                <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
+                    {/* Sale */}
+                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Purchase */}
+                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                     {/* Sale Return */}
+                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                     {/* Purchase Return */}
+                    { type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
+                </Modal>
             </div>
         </div>
     )

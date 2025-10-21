@@ -6,13 +6,22 @@ import Edit from "../../icons/Edit";
 import Remove from "../../icons/Remove";
 import DownModal from "../Input/DownModal";
 import BaseUrl from "../../Constant";
+import Modal from "../Input/Modal";
+import PreviewInvoice from "../Invoice/PreviewInvoice";
+import PreviewReturnInvoice from "../Invoice/PreviewReturnInvoice";
+import PreviewOpeningInvoice from "../Invoice/PreviewOpeningInvoice";
+import PreviewPurchaseInvoice from "../Invoice/PreviewPurchaseInvoice";
+import PreviewPurchaseReturnInvoice from "../Invoice/PreviewPurchaseReturnInvoice";
 
 
 const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice }) => {
     const [show, setShow] = useState(false);
     const [selected, setSelected] = useState(null);
     const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
-
+    const [invopreview, setInvoPreview] = useState(false);
+    const [id, setId] = useState(1)
+    const [type, setType] = useState('')
+    const [values, setValues] = useState({})
     const ModalOpen = (id) => {
         if (id === selected) {
             setSelected(null)
@@ -119,14 +128,14 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                     <tbody>
                         {invoices?.map((item, i) => (
                             <tr key={i} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
-                                <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.createdAt)}</th>
+                                <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.created_date)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.customername}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.type}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{formatDate(item?.createdAt)}</th>
+                                <th scope="col" className="px-3 py-2 border-r font-thin ">{formatDate(item?.created_date)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin">
                                     <div className="flex justify-center items-center">
                                         {item?.is_edit && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
@@ -135,7 +144,9 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                     </div>
                                 </th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.order_type}</th>
-                                <td scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative">
+                                <td scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative" onClick={() => {
+                                    setId(item?.id); setType(item?.type); setInvoPreview(true)
+                                }}>
                                     {
                                         selected === item?.id && <div className="absolute -top-12 bg-white dark:bg-[#040404] dark:text-white shadow-xl rounded-md right-14 w-[125px] p-[5px] z-50 border border-red-500 font-semibold">
                                             {/* <NavLink to={`/edit/user/balance/${item?.userId}/${item?.id}/${item?.type}`} className="flex justify-start items-center gap-[7px] cursor-pointer hover:bg-gray-200 px-1 py-[2px] rounded text-xs">
@@ -168,6 +179,23 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                         }
                     </tbody>
                 </table>
+                {/* <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
+                    {(type === "Sale" || type === "Purchase items") && <PreviewInvoice id={id} type={type} usertype={values?.usertype} />}
+                    {(type === "Sale Return" || type === "Return Purchase") && <PreviewReturnInvoice id={id} type={type} usertype={values?.usertype} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice usertype={values?.usertype} info={info} id={id} type={type} />}
+                </Modal> */}
+                <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
+                    {/* Sale */}
+                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Purchase */}
+                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Sale Return */}
+                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Purchase Return */}
+                    {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
+                </Modal>
             </div>
         </div>
     )

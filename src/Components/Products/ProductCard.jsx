@@ -113,14 +113,14 @@ const ProductCard = ({ item, i, isChecked, info = {}, getProduct, modalOpen, sel
           <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
         </div>
       </td>
-      <td scope="col" className="px-2 py-2.5 border-x" id="bnc-unicode-textarea">{item?.name} {item?.edition}
+      <td scope="col" className="px-2 py-2.5 border-x" id="kalpurush">{item?.name} {item?.edition}
         <Notification message={message} />
       </td>
       <td scope="col" className="px-2 py-2.5 border-x" >{item?.id}
         <Notification message={message} />
       </td>
-      <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.brand?.name}</td>
-      <td scope="col" className="px-2 py-2.5 border-r" id="bnc-unicode-textarea">{item?.category?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r" id="kalpurush">{item?.brand?.name}</td>
+      <td scope="col" className="px-2 py-2.5 border-r" id="kalpurush">{item?.category?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.company?.name}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.cost}</td>
       <td scope="col" className="px-2 py-2.5 border-r">{item?.price}</td>

@@ -103,7 +103,7 @@ const SelectionComponentSearch = ({ options, onSelect, label, className = 'round
               }}
               className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm dark:bg-[#040404] dark:text-white' onChange={handleFilter} />
           </div>
-          <div id="bnc-unicode-textarea" className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white dark:bg-[#040404] dark:text-white ${className} pt-1 `}>
+          <div id="kalpurush" className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white dark:bg-[#040404] dark:text-white ${className} pt-1 `}>
             {
               data?.map((opt, i) => {
                 return <div onMouseEnter={() => { setSelectedId(i) }}
@@ -115,7 +115,7 @@ const SelectionComponentSearch = ({ options, onSelect, label, className = 'round
                   }}
 
                   onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); }}
-                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-blue-500 dark:bg-[#040404] text-white' : ''}`} id="bnc-unicode-textarea">
+                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-blue-500 dark:bg-[#040404] text-white' : ''}`} id="kalpurush">
                   {opt?.name}
                 </div>
               })

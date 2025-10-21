@@ -1,18 +1,9 @@
 import React from "react";
+import { formatDate, ReturnSaleCode } from "../Input/Time";
 
 
-const ProTranCard = ({ item, i, isChecked }) => {
+const ProTranCard = ({ item, i, isChecked, prefix = "KB" }) => {
 
-
-    function formatDate(isoString) {
-        const date = new Date(isoString);
-
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'long' });
-        const year = date.getFullYear();
-
-        return `${day} ${month} ${year}`;
-    }
 
     return (
         <tr className={`border-b ${i % 2 === 1 ? 'bg-[#FAF9EE]' : ''}`}>
@@ -22,12 +13,15 @@ const ProTranCard = ({ item, i, isChecked }) => {
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
                 </div>
             </th> */}
-            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.name}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{formatDate(item?.created_date)}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.invoice_id).padStart(5, '0')}</th>
+            <th scope="col" className="px-2 py-2 border-x font-thin text-[#212529]">{item?.type}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.price}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.sellprice}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.qty} {item?.qty_type}</th>
             <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
-            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{formatDate(item?.createdAt)}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.qty}</th>
+            <th scope="col" className="px-2 py-2 border-r font-thin text-[#212529]">{item?.creator}</th>
         </tr>
     );
 };

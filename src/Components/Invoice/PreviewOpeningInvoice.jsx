@@ -297,7 +297,7 @@ const PreviewOpeningInvoice = ({ usertype, prefix = 'KB', info = {}, id, type })
                                     </div>
                                     <div className="flex justify-center items-center w-[30px]">:</div>
                                     <div className="border border-black p-1.5 w-[350px]">
-                                        <p className="m-0 text-black text-[16px]" id="bnc-unicode-textarea">{user?.name}</p>
+                                        <p className="m-0 text-black text-[16px]" id="kalpurush">{user?.name}</p>
                                     </div>
                                 </div>
 
@@ -307,7 +307,7 @@ const PreviewOpeningInvoice = ({ usertype, prefix = 'KB', info = {}, id, type })
                                     </div>
                                     <div className="flex justify-center items-center w-[30px]">:</div>
                                     <div className="border border-black p-1.5 w-[350px]">
-                                        <p className="m-0 text-black text-[16px]" id="bnc-unicode-textarea">{user?.address}{usertype === "Supplier" ? '' : `, ${state?.name}`}</p>
+                                        <p className="m-0 text-black text-[16px]" id="kalpurush">{user?.address}{usertype === "Supplier" ? '' : `, ${state?.name}`}</p>
                                     </div>
                                 </div>
 
@@ -328,7 +328,7 @@ const PreviewOpeningInvoice = ({ usertype, prefix = 'KB', info = {}, id, type })
                                     </div>
                                     <div className="flex justify-center items-center w-[30px]">:</div>
                                     <div className="border border-black p-1.5 w-[350px]">
-                                        <p className="m-0 text-black text-[16px]" id="bnc-unicode-textarea">{invoice?.paymentmethod}</p>
+                                        <p className="m-0 text-black text-[16px]" id="kalpurush">{invoice?.paymentmethod}</p>
                                     </div>
                                 </div>
 
@@ -340,7 +340,7 @@ const PreviewOpeningInvoice = ({ usertype, prefix = 'KB', info = {}, id, type })
                                     </div>
                                     <div className="flex justify-center items-center w-[30px]">:</div>
                                     <div className="border border-black p-1.5 w-[350px]">
-                                        <p className="m-0 text-black text-[16px]" id="bnc-unicode-textarea">{invoice?.methodname}</p>
+                                        <p className="m-0 text-black text-[16px]" id="kalpurush">{invoice?.methodname}</p>
                                     </div>
                                 </div>
 
@@ -374,15 +374,15 @@ const PreviewOpeningInvoice = ({ usertype, prefix = 'KB', info = {}, id, type })
                                     </div>
                                     <div className="flex justify-center items-center w-[30px]">:</div>
                                     <div className="border border-black p-1.5 w-[350px]">
-                                        <p className="m-0 text-black text-[16px]" id="bnc-unicode-textarea">{invoice?.note}</p>
+                                        <p className="m-0 text-black text-[16px]" id="kalpurush">{invoice?.note}</p>
                                     </div>
                                 </div>
-                                <h1 className='pl-1 pt-2 text-[16px]' id="bnc-unicode-textarea">(কথায় : {numberToWords(invoice?.paidamount > 0 ? invoice?.paidamount : invoice?.return)})</h1>
+                                <h1 className='pl-1 pt-2 text-[16px]' id="kalpurush">(কথায় : {numberToWords(invoice?.paidamount > 0 ? invoice?.paidamount : invoice?.return)})</h1>
 
 
 
                                 <div className='flex justify-between items-center font-thin pt-10'>
-                                    <h1 className='text-[17px] font-times' id="bnc-unicode-textarea">user : {invoice?.creator}</h1>
+                                    <h1 className='text-[17px] font-times' id="kalpurush">user : {invoice?.creator}</h1>
                                     <div className='text-center'>
                                         <p className='text-overline' style={{ textDecoration: "overline" }}>Received By</p>
                                     </div>
