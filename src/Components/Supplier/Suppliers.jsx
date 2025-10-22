@@ -152,7 +152,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     const DuesSupplier = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/search/due/customers/0/Supplier`, {
+        const response = await fetch(`${BaseUrl}/api/search/due/supplier/0/Supplier`, {
             method: 'GET',
             headers: {
                 "authorization": token,

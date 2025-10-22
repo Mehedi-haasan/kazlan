@@ -160,8 +160,8 @@ const Order = ({ info = {} }) => {
                 <h1 className="font-semibold text-lg">Order List</h1>
             </div>
 
-            <div className="rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4 pb-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-3">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}
@@ -169,10 +169,17 @@ const Order = ({ info = {} }) => {
                             label={'User'} />
                     </div>
                     <div>
-                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, fromDate: ti }) }} />
+                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) 
+                    }} getTime={(ti) => { 
+                        const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                        setRaw({ ...raw, fromDate: formatted }) }} />
                     </div>
                     <div>
-                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} getTime={(ti) => { setRaw({ ...raw, toDate: ti }) }} />
+                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} 
+                        
+                        getTime={(ti) => { 
+                            const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                            setRaw({ ...raw, toDate: formatted }) }} />
                     </div>
 
                 </div>

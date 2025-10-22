@@ -420,6 +420,8 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                                 setPrep_Value(true)
                                             }
 
+                                        } else if (e.key === "ArrowLeft") {
+                                            setBrand(true)
                                         }
                                     }}
                                 />

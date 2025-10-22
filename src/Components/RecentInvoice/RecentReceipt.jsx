@@ -21,7 +21,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
     const [invopreview, setInvoPreview] = useState(false);
     const [id, setId] = useState(1)
     const [type, setType] = useState('')
-    const [values, setValues] = useState({})
+      const [userType, setUserType] = useState("")
     const ModalOpen = (id) => {
         if (id === selected) {
             setSelected(null)
@@ -186,15 +186,15 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                 </Modal> */}
                 <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
                     {/* Sale */}
-                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={userType} />}
                     {/* Purchase */}
-                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={userType} />}
                     {/* Sale Return */}
-                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={userType} />}
                     {/* Purchase Return */}
-                    {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={userType} />}
 
-                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={userType} id={id} type={type} />}
                 </Modal>
             </div>
         </div>

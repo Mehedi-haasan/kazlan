@@ -492,7 +492,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                 </th>
                                 <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
-                                        Sale Amount
+                                        {values?.usertype === "Supplier" ? "Purchase" : "Sale"} Amount
                                         <Updown />
                                     </div>
                                 </th>

@@ -456,6 +456,8 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                                 });
                                                 setPrep_Value(true)
                                             }
+                                        } else if (e.key === "ArrowLeft") {
+                                            setBrand(true)
                                         }
                                     }}
                                     className='p-1 mt-[2px] rounded focus:outline-none w-full font-thin dark:bg-[#040404] dark:text-white' />
@@ -609,7 +611,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                     <div className='flex justify-between gap-5'>
                         <div>
                             <div className=''>
-                                <InputComponent placeholder={user?.balance ? user?.balance : due} value={user?.balance ? user?.balance : due} label={'Balance'} readOnly={true} className={``} />
+                                <InputComponent placeholder={user?.balance ? user?.balance*-1 : due} value={user?.balance ? user?.balance*-1 : due} label={'Balance'} readOnly={true} className={``} />
                             </div>
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>

@@ -166,7 +166,7 @@ const PurchaseItems = ({ info = {} }) => {
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4 pb-20'>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 pb-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 pb-4">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}

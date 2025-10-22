@@ -6,7 +6,7 @@ const ReturnInvoicePaymentTotal = ({ user, total, invoice }) => {
     const Calculate = () => {
 
         let sum = 0
-        let due = parseInt(user?.previousdue);
+        let due = parseInt(user?.previousdue*-1);
 
         if (due < 0) {
             sum = total + parseInt(user?.packing) + parseInt(user?.delivery) - parseInt(user?.lastdiscount) + due
@@ -20,7 +20,7 @@ const ReturnInvoicePaymentTotal = ({ user, total, invoice }) => {
 
     return (
         <>
-            <tr className="bg-white text-[16px]" id="kalpurush">
+            <tr className="bg-white text-[16px] font-thin" id="kalpurush">
                 <th className="p-1 "></th>
                 <td className="p-1"></td>
                 <th className="p-1"></th>
@@ -30,26 +30,26 @@ const ReturnInvoicePaymentTotal = ({ user, total, invoice }) => {
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="p-1 font-thin" colSpan={3} id="kalpurush">(কথায় : {numberToWords(total + user?.packing + user?.delivery - user?.lastdiscount)})</th>
-                <td className="p-1">প্যাকিং</td>
+                <td className="p-1">প্যাকিং, ডেলিভারী</td>
                 <td className="p-1">  </td>
-                <td className="p-1 text-right">{convertToBengaliNumber(parseInt(user?.packing))}.০</td>
+                <td className="p-1 text-right">{convertToBengaliNumber(parseInt(user?.packing + user?.delivery))}.০</td>
             </tr>
-            <tr className="bg-white text-[16px]" id="kalpurush">
+            {/* <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="p-1"></th>
                 <td className="p-1"> </td>
                 <th className="p-1"></th>
                 <td className="p-1 border-b">ডেলিভারী</td>
                 <td className="p-1 border-b"></td>
                 <td className="p-1 border-b text-right">{convertToBengaliNumber(parseInt(user?.delivery))}.০</td>
-            </tr>
-            <tr className="bg-white text-[16px]" id="kalpurush">
+            </tr> */}
+            {/* <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="p-1"></th>
                 <th className="p-1"></th>
                 <td className="p-1"></td>
                 <td className="p-1">সর্বমোট</td>
                 <td className="p-1"> </td>
                 <td className="p-1 text-right">{convertToBengaliNumber(total + user?.packing + user?.delivery)}.০</td>
-            </tr>
+            </tr> */}
 
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="pr-6 py-1"></th>
@@ -86,20 +86,18 @@ const ReturnInvoicePaymentTotal = ({ user, total, invoice }) => {
                 <td className="p-1 text-right">{convertToBengaliNumber(Calculate()*-1)}.০</td>
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
-                <td className="pr-6 py-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
+                <td className="pr-6 py-1" colSpan={3}>{invoice?.creator}</td>
                 <td className="p-1 border-b">জমা</td>
                 <td className="p-1 border-b"> </td>
                 <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(invoice?.paidamount))}.০</td>
             </tr>
             <tr className="bg-white text-[16px]" id="kalpurush">
                 <th className="px-1 border-t w-[80px] border-black"><h1 className='font-thin text-black' id="kalpurush">বিতরনকারী</h1></th>
-                <th className="px-1"><h1 className='font-thin text-black text-right' id="kalpurush">ম্যানেজার</h1></th>
+                <th className="px-1"><h1 className='font-thin text-black text-right overline' id="kalpurush">ম্যানেজার</h1></th>
                 <td className="px-1 overline border-black"></td>
                 <td className="px-1">মোট বাকি</td>
                 <td className="px-1"></td>
-                <td className="px-1 text-right">{convertToBengaliNumber((Calculate() + invoice?.paidamount))}.০</td>
+                <td className="px-1 text-right">{convertToBengaliNumber((Calculate()*-1 + (invoice?.paidamount)))}.০</td>
             </tr>
         </>
     )

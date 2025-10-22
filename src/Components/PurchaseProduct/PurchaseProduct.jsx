@@ -382,6 +382,8 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                                                 setPrep_Value(true)
                                             }
 
+                                        } else if (e.key === "ArrowLeft") {
+                                            setBrand(true)
                                         }
                                     }}
                                 />

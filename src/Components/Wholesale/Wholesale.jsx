@@ -384,6 +384,8 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                                 setPrep_Value(true)
                                             }
 
+                                        } else if (e.key === "ArrowLeft") {
+                                            setBrand(true)
                                         }
                                     }}
                                 />
@@ -535,7 +537,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                     <div className='flex justify-between gap-5'>
                         <div>
                             <div className='flex justify-between'>
-                                <InputComponent placeholder={due} value={due} label={'Balance'} readOnly={true} className={``} />
+                                <InputComponent placeholder={due * -1} value={due * -1} label={'Balance'} readOnly={true} className={``} />
                                 <InputComponent placeholder={values?.pay - lastTotal} value={values?.pay - lastTotal} label={'Return Balance'} readOnly={true} className={``} />
                             </div>
                             <div className={`${info?.role === "superadmin" ? "" : ""} pt-1`}>
@@ -570,13 +572,6 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                             setValues({ ...values, pay: num })
                                         }}
                                         placeholder={values?.pay} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
-                                    {/* <select value={values?.pay_type} onChange={(v) => { setValues({ ...values, pay_type: v.target.value }) }}
-                                        className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
-                                        {[{ id: 1, name: "Challan" }, { id: 2, name: "Due" }, { id: 3, name: "Cash" }].map(({ id, name }) => (
-                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
-                                        ))}
-                                    </select> */}
-
 
                                     <div className='relative z-50 border'>
                                         <RightArrow className='absolute rotate-90 top-2 right-2' />

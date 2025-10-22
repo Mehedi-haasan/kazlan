@@ -29,6 +29,8 @@ const InputComponent = ({ onChange, label, placeholder, type, isRequered, value,
                 } else if (e.key === "Tab") {
                     e.preventDefault();
                     handleTab()
+                }else if(e.key === "ArrowRight"){
+                   handleEnter(e.target.value) 
                 }
             }} className={`${className} font-thin border text-[#6B7280] dark:bg-[#040404] dark:text-white text-[15px] rounded  focus:outline-none block w-full px-1.5 pt-[6px] pb-[7px]`} placeholder={placeholder} />
         </div>

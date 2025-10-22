@@ -8,13 +8,13 @@ import PreviewOpeningInvoice from "../Invoice/PreviewOpeningInvoice";
 import PreviewPurchaseInvoice from "../Invoice/PreviewPurchaseInvoice";
 import PreviewPurchaseReturnInvoice from "../Invoice/PreviewPurchaseReturnInvoice";
 
-const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, info = {}, RecentInvoice, usertype="Customer",date_type ="Delivery Date",is_due=true }) => {
+const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Customer", date_type = "Delivery Date", is_due = true }) => {
 
 
     const [invopreview, setInvoPreview] = useState(false);
     const [id, setId] = useState(1)
     const [type, setType] = useState('')
-    const [values, setValues] = useState({})
+    const [user_type, setUserType] = useState("")
 
 
 
@@ -80,7 +80,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, info = {}, RecentInvo
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    Sale Type
+                                    {usertype === "Supplier" ? "Purchase" : "Sale"} Type
                                     <Updown />
                                 </div>
                             </th>
@@ -107,13 +107,13 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, info = {}, RecentInvo
                     <tbody>
                         {invoices?.map((item, i) => (
                             <tr key={i} onClick={() => { setId(item?.id); setType(item?.type); setInvoPreview(true) }} className={`border-b cursor-pointer ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
-                                <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.createdAt)}</th>
+                                <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.created_date)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin" >{item?.customername}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.total}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
-                                {is_due &&<th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>}
+                                {is_due && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>}
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin">
                                     <div className="flex justify-center items-center">
@@ -143,15 +143,15 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", sale, info = {}, RecentInvo
 
                 <Modal show={invopreview} handleClose={() => setInvoPreview(false)} size={`1000px`} crosshidden={true}>
                     {/* Sale */}
-                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={user_type} />}
                     {/* Purchase */}
-                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
-                     {/* Sale Return */}
-                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
-                     {/* Purchase Return */}
-                    { type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={user_type} />}
+                    {/* Sale Return */}
+                    {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={user_type} />}
+                    {/* Purchase Return */}
+                    {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={user_type} />}
 
-                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={user_type} id={id} type={type} />}
                 </Modal>
             </div>
         </div>
