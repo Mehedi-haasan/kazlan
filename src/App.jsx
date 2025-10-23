@@ -68,6 +68,7 @@ import EditSupplierBalance from "./Components/Payment/EditSupplierBalance.jsx";
 import PurchaseOrderEdit from "./Components/SaleOrderEdit/PurchaseOrderEdit.jsx";
 import PurchaseInvoice from "./Components/Invoice/PurchaseInvoice.jsx";
 import PurchaseReturnInvoice from "./Components/ReturnInvoice/PurchaseReturnInvoice.jsx";
+import SaleReturnEdit from "./Components/SaleOrderEdit/SaleReturnEdit.jsx";
 
 
 
@@ -362,6 +363,8 @@ function App() {
           <Route path="/sale/order" element={auth ? <WholeSell changeLan={lang} editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/sale/order/edit/:id/:type" element={auth ? <SaleOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
+          <Route path="/sale/return/edit/:id/:type" element={auth ? <SaleReturnEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/purchase/order/edit/:id/:type" element={auth ? <PurchaseOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 

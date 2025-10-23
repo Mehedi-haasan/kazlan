@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import MonthlySale from './MonthlySale';
 import BaseUrl from '../../Constant';
-import DailySalse from './DailySalse';
 import Cart from '../../icons/Cart';
 import Notification from '../../icons/Notification';
 import Button from '../Input/Button';
@@ -11,93 +9,11 @@ import RecentReceipt from '../RecentInvoice/RecentReceipt';
 
 
 
-const Dashboard = ({ data, info = {} }) => {
+const Dashboard = ({ info = {} }) => {
 
-    const [hourSales, setHourSales] = useState([]);
-    const [month, setMonthly] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [dailyreturn, setDailyReturn] = useState(0);
-    const [dailyPurchase, setDailyPurchase] = useState(0);
     const [message, setMessage] = useState({ id: Date.now(), mgs: '' });
+    const [summary, setSummary] = useState({})
 
-    const HourlySalesData = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse/test`, {
-            method: "GET",
-            headers: {
-                'authorization': token
-            }
-        });
-        const data = await response.json();
-
-        if (data?.items) {
-            const salesData = data.items.map((sa, i) => (
-                { x: new Date(2025, 0, 1, sa?.h), y: sa?.sales || 0 }
-            ));
-            let total = 0
-            const totalSale = data.items.map((sa, i) => (
-                total = total + sa?.sales
-            ));
-            setTotal(total)
-            setHourSales(salesData);
-        }
-    };
-
-    const GetTodaySale = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/daily/sale/today`, {
-            method: "GET",
-            headers: {
-                'authorization': token
-            }
-        });
-        const data = await response.json();
-        setTotal(data?.amount)
-
-    }
-
-    const DailySaleReturn = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/order/daily/salse/return/pruchase`, {
-            method: "GET",
-            headers: {
-                'authorization': token
-            }
-        });
-        const data = await response.json();
-        if (data) {
-            setDailyReturn(data?.returnsale || 0)
-            setDailyPurchase(data?.purchasesale || 0)
-        }
-    };
-
-    const MonthlySalesData = async () => {
-        const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/order/monthly`, {
-            method: "GET",
-            headers: {
-                'authorization': token
-            }
-        });
-        const data = await response.json();
-
-        if (data?.items) {
-            const formattedData = data.items.map(item => ({
-                x: new Date(item.x),
-                y: item.y
-            }));
-            setMonthly(formattedData);
-        }
-    };
-
-    useEffect(() => {
-        let token = localStorage.getItem('token')
-        if (token && token !== 'undefined') {
-            GetTodaySale()
-            MonthlySalesData()
-            DailySaleReturn()
-        }
-    }, [])
 
     useEffect(() => {
         document.title = "Dashboard - KazalandBrothers";
@@ -164,12 +80,12 @@ const Dashboard = ({ data, info = {} }) => {
         }
     }
 
-    const [pageSize, setPageSize] = useState(15)
+
     const [invoices, setInvoices] = useState([]);
     const [reciept, setReciept] = useState([])
     const RecentInvoice = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/user/recent/order/${1}/15`, {
             method: 'GET',
             headers: {
                 'authorization': token,
@@ -186,9 +102,30 @@ const Dashboard = ({ data, info = {} }) => {
         setReciept(recent_receipt)
     }
 
+
+    const BulkData = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch(`${BaseUrl}/api/get/order/summary`, {
+                method: 'GET',
+                headers: {
+                    'authorization': token,
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            });
+
+            const data = await response.json();
+            setSummary(data?.items)
+        } catch (error) {
+            setMessage({ id: Date.now(), mgs: error });
+        }
+    }
+
     useEffect(() => {
+        BulkData()
         RecentInvoice()
     }, [])
+
 
 
 
@@ -202,7 +139,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <Cart className="text-[#FFFFFF] h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12" />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{summary?.sale}.00</h1>
                         <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Sale Orders</p>
                     </div>
                 </div>
@@ -211,7 +148,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12 ' alt='image' />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{summary?.purchase}</h1>
                         <p className='font-semibold'>Purchase Orders</p>
                     </div>
                 </div>
@@ -220,7 +157,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12' alt='image' />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{summary?.cash}</h1>
                         <p className='font-semibold'>Cash Collections</p>
                     </div>
                 </div>
@@ -229,7 +166,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <Notification height="35px" width="35px" className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`} />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{summary?.online}</h1>
                         <p className='font-semibold'>Online Collections</p>
                     </div>
                 </div>
@@ -242,7 +179,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <Cart className="text-[#FFFFFF] h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12" />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{total}.00</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{summary?.return}.00</h1>
                         <p className='font-semibold bg-white dark:bg-[#040404] text-black dark:text-white'>Sale Returns</p>
                     </div>
                 </div>
@@ -251,7 +188,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12 ' alt='image' />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{dailyPurchase}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl pl-1'>{summary?.pur_return}</h1>
                         <p className='font-semibold'>Return To Suppliers</p>
                     </div>
                 </div>
@@ -260,7 +197,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <img src='https://cdn-icons-png.flaticon.com/128/6586/6586553.png' className='h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12' alt='image' />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{dailyreturn}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{summary?.nagad}</h1>
                         <p className='font-semibold'>Nagad Sale</p>
                     </div>
                 </div>
@@ -269,19 +206,13 @@ const Dashboard = ({ data, info = {} }) => {
                         <Notification height="35px" width="35px" className={`h-6 lg:h-8 2xl:h-12 w-6 lg:w-8 2xl:w-12`} />
                     </div>
                     <div className='flex justify-start items-end gap-1 dark:text-white'>
-                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{data?.length > 0 ? data?.length : 0}</h1>
+                        <h1 className='font-bold text-2xl lg:text-3xl 2xl:text-5xl'>{summary?.expense}</h1>
                         <p className='font-semibold'>Total Expense</p>
                     </div>
                 </div>
             </div>
 
             <div className='grid grid-cols-1 lg:grid-cols-2 mt-5 gap-5 lg:gap-7 pb-5 dark:bg-[#040404] dark:text-white rounded-md'>
-                {/* <div className='rounded-lg'>
-                    <DailySalse hourSales={hourSales} />
-                </div>
-                <div>
-                    <MonthlySale month={month} />
-                </div> */}
                 <div className='grid col-span-1 lg:col-span-2'>
 
                     <div className='rounded-xl overflow-hidden bg-[#FFFFFF] dark:bg-[#040404] p-3 shadow-lg dark:text-white'>
@@ -291,7 +222,7 @@ const Dashboard = ({ data, info = {} }) => {
                                 {BaseUrl === 'http://localhost:8050' && <Button isDisable={false} onClick={FetchData} name={'Upload to Server'} />}
                             </div>
                         </div>
-                        <InvoiceTemp info={info} invoices={invoices} RecentInvoice={RecentInvoice}/>
+                        <InvoiceTemp info={info} invoices={invoices} RecentInvoice={RecentInvoice} />
 
                     </div>
                 </div>
@@ -302,7 +233,7 @@ const Dashboard = ({ data, info = {} }) => {
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[20px]'>Recent Receipt</h1>
                         </div>
-                        <RecentReceipt info={info} invoices={reciept} RecentInvoice={RecentInvoice}/>
+                        <RecentReceipt info={info} invoices={reciept} RecentInvoice={RecentInvoice} />
 
                     </div>
                 </div>

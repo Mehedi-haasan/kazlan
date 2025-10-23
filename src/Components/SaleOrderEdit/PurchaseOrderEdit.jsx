@@ -178,7 +178,7 @@ const PurchaseOrderEdit = ({ shop = [], editio = [], brand = [], category = [], 
 
     const GetCustomer = async () => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/supplier/1/1000/Supplier`, {
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/1/1000`, {
             method: 'GET',
             headers: {
                 'authorization': token,

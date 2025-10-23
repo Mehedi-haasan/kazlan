@@ -42,12 +42,12 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Cust
                                     <Updown />
                                 </div>
                             </th>
-                            <th scope="col" className="px-3 py-3 text-center border-r ">
+                            {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Warehouse
                                     <Updown />
                                 </div>
-                            </th>
+                            </th>}
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Total
@@ -80,7 +80,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Cust
                             </th>
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
-                                    {usertype === "Supplier" ? "Purchase" : "Sale"} Type
+                                    Invoice Type
                                     <Updown />
                                 </div>
                             </th>
@@ -110,7 +110,7 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Cust
                                 <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.created_date)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin" >{item?.customername}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
+                                {info?.role === "superadmin" && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>}
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.total}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
                                 {is_due && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>}

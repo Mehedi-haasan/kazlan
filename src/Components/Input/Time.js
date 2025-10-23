@@ -144,6 +144,43 @@ export async function EditPrepareOrderData(allData, userId, name, values, info) 
 }
 
 
+export async function EditReturnOrderData(allData, userId, name, values, info) {
+    let orderData = [];
+    allData?.forEach((v) => {
+        let sale = 0;
+        const price = parseInt(v?.price) || 0;
+        const discount = parseInt(v?.discount) || 0;
+        const qty = parseInt(v?.qty) || 0;
+        if (v?.discount_type === "Fixed") {
+            sale = (price - discount) * qty;
+        } else if (v?.discount_type === "Percentage") {
+            const discountedPrice = price - (price * discount / 100);
+            sale = discountedPrice * qty;
+        }
+
+        orderData.push({
+            active: true,
+            product_id: v?.product ? v?.product?.id : v?.id,
+            code: v?.product ? v?.product?.code : v?.code,
+            username: name,
+            userId: userId,
+            name: v?.name,
+            shop: info?.shopname,
+            cost: price,
+            price: price,
+            discount: discount,
+            discount_type: v?.discount_type,
+            sellprice: sale,
+            qty: qty,
+            type: v?.type,
+            contact: values?.phone,
+            date: v?.date,
+            deliverydate: v?.deliverydate,
+        });
+    });
+    return orderData
+}
+
 export function PrepareWholeSaleData(allData, userId, name, values, info, lastTotal, paking, delivary, due, special_discount) {
     let orderData = [];
     allData?.forEach((v) => {
@@ -237,7 +274,7 @@ export async function PreparePurchaseReData(allData, userId, name, values, info,
             deliverydate: values?.deliverydate
         });
     });
-    let return_amount = values?.pay - lastTotal
+    let return_amount = values?.pay + lastTotal
     let final_amount = due + return_amount
     return {
         shop: info?.shopname,
@@ -295,7 +332,7 @@ export async function PrepareData(allData, userId, name, values, info, lastTotal
             deliverydate: values?.deliverydate
         });
     });
-    let return_amount = lastTotal - values?.pay
+    let return_amount = lastTotal + values?.pay
     let final_amount = due + return_amount
     return {
         shop: info?.shopname,

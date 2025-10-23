@@ -21,7 +21,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
     const [invopreview, setInvoPreview] = useState(false);
     const [id, setId] = useState(1)
     const [type, setType] = useState('')
-      const [userType, setUserType] = useState("")
+    const [userType, setUserType] = useState("")
     const ModalOpen = (id) => {
         if (id === selected) {
             setSelected(null)
@@ -75,12 +75,12 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                     <Updown />
                                 </div>
                             </th>
-                            <th scope="col" className="px-3 py-3 text-center border-r ">
+                            {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Warehouse
                                     <Updown />
                                 </div>
-                            </th>
+                            </th>}
                             <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Amount
@@ -131,7 +131,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                 <th scope="col" className="px-3 py-2 border-x font-thin ">{formatDate(item?.created_date)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.customername}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>
+                                {info?.role === "superadmin" && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>}
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.type}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>

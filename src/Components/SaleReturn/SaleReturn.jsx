@@ -119,6 +119,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         }
         const token = localStorage.getItem('token');
         let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, 0, 0, due, '', 0);
+        console.log(orderData);
         try {
             const response = await fetch(`${BaseUrl}/api/return/sale`, {
                 method: 'POST',
@@ -611,7 +612,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                     <div className='flex justify-between gap-5'>
                         <div>
                             <div className=''>
-                                <InputComponent placeholder={user?.balance ? user?.balance*-1 : due} value={user?.balance ? user?.balance*-1 : due} label={'Balance'} readOnly={true} className={``} />
+                                <InputComponent placeholder={user?.balance ? user?.balance * -1 : due} value={user?.balance ? user?.balance * -1 : due} label={'Balance'} readOnly={true} className={``} />
                             </div>
                             <div>
                                 <p className='py-2 pt-1 font-semibold text-sm'>Pay Amount</p>

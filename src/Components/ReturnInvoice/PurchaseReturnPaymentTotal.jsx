@@ -103,7 +103,7 @@ const PurchaseReturnPaymentTotal = ({ user, total, invoice }) => {
                 <td className="px-1 overline border-black"></td>
                 <td className="px-1">মোট বাকি</td>
                 <td className="px-1"></td>
-                <td className="px-1 text-right">{convertToBengaliNumber(Calculate() - invoice?.paidamount)}.০</td>
+                <td className="px-1 text-right">{convertToBengaliNumber(Calculate() + invoice?.paidamount)}.০</td>
             </tr>
         </>
     )

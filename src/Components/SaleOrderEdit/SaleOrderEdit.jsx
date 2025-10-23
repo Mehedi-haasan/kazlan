@@ -207,7 +207,6 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         setAllData(data?.items);
         setUser(data?.user);
         let invo = data?.invoice;
-        // invo['paidamount'] = 0
         setInvoice(data?.invoice);
         setValues(invo)
         setPaking(data?.user?.packing);
@@ -263,7 +262,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         setAllData(updatedData);
     };
 
-    console.log(invoice);
+
 
     return (
         <div className="min-h-screen pb-12 px-2.5 py-7 w-full">
@@ -279,12 +278,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                 setSecond(true);
                                 setFirst(false);
                                 setCustomer([]);
-                                if (params?.type === "Purchase items") {
-                                    GetCustomer(v?.id, "suppliers");
-                                } else if (params?.type === "Sale") {
-                                    GetCustomer(v?.id, "customers");
-                                }
-
+                                GetCustomer(v?.id, "customers");
                                 setFilter({ ...filter, state: v?.name });
                             }}
                             label={"Thana Name"} className='rounded-l z-50' />
@@ -591,7 +585,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
                                     <select value={values?.status} onChange={(v) => { setValues({ ...values, status: v.target.value }); setInvoice({ ...invoice, status: v.target.value }) }}
                                         className={`border text-[#6B7280] w-[35%] text-sm  focus:outline-none font-thin rounded-r block p-2 `}>
                                         {[{ id: 1, name: "Cash" }, { id: 2, name: "Due" }].map(({ id, name }) => (
-                                            <option key={id} value={name} className='text-[#6B7280]'> {name}</option>
+                                            <option key={id} value={name} className='text-[#6B7280]'>{name}</option>
                                         ))}
                                     </select>
 

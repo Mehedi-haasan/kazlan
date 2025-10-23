@@ -362,7 +362,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
         };
     };
 
-    
+
 
     return (
         <div className="pl-3 pt-5 pr-2 min-h-screen pb-12">
@@ -478,12 +478,12 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                         <Updown />
                                     </div>
                                 </th>
-                                <th scope="col" className="px-3 py-3 text-center border-r ">
+                                {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
                                         Warehouse
                                         <Updown />
                                     </div>
-                                </th>
+                                </th>}
                                 <th scope="col" className="px-3 py-3 text-center border-r ">
                                     <div className="flex justify-between items-center">
                                         Created by
@@ -528,7 +528,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.created_date)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{ }{item?.type}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>
+                                    {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>}
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
@@ -560,11 +560,11 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                     {type === "Sale" && <PreviewInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
                     {/* Purchase */}
                     {type === "Purchase items" && <PreviewPurchaseInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
-                     {/* Sale Return */}
+                    {/* Sale Return */}
                     {type === "Sale Return" && <PreviewReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
-                     {/* Purchase Return */}
-                    { type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
-                     {/* Opening */}
+                    {/* Purchase Return */}
+                    {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
+                    {/* Opening */}
                     {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
                 </Modal>
 

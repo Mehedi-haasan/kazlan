@@ -97,7 +97,7 @@ const PurchaseInvoicePaymentTotal = ({ user, total, invoice, info }) => {
                 <td className="p-1 text-right">{convertToBengaliNumber(Calculate()*-1)}.০</td>
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
-                <td className="pr-6 py-1" colSpan={3}>{info?.name}</td>
+                <td className="pr-6 py-1" colSpan={3}>{invoice?.creator}</td>
                 <td className="p-1 border-b">জমা</td>
                 <td className="p-1 border-b"> </td>
                 <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
