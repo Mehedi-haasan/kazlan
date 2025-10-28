@@ -119,7 +119,6 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         }
         const token = localStorage.getItem('token');
         let orderData = await PrepareData(allData, userId, name, values, info, lastTotal, 0, 0, due, '', 0);
-        console.log(orderData);
         try {
             const response = await fetch(`${BaseUrl}/api/return/sale`, {
                 method: 'POST',
@@ -241,7 +240,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
             if (item?.id === updateId) {
-                return { ...item, qty: updateQty };
+                return { ...item, qty: updateQty ? updateQty : 0 };
             } else {
                 return item;
             }

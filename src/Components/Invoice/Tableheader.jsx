@@ -5,7 +5,7 @@ const Tabeheader = ({ type }) => {
 
     const GetType = (type) => {
         let value = "বিক্রয় মূল্য";
-        console.log(type);
+
         if (type === "Sale" || type === "Sale Return") {
             value = "বিক্রয় মূল্য";
         } else if (type === "Purchase items" || type === "Purchase Items" || type === "Return Purchase") {

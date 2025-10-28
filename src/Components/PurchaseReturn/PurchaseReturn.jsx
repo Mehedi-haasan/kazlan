@@ -182,10 +182,6 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
 
     const HandleDelete = (id) => {
-        // if (!id) return;
-        // const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        // if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };
@@ -242,7 +238,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
             if (item?.id === updateId) {
-                return { ...item, qty: updateQty };
+                return { ...item, qty: updateQty ? updateQty : 0 };
             } else {
                 return item;
             }

@@ -5,7 +5,7 @@ import Notification from "../Input/Notification";
 import { useNavigate } from "react-router-dom";
 
 
-const AttributeTypeCreate = ({ entries }) => {
+const AttributeTypeCreate = ({CallAgain, entries }) => {
 
     const [values, setValues] = useState({ name: "", type: "Attribute Type" });
     const [isLoading, setIsLoading] = useState(false)
@@ -35,6 +35,7 @@ const AttributeTypeCreate = ({ entries }) => {
             const data = await response.json();
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
+            CallAgain()
             goto('/attribute')
         } catch (error) {
             console.error('Error updating variant:', error);

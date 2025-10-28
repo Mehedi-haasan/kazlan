@@ -8,7 +8,7 @@ import SelectionComponent from "../Input/SelectionComponent";
 import { useNavigate } from "react-router-dom";
 
 
-const CreateAttributeValue = ({ entries }) => {
+const CreateAttributeValue = ({CallAgain, entries }) => {
 
 
     const [values, setValues] = useState({ name: "", });
@@ -47,6 +47,7 @@ const CreateAttributeValue = ({ entries }) => {
             const data = await response.json();
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
+            CallAgain()
             goto('/attribute')
         } catch (error) {
             console.error('Error updating variant:', error);

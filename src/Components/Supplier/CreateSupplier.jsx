@@ -74,22 +74,22 @@ const CreateSupplier = ({ state, info = {} }) => {
 
 
     const handleSubmitOffline = async () => {
-        if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
-            return
-        }
-        setIsLoading(true)
-        const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:8050/api/create/customers`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': token,
-            },
-            body: JSON.stringify(values)
-        });
-        const data = await response.json();
-        setIsLoading(false);
-        goto('/suppliers')
+        // if (!values?.stateId || !values?.name || !values?.phone || !values?.address) {
+        //     return
+        // }
+        // setIsLoading(true)
+        // const token = localStorage.getItem('token')
+        // const response = await fetch(`http://localhost:8050/api/create/customers`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'authorization': token,
+        //     },
+        //     body: JSON.stringify(values)
+        // });
+        // const data = await response.json();
+        // setIsLoading(false);
+        // goto('/suppliers')
     }
 
     useEffect(() => {

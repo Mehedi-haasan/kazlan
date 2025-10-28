@@ -14,7 +14,7 @@ import Pdf from "../Pdf/Pdf";
 import Modal from "../Input/Modal";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import generatePDF from 'react-to-pdf';
+import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 import PreviewInvoice from '../Invoice/PreviewInvoice';
 import PreviewOpeningInvoice from '../Invoice/PreviewOpeningInvoice';
 import PreviewReturnInvoice from '../Invoice/PreviewReturnInvoice';
@@ -60,7 +60,26 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
     });
     const options = {
         width: 1000,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        resolution: Resolution.HIGH,
+        page: {
+            margin: {
+                top: 0,
+                right: 0,
+                bottom: Margin.SMALL, // ✅ only bottom margin
+                left: 0,
+            },
+            format: 'letter',
+            orientation: 'landscape',
+        },
+        overrides: {
+            pdf: {
+                compress: true
+            },
+            canvas: {
+                useCORS: true
+            }
+        },
     };
     const { ref, getPng } = useToImage(options)
 
@@ -394,7 +413,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                 </div>
                             </div>
                             <div className='flex justify-between items-center w-[400px]'>
-                                <h1 className='py-1.5 font-semibold'>{values?.usertype === "Customer" ? "Customer" : "Supplier"} Type</h1>
+                                <h1 className='py-1.5 font-semibold'>{values?.usertype === "  " ? "Customer" : "Supplier"} Type</h1>
                                 <h1 className='py-1.5'>{values?.customertype}</h1>
                             </div>
                             <div className='flex justify-between items-center w-[400px]'>
@@ -528,7 +547,7 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{formatDate(item?.created_date)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{ }{item?.type}</th>
-                                    {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.shopname}</th>}
+                                    {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 border-r font-thin">{item?.shopname}</th>}
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
@@ -645,34 +664,16 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {opening && <tr className={`border cursor-pointer`}>
-                                            <th scope="col" className="px-1 py-1 border-r font-thin ">{formatDate(opening?.createdAt)}</th>
-                                            {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-thin ">{opening?.sup_invo}</th>}
-                                            <th scope="col" className="px-1 py-1 border-r font-thin ">{prefix}/{ReturnSaleCode(opening?.type)}-{String(opening?.id).padStart(5, '0')}</th>
-                                            <th scope="col" className="px-1 py-1 border-r font-thin ">{opening?.type}</th>
-                                            {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-thin ">{opening?.total}</th>}
-                                            <th scope="col" className="px-1 py-1 border-r font-thin text-center">{opening?.total}</th>
-                                            <th scope="col" className="px-1 py-1 border-r font-thin text-center">{opening?.paidamount}</th>
-                                            <th scope="col" className="px-1 py-1 border-r font-thin text-center">{opening?.return}</th>
-                                            <th scope="col" className="px-1 py-1 border-r font-thin text-right">
-                                                {values?.usertype === "Supplier" ? <button className={`border rounded-full px-4 mx-auto block ${opening?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${opening?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                                                    {Math.abs(opening?.balance)}
-                                                </button> :
-                                                    <button className={`border rounded-full px-4 mx-auto block ${opening?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${opening?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                                                        {Math.abs(opening?.balance)}
-                                                    </button>}</th>
-                                        </tr>} */}
                                         {reverse?.map((item, i) => (
                                             <tr className={`border cursor-pointer`}>
-                                                <th scope="col" className="px-1 py-1 border-r font-thin ">{formatDate(item?.createdAt)}</th>
-                                                {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-thin ">{item?.sup_invo}</th>}
-                                                <th scope="col" className="px-1 py-1 border-r font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</th>
-                                                <th scope="col" className="px-1 py-1 border-r font-thin ">{item?.type}</th>
-                                                {/* {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-thin ">{item?.total}</th>} */}
-                                                <th scope="col" className="px-1 py-1 border-r font-thin text-center">{item?.total}.00</th>
-                                                <th scope="col" className="px-1 py-1 border-r font-thin text-center">{item?.paidamount}.00</th>
-                                                <th scope="col" className="px-1 py-1 border-r font-thin text-center">{item?.return}.00</th>
-                                                <th scope="col" className="px-1 py-1 border-r font-thin text-center">{item?.balance * -1}.00</th>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin ">{formatDate(item?.createdAt)}</td>
+                                                {values?.usertype === "Supplier" && <td className="px-1 py-1 border-r font-thin ">{item?.sup_invo}</td>}
+                                                <td className="px-1 py-1 border-r mb-1 font-thin ">{prefix}/{ReturnSaleCode(item?.type)}-{String(item?.id).padStart(5, '0')}</td>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin ">{item?.type}</td>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin text-center">{item?.total}.00</td>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin text-center">{item?.paidamount}.00</td>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin text-center">{item?.return}.00</td>
+                                                <td className="px-1 py-1 border-r mb-1 font-thin text-center">{item?.balance * -1}.00</td>
                                             </tr>
                                         ))
                                         }
@@ -681,7 +682,6 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                             {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-thin "></th>}
                                             <th scope="col" className="px-1 py-1 border-r font-thin "></th>
                                             <th scope="col" className="px-1 py-1 border-r font-thin "></th>
-                                            {/* {values?.usertype === "Supplier" && <th scope="col" className="px-1 py-1 border-r font-semibold">{calcu?.total}</th>} */}
                                             <th scope="col" className="px-1 py-1 border-r font-semibold text-center">{calcu?.total}.00</th>
                                             <th scope="col" className="px-1 py-1 border-r font-semibold text-center">{calcu?.paid}.00</th>
                                             <th scope="col" className="px-1 py-1 border-r font-semibold text-center">{calcu?.return_amount}.00</th>

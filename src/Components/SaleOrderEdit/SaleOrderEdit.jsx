@@ -111,7 +111,8 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         let orderData = await EditPrepareOrderData(allData, invoice?.userId, name, values, info)
         const token = localStorage.getItem('token');
         invoice['is_edit'] = true;
-        invoice['due'] = invoice?.paidamount - lastTotal
+        let due_amount = invoice?.paidamount - lastTotal
+        invoice['due'] = due_amount * -1
         try {
             const response = await fetch(`${BaseUrl}/api/edit/sale/order`, {
                 method: 'POST',
@@ -127,7 +128,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
-            goto(`/invoice/${data?.invoice}/${params?.type}`)
+            goto(`/sale/invoice/${invoice?.id}/${invoice?.type}`)
         } catch (error) {
             console.error('Error updating variant:', error);
         }
@@ -254,7 +255,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
             if (item?.id === updateId) {
-                return { ...item, qty: updateQty };
+                return { ...item, qty: updateQty ? updateQty : 0 };
             } else {
                 return item;
             }

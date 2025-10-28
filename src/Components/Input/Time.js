@@ -1,3 +1,4 @@
+
 export function getFormattedDate() {
     const date = new Date();
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -275,7 +276,7 @@ export async function PreparePurchaseReData(allData, userId, name, values, info,
         });
     });
     let return_amount = values?.pay + lastTotal
-    let final_amount = due + return_amount
+    let final_amount = due - return_amount
     return {
         shop: info?.shopname,
         customername: name,
@@ -402,8 +403,6 @@ export async function CalculateEditAmount(allData, delivary = 0, paking = 0, las
 }
 
 
-
-
 export function DiscountCal(itm) {
 
     let sale = 0;
@@ -523,8 +522,6 @@ export function numberToWords(num) {
 
     return parts.join(" ").trim() + " টাকা মাত্র";
 }
-
-
 
 
 export function ReturnSaleCode(type) {

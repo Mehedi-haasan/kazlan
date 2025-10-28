@@ -94,7 +94,7 @@ const PurchaseInvoicePaymentTotal = ({ user, total, invoice, info }) => {
                 <td className="pr-6 py-1" colSpan={3}></td>
                 <td className="p-1">অবশিষ্ট</td>
                 <td className="p-1"> </td>
-                <td className="p-1 text-right">{convertToBengaliNumber(Calculate()*-1)}.০</td>
+                <td className="p-1 text-right">{convertToBengaliNumber(Calculate() * -1)}.০</td>
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
                 <td className="pr-6 py-1" colSpan={3}>{invoice?.creator}</td>
@@ -108,7 +108,7 @@ const PurchaseInvoicePaymentTotal = ({ user, total, invoice, info }) => {
                 <td className="p-1"></td>
                 <td className="p-1">মোট বাকি</td>
                 <td className="p-1"> </td>
-                <td className="p-1 text-right">{convertToBengaliNumber(TotalDue()*-1)}.০</td>
+                <td className="p-1 text-right">{convertToBengaliNumber((Calculate() * -1) + invoice?.paidamount)}.০</td>
             </tr>
         </>
     )

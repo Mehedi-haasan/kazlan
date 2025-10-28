@@ -69,6 +69,7 @@ import PurchaseOrderEdit from "./Components/SaleOrderEdit/PurchaseOrderEdit.jsx"
 import PurchaseInvoice from "./Components/Invoice/PurchaseInvoice.jsx";
 import PurchaseReturnInvoice from "./Components/ReturnInvoice/PurchaseReturnInvoice.jsx";
 import SaleReturnEdit from "./Components/SaleOrderEdit/SaleReturnEdit.jsx";
+import PurchaseReturnEdit from "./Components/SaleOrderEdit/PurchaseReturnEdit.jsx";
 
 
 
@@ -88,24 +89,6 @@ function App() {
   let entries = [{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]
   const [lang, setLang] = useState({})
 
-
-
-  const getNotification = async () => {
-    const token = localStorage.getItem('token')
-    const response = await fetch(`${BaseUrl}/api/get/notification`, {
-      method: 'GET',
-      headers: {
-        "authorization": token,
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    });
-    const data = await response.json()
-    if (data && data?.message === "Invalid token" || data?.message === "User not found") {
-      localStorage.setItem('token', null);
-      setAuth(false);
-    }
-    setData(data.items)
-  }
 
   const getCategory = async () => {
     const token = localStorage.getItem('token')
@@ -248,7 +231,6 @@ function App() {
     }
 
     if (auth) {
-      // getNotification()
       getCategory();
       getBrand()
       getUser()
@@ -258,32 +240,6 @@ function App() {
 
   }, [auth])
 
-
-  // useEffect(() => {
-  //   const handleContextMenu = (e) => {
-  //     e.preventDefault();
-  //   };
-  //   document.addEventListener("contextmenu", handleContextMenu);
-  //   return () => {
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const handleKeyDown = (e) => {
-  //     if (
-  //       e.key === "F12" ||
-  //       (e.ctrlKey && e.shiftKey && ["I", "C", "J"].includes(e.key)) ||
-  //       (e.ctrlKey && e.key === "U") // View Source
-  //     ) {
-  //       e.preventDefault();
-  //     }
-  //   };
-  //   document.addEventListener("keydown", handleKeyDown);
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, []);
 
 
   useEffect(() => {
@@ -319,6 +275,7 @@ function App() {
       localStorage.setItem("theme", "light");
     }
   }, [darkMode]);
+
 
 
 
@@ -368,6 +325,8 @@ function App() {
 
           <Route path="/purchase/order/edit/:id/:type" element={auth ? <PurchaseOrderEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
+          <Route path="/purchase/return/edit/:id/:type" element={auth ? <PurchaseReturnEdit editio={edition} entries={entries} brand={brand} category={category} shop={shop} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+
           <Route path="/notification" element={<Notification data={data} info={info} />} />
 
           <Route path="/customer/balance/:id" element={auth ? <CustomerPayment info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
@@ -412,19 +371,19 @@ function App() {
 
           <Route path="/attribute" element={auth ? <Attribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/attribute" element={auth ? <CreateAttribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/attribute" element={auth ? <CreateAttribute CallAgain={Edition} brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/attribute/value" element={auth ? <CreateAttributeValue brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/attribute/value" element={auth ? <CreateAttributeValue CallAgain={Edition} brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/attribute/type" element={auth ? <AttributeTypeCreate brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/attribute/type" element={auth ? <AttributeTypeCreate CallAgain={Edition} brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/update/attribute/:id" element={auth ? <UpdateAttribute brands={brand} entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/category" element={auth ? <CreateCategory brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/category" element={auth ? <CreateCategory CallAgain={getCategory} brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/update/category/:id" element={auth ? <UpdateCategory brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/create/brand" element={auth ? <CreateBrand brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/create/brand" element={auth ? <CreateBrand CallAgain={getBrand} brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/update/brand/:id" element={auth ? <UpdateBrand brands={brand} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -434,23 +393,15 @@ function App() {
 
           <Route path="/update/user/:id" element={auth ? <UpdateUser entries={entries} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-
-
           <Route path="/sale/invoice/:id/:type" element={auth ? <Invoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/purchase/invoice/:id/:type" element={auth ? <PurchaseInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-
-
           <Route path="/opening/invoice/:id/:type" element={auth ? <OpeningInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
-
-
 
           <Route path="/sale/return/invoice/:id/:type" element={auth ? <ReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/purchase/return/invoice/:id/:type" element={auth ? <PurchaseReturnInvoice info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
-
-
 
           <Route path="/recent/invoice" element={auth ? <RecentInvoice /> : <Login auth={(v) => { setAuth(v) }} />} />
 

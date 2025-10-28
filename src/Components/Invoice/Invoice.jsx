@@ -12,7 +12,7 @@ import Edit from '../../icons/Edit'
 import Pdf from '../Pdf/Pdf';
 import PdfHeader from './PdfHeader';
 import PdfBottom from './PdfBottom'
-import { ReturnSaleCode } from '../Input/Time';
+import { ReturnSaleCode,convertToBengaliNumber } from '../Input/Time';
 
 
 
@@ -65,10 +65,6 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
         GetReturnProduct(params?.id, params?.type)
     }, [params?.id])
 
-    function convertToBengaliNumber(num) {
-        const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
-        return num.toString().replace(/\d/g, (digit) => bengaliDigits[digit]);
-    }
 
     const CalculateSale = (item) => {
         let sale = 0;

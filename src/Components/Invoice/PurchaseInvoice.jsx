@@ -427,7 +427,7 @@ const PurchaseInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                             onClick={() => {
                                 if (params?.type === "Sale") {
                                     goto(`/sale/order/edit/${params?.id}/${params?.type}`)
-                                } else if (params?.type === "Purchase items") {
+                                } else if (params?.type === "Purchase Items") {
                                     goto(`/purchase/order/edit/${params?.id}/${params?.type}`)
                                 }
                             }}

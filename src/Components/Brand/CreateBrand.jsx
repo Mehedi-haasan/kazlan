@@ -7,7 +7,7 @@ import logo from '../Logo/photo.png'
 import { useNavigate } from "react-router-dom";
 
 
-const CreateBrand = ({ entries }) => {
+const CreateBrand = ({ CallAgain, entries }) => {
 
     const [image_url, setImage_Url] = useState();
     const [imageFile, setImageFile] = useState(null);
@@ -71,6 +71,7 @@ const CreateBrand = ({ entries }) => {
             const data = await response.json();
             setValues({ ...values, name: '' })
             setMessage({ id: Date.now(), mgs: data?.message });
+            CallAgain()
             goto('/brand')
         } catch (error) {
             console.error('Error updating variant:', error);

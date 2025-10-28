@@ -249,7 +249,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
                                 </div> */}
 
                                 <div>
-                                    <p className='py-2 pt-1 font-semibold text-sm'>Opening Balance</p>
+                                    <p className='py-2 pt-1 font-semibold text-sm'>Balance</p>
                                     <div className='flex justify-start items-end pb-1 pt-1'>
                                         <input ref={dis}
                                             onKeyDown={(e) => {
@@ -265,8 +265,8 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
                                                 let num = BanglaToEnglish(e.target.value);
                                                 setValues({ ...values, balance: num })
                                             }}
-                                            value={values?.balance}
-                                            placeholder={values?.balance} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
+                                            value={values?.balance * -1}
+                                            placeholder={values?.balance * -1} className='border-y border-l dark:bg-[#040404] dark:text-white px-2 focus:outline-none rounded-l font-thin pt-[6px] pb-[5px] w-[65%]' />
 
                                         <div className='relative z-50 border'>
                                             <RightArrow className='absolute rotate-90 top-2 right-2' />

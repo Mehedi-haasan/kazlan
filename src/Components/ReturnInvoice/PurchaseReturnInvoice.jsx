@@ -341,7 +341,7 @@ const PurchaseReturnInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => 
 
                     <div className="flex justify-end my-3 mr-2">
                         <button
-                            onClick={() => goto(`/sale/order/edit/${params?.id}/${params?.type}`)}
+                            onClick={() => goto(`/purchase/return/edit/${params?.id}/${params?.type}`)}
                             className="group border bg-[#FFFFFF] border-green-500 flex shadow-md justify-start items-center gap-1 text-green-500 rounded-lg px-4 py-1.5 ml-3 font-thin hover:bg-green-500 hover:text-white transition duration-200"
                         >
                             <Edit className="group-hover:text-white transition duration-200" />

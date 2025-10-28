@@ -112,10 +112,10 @@ const SaleReturnEdit = ({ shop = [], editio = [], brand = [], category = [], sta
         const token = localStorage.getItem('token');
         invoice['is_edit'] = true;
         invoice['due'] = 0
-        invoice['return'] = 0
+        invoice['total'] = 0
+        invoice['return'] = lastTotal
         let last_bal = user?.balance + lastTotal + invoice?.paidamount
         invoice['balance'] = last_bal
-        console.log(invoice);
         try {
             const response = await fetch(`${BaseUrl}/api/edit/sale/return`, {
                 method: 'POST',
@@ -258,7 +258,7 @@ const SaleReturnEdit = ({ shop = [], editio = [], brand = [], category = [], sta
         let updateQty = parseInt(qty)
         const updatedData = allData.map((item) => {
             if (item?.id === updateId) {
-                return { ...item, qty: updateQty };
+                return { ...item, qty: updateQty ? updateQty : 0 };
             } else {
                 return item;
             }
