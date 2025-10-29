@@ -251,7 +251,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
                                 <div>
                                     <p className='py-2 pt-1 font-semibold text-sm'>Balance</p>
                                     <div className='flex justify-start items-end pb-1 pt-1'>
-                                        <input ref={dis}
+                                        <input ref={dis} readOnly={true}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter") {
                                                     handleSubmit();
@@ -270,7 +270,7 @@ const UpdateCustomer = ({ state = [], info = {} }) => {
 
                                         <div className='relative z-50 border'>
                                             <RightArrow className='absolute rotate-90 top-2 right-2' />
-                                            <input ref={dtype} value={values?.balance_type} onClick={() => { setDisType(!disType); }}
+                                            <input ref={dtype} value={values?.balance_type} 
                                                 onKeyDown={(e) => {
                                                     if (e.key === "ArrowDown") {
                                                         if (selectedId === disOnSale?.length - 1) {
