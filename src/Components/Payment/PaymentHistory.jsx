@@ -20,6 +20,7 @@ import PreviewOpeningInvoice from '../Invoice/PreviewOpeningInvoice';
 import PreviewReturnInvoice from '../Invoice/PreviewReturnInvoice';
 import PreviewPurchaseInvoice from '../Invoice/PreviewPurchaseInvoice';
 import PreviewPurchaseReturnInvoice from '../Invoice/PreviewPurchaseReturnInvoice';
+import Notification from '../Input/Notification';
 
 
 const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
@@ -382,9 +383,25 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
     };
 
 
+    const handleSubmit = async () => {
+
+        const token = localStorage.getItem('token')
+        const response = await fetch(`${BaseUrl}/api/invoice/recalculate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': token,
+            },
+            body: JSON.stringify({ userId: values?.id })
+        });
+        const data = await response.json();
+        setMessage({ id: Date.now(), mgs: data.message });
+    }
+
 
     return (
         <div className="pl-3 pt-5 pr-2 min-h-screen pb-12">
+            <Notification message={message} />
             <div className="bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow flex justify-between">
                 <div className='flex justify-start items-start gap-5 px-2 py-1.5 dark:bg-[#040404] dark:text-white'>
                     {
@@ -443,7 +460,8 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
 
 
                 <div className='pt-8 w-[400px] mr-4'>
-                    <div className='flex justify-end'>
+                    <div className='flex justify-end gap-4'>
+                        <button className={`border text-white rounded-lg font-thin shadow py-1.5 px-4 bg-blue-600`} onClick={handleSubmit}>Recalculate</button>
                         <NavLink to={`/${customertype}/balance/${values?.id}`} className={`border text-white rounded-lg font-thin shadow py-1.5 px-4 bg-blue-600`}>Make Payment</NavLink>
                     </div>
 
