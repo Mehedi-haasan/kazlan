@@ -17,14 +17,14 @@ const Tabeheader = ({ type }) => {
 
 
     return (
-        <thead className="text-gray-900 dark:bg-[#040404] dark:text-white text-[15px]">
-            <tr className='border font-thin text-[16px]' id="kalpurush">
-                <th scope="col" className="p-2 text-center">পরিমাণ</th>
-                <th scope="col" className="p-2 border-l">বইয়ের নাম এবং শ্রেণি</th>
-                <th scope="col" className="p-2 border-l">প্রকাশনি</th>
-                <th scope="col" className="p-2 text-center border-l">মূল্য</th>
-                <th scope="col" className="p-2 text-center border-l">{GetType(type)}</th>
-                <th scope="col" className="p-2 text-right border-l">মোট মূল্য</th>
+        <thead className="text-black dark:bg-[#040404] dark:text-white text-[15px] text-black">
+            <tr className='border border-black font-thin text-[16px]' id="kalpurush">
+                <th scope="col" className="p-1 text-center align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>পরিমাণ</th>
+                <th scope="col" className="p-1 border-l border-black align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>বইয়ের নাম এবং শ্রেণি</th>
+                <th scope="col" className="p-1 border-l border-black align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>প্রকাশনি</th>
+                <th scope="col" className="p-1 text-center border-l border-black align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>মূল্য</th>
+                <th scope="col" className="p-1 text-center border-l border-black align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>{GetType(type)}</th>
+                <th scope="col" className="p-1 text-right border-l border-black align-top" style={{ paddingBottom: '10px', paddingTop: '2px' }}>মোট মূল্য</th>
             </tr>
         </thead>
     )

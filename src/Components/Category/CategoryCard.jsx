@@ -8,8 +8,6 @@ import Button from "../Input/Button";
 import BaseUrl from "../../Constant";
 import logo from '../Logo/photo.png'
 import ImageSelect from "../Input/ImageSelect";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
-import { useLottie } from "lottie-react";
 import Notification from "../Input/Notification";
 import { useNavigate } from "react-router-dom";
 

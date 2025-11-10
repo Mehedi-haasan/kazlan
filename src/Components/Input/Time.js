@@ -395,7 +395,7 @@ export async function CalculateEditAmount(allData, delivary = 0, paking = 0, las
         }
 
     }, 0);
-
+    console.log(delivary, paking, lastdiscount)
     return {
         amount: parseInt(amount),
         lastTotal: parseInt(amount) + parseInt(delivary) + parseInt(paking) - parseInt(lastdiscount) - parseInt(spDis)

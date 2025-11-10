@@ -43,6 +43,10 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
     const last_pay = useRef()
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
+    const [brandList, setBrandList] = useState([])
+    useEffect(() => {
+        setBrandList([...brand].reverse())
+    }, [brand])
     const [total, setTotal] = useState(0);
     const [paking, setPaking] = useState(0);
     const [delivary, setDelivery] = useState(0)
@@ -398,7 +402,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                             }} label={'Category'} />
                     </div>
                     <div className='pt-1.5'>
-                        <SelectionComponentSearch options={brand} default_select={bran} default_value={filter?.bran_value}
+                        <SelectionComponentSearch options={brandList} default_select={bran} default_value={filter?.bran_value}
                             handleRight={() => { setBrand(false); inputRef.current.focus() }}
                             handleLeft={() => { setBrand(false); setCatego(true); }}
                             onSelect={(v) => {
@@ -472,9 +476,12 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                         <div className="text-xs text-gray-900">
                                             <SearchResultHeader />
                                         </div>
-                                        <div>
+                                        <div className='max-h-[350px] overflow-hidden overflow-y-scroll'>
                                             {searchData?.map((item, i) => {
-                                                return <div key={i} className={`border-b cursor-pointer grid grid-cols-8 ${selectedId === i ? 'bg-gray-100' : ''}`}
+                                                return <div key={i}
+                                                    onMouseEnter={() => { setSelectedId(i) }}
+                                                    ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                    className={`border-b cursor-pointer grid grid-cols-11 ${selectedId === i ? 'bg-blue-600 text-white' : 'text-black'}`}
                                                     onClick={() => {
                                                         let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
                                                         setPrepareData(data)
@@ -493,13 +500,13 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                                         setPrep_Value(true)
                                                     }}
                                                 >
-                                                    <div scope="col" className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
-                                                    <div scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</div>
-                                                    <div scope="col" className="px-2 py-2 text-left font-thin">{item?.brand?.name}</div>
-                                                    <div scope="col" className="px-2 py-2 text-left font-thin">{item?.category?.name}</div>
-                                                    <div scope="col" className="pl-2 py-2 text-left font-thin">{item?.price}</div>
-                                                    <div scope="col" className="pl-2 py-2 text-left font-thin">{item?.discount}</div>
-                                                    <div scope="col" className="pr-3 py-2 text-right font-thin">{item?.qty}</div>
+                                                    <div className="px-1 py-1 font-thin text-left grid col-span-3">{item?.name}</div>
+                                                    <div className="px-1 py-1 font-thin text-left">{item?.edition}</div>
+                                                    <div className="px-1 py-1 text-left font-thin grid col-span-2">{item?.brand?.name}</div>
+                                                    <div className="px-1 py-1 text-left font-thin grid col-span-2">{item?.category?.name}</div>
+                                                    <div className="pl-1 py-1 text-center font-thin">{item?.price}</div>
+                                                    <div className="pl-1 py-1 text-center font-thin">{item?.discount}</div>
+                                                    <div className="pr-1 py-1 text-center font-thin">{item?.qty}</div>
                                                 </div>
                                             })}
                                         </div>
@@ -704,6 +711,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
 
                             <div className='flex justify-between items-center gap-4'>
                                 <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} handleEnter={() => { setPack(false); setDeli(true) }}
+                                    handleTab={() => { setPack(false); setDeli(true) }}
                                     placeholder={user?.packing ? user?.packing : paking} value={user?.packing ? user?.packing : paking}
                                     readOnly={loadInvo ? false : true}
                                     onChange={(v) => {
@@ -712,6 +720,7 @@ const PurchaseReturn = ({ shop = [], editio = [], brand = [], category = [], sta
                                     }} className={``} />
 
                                 <InputComponent label={'Delivery Charge'} type={'text'} placeholder={user?.delivery ? user?.delivery : delivary}
+                                    handleTab={() => { setDeli(false); dis_ref.current.focus() }}
                                     value={user?.delivery ? user?.delivery : delivary} input_focus={deli} handleEnter={() => { setDeli(false); dis_ref.current.focus() }}
                                     readOnly={loadInvo ? false : true}
                                     onChange={(v) => {

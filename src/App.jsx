@@ -202,7 +202,7 @@ function App() {
     const compId = localStorage.getItem('compId');
     const shopcode = localStorage.getItem('shopcode');
 
-
+    console.log(role)
     if (token && token !== "null") {
       setAuth(true);
       setInfo({

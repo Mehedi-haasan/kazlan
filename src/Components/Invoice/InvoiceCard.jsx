@@ -20,23 +20,23 @@ const InvoiceCard = ({ item }) => {
     }
 
     return (
-        <tr key={item?.id} className="border-b border-x text-[15px] text-black" id="kalpurush">
-            <th className="p-2 font-thin text-center" >
+        <tr key={item?.id} className="border-b border-x border-black text-[15px] text-black" id="kalpurush">
+            <td className="p-1 font-thin text-center align-top" style={{ paddingBottom: '10px' }} >
                 {convertToBengaliNumber(item?.qty)}
-            </th>
-            <td className="p-2 border-l font-thin">
+            </td>
+            <td className="p-1 border-l border-black font-thin align-top" style={{ paddingBottom: '10px' }}>
                 {item?.name}, {item?.product?.category?.name}, {item?.product?.edition}
             </td>
-            <td className="p-2 border-l font-thin">
+            <td className="p-1 border-l border-black font-thin align-top" style={{ paddingBottom: '10px' }}>
                 {item?.product?.brand?.name}
             </td>
-            <td className="p-2 border-l font-thin text-center">
+            <td className="p-1 border-l border-black font-thin text-center align-top" style={{ paddingBottom: '10px' }}>
                 {convertToBengaliNumber(parseInt(item?.product?.price))}.০
             </td>
-            <td className="p-2 border-l font-thin text-center">
+            <td className="p-1 border-l border-black font-thin text-center align-top" style={{ paddingBottom: '10px' }}>
                 {convertToBengaliNumber(CalculateSale(item))}.০
             </td>
-            <td className="p-2 text-right border-l font-thin">
+            <td className="p-1 text-right border-l border-black font-thin align-top" style={{ paddingBottom: '10px' }}>
                 {convertToBengaliNumber(item?.sellprice)}.০
             </td>
         </tr>

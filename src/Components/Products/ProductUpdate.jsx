@@ -14,10 +14,13 @@ import { BanglaToEnglish } from '../Input/Time';
 import RightArrow from '../../icons/RightArrow';
 
 
-const ProductUpdate = ({ info = {}, editio }) => {
+const ProductUpdate = ({ info = {}, editio, brand, category }) => {
     const goto = useNavigate()
     const params = useParams()
     const [edition, setEdition] = useState(false)
+    const [bran, setBran] = useState(false)
+    const [cate, setCate] = useState(false)
+    const [sup, setSup] = useState(false)
     const [image_url, setImage_Url] = useState();
     const [isLoading, setIsLoading] = useState(false)
     const [imageFile, setImageFile] = useState(null);
@@ -43,6 +46,11 @@ const ProductUpdate = ({ info = {}, editio }) => {
         const res = await fetch(`${BaseUrl}/api/get/product/search/${params?.id}`);
         const data = await res.json()
         setValues(data?.items)
+        setFilter({
+            ...filter,
+            bran_value: data?.brand?.name,
+            cate_value: data?.category?.name
+        })
     }
 
 
@@ -55,6 +63,7 @@ const ProductUpdate = ({ info = {}, editio }) => {
 
 
     const handleupdateProduct = async () => {
+        console.log(values)
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`${BaseUrl}/api/update/single/product`, {
@@ -63,7 +72,31 @@ const ProductUpdate = ({ info = {}, editio }) => {
                     'authorization': token,
                     'Content-type': 'application/json; charset=UTF-8',
                 },
-                body: JSON.stringify(values),
+                body: JSON.stringify({
+                    id: values?.id,
+                    active: true,
+                    name: values?.name,
+                    brandId: values?.brandId,
+                    categoryId: values?.categoryId,
+                    edition: values?.edition,
+                    code: '',
+                    cost: values?.cost,
+                    compId: values?.compId,
+                    createdby: values?.createdby,
+                    creator: values?.creator,
+                    description: values?.description,
+                    discount: values?.discount,
+                    discount_type: values?.discount_type,
+                    image_url: values?.image_url,
+                    price: values?.price,
+                    product_type: values?.product_type,
+                    qty: values?.qty,
+                    qty_type: values?.qty_type,
+                    supplier: values?.supplier,
+                    year: values?.year,
+                    createdAt: values?.createdAt,
+                    updatedAt: values?.updatedAt
+                }),
             });
 
             const data = await response.json();
@@ -118,7 +151,7 @@ const ProductUpdate = ({ info = {}, editio }) => {
 
                 <div className='w-full mx-auto rounded-lg p-5'>
                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 pb-14'>
-                        {/* <InputComponent onChange={(e) => setValues({ ...values, name: e })} label={"Item Name*"} isRequered={true} value={values?.name} placeholder={values?.name} type={""} className={``} /> */}
+
                         <div className='flex justify-start items-center w-full z-50'>
                             <div className='w-[60%]'>
                                 <h1 className='text-[15px] pb-1.5'>Item Name</h1>
@@ -141,20 +174,64 @@ const ProductUpdate = ({ info = {}, editio }) => {
 
                             <div className='w-[40%] z-50'>
                                 <div className='flex justify-start items-end z-40'>
-                                    <SelectionComponent options={editio} default_select={edition} default_value={values?.edition} onSelect={(v) => { setEdition(false); setValues({ ...values, editionId: v?.id, edition: v?.name }) }} label={"Edition*"} className='rounded-r' />
-                                    <div onClick={() => goto(`/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                    <SelectionComponent options={editio} default_select={edition} default_value={values?.edition} onSelect={(v) => {
+                                        setEdition(false);
+                                        setValues({ ...values, editionId: v?.id, edition: v?.name });
+                                        setBran(true)
+                                    }} label={"Edition*"} className='rounded-r' />
+                                    <div onClick={() => goto(`/attribute`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
                                         <Add />
                                     </div>
                                 </div>
 
                             </div>
                         </div>
+                        <div className='flex justify-start items-end z-50'>
+                            <SelectionComponent options={brand} default_select={bran} default_value={values?.brand?.name} onSelect={(v) => {
+                                setBran(false);
+                                setValues({
+                                    ...values,
+                                    brandId: v?.id,
+                                    brand: {
+                                        ...values.brand,
+                                        name: v?.name
+                                    }
+                                })
 
-                        <InputComponent onChange={(e) => { }} label={"Brand / Publishers*"} value={values?.brand?.name} placeholder={values?.brand?.name} readOnly={true} />
+                                setCate(true)
+                            }}
+                                label={"Brand / Publishers*"} className='rounded-r' />
+                            <div onClick={() => goto(`/create/brand`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                <Add />
+                            </div>
+                        </div>
 
-                        <InputComponent onChange={(e) => { }} label={"Category*"} value={values?.category?.name} placeholder={values?.category?.name} readOnly={true} />
+                        <div className='flex justify-start items-end z-40'>
+                            <SelectionComponent options={category} default_select={cate} default_value={values?.category?.name} onSelect={(v) => {
+                                setCate(false);
+                                setValues({
+                                    ...values,
+                                    categoryId: v?.id,
+                                    category: {
+                                        ...values.category,
+                                        name: v?.name
+                                    }
+                                })
+                                setSup(true)
+                            }}
+                                label={"Category"} className='rounded-r' />
+                            <div onClick={() => goto(`/create/category`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                <Add />
+                            </div>
+                        </div>
 
-                        <InputComponent onChange={(e) => { }} label={"Supplier*"} isRequered={true} placeholder={values?.supplier} readOnly={true} />
+                        <div className='flex justify-start items-end z-40'>
+                            <SelectionComponent options={[]} default_select={sup} default_value={values?.supplier} onSelect={(v) => { setEdition(false); setValues({ ...values, supplier: v?.name }) }}
+                                label={"Supplier"} className='rounded-r' />
+                            <div onClick={() => goto(`/create/supplier`)} className='border-y border-r px-3 pt-[7px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE] '>
+                                <Add />
+                            </div>
+                        </div>
 
                         <div className='my-2 grid col-span-1 pb-2'>
                             <div>

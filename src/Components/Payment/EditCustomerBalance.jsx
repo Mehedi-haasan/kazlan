@@ -13,6 +13,7 @@ const EditCustomerBalance = ({ info, state }) => {
     const params = useParams()
     const goto = useNavigate()
     const [user, setuser] = useState([])
+    const [prev, setPrev]=useState({})
     const [invo, setinvo] = useState({})
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState({ id: '', mgs: '' });
@@ -56,6 +57,7 @@ const EditCustomerBalance = ({ info, state }) => {
         });
         const data = await response.json();
         setinvo(data?.items);
+        setPrev(data?.prev)
         setuser(data?.user)
         setValues({
             ...values,
@@ -94,7 +96,7 @@ const EditCustomerBalance = ({ info, state }) => {
             values['type'] = 'Make Payment'
         }
 
-        const response = await fetch(`${BaseUrl}/api/edit/user/balance/${params?.id}/${type}`, {
+        const response = await fetch(`${BaseUrl}/api/edit/customer/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -140,6 +142,7 @@ const EditCustomerBalance = ({ info, state }) => {
         GetInvoiceData(params.invo);
     }, [params?.invo, params?.type]);
 
+    console.log(user)
 
     return (
         <div className="px-3 py-5 min-h-screen pb-12">
@@ -171,7 +174,7 @@ const EditCustomerBalance = ({ info, state }) => {
                             onSelect={(v) => { setinvo({ ...invo, methodname: v?.name }); setValues({ ...values, methodname: v?.name }); }}
                         />
                     </div>
-                    <InputComponent className={`text-black`} label={"Balance"} placeholder={invo?.balance} value={invo?.balance} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
+                    <InputComponent className={`text-black`} label={"Balance"} placeholder={prev?.balance} value={prev?.balance*-1} readOnly={true} onChange={(v) => { setValues({ ...values, balance: v }) }} />
                     <div>
                         <p className='pt-1.5 pb-1.5 font-semibold'>Payment</p>
                         <div className='flex justify-start items-end pb-1 dark:bg-[#040404] dark:text-white'>

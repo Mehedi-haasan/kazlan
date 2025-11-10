@@ -15,25 +15,37 @@ const CustomerCardPdf = ({ item, i }) => {
 
 
     return (
-        <tr className={`border-b text-xs ${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'}`}>
-            <th scope="col" className="p-1 border-x font-thin ">{item?.name}</th>
-             <th scope="col" className="p-1 border-x font-thin ">{item?.id}</th>
-            <th scope="col" className="p-1 border-r font-thin ">{item?.phone}</th>
-            <th scope="col" className="p-1 border-r font-thin ">{item?.email}</th>
-            <th scope="col" className="p-1 border-r font-thin ">{item?.bankname}</th>
-            <th scope="col" className="p-1 border-r font-thin ">{item?.accountname}</th>
-            <th scope="col" className="p-1 border-r font-thin text-xs">
-                <span>{item?.address}</span><br/>
-                <span>{item?.state?.name}</span>
-            </th>
-            <th scope="col" className={`p-1 border-r font-bold  `}>
-                <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray4100` : `${item?.balance < 1 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
-                    {Math.abs(item?.balance)}
-                </button>
-            </th>
-            <th scope="col" className="p-1 border-r font-thin ">{item?.creator}</th>
-            <th scope="col" className="p-1 border-r font-thin ">{formatDate(item?.createdAt)}</th>
-
+        <tr className={`text-xs border-b border-black`}>
+            <td className="p-1 px-2 border-l border-black font-thin align-top" style={{ paddingBottom: '10px' }}>
+                {item?.name}
+            </td>
+            <td className="p-1 px-2 border-x border-black  font-thin" style={{ paddingBottom: '10px' }}>
+                {item?.id}
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                {item?.phone}
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                {item?.email}
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                {item?.bankname}
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                <p className="pb-1">{item?.accountname}</p>
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin text-xs" style={{ paddingBottom: '10px' }}>
+                <span>{item?.address}</span> <span>{item?.state?.name}</span><br />
+            </td>
+            <td className="p-1 px-2 border-r border-black font-bold text-center" style={{ paddingBottom: '10px' }}>
+                <p>{item?.balance}</p>
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                {item?.creator}
+            </td>
+            <td className="p-1 px-2 border-r border-black font-thin" style={{ paddingBottom: '10px' }}>
+                {formatDate(item?.createdAt)}
+            </td>
         </tr>
     )
 }

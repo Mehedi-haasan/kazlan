@@ -118,9 +118,9 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Cust
                                 <th scope="col" className="px-3 py-2 border-r font-thin" >{item?.customername}</th>
                                 {info?.role === "superadmin" && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.shopname}</th>}
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.total}</th>
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.paidamount}</th>
+                                <th scope="col" className="px-3 py-2 border-r font-thin ">{Math.abs(item?.paidamount)}</th>
                                 {is_due && <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.due}</th>}
-                                <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.return}</th>
+                                <th scope="col" className="px-3 py-2 border-r font-thin ">{Math.abs(item?.return)}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.creator}</th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin">
                                     <div className="flex justify-center items-center">
@@ -158,7 +158,8 @@ const InvoiceTemp = ({ invoices = [], prefix = "KB", info = {}, usertype = "Cust
                     {/* Purchase Return */}
                     {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={user_type} />}
 
-                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={user_type} id={id} type={type} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") &&
+                        <PreviewOpeningInvoice info={info} usertype={user_type} id={id} type={type} />}
                 </Modal>
             </div>
         </div>

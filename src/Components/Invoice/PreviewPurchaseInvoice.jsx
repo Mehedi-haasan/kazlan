@@ -327,16 +327,14 @@ const PreviewPurchaseInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, 
                     <div className='pt-24'></div>
                     <InvoHeader user={user} params={params} invoice={invoice} />
 
-                    <div className='relative overflow-x-auto my-5'>
-                        <table class="w-full text-sm text-left rtl:text-right text-black font-thin">
+                    <div className='relative overflow-x-auto my-5 px-5'>
+                        <table className="w-full text-sm text-left rtl:text-right text-black font-thin">
                             <Tabeheader type={invoice?.type} />
                             <tbody>
-
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
                                 <PurchaseInvoicePaymentTotal user={user} info={info} total={total} invoice={invoice} />
-
                             </tbody>
                         </table>
                     </div>

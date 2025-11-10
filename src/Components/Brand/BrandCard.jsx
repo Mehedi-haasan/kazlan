@@ -8,8 +8,6 @@ import Button from "../Input/Button";
 import logo from '../Logo/photo.png'
 import ImageSelect from "../Input/ImageSelect";
 import Notification from "../Input/Notification";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
-import { useLottie } from "lottie-react";
 import DownModal from "../Input/DownModal";
 import { useNavigate } from "react-router-dom";
 
@@ -117,17 +115,6 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
     }
 
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: {
-            width: 200,
-            height: 200,
-        },
-    };
-
-    const { View } = useLottie(options);
-
     return (
         <tr className={`${i %2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white': 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b`}>
             <th className="w-4 py-1.5 px-4 border-x">
@@ -137,9 +124,6 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
                 </div>
             </th>
             <th id="kalpurush" scope="col" className="px-2 py-1.5 border-x font-thin ">{item?.name}
-                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`}>
-                    <>{View}</>
-                </Modal>
                 <Notification message={message} />
             </th>
             <th scope="col" className="px-2 py-1.5 border-r font-thin ">{item?.id}</th>

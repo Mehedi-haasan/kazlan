@@ -48,9 +48,9 @@ const PurchaseInvoicePaymentTotal = ({ user, total, invoice, info }) => {
                 <td className="pr-6 py-1"></td>
                 <td className="p-1"></td>
                 <td className="p-1"></td>
-                <td className="p-1 border-b">ডিসকাউন্ট</td>
-                <td className="p-1 border-b">  </td>
-                <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}>ডিসকাউন্ট</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}>  </td>
+                <td className="p-1 text-right border-b border-black align-top" style={{ paddingBottom: '10px' }}>{convertToBengaliNumber(parseInt(user?.lastdiscount || 0))}.০</td>
             </tr>
             {invoice?.special_discount > 0 &&
                 <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
@@ -75,21 +75,21 @@ const PurchaseInvoicePaymentTotal = ({ user, total, invoice, info }) => {
                 <td className="pr-6 py-1"></td>
                 <td className="p-1"></td>
                 <td className="p-1"></td>
-                <td className="p-1 border-b">পুর্বের বকেয়া</td>
-                <td className="p-1 border-b"></td>
-                <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.previousdue * -1))}.০</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}>পুর্বের বকেয়া</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}></td>
+                <td className="p-1 text-right border-b border-black align-top" style={{ paddingBottom: '10px' }}>{convertToBengaliNumber(parseInt(user?.previousdue * -1))}.০</td>
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
                 <td className="pr-6 py-1" colSpan={3}></td>
                 <td className="p-1">অবশিষ্ট</td>
                 <td className="p-1"> </td>
-                <td className="p-1 text-right">{convertToBengaliNumber(get_total() + (user?.previousdue * -1))}.০</td>
+                <td className="p-1 text-right">{convertToBengaliNumber((get_total() + (user?.previousdue))*-1)}.০</td>
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
                 <td className="pr-6 py-1" colSpan={3}>{invoice?.creator}</td>
-                <td className="p-1 border-b">জমা</td>
-                <td className="p-1 border-b"> </td>
-                <td className="p-1 text-right border-b">{convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}>জমা</td>
+                <td className="p-1 border-b border-black align-top" style={{ paddingBottom: '10px' }}> </td>
+                <td className="p-1 text-right border-b border-black align-top" style={{ paddingBottom: '10px' }}>{convertToBengaliNumber(parseInt(user?.paidamount || 0))}.০</td>
             </tr>
             <tr className="bg-white text-[16px] text-black font-thin" id="kalpurush">
                 <td className="p-1"><h1 className='font-thin text-black overline'>বিতরনকারী</h1></td>

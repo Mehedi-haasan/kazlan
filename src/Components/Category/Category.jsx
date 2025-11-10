@@ -14,8 +14,6 @@ import logo from '../Logo/photo.png'
 import Excel from "../Input/Excel";
 import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
-import { useLottie } from "lottie-react";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Pdf from "../Pdf/Pdf";
 import CategoryCardPdf from "./CategoryCardPdf";
@@ -216,26 +214,6 @@ const Category = ({ entries, info = {} }) => {
         }
     };
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: {
-            width: 200,
-            height: 200,
-        },
-    };
-
-    const { View } = useLottie(options);
-
-
-    useEffect(() => {
-        if (showlotti) {
-            const timer = setTimeout(() => {
-                setLottiShow(false);
-            }, 500);
-            return () => clearTimeout(timer);
-        }
-    }, [showlotti]);
 
     EscapeRedirect()
 
@@ -277,9 +255,7 @@ const Category = ({ entries, info = {} }) => {
     return (
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <Notification message={message} />
-            <Modal show={showlotti} handleClose={() => { setLottiShow(false); setInpo(true) }} size={`250px`} crosshidden={true}>
-                <>{View}</>
-            </Modal>
+
             <div className="flex justify-between items-center px-4 py-2.5 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white rounded shadow">
                 <h1 className="font-semibold text-lg">Category List</h1>
                 <button onClick={() => { goto('/create/category') }} className={`bg-blue-500 rounded px-4 py-1.5 text-white font-thin`}>Create Category</button>

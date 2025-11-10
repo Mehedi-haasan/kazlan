@@ -5,11 +5,6 @@ import Modal from "../Input/Modal";
 import InputComponent from "../Input/InputComponent";
 import BaseUrl from "../../Constant";
 import Button from "../Input/Button";
-import logo from '../Logo/userProfile.png'
-import ImageSelect from "../Input/ImageSelect";
-import Notification from "../Input/Notification";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
-import { useLottie } from "lottie-react";
 import DownModal from "../Input/DownModal";
 import SelectionComponent from "../Input/SelectionComponent";
 import { useNavigate } from "react-router-dom";
@@ -83,16 +78,6 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
     }
 
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: {
-            width: 200,
-            height: 200,
-        },
-    };
-
-    const { View } = useLottie(options);
 
     return (
         <tr className={`${i % 2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white' : 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b`}>
@@ -112,7 +97,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, GetAttribute, isDownloadMode
                             </div>
                             <div className="flex justify-start items-start flex-wrap gap-2 px-1 py-1.5 mt-[3px]">
                                 {attr?.attributevalues?.map((att_val) => {
-                                    return <button className="px-1 text-[13px] border-blue-600">{att_val?.name}</button>
+                                    return <h1 className="px-1 text-[13px] border-blue-600">{att_val?.name}</h1>
                                 })}
                             </div>
                         </div>

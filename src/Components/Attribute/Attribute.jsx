@@ -12,8 +12,6 @@ import Loading from "../../icons/Loading";
 import Notification from "../Input/Notification";
 import Excel from '../Input/Excel'
 import Search from "../Input/Search";
-import { useLottie } from "lottie-react";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import SelectionComponent from "../Input/SelectionComponent";
 import AttributeCardPdf from "./AttributeCardPdf";
@@ -39,7 +37,6 @@ const Attribute = ({ entries = [], info = {} }) => {
     const [pageSize, setPageSize] = useState(10);
     const [totalItem, setTotalItem] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
-    const [isChecked, setIsChecked] = useState(false)
     const [showlotti, setLottiShow] = useState(false);
     const [first, setFirst] = useState({
         first: true,
@@ -167,24 +164,6 @@ const Attribute = ({ entries = [], info = {} }) => {
 
 
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: { width: 200, height: 200, },
-    };
-
-    const { View } = useLottie(options);
-
-
-    useEffect(() => {
-        if (showlotti) {
-            const timer = setTimeout(() => {
-                setLottiShow(false);
-            }, 500);
-            return () => clearTimeout(timer);
-        }
-    }, [showlotti]);
-
     EscapeRedirect()
 
     const TikBox = (id) => {
@@ -222,9 +201,6 @@ const Attribute = ({ entries = [], info = {} }) => {
         <div className="pl-4 pr-2 pt-5 min-h-screen pb-12">
             <Notification message={message} />
             <div>
-                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`} crosshidden={true}>
-                    <>{View}</>
-                </Modal>
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                         <div className="border-b">

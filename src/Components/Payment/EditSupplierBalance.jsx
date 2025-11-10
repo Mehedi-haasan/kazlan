@@ -94,7 +94,7 @@ const EditSupplierBalance = ({ info, state }) => {
             values['type'] = 'Make Payment'
         }
 
-        const response = await fetch(`${BaseUrl}/api/edit/user/balance/${params?.id}/${type}`, {
+        const response = await fetch(`${BaseUrl}/api/edit/supplier/balance/${params?.id}/${type}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

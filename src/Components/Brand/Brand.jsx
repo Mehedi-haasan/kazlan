@@ -14,8 +14,6 @@ import logo from '../Logo/photo.png'
 import Excel from '../Input/Excel'
 import Search from "../Input/Search";
 import ImageSelect from "../Input/ImageSelect";
-import { useLottie } from "lottie-react";
-import groovyWalkAnimation from "../../lotti/Animation - 1745147041767.json";
 import EscapeRedirect from "../Wholesale/EscapeRedirect";
 import Pdf from '../Pdf/Pdf'
 import BrandCardPdf from "./BrandCardPdf";
@@ -214,27 +212,7 @@ const Brand = ({ entries, info = {} }) => {
     };
 
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: { width: 200, height: 200, },
-    };
 
-    const { View } = useLottie(options);
-
-    // useEffect(() => {
-    //     input_focus.current.focus()
-    // }, [show])
-
-
-    useEffect(() => {
-        if (showlotti) {
-            const timer = setTimeout(() => {
-                setLottiShow(false);
-            }, 500);
-            return () => clearTimeout(timer);
-        }
-    }, [showlotti]);
 
     EscapeRedirect()
 
@@ -278,9 +256,6 @@ const Brand = ({ entries, info = {} }) => {
             <Notification message={message} />
 
             <div>
-                <Modal show={showlotti} handleClose={() => { setLottiShow(false); }} size={`250px`} crosshidden={true}>
-                    <>{View}</>
-                </Modal>
                 <Modal show={show} handleClose={() => { setShow(false) }} size={`800px`} className="">
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                         <div className="border-b">

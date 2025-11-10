@@ -117,7 +117,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                     <Updown />
                                 </div>
                             </th>
-                            <th scope="col" className="px-3 py-3 text-right border-r ">
+                            <th scope="col" className="px-3 py-3 text-center border-r ">
                                 <div className="flex justify-between items-center">
                                     Preview
                                     <Updown />
@@ -144,9 +144,7 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                     </div>
                                 </th>
                                 <th scope="col" className="px-3 py-2 border-r font-thin ">{item?.order_type}</th>
-                                <td scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative" onClick={() => {
-                                    setId(item?.id); setType(item?.type); setInvoPreview(true)
-                                }}>
+                                <td scope="col" className="px-2 py-2 flex justify-center items-center border-r gap-2 relative">
                                     {/* {
                                         selected === item?.id && <div className="absolute -top-12 bg-white dark:bg-[#040404] dark:text-white shadow-xl rounded-md right-14 w-[125px] p-[5px] z-50 border border-red-500 font-semibold">
                                             <NavLink to={`/edit/user/balance/${item?.userId}/${item?.id}/${item?.type}`} className="flex justify-start items-center gap-[7px] cursor-pointer hover:bg-gray-200 px-1 py-[2px] rounded text-xs">
@@ -161,11 +159,14 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                                             </div>
                                         </div>
                                     } */}
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="cursor-pointer" width="25" height="22" viewBox="0 0 40 40">
-                                        <g fill="currentColor"><path d="M23.112 9.315a3.113 3.113 0 1 1-6.226.002a3.113 3.113 0 0 1 6.226-.002" />
-                                            <circle cx="20" cy="19.999" r="3.112" /><circle cx="20" cy="30.685" r="3.112" />
-                                        </g>
-                                    </svg>
+                                    <button onClick={() => { setId(item?.id); setType(item?.type); setInvoPreview(true); setUserType(item?.customer?.usertype) }} >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                <path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19s-7.764-4.013-9.257-5.962a1.69 1.69 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5s7.764 4.013 9.257 5.962" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </g>
+                                        </svg>
+                                    </button>
                                     {/* <DownModal show={show} handleClose={() => { setShow(false) }} size={``} className=''>
                                         <h1 className="py-3 text-sm font-thin">Are you sure you want to delete this?</h1>
                                         <div className="flex justify-between items-center p-4">
@@ -194,7 +195,8 @@ const RecentReceipt = ({ invoices = [], prefix = "KB", info = {}, RecentInvoice 
                     {/* Purchase Return */}
                     {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={userType} />}
 
-                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={"Customer"} id={id} type={type} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") &&
+                        <PreviewOpeningInvoice info={info} usertype={userType} id={id} type={type} />}
                 </Modal>
             </div>
         </div>

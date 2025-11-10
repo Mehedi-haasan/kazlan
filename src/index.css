@@ -48,3 +48,16 @@ body {
 body {
   font-family: "Times New Roman", Times, serif;
 }
+
+
+.pdf-th {
+  padding: 0;
+  border-right: 1px solid #000;
+}
+.pdf-th > div {
+  height: 24px;          /* top+bottom approx 6px like */
+  line-height: 24px;     /* IMPORTANT */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;   /* vertically center text */
+}

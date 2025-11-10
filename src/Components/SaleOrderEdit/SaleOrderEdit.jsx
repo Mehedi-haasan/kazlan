@@ -137,7 +137,7 @@ const SaleOrderEdit = ({ shop = [], editio = [], brand = [], category = [], stat
 
     useEffect(() => {
         const fetchAmount = async () => {
-            let { amount, lastTotal } = await CalculateEditAmount(allData, 0, 0, 0);
+            let { amount, lastTotal } = await CalculateEditAmount(allData, values?.delivery, values?.packing, values?.lastdiscount, values?.special_discount);
             setTotal(amount);
             setLastTotal(lastTotal);
             let balance = user?.balance + (lastTotal - invoice?.paidamount)

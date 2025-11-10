@@ -46,6 +46,10 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
     const today = new Date();
     const goto = useNavigate()
     const [searchItem, setSearchItem] = useState('')
+    const [brandList, setBrandList] = useState([])
+    useEffect(() => {
+        setBrandList([...brand].reverse())
+    }, [brand])
     const [total, setTotal] = useState(0);
     const [paking, setPaking] = useState(0);
     const [delivary, setDelivery] = useState(0)
@@ -393,7 +397,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                             }} label={'Category'} />
                     </div>
                     <div className='pt-1.5'>
-                        <SelectionComponentSearch options={brand} default_select={bran} default_value={filter?.bran_value}
+                        <SelectionComponentSearch options={brandList} default_select={bran} default_value={filter?.bran_value}
                             handleRight={() => { setBrand(false); inputRef.current.focus() }}
                             handleLeft={() => { setBrand(false); setCatego(true); }}
                             onSelect={(v) => {
@@ -467,9 +471,12 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                         <div className="text-xs text-gray-900">
                                             <SearchResultHeader />
                                         </div>
-                                        <div>
+                                        <div className='max-h-[350px] overflow-hidden overflow-y-scroll'>
                                             {searchData?.map((item, i) => {
-                                                return <div key={i} className={`border-b cursor-pointer grid grid-cols-8 ${selectedId === i ? 'bg-gray-100' : ''}`}
+                                                return <div key={i}
+                                                    onMouseEnter={() => { setSelectedId(i) }}
+                                                    ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                    className={`border-b cursor-pointer grid grid-cols-11 ${selectedId === i ? 'bg-blue-600 text-white' : 'text-black'}`}
                                                     onClick={() => {
                                                         let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
                                                         setPrepareData(data)
@@ -488,13 +495,13 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                                         setPrep_Value(true)
                                                     }}
                                                 >
-                                                    <div scope="col" className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
-                                                    <div scope="col" className="px-1 py-2 font-thin text-left">{item?.edition}</div>
-                                                    <div scope="col" className="px-2 py-2 text-left font-thin">{item?.brand?.name}</div>
-                                                    <div scope="col" className="px-2 py-2 text-left font-thin">{item?.category?.name}</div>
-                                                    <div scope="col" className="pl-2 py-2 text-left font-thin">{item?.price}</div>
-                                                    <div scope="col" className="pl-2 py-2 text-left font-thin">{item?.discount}</div>
-                                                    <div scope="col" className="pr-3 py-2 text-right font-thin">{item?.qty}</div>
+                                                    <div className="px-1 py-1 font-thin text-left grid col-span-3">{item?.name}</div>
+                                                    <div className="px-1 py-1 font-thin text-left">{item?.edition}</div>
+                                                    <div className="px-2 py-1 text-left font-thin grid col-span-2">{item?.brand?.name}</div>
+                                                    <div className="px-1 py-1 text-left font-thin grid col-span-2">{item?.category?.name}</div>
+                                                    <div className="pl-1 py-1 text-left font-thin">{item?.price}</div>
+                                                    <div className="pl-1 py-1 text-left font-thin">{item?.discount}</div>
+                                                    <div className="pr-1 py-1 text-right font-thin">{item?.qty}</div>
                                                 </div>
                                             })}
                                         </div>
@@ -518,15 +525,15 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                         <div>
                             {Object.keys(prepareData || {}).length > 0 && (
                                 <div className={`border-b border-x text-[15px] text-black grid grid-cols-12`}>
-                                    <div className="py-2 flex justify-center items-center">
+                                    <div className="py-1 flex justify-center items-center">
                                         <Remove onClick={() => { }} />
                                     </div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.qty}</div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.edition}</div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.category?.name}</div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.brand?.name}</div>
-                                    <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
-                                    <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
+                                    <div className="px-1 py-1 text-left font-thin border-l">{prepareData?.qty}</div>
+                                    <div className="px-1 py-1 text-left font-thin border-l">{prepareData?.edition}</div>
+                                    <div className="px-1 py-1 text-left font-thin border-l">{prepareData?.category?.name}</div>
+                                    <div className="px-1 py-1 text-left font-thin border-l">{prepareData?.brand?.name}</div>
+                                    <div className="px-1 py-1 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
+                                    <div className="py-1 text-center font-thin border-x">{prepareData?.cost}</div>
                                     <div className='flex justify-start items-center border-r'>
                                         <input type='text' ref={discount_ref}
                                             onKeyDown={(e) => {
@@ -596,8 +603,8 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                             </div>
                                         }
                                     </div>
-                                    <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
-                                    <div className="pl-2 py-2 text-right font-thin border-l">{DiscountCalculate(prepareData)}</div>
+                                    <div className="pl-2 py-1 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
+                                    <div className="pl-2 py-1 text-right font-thin border-l">{DiscountCalculate(prepareData)}</div>
                                 </div>
                             )}
                             {allData?.map((item, i) => {
@@ -697,6 +704,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
                                     // readOnly={loadInvo ? false : true}
                                     onChange={(v) => { setPaking(parseFloat(v)); }} className={``} /> */}
                                 <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} handleEnter={() => { setPack(false); setDeli(true) }}
+                                    handleTab={() => { setPack(false); setDeli(true) }}
                                     placeholder={0} value={paking}
                                     // readOnly={loadInvo ? false : true}
                                     onChange={(v) => {
@@ -706,6 +714,7 @@ const SaleReturn = ({ shop = [], editio = [], brand = [], category = [], state =
 
 
                                 <InputComponent label={'Delivery Charge'} type={'text'} placeholder={user?.delivery ? user?.delivery : delivary}
+                                    handleTab={() => { setDeli(false); dis_ref.current.focus() }}
                                     value={user?.delivery ? user?.delivery : delivary} input_focus={deli} handleEnter={() => { setDeli(false); dis_ref.current.focus() }}
                                     // readOnly={loadInvo ? false : true}
                                     onChange={(v) => {

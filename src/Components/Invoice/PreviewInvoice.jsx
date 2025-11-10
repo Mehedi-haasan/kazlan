@@ -92,17 +92,6 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
         return amount - parseInt(user?.paidamount)
     }
 
-    const GetTypeInvo = (type) => {
-        let value = "বিক্রয় মূল্য";
-
-        if (type === "Sale" || type === "Sale Return") {
-            value = "বিক্রয় মূল্য";
-        } else if (type === "Purchase items" || type === "Purchase Return") {
-            value = "µq g~j¨";
-        }
-
-        return value;
-    };
 
     const GetType = (type) => {
         let value = "বি. মূল্য";
@@ -332,11 +321,11 @@ const PreviewInvoice = ({ isOrder = true, info = {}, prefix = 'KB', id, type }) 
 
             <div className='w-full mx-auto rounded px-10'>
                 <div ref={targetRef} className="bg-[#FFFFFF] rounded px-10">
-                    <div className='pt-24'></div>
+                    <div className='pt-36'></div>
                     <InvoHeader user={user} params={params} invoice={invoice} />
 
-                    <div className='relative overflow-x-auto my-5'>
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                    <div className='relative overflow-x-auto mb-5 mt-1'>
+                        <table className="w-full text-sm text-left text-black">
                             <Tabeheader type={invoice?.type} />
                             <tbody>
 

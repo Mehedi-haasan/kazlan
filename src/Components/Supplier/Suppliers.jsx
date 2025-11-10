@@ -334,6 +334,12 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                                     </th>
                                     <th scope="col" className="px-2 py-2 text-center border-r">
                                         <div className="flex justify-between items-center">
+                                            Code
+                                            <Updown />
+                                        </div>
+                                    </th>
+                                    <th scope="col" className="px-2 py-2 text-center border-r">
+                                        <div className="flex justify-between items-center">
                                             Mobile
                                             <Updown />
                                         </div>
@@ -401,64 +407,64 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                     <div ref={ref}>
                         <div ref={targetRef} className="pt-3 w-full overflow-hidden overflow-x-auto actual-receipt" >
                             <Pdf>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:bg-[#040404] dark:text-white">
-                                    <thead class="text-sm text-gray-900 bg-[#BCA88D]">
-                                        <tr className='border'>
-                                            <th scope="col" className="p-1 border-r ">
+                                <table className="w-full text-sm text-left rtl:text-right text-black">
+                                    <thead className="text-sm text-black">
+                                        <tr className='border border-black'>
+                                            <th scope="col" className="p-1 border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Name
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 border-r ">
+                                            <th scope="col" className="p-1 border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Code
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-center border-r">
+                                            <th scope="col" className="p-1 text-center border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Mobile
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1  text-center border-r">
+                                            <th scope="col" className="p-1  text-center border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Email
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="px-2 py-2 text-center border-r">
+                                            <th scope="col" className="p-1 text-center border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Bank Name
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-center border-r">
+                                            <th scope="col" className="p-1 text-center border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Account Name
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-center border-r">
+                                            <th scope="col" className="p-1 text-center border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Address
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-right border-r">
+                                            <th scope="col" className="p-1 text-right border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Balance
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-right border-r">
+                                            <th scope="col" className="p-1 text-right border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Created by
                                                     <Updown />
                                                 </div>
                                             </th>
-                                            <th scope="col" className="p-1 text-right border-r">
+                                            <th scope="col" className="p-1 text-right border-r border-black align-top" style={{ paddingBottom: '10px' }}>
                                                 <div className="flex justify-between items-center">
                                                     Created at
                                                     <Updown />

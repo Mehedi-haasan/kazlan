@@ -49,6 +49,10 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
     const [delivary, setDelivery] = useState(0)
     const [customer, setCustomer] = useState([])
     const [name, setName] = useState('Mehedi hasan')
+    const [brandList, setBrandList] = useState([])
+    useEffect(() => {
+        setBrandList([...brand].reverse())
+    }, [brand])
     const [due, setDue] = useState(0);
     const [allData, setAllData] = useState([])
     const [searchData, setSearchData] = useState([]);
@@ -186,10 +190,6 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
 
     const HandleDelete = (id) => {
-        // if (!id) return;
-        // const confirmDelete = window.confirm("Are you sure you want to delete this item?");
-        // if (!confirmDelete) return;
-
         const updatedData = allData?.filter(item => parseInt(item?.id) !== parseInt(id));
         setAllData(updatedData);
     };
@@ -235,6 +235,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
         });
         setAllData(updatedData);
     };
+
 
 
 
@@ -286,7 +287,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                 <div className='border-b p-4'>
                     <h1 className='text-[20px]'>Items</h1>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-3 p-4 '>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-3 p-4 '>
                     <div>
                         <InputComponent label={changeLan?.qty} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
                             handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
@@ -320,7 +321,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                             }} label={'Category'} />
                     </div>
                     <div className='pt-1.5'>
-                        <SelectionComponentSearch options={brand} default_select={bran} default_value={filter?.bran_value}
+                        <SelectionComponentSearch options={brandList} default_select={bran} default_value={filter?.bran_value}
                             handleRight={() => { setBrand(false); inputRef.current.focus() }}
                             handleLeft={() => { setBrand(false); setCatego(true); }}
                             onSelect={(v) => {
@@ -331,7 +332,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                             }}
                             label={'Brand'} />
                     </div>
-                    <div className='grid col-span-5'>
+                    <div className='grid col-span-6'>
                         <h1 className='pb-1'>Enter Item Name</h1>
                         <div className='flex justify-center w-full h-[39px]'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
@@ -392,35 +393,38 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 dark:bg-[#040404] dark:text-white rounded-full' />
                                 {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
                                     <div className="w-full text-sm text-left rtl:text-right text-gray-500">
-                                        <div className="text-xs text-gray-900">
+                                        <div className="text-xs text-black">
                                             <SearchResultHeader />
                                         </div>
-                                        <div>
+                                        <div className='max-h-[350px] overflow-hidden overflow-y-scroll'>
                                             {searchData?.map((item, i) => {
-                                                return <div key={i} className={`border-b cursor-pointer grid grid-cols-8 ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => {
-                                                    let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
-                                                    setPrepareData(data)
-                                                    setSearchData([]);
-                                                    setSearchItem('');
-                                                    setItemQuan(0);
-                                                    setFilter({
-                                                        ...filter,
-                                                        cate: null,
-                                                        bran: null,
-                                                        edit: null,
-                                                        edit_value: 'Select a filter',
-                                                        bran_value: 'Select a filter',
-                                                        cate_value: 'Select a filter'
-                                                    });
-                                                    setPrep_Value(true);
-                                                }}>
-                                                    <div className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
-                                                    <div className="px-1 py-2 font-thin text-left">{item?.edition}</div>
-                                                    <div className="px-2 py-2 text-left font-thin">{item?.brand?.name}</div>
-                                                    <div className="px-2 py-2 text-left font-thin">{item?.category?.name}</div>
-                                                    <div className="pl-2 py-2 text-left font-thin">{item?.cost}</div>
-                                                    <div className="pl-2 py-2 text-left font-thin">{item?.discount}</div>
-                                                    <div className="pr-3 py-2 text-right font-thin">{item?.qty}</div>
+                                                return <div key={i}
+                                                    onMouseEnter={() => { setSelectedId(i) }}
+                                                    ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                    className={`border-b cursor-pointer grid grid-cols-11 ${selectedId === i ? 'bg-blue-600 text-white' : 'text-black'}`} onClick={() => {
+                                                        let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
+                                                        setPrepareData(data)
+                                                        setSearchData([]);
+                                                        setSearchItem('');
+                                                        setItemQuan(0);
+                                                        setFilter({
+                                                            ...filter,
+                                                            cate: null,
+                                                            bran: null,
+                                                            edit: null,
+                                                            edit_value: 'Select a filter',
+                                                            bran_value: 'Select a filter',
+                                                            cate_value: 'Select a filter'
+                                                        });
+                                                        setPrep_Value(true);
+                                                    }}>
+                                                    <div className="px-1 py-1 font-thin text-left grid col-span-3">{item?.name}</div>
+                                                    <div className="px-1 py-1 font-thin text-left">{item?.edition}</div>
+                                                    <div className="px-1 py-1 text-left font-thin grid col-span-2">{item?.brand?.name}</div>
+                                                    <div className="px-1 py-1 text-left font-thin grid col-span-2">{item?.category?.name}</div>
+                                                    <div className="pl-1 py-1 text-center font-thin">{item?.cost}</div>
+                                                    <div className="pl-1 py-1 text-center font-thin">{item?.discount}</div>
+                                                    <div className="pr-1 py-1 text-center font-thin">{item?.qty}</div>
                                                 </div>
                                             })}
                                         </div>
@@ -523,7 +527,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                         }
                                     </div>
                                     <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCal(prepareData)}</div>
-                                    <div className="pl-2 py-2 text-right font-thin border-l">{DiscountCalculate(prepareData)}</div>
+                                    <div className="pl-2 py-2 text-center font-thin border-l">{DiscountCalculate(prepareData)}</div>
                                 </div>
                             )}
                             {allData?.map((item, i) => {
@@ -647,6 +651,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
                             <div className='flex justify-between items-center gap-4'>
                                 <InputComponent label={'Packing Charge'} type={'text'} input_focus={pack} placeholder={paking}
+                                    handleTab={() => { setPack(false); setDeli(true) }}
                                     handleEnter={() => { setPack(false); setDeli(true) }} value={paking}
                                     onChange={(v) => {
                                         let num = BanglaToEnglish(v)
@@ -655,6 +660,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                 />
                                 <InputComponent label={'Delivery Charge'} type={'text'} input_focus={deli} placeholder={delivary}
                                     handleEnter={() => { setDeli(false); dis_ref.current.focus() }} value={delivary}
+                                    handleTab={() => { setDeli(false); dis_ref.current.focus() }}
                                     onChange={(v) => {
                                         let num = BanglaToEnglish(v)
                                         setDelivery(parseInt(num));

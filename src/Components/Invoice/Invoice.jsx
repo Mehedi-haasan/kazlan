@@ -12,7 +12,7 @@ import Edit from '../../icons/Edit'
 import Pdf from '../Pdf/Pdf';
 import PdfHeader from './PdfHeader';
 import PdfBottom from './PdfBottom'
-import { ReturnSaleCode,convertToBengaliNumber } from '../Input/Time';
+import { ReturnSaleCode, convertToBengaliNumber } from '../Input/Time';
 
 
 
@@ -362,25 +362,26 @@ const Invoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                     <div className='max-h-[700px] '>
                         <div ref={ref} className=''>
                             <div ref={targetRef} className='bg-white w-[760px]'>
-                                <Pdf>
-                                    <div className="">
-                                        <PdfHeader user={user} params={params} />
+                           
+                                    <div className="bg-[#FFFFFF] rounded px-4 pb-4 pt-24">
 
-                                        <div className='relative overflow-x-auto py-5'>
-                                            <table className="w-full text-[14px] text-left">
+                                        <InvoHeader user={user} params={params} invoice={invoice} />
+
+                                        <div className='relative overflow-x-auto my-5'>
+                                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                                                 <Tabeheader type={params?.type} />
                                                 <tbody>
+
                                                     {allData?.map((item) => {
                                                         return <InvoiceCard key={item?.id} item={item} />
                                                     })}
-                                                    <PdfBottom user={user} total={total} />
+                                                    <PaymentTotal user={user} total={total} invoice={invoice} />
 
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
-                                </Pdf>
+                     
                             </div>
                         </div>
                         <div className='flex justify-end items-end pr-8 gap-2'>

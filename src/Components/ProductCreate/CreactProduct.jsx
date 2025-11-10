@@ -71,7 +71,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
         year: '2026',
         edition: '',
         code: '',
-        qty_type: 'None'
+        qty_type: 'Pcs'
     })
 
     EscapeRedirect("/items")

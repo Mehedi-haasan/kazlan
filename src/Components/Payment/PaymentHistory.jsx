@@ -421,12 +421,13 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                     <h1 className='py-1.5 font-semibold'>Balance</h1>
                                 </div>
                                 <div>
-                                    {values?.usertype === "Supplier" ? <button className={`border rounded-full px-4 mx-auto float-right block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
+                                    {/* {values?.usertype === "Supplier" ? <button className={`border rounded-full px-4 mx-auto float-right block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                         {Math.abs(values?.balance)}
                                     </button> :
                                         <button className={`border rounded-full px-4 mx-auto float-right block ${values?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${values?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                             {Math.abs(values?.balance)}
-                                        </button>}
+                                        </button>} */}
+                                        {values?.balance*-1}
                                 </div>
                             </div>
                             <div className='flex justify-between items-center w-[400px]'>
@@ -568,16 +569,18 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                                     {info?.role === "superadmin" && <th scope="col" className="px-3 py-3 border-r font-thin">{item?.shopname}</th>}
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.creator}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.total}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.paidamount}</th>
-                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.return}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{Math.abs(item?.paidamount)}</th>
+                                    <th scope="col" className="px-3 py-3 border-r font-thin ">{Math.abs(item?.return)}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">{item?.order_type}</th>
                                     <th scope="col" className="px-3 py-3 border-r font-thin ">
-                                        {values?.usertype === "Supplier" ? <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${item?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
+                                        {/* {values?.usertype === "Supplier" ? <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${item?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                             {Math.abs(item?.balance)}
                                         </button> :
                                             <button className={`border rounded-full px-4 mx-auto block ${item?.balance === 0 ? `text-gray-900 bg-gray-300 border-gray-100` : `${item?.balance > 0 ? `text-red-600 bg-red-100 border-red-100` : `text-[#15CA20] bg-[#DAE9D9] border-[#DAE9D9]`}`} `}>
                                                 {Math.abs(item?.balance)}
-                                            </button>}
+                                            </button>} */}
+
+                                        {item?.balance*-1}
                                     </th>
                                 </tr>
                             ))
@@ -602,7 +605,8 @@ const PaymentHistory = ({ entries = [], info = {}, prefix = "KB" }) => {
                     {/* Purchase Return */}
                     {type === "Return Purchase" && <PreviewPurchaseReturnInvoice info={info} id={id} type={type} usertype={values?.usertype} />}
                     {/* Opening */}
-                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") && <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
+                    {(type === "Opening" || type === "Make Payment" || type === "Yearly Bonus" || type === "Online Collection") &&
+                        <PreviewOpeningInvoice info={info} usertype={values?.usertype} id={id} type={type} />}
                 </Modal>
 
                 <Modal show={preview} handleClose={() => { setPreview(false) }} size={`1000px`} crosshidden={true}>

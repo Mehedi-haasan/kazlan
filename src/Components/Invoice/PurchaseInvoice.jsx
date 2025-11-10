@@ -350,7 +350,6 @@ const PurchaseInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                             <Tabeheader type={params?.type} />
                             <tbody>
-
                                 {allData?.map((item) => {
                                     return <InvoiceCard key={item?.id} item={item} />
                                 })}
@@ -362,28 +361,29 @@ const PurchaseInvoice = ({ isOrder = true, info = {}, prefix = 'KB' }) => {
                 </div>
 
                 <DownModal show={isGen} handleClose={() => { setIsGen(false) }} className={`w-[800px] overflow-hidden overflow-y-auto`}>
-                    <div className='max-h-[700px] '>
-                        <div ref={ref} className=''>
-                            <div ref={targetRef} className='bg-white w-[760px]'>
-                                <Pdf>
-                                    <div className="">
-                                        <PdfHeader user={user} params={params} />
+                    <div className='max-h-[700px]'>
+                        <div ref={ref} className='w-full'>
+                            <div ref={targetRef} className='bg-white w-[800px] flex justify-center items-center'>
+                            
+                                    <div className="bg-[#FFFFFF] w-[720px] rounded pb-4 pt-24 pr-8">
 
-                                        <div className='relative overflow-x-auto py-5'>
-                                            <table className="w-full text-[14px] text-left">
+                                        <InvoHeader user={user} params={params} invoice={invoice} />
+
+                                        <div className='relative overflow-x-auto my-5'>
+                                            <table class="w-full text-sm text-left text-black">
                                                 <Tabeheader type={params?.type} />
                                                 <tbody>
+
                                                     {allData?.map((item) => {
                                                         return <InvoiceCard key={item?.id} item={item} />
                                                     })}
-                                                    <PdfBottom user={user} total={total} />
+                                                    <PurchaseInvoicePaymentTotal user={user} total={total} invoice={invoice} />
 
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
-                                </Pdf>
+                         
                             </div>
                         </div>
                         <div className='flex justify-end items-end pr-8 gap-2'>

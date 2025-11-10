@@ -67,7 +67,7 @@ const SellCard = ({ i, item, onClick, ChangeQty, handleEnter }) => {
             <div scope="col" className="p-2 font-thin border-l">{item?.discount}</div>
             <div scope="col" className="p-2 font-thin border-l">{item?.discount_type}</div>
             <div scope="col" className="p-2 font-thin border-l">{DiscountCal(item)} </div>
-            <div scope="col" className="p-2 text-right font-thin border-l">{DiscountCalculate(item)}</div>
+            <div scope="col" className="p-2 text-center font-thin border-l">{DiscountCalculate(item)}</div>
 
         </div>
     );

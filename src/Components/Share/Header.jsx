@@ -8,8 +8,6 @@ import Add from "../../icons/Add";
 import RightArrow from "../../icons/RightArrow";
 import Circle from '../../icons/Circle';
 import flag from '../Logo/united.png'
-import { useLottie } from "lottie-react";
-import groovyWalkAnimation from "../../lotti/Animation - 1745262361506.json";
 import Noti from "../Input/Notification";
 
 
@@ -23,16 +21,7 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {}, lang
     const lan_ref = useRef(null)
     const wiz_pro = useRef(null)
 
-    const options = {
-        animationData: groovyWalkAnimation,
-        loop: true,
-        style: {
-            width: 40,
-            height: 40,
-        },
-    };
 
-    const { View } = useLottie(options);
 
     useEffect(() => {
         setMode(!darkMode);
@@ -131,9 +120,6 @@ const Header = ({ auth, isLoggedOut, open, isOpen, notification, info = {}, lang
                     </div> : <NavLink to={`/`} className='font-semibold text-sm lg:text-md'>LOGIN</NavLink>}
 
                     <NavLink to='/notification' className="relative p-1 rounded-full mr-1">
-                        <div className={`w-8 h-8 ${noti?.length === 0 ? 'hidden' : ''}`}>
-                            {View}
-                        </div>
                         <div className={`w-8 h-8 p-1 ${noti?.length === 0 ? '' : 'hidden'}`}>
                             <Notification />
                         </div>
