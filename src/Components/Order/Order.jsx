@@ -53,7 +53,10 @@ const Order = ({ info = {} }) => {
         cate_value: "Select a filter",
         bran: false,
         bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
     })
+    const [comId, setComId] = useState(null);
     EscapeRedirect()
 
 
@@ -161,25 +164,32 @@ const Order = ({ info = {} }) => {
             </div>
 
             <div className="rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4 pb-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-3">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}
                             onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'User'} />
                     </div>
+                    {info?.role === "superadmin" && <div className="w-full pb-3">
+                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    </div>}
                     <div>
-                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) 
-                    }} getTime={(ti) => { 
-                        const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
-                        setRaw({ ...raw, fromDate: formatted }) }} />
+                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => {
+                            setValues({ ...values, deliverydate: date })
+                        }} getTime={(ti) => {
+                            const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                            setRaw({ ...raw, fromDate: formatted })
+                        }} />
                     </div>
                     <div>
-                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }} 
-                        
-                        getTime={(ti) => { 
-                            const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
-                            setRaw({ ...raw, toDate: formatted }) }} />
+                        <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
+
+                            getTime={(ti) => {
+                                const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                                setRaw({ ...raw, toDate: formatted })
+                            }} />
                     </div>
 
                 </div>

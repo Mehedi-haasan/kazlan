@@ -202,7 +202,7 @@ function App() {
     const compId = localStorage.getItem('compId');
     const shopcode = localStorage.getItem('shopcode');
 
-    console.log(role)
+
     if (token && token !== "null") {
       setAuth(true);
       setInfo({
@@ -341,9 +341,9 @@ function App() {
 
           <Route path="/excel/sheet" element={<ExcelSheet />} />
 
-          <Route path="/sale/items" element={<SaleItems />} />
+          <Route path="/sale/items" element={<SaleItems info={info} />} />
 
-          <Route path="/return/items" element={<ReturnItems />} />
+          <Route path="/return/items" element={<ReturnItems info={info} />} />
 
           <Route path="/app/setting" element={<Setting userinfo={info} />} />
 
@@ -357,7 +357,7 @@ function App() {
 
           <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} info={info} />} />
 
-          <Route path="/order" element={auth ? <Order user={user} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/order" element={auth ? <Order user={user} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/state" element={auth ? <State entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 

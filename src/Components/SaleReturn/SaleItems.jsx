@@ -15,9 +15,10 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Modal from "../Input/Modal";
 import Pdf from "../Pdf/Pdf";
+import Notification from "../Input/Notification";
 
 
-const SaleItems = ({ }) => {
+const SaleItems = ({ info = {} }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -48,11 +49,14 @@ const SaleItems = ({ }) => {
         lastdiscounttype: "Fixed",
         deliverydate: ''
     })
+    const [comId, setComId] = useState(null);
     const [filter, setFilter] = useState({
         cate: false,
         cate_value: "Select a filter",
         bran: false,
         bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
     })
 
 
@@ -134,7 +138,7 @@ const SaleItems = ({ }) => {
     };
 
 
-        const SearchOrder = async (v) => {
+    const SearchOrder = async (v) => {
         if (v === '') {
             RecentInvoice()
         } else {
@@ -155,7 +159,7 @@ const SaleItems = ({ }) => {
 
     return (
         <div className="px-3 pt-5 rounded-md min-h-screen">
-
+            <Notification message={message} />
             <div className='flex justify-between items-center p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-md rounded-lg'>
                 <h1 className=''>Recent Sales</h1>
                 <NavLink to={`/sale/order`} className={`border rounded-md shadow bg-blue-500 text-white py-1.5 px-4 font-thin`}>Create Sale</NavLink>
@@ -165,25 +169,32 @@ const SaleItems = ({ }) => {
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4 pb-20'>
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-4 pb-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4 pb-3">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.bran} default_value={filter?.bran_value}
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'Customer'} />
                     </div>
+                    {info?.role === "superadmin" && <div className="w-full pb-3">
+                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    </div>}
                     <div>
-                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date })
-                     }} getTime={(ti) => {
-                        const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
-                        setRaw({ ...raw, fromDate: formatted }) }} />
+                        <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => {
+                            setValues({ ...values, deliverydate: date })
+                        }} getTime={(ti) => {
+                            const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                            setRaw({ ...raw, fromDate: formatted })
+                        }} />
                     </div>
                     <div>
                         <Calendar label={"To Date"} value={handleDateConvert(new Date(raw?.toDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
-                        
-                        getTime={(ti) => { 
-                            const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
-                            setRaw({ ...raw, toDate: formatted }) }} />
+
+                            getTime={(ti) => {
+                                const formatted = new Date(Date.UTC(ti.getFullYear(), ti.getMonth(), ti.getDate())).toISOString().slice(0, 10);
+                                setRaw({ ...raw, toDate: formatted })
+                            }} />
                     </div>
 
                 </div>
@@ -192,8 +203,8 @@ const SaleItems = ({ }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true}/>
-                        <Search  SearchProduct={(v) => SearchOrder(v)} />
+                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
+                        <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>
                 <InvoiceTemp invoices={invoices} />

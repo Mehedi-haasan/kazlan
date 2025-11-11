@@ -49,11 +49,14 @@ const ReturnPurchaseItem = ({ info = {} }) => {
         lastdiscounttype: "Fixed",
         deliverydate: ''
     })
+    const [comId, setComId] = useState(null);
     const [filter, setFilter] = useState({
         cate: false,
         cate_value: "Select a filter",
         bran: false,
         bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
     })
 
     const GetCustomer = async () => {
@@ -162,13 +165,17 @@ const ReturnPurchaseItem = ({ info = {} }) => {
 
 
             <div className='rounded-xl overflow-hidden p-4 bg-[#FFFFFF] dark:bg-[#040404] dark:text-white shadow-lg mt-4 pb-20'>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 pb-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 pb-5">
                     <div className='pt-1'>
                         <SelectionComponent options={user}
                             default_select={filter?.cate} default_value={filter?.cate_value}
                             onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'Supplier'} />
                     </div>
+                    {info?.role === "superadmin" && <div className="w-full">
+                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    </div>}
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => { setValues({ ...values, deliverydate: date }) }}
                             getTime={(ti) => {

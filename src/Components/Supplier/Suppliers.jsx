@@ -18,6 +18,7 @@ import Pdf from "../Pdf/Pdf";
 import Selection from "../Input/Selection";
 import DueCustomerCard from "../Customers/DueCustomerCard";
 import { formatDate, getFormattedDate } from "../Input/Time";
+import SelectionComponent from "../Input/SelectionComponent";
 
 const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
@@ -37,6 +38,15 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0)
     const [select, setSelect] = useState(null)
+    const [comId, setComId] = useState(null);
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
+    })
 
     const GetSupplier = async () => {
         const token = localStorage.getItem('token')
@@ -55,7 +65,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     useEffect(() => {
         document.title = `Suppliers - Kazaland Brothers`;
         GetSupplier()
-    }, [page, pageSize])
+    }, [page, pageSize,comId])
 
 
 
@@ -77,7 +87,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [select]);
 
 
 
@@ -300,7 +310,10 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                         <div className="pt-[29px]">
                             <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                         </div>
-
+                        {info?.role === "superadmin" && <div className="w-[200px] pb-3">
+                            <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                                onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                        </div>}
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <button className="border rounded px-2 py-1 font-thin border-blue-600" onClick={() => { DuesSupplier(); setPreviewDue(true) }}>Due Report</button>

@@ -19,6 +19,7 @@ import Modal from "../Input/Modal";
 import CustomerCardPdf from "./CustomerCardPdf";
 import DueCustomerCard from "./DueCustomerCard";
 import { formatDate, getFormattedDate } from "../Input/Time";
+import SelectionComponent from "../Input/SelectionComponent";
 
 
 const Customers = ({ entries, state = [], info = {} }) => {
@@ -34,7 +35,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const option = { backgroundColor: '#ffffff' };
     const { ref, getPng } = useToImage(option)
     const [customer, setCustomer] = useState([])
-    const [duecus, setDueCus]=useState()
+    const [duecus, setDueCus] = useState()
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [isLoading, setIsLoading] = useState(false)
@@ -43,8 +44,17 @@ const Customers = ({ entries, state = [], info = {} }) => {
     const [values, setValues] = useState({
         customertype: null
     })
-
+    const [comId, setComId] = useState(null);
+    const [filter, setFilter] = useState({
+        cate: false,
+        cate_value: "Select a filter",
+        bran: false,
+        bran_value: 'Select a filter',
+        war: false,
+        war_value: 'Select a filter',
+    })
     const GetCustomer = async () => {
+
         setIsLoading(true)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}/${values?.customertype}`, {
@@ -78,7 +88,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     useEffect(() => {
         document.title = "Customers - KazalandBrothers";
         GetCustomer()
-    }, [pageSize, values])
+    }, [page, pageSize, values])
 
     const OpenModal = (id) => {
         if (id === select) {
@@ -266,6 +276,8 @@ const Customers = ({ entries, state = [], info = {} }) => {
         };
     };
 
+
+
     return (
         <div className="pl-4 pt-5 pr-2 min-h-screen pb-12">
             <Notification message={message} />
@@ -290,6 +302,10 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             }}
                             label={'Filter'} />
                     </div>
+                    {info?.role === "superadmin" && <div className="w-[200px] pb-3">
+                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    </div>}
                 </div>
                 <div className="flex justify-between items-center ">
                     <div>
