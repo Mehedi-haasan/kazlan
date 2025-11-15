@@ -93,6 +93,9 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
 
     const SecondSearchProduct = async (edit, cate, bran, value) => {
         setSelectedId(0)
+        if (value === '') {
+            setSearchData([]);
+        }
         setSearchItem(value)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/product/search/with/${edit}/${cate}/${bran}/${value}`, {
@@ -289,49 +292,53 @@ const PurchaseProduct = ({ shop = [], editio = [], brand = [], category = [], st
                     <h1 className='text-[20px]'>Items</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-3 p-4 '>
-                    <div>
-                        <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
-                            handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
-                            onChange={(v) => {
-                                let num = BanglaToEnglish(v);
-                                setItemQuan(num);
-                            }} className={``} />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
-                            onSelect={(v) => {
-                                setCatego(true);
-                                setEdition(false);
-                                setFilter({ ...filter, edit: v?.id, edit_value: v?.name });
-                                SecondSearchProduct(v?.id, filter?.cate, filter?.bran, null)
-                            }}
-                            handleRight={() => { setEdition(false); setCatego(true); }}
-                            handleLeft={() => { setEdition(false); setQuan(true); }}
-                            label={'Edition'}
-                        />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={category} default_select={catego} default_value={filter?.cate_value}
-                            handleRight={() => { setCatego(false); setBrand(true); }}
-                            handleLeft={() => { setCatego(false); setEdition(true); }}
-                            onSelect={(v) => {
-                                setFilter({ ...filter, cate: v?.id, cate_value: v?.name })
-                                setCatego(false)
-                                setBrand(true)
-                                SecondSearchProduct(filter?.edit, v?.id, filter?.bran, null)
-                            }} label={'Category'} />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={brandList} default_select={bran} default_value={filter?.bran_value}
-                            handleRight={() => { setBrand(false); inputRef.current.focus() }}
-                            handleLeft={() => { setBrand(false); setCatego(true); }}
-                            onSelect={(v) => {
-                                setBrand(false)
-                                inputRef.current.focus()
-                                setFilter({ ...filter, bran: v?.id, bran_value: v?.name })
-                                SecondSearchProduct(filter?.edit, filter?.cate, v?.id, null)
-                            }}
-                            label={'Brand'} />
+                    <div className='grid col-span-4'>
+                        <div className='grid grid-cols-7 gap-3'>
+                            <div>
+                                <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
+                                    handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v);
+                                        setItemQuan(num);
+                                    }} className={``} />
+                            </div>
+                            <div className='pt-1.5 grid col-span-2'>
+                                <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
+                                    onSelect={(v) => {
+                                        setCatego(true);
+                                        setEdition(false);
+                                        setFilter({ ...filter, edit: v?.id, edit_value: v?.name });
+                                        SecondSearchProduct(v?.id, filter?.cate, filter?.bran, null)
+                                    }}
+                                    handleRight={() => { setEdition(false); setCatego(true); }}
+                                    handleLeft={() => { setEdition(false); setQuan(true); }}
+                                    label={'Edition'}
+                                />
+                            </div>
+                            <div className='pt-1.5 grid col-span-2'>
+                                <SelectionComponentSearch options={category} default_select={catego} default_value={filter?.cate_value}
+                                    handleRight={() => { setCatego(false); setBrand(true); }}
+                                    handleLeft={() => { setCatego(false); setEdition(true); }}
+                                    onSelect={(v) => {
+                                        setFilter({ ...filter, cate: v?.id, cate_value: v?.name })
+                                        setCatego(false)
+                                        setBrand(true)
+                                        SecondSearchProduct(filter?.edit, v?.id, filter?.bran, null)
+                                    }} label={'Category'} />
+                            </div>
+                            <div className='pt-1.5 grid col-span-2'>
+                                <SelectionComponentSearch options={brandList} default_select={bran} default_value={filter?.bran_value}
+                                    handleRight={() => { setBrand(false); inputRef.current.focus() }}
+                                    handleLeft={() => { setBrand(false); setCatego(true); }}
+                                    onSelect={(v) => {
+                                        setBrand(false)
+                                        inputRef.current.focus()
+                                        setFilter({ ...filter, bran: v?.id, bran_value: v?.name })
+                                        SecondSearchProduct(filter?.edit, filter?.cate, v?.id, null)
+                                    }}
+                                    label={'Brand'} />
+                            </div>
+                        </div>
                     </div>
                     <div className='grid col-span-6'>
                         <h1 className='pb-1'>Enter Item Name</h1>

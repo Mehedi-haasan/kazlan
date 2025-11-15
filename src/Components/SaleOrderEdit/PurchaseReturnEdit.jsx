@@ -179,7 +179,7 @@ const PurchaseReturnEdit = ({ shop = [], editio = [], brand = [], category = [],
 
     const GetCustomer = async () => {
         const token = localStorage.getItem(`token`);
-        const response = await fetch(`${BaseUrl}/api/get/suppliers/1/1000`, {
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/1/1000/${null}`, {
             method: 'GET',
             headers: {
                 'authorization': token,

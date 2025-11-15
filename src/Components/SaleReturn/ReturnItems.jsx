@@ -17,7 +17,7 @@ import Modal from "../Input/Modal";
 import Pdf from "../Pdf/Pdf";
 
 
-const ReturnItems = ({ info = {} }) => {
+const ReturnItems = ({ shop = [], info = {} }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -37,7 +37,8 @@ const ReturnItems = ({ info = {} }) => {
         fromDate: sevenDaysAgo.toISOString(),
         toDate: today.toISOString(),
         userId: null,
-        type: "Sale Return"
+        type: "Sale Return",
+        comId: null
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -48,7 +49,6 @@ const ReturnItems = ({ info = {} }) => {
         lastdiscounttype: "Fixed",
         deliverydate: ''
     })
-    const [comId, setComId] = useState(null);
     const [filter, setFilter] = useState({
         cate: false,
         cate_value: "Select a filter",
@@ -61,7 +61,7 @@ const ReturnItems = ({ info = {} }) => {
     const GetCustomer = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer/${null}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -173,9 +173,9 @@ const ReturnItems = ({ info = {} }) => {
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'Customer'} />
                     </div>
-                    {info?.role === "superadmin" && <div className="w-full">
-                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
-                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    {info?.role === "superadmin" && <div className="w-full pt-1">
+                        <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setRaw({ ...raw, comId: v?.id }) }} label={'Warehouse'} />
                     </div>}
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))}

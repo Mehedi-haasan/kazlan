@@ -341,9 +341,9 @@ function App() {
 
           <Route path="/excel/sheet" element={<ExcelSheet />} />
 
-          <Route path="/sale/items" element={<SaleItems info={info} />} />
+          <Route path="/sale/items" element={<SaleItems shop={shop} info={info} />} />
 
-          <Route path="/return/items" element={<ReturnItems info={info} />} />
+          <Route path="/return/items" element={<ReturnItems shop={shop} info={info} />} />
 
           <Route path="/app/setting" element={<Setting userinfo={info} />} />
 
@@ -355,9 +355,9 @@ function App() {
 
           <Route path="/update/supplier/:id" element={<UpdateSupplier state={state} info={info} />} />
 
-          <Route path="/purchase/return/items" element={<ReturnPurchaseItem state={state} info={info} />} />
+          <Route path="/purchase/return/items" element={<ReturnPurchaseItem shop={shop} state={state} info={info} />} />
 
-          <Route path="/order" element={auth ? <Order user={user} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/order" element={auth ? <Order user={user} info={info} shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/state" element={auth ? <State entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
@@ -415,11 +415,11 @@ function App() {
 
           <Route path="/purchase/return" element={auth ? <PruchaseReturn shop={shop} info={info} state={state} editio={edition} brand={brand} category={category} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/customers" element={auth ? <Customers entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/customers" element={auth ? <Customers entries={entries} state={state} info={info} shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/payment/history/:id" element={auth ? <PaymentHistory category={category} brand={brand} info={info} entries={entries} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
-          <Route path="/suppliers" element={auth ? <Suppliers entries={entries} state={state} info={info} /> : <Login auth={(v) => { setAuth(v) }} />} />
+          <Route path="/suppliers" element={auth ? <Suppliers entries={entries} state={state} info={info} shop={shop} /> : <Login auth={(v) => { setAuth(v) }} />} />
 
           <Route path="/purchase/product" element={auth ? <PurchaseProduct shop={shop} info={info} state={state} editio={edition} brand={brand} category={category} /> : <Login auth={(v) => { setAuth(v) }} />} />
 

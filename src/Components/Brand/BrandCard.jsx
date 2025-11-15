@@ -117,7 +117,7 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
 
     return (
         <tr className={`${i %2 === 1 ? 'bg-[#FAF9EE] dark:bg-[#040404] dark:text-white': 'bg-white dark:bg-[#1C2426] dark:text-white'} border-b`}>
-            <th className="w-4 py-1.5 px-4 border-x">
+            <th className="w-4 py-1 px-4 border-x">
                 <div className="flex items-center">
                     <input id="checkbox-table-search-1" checked={isChecked} onChange={() => TikBox(item.id)} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="checkbox-table-search-1" className="sr-only">checkbox</label>
@@ -126,13 +126,13 @@ const BrandCard = ({ item, i, isChecked, info = {}, getBrand, isDownloadMode, Ti
             <th id="kalpurush" scope="col" className="px-2 py-1.5 border-x font-thin ">{item?.name}
                 <Notification message={message} />
             </th>
-            <th scope="col" className="px-2 py-1.5 border-r font-thin ">{item?.id}</th>
+            <th scope="col" className="px-2 py-1 border-r font-thin ">{item?.id}</th>
             <th scope="col" className="px-2 py-1 border-r">
                 <img src={item?.image_url ? item?.image_url : logo} alt={item?.image_url ? item?.image_url : logo} className="h-8 w-8 rounded" />
             </th>
-            <th scope="col" className="px-2 py-1.5 border-r font-thin ">{item?.creator}</th>
-            <th scope="col" className="px-2 py-1.5 border-r font-thin ">{formatDate(item?.createdAt)}</th>
-            <th scope="col" className="px-2 py-3 flex justify-center items-center border-r gap-2">
+            <th scope="col" className="px-2 py-1 border-r font-thin ">{item?.creator}</th>
+            <th scope="col" className="px-2 py-1 border-r font-thin ">{formatDate(item?.createdAt)}</th>
+            <th scope="col" className="px-2 py-1 flex justify-center items-center border-r gap-2">
                 <Modal show={edit} handleClose={() => { setEdit(false) }} size={`800px`} className=''>
                     <div className="pt-1 bg-[#FFFFFF] rounded-lg w-full">
                         <div className="border-b">

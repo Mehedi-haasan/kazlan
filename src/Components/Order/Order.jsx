@@ -16,7 +16,7 @@ import { saveAs } from 'file-saver';
 import Pdf from '../Pdf/Pdf';
 import Modal from '../Input/Modal';
 
-const Order = ({ info = {} }) => {
+const Order = ({ info = {}, shop = [] }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -37,7 +37,8 @@ const Order = ({ info = {} }) => {
         fromDate: sevenDaysAgo.toISOString(),
         toDate: today.toISOString(),
         userId: null,
-        type: null
+        type: null,
+        comId: null
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -56,14 +57,14 @@ const Order = ({ info = {} }) => {
         war: false,
         war_value: 'Select a filter',
     })
-    const [comId, setComId] = useState(null);
+
     EscapeRedirect()
 
 
     const GetCustomer = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer/${null}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -171,9 +172,9 @@ const Order = ({ info = {} }) => {
                             onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'User'} />
                     </div>
-                    {info?.role === "superadmin" && <div className="w-full pb-3">
-                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
-                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    {info?.role === "superadmin" && <div className="w-full pt-1">
+                        <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setRaw({ ...raw, comId: v?.id }) }} label={'Warehouse'} />
                     </div>}
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => {

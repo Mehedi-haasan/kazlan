@@ -23,7 +23,7 @@ import RightArrow from '../../icons/RightArrow';
 
 const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = [], info = {}, changeLan }) => {
 
-
+    const [loading, setLoading] = useState(false)
     const [itemQuan, setItemQuan] = useState(null)
     const [message, setMessage] = useState({ id: '', mgs: '' });
     const [spDis, setSpDis] = useState(0)
@@ -106,6 +106,9 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
 
     const SecondSearchProduct = async (edit, cate, bran, value) => {
         setSelectedId(0)
+        if (value === '') {
+            setSearchData([]);
+        }
         setSearchItem(value)
         const token = localStorage.getItem('token')
         const response = await fetch(`${BaseUrl}/api/get/product/search/with/${edit}/${cate}/${bran}/${value}`, {
@@ -124,6 +127,11 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
     }
 
     const Order = async () => {
+
+        if (loading) {
+            return
+        }
+        setLoading(true)
         if (!userId) {
             setMessage({ id: Date.now(), mgs: "Customer Is required" });
             return
@@ -143,9 +151,12 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
             const data = await response.json();
             setMessage({ id: Date.now(), mgs: data?.message });
             goto(`/sale/invoice/${data?.invoice}/Sale`)
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.error('Error updating variant:', error);
         }
+        setLoading(false)
     }
 
     const fetchAmount = async () => {
@@ -289,7 +300,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-10 gap-3 p-4 '>
                     <div className='grid col-span-4'>
-                        <div className='grid grid-cols-6 gap-3'>
+                        <div className='grid grid-cols-7 gap-3'>
                             <div >
                                 <InputComponent label={changeLan?.qty} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
                                     handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
@@ -298,7 +309,7 @@ const WholeSell = ({ shop = [], editio = [], brand = [], category = [], state = 
                                         setItemQuan(num);
                                     }} className={``} />
                             </div>
-                            <div className='pt-1.5'>
+                            <div className='pt-1.5 grid col-span-2'>
                                 <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
                                     onSelect={(v) => {
                                         setCatego(true);

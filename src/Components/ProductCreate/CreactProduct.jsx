@@ -135,7 +135,7 @@ const CreactProduct = ({ handleClose, callAgain, info = {} }) => {
 
     const GetSupplier = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/suppliers/${1}/${100}`, {
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/${1}/${100}/${null}`, {
             method: 'GET',
             headers: {
                 "authorization": token,

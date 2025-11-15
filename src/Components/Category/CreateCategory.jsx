@@ -7,7 +7,7 @@ import logo from '../Logo/photo.png'
 import { useNavigate } from "react-router-dom";
 
 
-const CreateCategory = ({CallAgain, entries }) => {
+const CreateCategory = ({ CallAgain, entries }) => {
 
     const [image_url, setImage_Url] = useState();
     const [imageFile, setImageFile] = useState(null);
@@ -29,7 +29,9 @@ const CreateCategory = ({CallAgain, entries }) => {
     }, []);
 
     const handleCreateLocally = async (image_url) => {
+        setIsLoading(true)
         if (BaseUrl === "http://localhost:8050") {
+            setIsLoading(false)
             return
         }
         values.image_url = image_url;

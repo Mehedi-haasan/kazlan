@@ -18,7 +18,7 @@ import Pdf from "../Pdf/Pdf";
 import Notification from "../Input/Notification";
 
 
-const SaleItems = ({ info = {} }) => {
+const SaleItems = ({shop=[], info = {} }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -38,7 +38,8 @@ const SaleItems = ({ info = {} }) => {
         fromDate: sevenDaysAgo.toISOString(),
         toDate: today.toISOString(),
         userId: null,
-        type: "Sale"
+        type: "Sale",
+        comId: null
     });
     const [values, setValues] = useState({
         pay: 0,
@@ -63,7 +64,7 @@ const SaleItems = ({ info = {} }) => {
     const GetCustomer = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/1/300/Customer/${null}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -176,9 +177,9 @@ const SaleItems = ({ info = {} }) => {
                             onSelect={(v) => { setFilter({ ...filter, bran_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'Customer'} />
                     </div>
-                    {info?.role === "superadmin" && <div className="w-full pb-3">
-                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
-                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
+                    {info?.role === "superadmin" && <div className="w-full pt-1">
+                        <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
+                            onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setRaw({ ...raw, comId: v?.id }) }} label={'Warehouse'} />
                     </div>}
                     <div>
                         <Calendar label={"From Date"} value={handleDateConvert(new Date(raw?.fromDate))} getDate={(date) => {

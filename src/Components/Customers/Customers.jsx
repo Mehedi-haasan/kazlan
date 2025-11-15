@@ -22,7 +22,7 @@ import { formatDate, getFormattedDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 
 
-const Customers = ({ entries, state = [], info = {} }) => {
+const Customers = ({ entries, state = [], info = {}, shop = [] }) => {
 
 
     const [selectAll, setSelectAll] = useState(false);
@@ -57,7 +57,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
 
         setIsLoading(true)
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}/${values?.customertype}`, {
+        const response = await fetch(`${BaseUrl}/api/get/customers/${page}/${pageSize}/${values?.customertype}/${comId}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -88,7 +88,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
     useEffect(() => {
         document.title = "Customers - KazalandBrothers";
         GetCustomer()
-    }, [page, pageSize, values])
+    }, [page, pageSize, values, comId])
 
     const OpenModal = (id) => {
         if (id === select) {
@@ -303,7 +303,7 @@ const Customers = ({ entries, state = [], info = {} }) => {
                             label={'Filter'} />
                     </div>
                     {info?.role === "superadmin" && <div className="w-[200px] pb-3">
-                        <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                        <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
                             onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
                     </div>}
                 </div>

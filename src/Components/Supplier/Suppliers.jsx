@@ -20,7 +20,7 @@ import DueCustomerCard from "../Customers/DueCustomerCard";
 import { formatDate, getFormattedDate } from "../Input/Time";
 import SelectionComponent from "../Input/SelectionComponent";
 
-const Suppliers = ({ entries = [], state = [], info = {} }) => {
+const Suppliers = ({ entries = [], state = [], info = {}, shop = [] }) => {
 
     const [selectAll, setSelectAll] = useState(false);
     const [preview, setPreview] = useState(false)
@@ -50,7 +50,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
 
     const GetSupplier = async () => {
         const token = localStorage.getItem('token')
-        const response = await fetch(`${BaseUrl}/api/get/suppliers/${page}/${pageSize}`, {
+        const response = await fetch(`${BaseUrl}/api/get/suppliers/${page}/${pageSize}/${comId}`, {
             method: 'GET',
             headers: {
                 "authorization": token,
@@ -65,7 +65,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
     useEffect(() => {
         document.title = `Suppliers - Kazaland Brothers`;
         GetSupplier()
-    }, [page, pageSize,comId])
+    }, [page, pageSize, comId])
 
 
 
@@ -311,7 +311,7 @@ const Suppliers = ({ entries = [], state = [], info = {} }) => {
                             <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                         </div>
                         {info?.role === "superadmin" && <div className="w-[200px] pb-3">
-                            <SelectionComponent options={[]} default_select={filter?.war} default_value={filter?.war_value}
+                            <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
                                 onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setComId(v?.id) }} label={'Warehouse'} />
                         </div>}
                     </div>
