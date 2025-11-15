@@ -78,7 +78,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
         getProduct()
     }, [page, pageSize, brandId, catId, comId])
 
-
+console.log(comId)
     const SearchProduct = async (e) => {
         const name = e
         const token = localStorage.getItem('token')
@@ -230,7 +230,7 @@ const Product = ({ category = [], brand = [], shop = [], info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel handeldelete={() => { BulkDelete() }} expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel handeldelete={() => { BulkDelete() }} filename='items.xlsx' data={data} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={(e) => { SearchProduct(e) }} />
                     </div>
                 </div>

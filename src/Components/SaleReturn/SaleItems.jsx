@@ -18,7 +18,7 @@ import Pdf from "../Pdf/Pdf";
 import Notification from "../Input/Notification";
 
 
-const SaleItems = ({shop=[], info = {} }) => {
+const SaleItems = ({ shop = [], info = {} }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -204,7 +204,7 @@ const SaleItems = ({shop=[], info = {} }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
+                        <Excel filename='saleitems.xlsx' data={invoices} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
                         <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>

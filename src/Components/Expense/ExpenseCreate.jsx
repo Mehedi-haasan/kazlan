@@ -15,6 +15,7 @@ const ExpenseCreate = ({ info }) => {
     const [expenseType, setExpensetype] = useState([])
     const [paymentMethod, setPaymentMethod] = useState([])
     const [defa, setDefa] = useState(true)
+    const [sub_cate, setSubCate] = useState(false)
     const amt = useRef()
     const [values, setValues] = useState({
         expensename: "",
@@ -110,13 +111,17 @@ const ExpenseCreate = ({ info }) => {
                             default_select={defa}
                             options={expenseType} default_value={values?.expensename}
                             value={values?.expensename}
-                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); amt.current.focus(); PaymentMethod(v?.id) }}
+                            onSelect={(v) => { setValues({ ...values, expensename: v?.name, type: v?.name }); setDefa(false); setSubCate(true); PaymentMethod(v?.id) }}
                         />
                     </div>
                     <div className="pt-2 flex justify-start items-center gap-4">
                         <SelectionComponent label={"Select Sub-Category"}
+                            default_select={sub_cate}
                             options={paymentMethod} default_value={values?.methodname} value={values?.methodname} placeholder={values?.methodname}
-                            onSelect={(v) => { setValues({ ...values, methodname: v?.name }) }}
+                            onSelect={(v) => {
+                                setValues({ ...values, methodname: v?.name });
+                                amt.current.focus()
+                            }}
                         />
                     </div>
                     <div>

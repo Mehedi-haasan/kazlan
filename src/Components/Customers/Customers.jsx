@@ -37,7 +37,7 @@ const Customers = ({ entries, state = [], info = {}, shop = [] }) => {
     const [customer, setCustomer] = useState([])
     const [duecus, setDueCus] = useState()
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(50);
     const [isLoading, setIsLoading] = useState(false)
     const [totalItem, setTotalItem] = useState(0);
     const [select, setSelect] = useState(null);
@@ -309,7 +309,7 @@ const Customers = ({ entries, state = [], info = {}, shop = [] }) => {
                 </div>
                 <div className="flex justify-between items-center ">
                     <div>
-                        <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
+                        {/* <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} /> */}
                     </div>
                     <div className="flex justify-end items-center gap-8">
                         <button className="border rounded px-2 py-1 font-thin border-blue-600" onClick={() => { DueCustomer(); setPreviewDue(true) }}>Due Report</button>

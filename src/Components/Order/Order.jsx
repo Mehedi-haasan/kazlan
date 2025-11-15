@@ -200,7 +200,7 @@ const Order = ({ info = {}, shop = [] }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel filename='allinvoice.xlsx' data={data} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>

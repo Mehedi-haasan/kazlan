@@ -19,7 +19,7 @@ import PdfInvoiceTemp from "../RecentInvoice/PdfInvoiceTemp";
 
 
 
-const PurchaseItems = ({shop=[], info = {} }) => {
+const PurchaseItems = ({ shop = [], info = {} }) => {
 
     const targetRef = useRef();
     const [preview, setPreview] = useState(false)
@@ -177,7 +177,7 @@ const PurchaseItems = ({shop=[], info = {} }) => {
                             onSelect={(v) => { setFilter({ ...filter, cate_value: v?.name }); setRaw({ ...raw, userId: v?.id }) }}
                             label={'Supplier'} />
                     </div>
-                      {info?.role === "superadmin" && <div className="w-full pt-1">
+                    {info?.role === "superadmin" && <div className="w-full pt-1">
                         <SelectionComponent options={shop} default_select={filter?.war} default_value={filter?.war_value}
                             onSelect={(v) => { setFilter({ ...filter, war_value: v?.name }); setRaw({ ...raw, comId: v?.id }) }} label={'Warehouse'} />
                     </div>}
@@ -202,7 +202,7 @@ const PurchaseItems = ({shop=[], info = {} }) => {
                         <ShowEntries options={[{ id: 501, name: "10" }, { id: 502, name: "20" }, { id: 503, name: "30" }, { id: 504, name: "50" }]} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
+                        <Excel filename='purchaseitems.xlsx' data={invoices} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} is_delete={true} />
                         <Search SearchProduct={(v) => SearchOrder(v)} />
                     </div>
                 </div>
@@ -212,7 +212,7 @@ const PurchaseItems = ({shop=[], info = {} }) => {
                         <div ref={targetRef} className="px-10 py-5 w-full overflow-hidden overflow-x-auto actual-receipt max-h-[80vh] overflow-y-auto" >
                             {/* <Pdf> */}
                             <h1 className="text-center">Product Purchase Details</h1>
-                                <PdfInvoiceTemp invoices={invoices} info={info} usertype="Supplier" date_type={"Receive Date"} />
+                            <PdfInvoiceTemp invoices={invoices} info={info} usertype="Supplier" date_type={"Receive Date"} />
                             {/* </Pdf> */}
                         </div>
                     </div>

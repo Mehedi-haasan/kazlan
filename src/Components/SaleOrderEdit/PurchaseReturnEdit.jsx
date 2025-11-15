@@ -341,53 +341,57 @@ const PurchaseReturnEdit = ({ shop = [], editio = [], brand = [], category = [],
                     <h1>Items</h1>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-9 gap-3 p-4 '>
-                    <div>
-                        <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
-                            handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
-                            onChange={(v) => {
-                                let num = BanglaToEnglish(v)
-                                setItemQuan(num);
-                            }} className={``} />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
-                            onSelect={(v) => {
-                                setCatego(true);
-                                setEdition(false);
-                                setFilter({ ...filter, edit: v?.id, edit_value: v?.name });
-                                SecondSearchProduct(v?.id, filter?.cate, filter?.bran, null)
-                            }}
-                            handleRight={() => { setEdition(false); setCatego(true); }}
-                            handleLeft={() => { setEdition(false); setQuan(true); }}
-                            label={'Edition'}
-                        />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={category} default_select={catego} default_value={filter?.cate_value}
-                            handleRight={() => { setCatego(false); setBrand(true); }}
-                            handleLeft={() => { setCatego(false); setEdition(true); }}
-                            onSelect={(v) => {
-                                setFilter({ ...filter, cate: v?.id, cate_value: v?.name })
-                                setCatego(false)
-                                setBrand(true)
-                                SecondSearchProduct(filter?.edit, v?.id, filter?.bran, null)
-                            }} label={'Category'} />
-                    </div>
-                    <div className='pt-1.5'>
-                        <SelectionComponentSearch options={brand} default_select={bran} default_value={filter?.bran_value}
-                            handleRight={() => { setBrand(false); inputRef.current.focus() }}
-                            handleLeft={() => { setBrand(false); setCatego(true); }}
-                            onSelect={(v) => {
-                                setBrand(false)
-                                inputRef.current.focus()
-                                setFilter({ ...filter, bran: v?.id, bran_value: v?.name })
-                                SecondSearchProduct(filter?.edit, filter?.cate, v?.id, null)
-                            }}
-                            label={'Brand'} />
+                    <div className='grid col-span-4'>
+                        <div className='grid grid-cols-6 gap-3'>
+                            <div>
+                                <InputComponent label={'Quantity'} type={'text'} input_focus={quan} placeholder={0} value={itemQuan}
+                                    handleEnter={() => { setQuan(false); setEdition(true) }} handleTab={() => { setPack(true) }}
+                                    onChange={(v) => {
+                                        let num = BanglaToEnglish(v)
+                                        setItemQuan(num);
+                                    }} className={``} />
+                            </div>
+                            <div className='pt-1.5'>
+                                <SelectionComponentSearch options={editio} default_select={edition} default_value={filter?.edit_value}
+                                    onSelect={(v) => {
+                                        setCatego(true);
+                                        setEdition(false);
+                                        setFilter({ ...filter, edit: v?.id, edit_value: v?.name });
+                                        SecondSearchProduct(v?.id, filter?.cate, filter?.bran, null)
+                                    }}
+                                    handleRight={() => { setEdition(false); setCatego(true); }}
+                                    handleLeft={() => { setEdition(false); setQuan(true); }}
+                                    label={'Edition'}
+                                />
+                            </div>
+                            <div className='pt-1.5 grid col-span-2'>
+                                <SelectionComponentSearch options={category} default_select={catego} default_value={filter?.cate_value}
+                                    handleRight={() => { setCatego(false); setBrand(true); }}
+                                    handleLeft={() => { setCatego(false); setEdition(true); }}
+                                    onSelect={(v) => {
+                                        setFilter({ ...filter, cate: v?.id, cate_value: v?.name })
+                                        setCatego(false)
+                                        setBrand(true)
+                                        SecondSearchProduct(filter?.edit, v?.id, filter?.bran, null)
+                                    }} label={'Category'} />
+                            </div>
+                            <div className='pt-1.5 grid col-span-2'>
+                                <SelectionComponentSearch options={brand} default_select={bran} default_value={filter?.bran_value}
+                                    handleRight={() => { setBrand(false); inputRef.current.focus() }}
+                                    handleLeft={() => { setBrand(false); setCatego(true); }}
+                                    onSelect={(v) => {
+                                        setBrand(false)
+                                        inputRef.current.focus()
+                                        setFilter({ ...filter, bran: v?.id, bran_value: v?.name })
+                                        SecondSearchProduct(filter?.edit, filter?.cate, v?.id, null)
+                                    }}
+                                    label={'Brand'} />
+                            </div>
+                        </div>
                     </div>
                     <div className='grid col-span-5'>
                         <h1 className='pb-1'>Enter Item Name</h1>
-                        <div className='flex justify-center w-full h-[39px]'>
+                        <div className='flex justify-center w-full h-[39px] relative'>
                             <div className='border px-3 py-1 rounded-l cursor-pointer'>
                                 <BarCode className='text-[#3C96EE]' />
                             </div>
@@ -440,52 +444,55 @@ const PurchaseReturnEdit = ({ shop = [], editio = [], brand = [], category = [],
 
                                         } else if (e.key === "ArrowLeft") {
                                             setBrand(true)
+                                        } else if (e.key === "Home") {
+                                            setSelectedId(0)
+                                        } else if (e.key === "End") {
+                                            setSelectedId(searchData?.length - 1)
                                         }
                                     }}
                                 />
                                 <Search className='absolute right-1 top-2 cursor-pointer hover:bg-slate-200 rounded-full' />
-                                {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
-                                    <div className="w-full text-sm text-left rtl:text-right text-gray-500">
-                                        <div className="text-xs text-gray-900">
-                                            <SearchResultHeader />
-                                        </div>
-                                        <div>
-                                            {searchData?.map((item, i) => {
-                                                return <div key={i} className={`border-b cursor-pointer grid grid-cols-8 ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => {
-                                                    let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
-                                                    setPrepareData(data)
-                                                    setSearchData([]);
-                                                    setSearchItem('');
-                                                    setItemQuan(0);
-                                                    setFilter({
-                                                        ...filter,
-                                                        cate: null,
-                                                        bran: null,
-                                                        edit: null,
-                                                        edit_value: 'Select a filter',
-                                                        bran_value: 'Select a filter',
-                                                        cate_value: 'Select a filter'
-                                                    });
-                                                    setPrep_Value(true);
-                                                }}>
-                                                    <div className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
-                                                    <div className="px-1 py-2 font-thin text-left">{item?.edition}</div>
-                                                    <div className="px-2 py-2 text-left font-thin">{item?.brand?.name}</div>
-                                                    <div className="px-2 py-2 text-left font-thin">{item?.category?.name}</div>
-                                                    <div className="pl-2 py-2 text-left font-thin">{item?.cost}</div>
-                                                    <div className="pl-2 py-2 text-left font-thin">{item?.discount}</div>
-                                                    <div className="pr-3 py-2 text-right font-thin">{item?.qty}</div>
-                                                </div>
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-                                }
 
                             </div>
                             <div onClick={() => { goto('/create') }} className='border px-3 pt-[6px] pb-[6px] rounded-r cursor-pointer text-[#3C96EE]'>
                                 <Add />
                             </div>
+                            {searchData && searchData?.length > 0 && <div className='w-full absolute top-[35px] border bg-[#FFFFFF] shadow rounded-b'>
+                                <div className="w-full text-sm text-left rtl:text-right text-gray-500">
+                                    <div className="text-xs text-gray-900">
+                                        <SearchResultHeader />
+                                    </div>
+                                    <div>
+                                        {searchData?.map((item, i) => {
+                                            return <div key={i} className={`border-b cursor-pointer grid grid-cols-8 ${selectedId === i ? 'bg-gray-100' : ''}`} onClick={() => {
+                                                let data = { ...item, qty: itemQuan > 0 ? itemQuan : 1 };
+                                                setPrepareData(data)
+                                                setSearchData([]);
+                                                setSearchItem('');
+                                                setItemQuan(0);
+                                                setFilter({
+                                                    ...filter,
+                                                    cate: null,
+                                                    bran: null,
+                                                    edit: null,
+                                                    edit_value: 'Select a filter',
+                                                    bran_value: 'Select a filter',
+                                                    cate_value: 'Select a filter'
+                                                });
+                                                setPrep_Value(true);
+                                            }}>
+                                                <div className="px-1 py-2 font-thin text-left grid col-span-2">{item?.name}</div>
+                                                <div className="px-1 py-2 font-thin text-left">{item?.edition}</div>
+                                                <div className="px-2 py-2 text-left font-thin">{item?.brand?.name}</div>
+                                                <div className="px-2 py-2 text-left font-thin">{item?.category?.name}</div>
+                                                <div className="pl-2 py-2 text-left font-thin">{item?.cost}</div>
+                                                <div className="pl-2 py-2 text-left font-thin">{item?.discount}</div>
+                                                <div className="pr-3 py-2 text-right font-thin">{item?.qty}</div>
+                                            </div>
+                                        })}
+                                    </div>
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -498,83 +505,96 @@ const PurchaseReturnEdit = ({ shop = [], editio = [], brand = [], category = [],
                         <div>
                             {Object.keys(prepareData || {}).length > 0 && (
                                 <div className={`border-b border-x text-[15px] text-black grid grid-cols-12`}>
-                                    <div className="py-2 flex justify-center items-center">
-                                        <Remove onClick={() => { }} />
+                                    <div className="grid col-span-2">
+                                        <div className="grid grid-cols-3 text-center">
+                                            <div className="py-2 flex justify-center items-center">
+                                                <Remove onClick={() => { }} />
+                                            </div>
+                                            <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.qty}</div>
+                                            <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.edition}</div>
+                                        </div>
                                     </div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.qty}</div>
-                                    <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.edition}</div>
+
                                     <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.category?.name}</div>
                                     <div className="px-2 py-2 text-left font-thin border-l">{prepareData?.brand?.name}</div>
                                     <div className="px-2 py-2 text-left font-thin border-l grid col-span-2">{prepareData?.name}</div>
-                                    <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
-                                    <div className='flex justify-start items-center border-r'>
-                                        <input type='text' ref={discount_ref}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    setAllData([...allData, prepareData]);
-                                                    setPrepareData({})
-                                                    setPrep_Value(false)
-                                                    setQuan(true);
-                                                } else if (e.key === "ArrowRight") {
-                                                    e.preventDefault();
-                                                    typeRef.current?.focus();
-                                                    setDisValue(true);
-                                                    setSelectedId(0)
-                                                }
-                                            }}
-                                            placeholder={0}
-                                            value={prepareData?.discount}
-                                            onChange={(e) => {
-                                                let num = BanglaToEnglish(e.target.value)
-                                                ChangeDis(num, prepareData?.discount_type)
-                                            }}
-                                            className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
-                                    </div>
-                                    <div className='relative z-50 border-l'>
-                                        <input ref={typeRef} value={prepareData?.discount_type} onKeyDown={(e) => {
-                                            if (e.key === "ArrowDown") {
-                                                if (selectedId === data?.length - 1) {
-                                                    setSelectedId(0)
-                                                } else {
-                                                    setSelectedId(selectedId + 1)
-                                                }
 
-                                            } else if (e.key === "ArrowUp") {
-                                                if (selectedId === 0) {
-                                                    setSelectedId(data?.length - 1)
-                                                } else {
-                                                    setSelectedId(selectedId - 1)
-                                                }
-                                            } else if (e.key === "Enter" && data[selectedId]) {
-                                                ChangeDis(prepareData?.discount, data[selectedId]?.name)
-                                                setDisValue(false);
-                                                setSelectedId(0);
-                                                discount_ref.current?.focus();
-                                            }
-                                        }} className='p-2 focus:outline-none w-full text-[#212529] font-thin' />
-                                        {
-                                            disValue && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+
+
+
+                                    <div className="grid col-span-4">
+                                        <div className="grid grid-cols-5 text-center">
+                                            <div className="py-2 text-center font-thin border-x">{prepareData?.cost}</div>
+                                            <div className='flex justify-start items-center border-r'>
+                                                <input type='text' ref={discount_ref}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") {
+                                                            setAllData([...allData, prepareData]);
+                                                            setPrepareData({})
+                                                            setPrep_Value(false)
+                                                            setQuan(true);
+                                                        } else if (e.key === "ArrowRight") {
+                                                            e.preventDefault();
+                                                            typeRef.current?.focus();
+                                                            setDisValue(true);
+                                                            setSelectedId(0)
+                                                        }
+                                                    }}
+                                                    placeholder={0}
+                                                    value={prepareData?.discount}
+                                                    onChange={(e) => {
+                                                        let num = BanglaToEnglish(e.target.value)
+                                                        ChangeDis(num, prepareData?.discount_type)
+                                                    }}
+                                                    className=' px-2 focus:outline-none rounded-l font-thin py-2 full' />
+                                            </div>
+                                            <div className='relative z-50 border-l'>
+                                                <input ref={typeRef} value={prepareData?.discount_type} onKeyDown={(e) => {
+                                                    if (e.key === "ArrowDown") {
+                                                        if (selectedId === data?.length - 1) {
+                                                            setSelectedId(0)
+                                                        } else {
+                                                            setSelectedId(selectedId + 1)
+                                                        }
+
+                                                    } else if (e.key === "ArrowUp") {
+                                                        if (selectedId === 0) {
+                                                            setSelectedId(data?.length - 1)
+                                                        } else {
+                                                            setSelectedId(selectedId - 1)
+                                                        }
+                                                    } else if (e.key === "Enter" && data[selectedId]) {
+                                                        ChangeDis(prepareData?.discount, data[selectedId]?.name)
+                                                        setDisValue(false);
+                                                        setSelectedId(0);
+                                                        discount_ref.current?.focus();
+                                                    }
+                                                }} className='p-2 focus:outline-none w-full text-[#212529] font-thin' />
                                                 {
-                                                    data?.map((opt, i) => {
-                                                        return <div onMouseEnter={() => { }}
-                                                            ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === "ArrowDown") {
-                                                                    setSelectedId(i + 2)
-                                                                }
-                                                            }}
+                                                    disValue && <div className={`px-0 max-h-[250px] absolute left-0 top-[37px] right-0 z-50 border-x border-b rounded-b overflow-hidden overflow-y-scroll hide-scrollbar bg-white`}>
+                                                        {
+                                                            data?.map((opt, i) => {
+                                                                return <div onMouseEnter={() => { }}
+                                                                    ref={el => selectedId === i && el?.scrollIntoView({ block: 'nearest' })}
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === "ArrowDown") {
+                                                                            setSelectedId(i + 2)
+                                                                        }
+                                                                    }}
 
-                                                            onClick={() => { }}
-                                                            className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
-                                                            {opt?.name}
-                                                        </div>
-                                                    })
+                                                                    onClick={() => { }}
+                                                                    className={`font-thin text-sm cursor-pointer px-2 py-1 text-[#212529] ${i === selectedId ? 'bg-gray-100' : ''}`}>
+                                                                    {opt?.name}
+                                                                </div>
+                                                            })
+                                                        }
+                                                    </div>
                                                 }
                                             </div>
-                                        }
+                                            <div className="pl-2 py-2 text-center font-thin border-l">{prepareData?.disPrice || prepareData?.price}</div>
+                                            <div className="pl-2 py-2 text-right font-thin border-l">{parseInt(prepareData?.disPrice || prepareData?.price) * parseInt(prepareData?.qty)}</div>
+                                        </div>
                                     </div>
-                                    <div className="pl-2 py-2 text-center font-thin border-l">{prepareData?.disPrice || prepareData?.price}</div>
-                                    <div className="pl-2 py-2 text-right font-thin border-l">{parseInt(prepareData?.disPrice || prepareData?.price) * parseInt(prepareData?.qty)}</div>
                                 </div>
                             )}
                             {allData?.map((item, i) => {

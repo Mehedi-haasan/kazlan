@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 const Brand = ({ entries, info = {} }) => {
 
-    const goto =  useNavigate()
+    const goto = useNavigate()
     const [selectAll, setSelectAll] = useState(false);
     const [preview, setPreview] = useState(false)
     const targetRef = useRef();
@@ -176,30 +176,7 @@ const Brand = ({ entries, info = {} }) => {
     }
 
 
-    const exportToExcel = () => {
-        let filename = 'bran.xlsx'
-        if (!bran || bran.length === 0) {
-            setMessage({ id: Date.now(), mgs: 'No brand to export!' });
-            return;
-        }
-        let excel = [];
-        bran.map((item) => {
-            excel.push({
-                name: item?.name,
-                active: item?.active,
-                createdby: item?.creator,
-                createdAt: item?.createdAt
-            })
-        })
 
-        const worksheet = XLSX.utils.json_to_sheet(excel);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-        saveAs(blob, filename);
-    };
 
 
 
@@ -226,8 +203,6 @@ const Brand = ({ entries, info = {} }) => {
                     return item;
                 }
             });
-
-            // Check if all are active based on newData
             const allActive = newData.every(item => item.active === false);
             setSelectAll(allActive)
 
@@ -282,7 +257,7 @@ const Brand = ({ entries, info = {} }) => {
                         <ShowEntries e options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel filename='brand.xlsx' data={bran} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={SearchBrand} />
                     </div>
                 </div>

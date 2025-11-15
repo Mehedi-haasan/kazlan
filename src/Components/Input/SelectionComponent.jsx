@@ -69,7 +69,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
           <path fill="currentColor" d="M18.36 19.78L12 13.41l-6.36 6.37l-1.42-1.42L10.59 12L4.22 5.64l1.42-1.42L12 10.59l6.36-6.36l1.41 1.41L13.41 12l6.36 6.36z" />
         </svg>}
 
-        <div className={`font-thin p-1.5 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280] dark:text-white' : 'text-black dark:text-white'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{default_value}</div>
+        <div className={`font-thin p-1 cursor-pointer ${select === "Select a filter" ? 'text-[#6B7280] dark:text-white' : 'text-black dark:text-white'} z-0 text-md`} onClick={() => { setHide(!hide) }}>{default_value}</div>
         <div className={` ${hide ? '' : 'hidden'} absolute left-[-1px] right-[-1px] border-x border-b rounded-b bg-white dark:bg-[#040404]`}>
           <div className='px-2'>
             <input type='text' ref={inputRef}
@@ -99,7 +99,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
               }}
               className='border rounded-l focus:outline-none w-full p-2 font-thin text-sm dark:bg-[#040404] dark:text-white' onChange={handleFilter} />
           </div>
-          <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white dark:bg-[#040404] dark:text-white ${className} pt-1 `}>
+          <div className={`px-0 max-h-[150px] overflow-hidden overflow-y-scroll hide-scrollbar bg-white dark:bg-[#040404] dark:text-white ${className} pt-1`}>
             {
               data?.map((opt, i) => {
                 return <div onMouseEnter={() => { setSelectedId(i) }}
@@ -111,7 +111,7 @@ const SelectionComponent = ({ options, onSelect, label, className = 'rounded', d
                   }}
 
                   onClick={() => { onSelect({ id: opt.id, name: opt.name }); setSelect(opt?.name); setHide(false); }}
-                  className={`font-thin text-sm cursor-pointer px-2 py-1.5 text-[#212529] dark:text-white ${i === selectedId ? 'bg-blue-500 text-white dark:bg-[#040404]' : ''}`}>
+                  className={`font-thin text-sm cursor-pointer px-2 py-[1px] text-[12px] text-[#212529] dark:text-white ${i === selectedId ? 'bg-blue-500 text-white dark:bg-[#040404]' : ''}`}>
                   {opt?.name}
                 </div>
               })

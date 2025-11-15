@@ -42,7 +42,7 @@ const Category = ({ entries, info = {} }) => {
     const goto = useNavigate()
     const [showlotti, setLottiShow] = useState(false)
     const [message, setMessage] = useState({ id: '', mgs: '' });
-    
+
     const getCategory = async () => {
         setIsLoading(true)
         const token = localStorage.getItem('token')
@@ -267,7 +267,7 @@ const Category = ({ entries, info = {} }) => {
                         <ShowEntries options={entries} onSelect={(v) => { setPageSize(parseInt(v?.name)) }} />
                     </div>
                     <div className="flex justify-end items-center gap-8">
-                        <Excel expotExcel={exportToExcel} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
+                        <Excel filename='category.xlsx' data={category} handeldelete={() => { BulkDelete() }} onClick={() => setPreview(true)} Jpg={() => setPreview(true)} />
                         <Search SearchProduct={SearchCategory} />
                     </div>
                 </div>
